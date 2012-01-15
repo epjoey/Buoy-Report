@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/ReportOptions.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 
 class FilterForm {
 

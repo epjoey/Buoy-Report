@@ -1,6 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/ReportForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 
 
 class ReportFormPage extends GeneralPage {

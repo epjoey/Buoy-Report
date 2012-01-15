@@ -1,7 +1,7 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/ReportOptions.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/utility/SimpleImage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/SingleReport.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
 class ReportFeed {
 

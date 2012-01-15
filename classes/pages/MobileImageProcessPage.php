@@ -1,5 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 
 class MobileImageProcessPage extends GeneralPage {
 

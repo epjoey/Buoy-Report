@@ -1,9 +1,9 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/utility/Paths.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/User.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/pages/IntroPage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/pages/HomePage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/IntroPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/HomePage.php';
 
 $user = new User;
 //intro page has no form handling. reg & login forms sent to register.php,login.php

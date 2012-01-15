@@ -1,6 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/ReportFeed.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 
 
 if (!isset($_SESSION)) session_start();

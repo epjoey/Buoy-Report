@@ -1,8 +1,8 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/pages/GeneralPage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/ReportFeed.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/FilterForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/LocationList.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 
 

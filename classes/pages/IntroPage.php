@@ -1,7 +1,7 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/pages/GeneralPage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/LoginForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/RegisterForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LoginForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/RegisterForm.php';
 
 
 class IntroPage extends GeneralPage {

@@ -1,12 +1,7 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/Persistence.php';
-timer('gen_after_include_pers');
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/Header.php';
-timer('gen_after_include_header');
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/utility/Mobile_Detect.php';
-timer('gen_after_include_mobile');
-
-
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/Header.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Mobile_Detect.php';
 
 class GeneralPage {
 

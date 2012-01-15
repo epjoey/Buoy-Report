@@ -1,7 +1,7 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/Report.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/SingleReport.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Report.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
 
 if (!isset($_SESSION)) session_start();

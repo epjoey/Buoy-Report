@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/utility/simple_html_dom.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/simple_html_dom.php';
 
 class TideData {
 

@@ -1,8 +1,8 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/utility/Paths.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/User.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/pages/LocationPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/LocationPage.php';
 
 $page = new LocationPage();
 $page->loadData();

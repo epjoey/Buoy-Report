@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/SingleReport.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
 $id = $_REQUEST['id'];
 

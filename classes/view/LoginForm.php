@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
 
 class LoginForm {
 	public function renderForm($logInError = NULL) {

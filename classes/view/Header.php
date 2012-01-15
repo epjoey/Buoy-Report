@@ -1,6 +1,6 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/utility/Paths.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/LocationList.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 class Header {
 
