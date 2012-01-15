@@ -1,2 +1,2 @@
 #! /bin/bash
-phd $0 br bouyreport.com
+phd $0 br br
