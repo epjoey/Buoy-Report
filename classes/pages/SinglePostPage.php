@@ -1,0 +1,38 @@
+<?php
+include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/view/ReportFeed.php';
+
+class SinglePostPage extends GeneralPage {
+
+	public function loadData($id) {
+		parent::loadData();
+		$this->pageTitle = $this->siteTitle . '';
+
+		$this->report = Persistence::getReportById($id);
+		if(!isset($this->report)) {
+			header('HTTP/1.1 301 Moved Permanently');			
+			header('Location:'.Paths::to404());
+			exit();	
+		}		
+		$this->locationInfo = Persistence::getLocationInfoById($this->report['locationid']);
+		$this->showDetails = TRUE;
+		
+		$this->reportView = new SingleReport;
+		$this->reportView->loadData($this->report, $this->locationInfo, $this->showDetails);
+	}
+
+	public function getBodyClassName() {
+		return 'single-post-page';
+	}	
+
+	public function renderBodyContent() {
+		$this->reportView->renderSingleReport();
+		if ($this->report['reporterid'] == $this->userId) {
+			?>	
+				<p><a class="random" href="<?=Paths::toEditPost($this->report['id'])?>">Edit Post</a></p>
+			<?
+		}
+	}
+	
+
+}

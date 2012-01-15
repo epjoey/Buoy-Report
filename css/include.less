@@ -1,0 +1,42 @@
+@grey-blue:#0a3660;
+@sea-blue:#0004d8;
+@pink:#cc09d6;
+//@grey:lighten(#52606e, 18%);
+@grey:#a1afbc;
+@grey-bg:#bebebe;
+@dark-blue: #06223c;
+@light-grey:lighten(@grey, 20%);
+@red: #600c1c;
+
+
+.bg-image(@img-name:'', @x:0, @y:0, @repeat:no-repeat, @bg-color:transparent) {
+	background:url('/reporter/images/@{img-name}') @x @y @repeat @bg-color;
+}
+
+/* ============================ FONTS  ============================ */
+.sans-serif(@size : 16px, @height : 1.3em, @weight:normal) {
+	font:@weight @size e('/') @height 'Helvetica Neue', arial, sans-serif;
+}
+
+.museo(@weight:300) {
+	font-family:'Museo@{weight}', 'Helvetica Neue', sans-serif;
+}
+
+.museo300(@size : 20px, @height : 1.3em) {
+	font:@size e('/') @height 'Museo300', 'Helvetica Neue', sans-serif;
+}
+.museo500(@size : 20px, @height : 1.3em) {
+	font:@size e('/') @height 'Museo500', 'Helvetica Neue', sans-serif;
+}
+.museo700(@size : 20px, @height : 1.3em) {
+	font:@size e('/') @height 'Museo700', 'Helvetica Neue', sans-serif;
+}
+.museoSlab(@size : 40px, @height : 1.3em) {
+	font:@size e('/') @height 'MuseoSlab500', 'Museo500', 'Helvetica Neue', sans-serif;
+}
+
+/* ============================ FORMS  ============================ */
+
+
+/* ============================ LOCATIONS  ============================ */
+

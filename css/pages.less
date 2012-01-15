@@ -1,0 +1,160 @@
+
+/* =================== INTRO PAGE =================== */
+.intro-page {
+	.header { margin-bottom:50px;
+		.form-container {display:none; float:right; .rounded-corner(6px 0 0 0); .drop-shadow-reset(); /*top:-200px;*/}
+		.form-container.expanded {display:inline-block; /*.translate3d(0,200px,0);*/}	
+	}
+
+	.logo-graphic { display:block; position:absolute; top:-78px; left:-34px; z-index:0;}
+	h1.welcome-to-br { .museoSlab(84px, .8em); .text-shadow(0, 2px, 2px, rgba(0,0,0,.6)); text-transform:uppercase; margin:0px 0 20px 0; letter-spacing:-1px; color:#FFF; position:relative;
+		.welcome { font-size:40px; display:block; line-height:40px; }
+/*		.pattern { position:absolute; top:38px; left:0; .bg-image('pattern.png',0,0,repeat); width:612px; height:120px; display:block;}	
+*/	}
+	.sub-text { margin-bottom:40px; clear:both;
+		.desc { position:relative; float:left;  background-color:@grey; padding:8px 10px; margin:0 4px 4px 0; cursor:pointer; .rounded-corner(0 0 0 6px); }
+		.tag-line {  margin:0; display:inline-block; color:@dark-blue; font-size:30px; line-height:1.1em; .text-highlight(); }
+		.what {position:absolute; bottom:-22px; .museo500(14px) ; right:0; color: @grey; cursor:pointer;}
+		.desc .detail { color:@dark-blue; font-size:24px; line-height:1.1em; .text-highlight(); max-width:390px; display:none; margin:0; overflow:hidden; }
+		.desc.expanded .detail { margin:6px 0 0; display:inline;}
+		.reg-browse {float:left; }
+		.reg-container { float:left;  position:relative;  }
+		.reg-btn { display:inline-block; margin-right:8px; background-color:@pink; color:@dark-blue; line-height:49px; font-size:30px; padding:0 6px; .text-shadow(0,1px,1px,rgba(255,255,255,.4)); cursor:pointer;}
+		.reg-btn:hover {text-decoration:none;}
+		.form-container { display:none; position:absolute; background-color:@pink; .drop-shadow-reset();
+			form { max-width:280px; margin-top:2px;}
+			.field {margin-bottom:0px;}
+		}
+		.form-container.expanded {display:block;}
+		.reg-btn:hover { background-color:#FFF;}
+		#cancel-reg {position:absolute; color:#FFF; bottom:-21px; left:263px; width:30px; .sans-serif(15px, 1.2em, 500); cursor:pointer;}
+		#cancel-reg:hover {color:#000;}
+		.browse-spots { float:left; color:@grey; line-height:1.3em; display:block; padding-top:12px;}
+		.browse-spots a { color:#FFF; }
+	}	
+	#outer-container {min-height:0; position:relative;}
+	.footer .top {margin-top:-120px;}	
+}
+
+/* =================== LOGIN PAGE =================== */
+.login-page {
+	.container { max-width:466px;}
+	.need-account {margin-top:12px; color:@grey;
+		a {color:#FFF;}
+	}
+}
+
+/* =================== REG PAGE =================== */
+.reg-page {
+	.container { max-width:518px;}
+}
+
+/* =================== ADD LOCATION PAGE =================== */
+.add-location-page {
+	.container { max-width:518px;}
+}
+
+
+/* =================== LOCATION LIST PAGE =================== */
+.location-list-page {
+	.container { margin-bottom:30px; }
+
+}
+
+/* =================== USER HOME PAGE =================== */
+
+.user-home-page {
+}
+
+/* =================== LOCATION DETAIL PAGE =================== */
+
+.location-detail-page { color:@grey;
+	.loc-details {margin:6px 0 20px;}
+	h1 {margin-bottom:8px;}
+	.post-report {}
+	.edit-loc-link {font-size:16px; }
+	.add-station-form {
+		display:inline;
+		.edit-loc-link {cursor:pointer;}
+
+	}
+	.reporters {.sans-serif();
+		p { margin-bottom:10px;}
+		a {color:#FFF;}
+		.bookmark input {margin:12px 0;}
+	}
+	.current-data { .sans-serif(16px); 
+		.no-data { font:italic 14px georgia;}
+		.tidestation-data { border-bottom:1px dotted darken(@grey,20%); margin-top:4px; margin-bottom:4px; padding-bottom:2px;
+			a {color:#FFF; }	
+		} 		
+	}
+	.bouy-iframe-link { margin:0; display:block; padding:6px;}
+}
+
+/* =================== REPORT FORM PAGE =================== */
+
+.report-form-page {
+	.container { max-width:820px; margin-bottom:24px;}
+	.field {border-bottom:1px solid darken(@grey, 12%); border-top:1px dotted lighten(@grey, 15%); margin:0; padding:8px 0; }
+	.field.first {border-top:0 none;}
+	.field.last {border-bottom:0 none;}
+	.time select {float:left; margin:4px 0 0 0; width:208px;}
+	.text input {float:left; }
+	.field > label {width:140px; .museo(500);}
+	.radio-field label {width:auto; float:none;}
+	.image label {width:180px;}
+	.image input {margin-top:8px;}
+	.quality {position:relative;}
+	.quality label.error {position:absolute; bottom:4px; right:4px;}
+	.field label.error {width:auto;}
+	.mobile-note {font-size:.8em;}
+}
+
+
+/* =================== PROFILE PAGE =================== */
+.profile-page {
+	.name-title {margin-bottom:4px;}
+	.reporter-info {margin-bottom:20px;}
+	.account-details {margin-bottom:20px;}
+	.filter-expanded .filter .cancel {top:4px;}
+	.member-info {color:@grey; font:italic 16px georgia;}
+}
+
+/* =================== EDIT LOCATION PAGE =================== */
+.edit-location-page {
+	.container {max-width:600px;}
+	.form-container {padding:10px;}
+	form{margin:0;}
+	.text-input, select {float:left;}
+	select {margin-top:4px; width:280px; height:35px;}
+	input[type=submit] {float:right; margin:0;}
+	.bouys {margin:0;}
+	.field {margin-bottom:12px;}
+	.field.bouy {line-height:34px;}
+	.remove-bouy {float:right;}
+	#delete-location-form {
+		input:hover { text-decoration:underline; }
+	}
+	#delete-location-form .cancel {}
+	#delete-location-form input[type="submit"] {float:none; margin-left:8px; color:#000;} 
+}
+
+/* =================== PROCESS MOBILE IMAGE PAGE =================== */
+.process-mobile-image {
+	#wrapper {padding:20px 0 200px;}
+	h1,a {margin-bottom:12px;}
+}
+
+/* =================== SINGLE POST PAGE =================== */
+.single-post-page {
+	.container { max-width:820px; }
+}
+
+.edit-report {
+	.image-container {text-align:left;
+		label {float:none; width:auto; display:inline; .museo(300); }
+	}
+}
+
+

@@ -1,0 +1,346 @@
+-- phpMyAdmin SQL Dump
+-- version 3.3.9.2
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Dec 09, 2011 at 10:08 AM
+-- Server version: 5.5.9
+-- PHP Version: 5.3.5
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `reportdb`
+--
+CREATE DATABASE `reportdb` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `reportdb`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bouy`
+--
+
+CREATE TABLE `bouy` (
+  `bouyid` varchar(50) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bouy`
+--
+
+INSERT INTO `bouy` VALUES('46026', 'San Francisco');
+INSERT INTO `bouy` VALUES('46237', 'San Francisco Bar, CA');
+INSERT INTO `bouy` VALUES('46012', 'Half Moon Bay');
+INSERT INTO `bouy` VALUES('41013', 'Frying Pan Shoals, NC');
+INSERT INTO `bouy` VALUES('CLKN7', 'Cape Lookout, NC');
+INSERT INTO `bouy` VALUES('46221', 'Santa Monica Bay, CA');
+INSERT INTO `bouy` VALUES('46006', NULL);
+INSERT INTO `bouy` VALUES('46247', NULL);
+INSERT INTO `bouy` VALUES('46239', NULL);
+INSERT INTO `bouy` VALUES('46028', NULL);
+INSERT INTO `bouy` VALUES('46002', 'OREGON');
+INSERT INTO `bouy` VALUES('ILOH1', NULL);
+INSERT INTO `bouy` VALUES('46089', 'Tillamook');
+INSERT INTO `bouy` VALUES('DESW1', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bouydata`
+--
+
+CREATE TABLE `bouydata` (
+  `reportid` int(11) NOT NULL,
+  `bouy` int(11) NOT NULL,
+  `winddir` int(11) DEFAULT NULL,
+  `windspeed` double DEFAULT NULL,
+  `swellheight` double DEFAULT NULL,
+  `swellperiod` double DEFAULT NULL,
+  `swelldir` int(11) DEFAULT NULL,
+  `tide` char(50) DEFAULT NULL,
+  `gmttime` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bouydata`
+--
+
+INSERT INTO `bouydata` VALUES(478, 46026, 320, 4.5, 7.2, 10, 314, NULL, 1319601000);
+INSERT INTO `bouydata` VALUES(478, 46237, NULL, NULL, 6.2, 11, 273, NULL, 1319600400);
+INSERT INTO `bouydata` VALUES(479, 46012, 280, 8.9, 9.5, 11, 306, NULL, 1319579400);
+INSERT INTO `bouydata` VALUES(501, 46026, 40, 4.5, 6.6, 10, 316, NULL, 1319647800);
+INSERT INTO `bouydata` VALUES(501, 46237, NULL, NULL, 5.9, 10, 271, NULL, 1319647200);
+INSERT INTO `bouydata` VALUES(502, 46026, 320, 6.7, 6.2, 11, 313, NULL, 1319640600);
+INSERT INTO `bouydata` VALUES(502, 46237, NULL, NULL, 5.9, 11, 270, NULL, 1319645400);
+INSERT INTO `bouydata` VALUES(503, 46026, 40, 4.5, 6.6, 10, 316, NULL, 1319647800);
+INSERT INTO `bouydata` VALUES(503, 46237, NULL, NULL, 5.2, 11, 274, NULL, 1319650800);
+INSERT INTO `bouydata` VALUES(504, 46026, 310, 8.9, 4.9, 8, 308, NULL, 1319687400);
+INSERT INTO `bouydata` VALUES(504, 46237, NULL, NULL, 4.9, 9, 277, NULL, 1319686800);
+INSERT INTO `bouydata` VALUES(506, 46026, 310, 8.9, 4.9, 8, 308, NULL, 1319687400);
+INSERT INTO `bouydata` VALUES(506, 46237, NULL, NULL, 4.9, 9, 277, NULL, 1319686800);
+INSERT INTO `bouydata` VALUES(507, 46026, 300, 4.5, 5.6, 8, 314, NULL, 1319691000);
+INSERT INTO `bouydata` VALUES(507, 46237, NULL, NULL, 4.3, 9, 273, NULL, 1319692200);
+INSERT INTO `bouydata` VALUES(508, 46026, 300, 4.5, 5.6, 8, 314, NULL, 1319691000);
+INSERT INTO `bouydata` VALUES(508, 46237, NULL, NULL, 4.3, 9, 273, NULL, 1319692200);
+INSERT INTO `bouydata` VALUES(509, 46026, 340, 8.9, 5.2, 9, 302, NULL, 1319683800);
+INSERT INTO `bouydata` VALUES(509, 46237, NULL, NULL, 4.9, 11, 266, NULL, 1319683200);
+INSERT INTO `bouydata` VALUES(510, 46026, 320, 13.4, 5.2, 8, 304, NULL, 1319680200);
+INSERT INTO `bouydata` VALUES(510, 46237, NULL, NULL, 5.2, 11, 263, NULL, 1319679600);
+INSERT INTO `bouydata` VALUES(517, 46026, 310, 13.4, 4.6, 13, 282, NULL, 1319863800);
+INSERT INTO `bouydata` VALUES(517, 46237, NULL, NULL, 4.9, 13, 260, NULL, 1319865000);
+INSERT INTO `bouydata` VALUES(518, 46237, NULL, NULL, 3.9, 13, 260, NULL, 1319872200);
+INSERT INTO `bouydata` VALUES(519, 46237, NULL, NULL, 4.3, 13, 263, NULL, 1319874000);
+INSERT INTO `bouydata` VALUES(520, 46237, NULL, NULL, 4.3, 13, 263, NULL, 1319874000);
+INSERT INTO `bouydata` VALUES(521, 46237, NULL, NULL, 4.3, 13, 263, NULL, 1319874000);
+INSERT INTO `bouydata` VALUES(522, 46237, NULL, NULL, 4.3, 13, 263, NULL, 1319874000);
+INSERT INTO `bouydata` VALUES(523, 46237, NULL, NULL, 4.3, 13, 263, NULL, 1319874000);
+INSERT INTO `bouydata` VALUES(524, 46237, NULL, NULL, 3.9, 13, 245, NULL, 1319906400);
+INSERT INTO `bouydata` VALUES(526, 46237, NULL, NULL, 3.9, 13, 245, NULL, 1319906400);
+INSERT INTO `bouydata` VALUES(0, 46237, NULL, NULL, 4.9, 13, 254, NULL, 1319902800);
+INSERT INTO `bouydata` VALUES(0, 46026, 330, 2.2, 4.6, 13, 272, NULL, 1319903400);
+INSERT INTO `bouydata` VALUES(533, 46237, NULL, NULL, 3.9, 13, 264, NULL, 1319920800);
+INSERT INTO `bouydata` VALUES(533, 46026, 300, 11.2, 4.3, 12, 292, NULL, 1319921400);
+INSERT INTO `bouydata` VALUES(535, 46237, NULL, NULL, 3.6, 13, 273, NULL, 1319924400);
+INSERT INTO `bouydata` VALUES(536, 46026, 320, 8.9, 3.6, 12, 303, NULL, 1319917800);
+INSERT INTO `bouydata` VALUES(539, 46026, 310, 6.7, 4.9, 12, 291, NULL, 1319997000);
+INSERT INTO `bouydata` VALUES(540, 46221, NULL, NULL, 3.3, 10, 278, NULL, 1320207300);
+INSERT INTO `bouydata` VALUES(541, 46006, 320, 22.4, 12.1, 10, NULL, NULL, 1320295800);
+INSERT INTO `bouydata` VALUES(542, 46239, NULL, NULL, 7.5, 13, 301, NULL, 1320297660);
+INSERT INTO `bouydata` VALUES(542, 46028, 60, 2.2, 5.9, 13, 321, NULL, 1320295800);
+INSERT INTO `bouydata` VALUES(543, 46028, 60, 2.2, 5.9, 13, 321, NULL, 1320295800);
+INSERT INTO `bouydata` VALUES(546, 46002, NULL, NULL, 21.6, 16, NULL, NULL, 1320385800);
+INSERT INTO `bouydata` VALUES(547, 46002, NULL, NULL, 21.6, 16, NULL, NULL, 1320385800);
+INSERT INTO `bouydata` VALUES(549, 46237, NULL, NULL, 7.2, 14, 263, NULL, 1320689400);
+INSERT INTO `bouydata` VALUES(549, 46026, 340, 4.5, 7.9, 10, 302, NULL, 1320688200);
+INSERT INTO `bouydata` VALUES(550, 46237, NULL, NULL, 6.2, 12, 267, NULL, 1321089000);
+INSERT INTO `bouydata` VALUES(550, 46026, 80, 15.7, 6.9, 12, 305, NULL, 1321087800);
+INSERT INTO `bouydata` VALUES(551, 41013, 230, 33.6, 8.9, 7, 193, NULL, 1321545000);
+INSERT INTO `bouydata` VALUES(554, 46237, NULL, NULL, 6.9, 13, 267, NULL, 1321767600);
+INSERT INTO `bouydata` VALUES(554, 46026, 160, 31.3, 8.9, 6, 175, NULL, 1321768200);
+INSERT INTO `bouydata` VALUES(555, 46237, NULL, NULL, 7.5, 10, 270, NULL, 1321841400);
+INSERT INTO `bouydata` VALUES(555, 46026, 70, 20.1, 8.5, 11, 303, NULL, 1321840200);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bouylocation`
+--
+
+CREATE TABLE `bouylocation` (
+  `bouy` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `location` int(11) DEFAULT NULL,
+  `primarybouy` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `bouylocation`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `location`
+--
+
+CREATE TABLE `location` (
+  `id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `locname` varchar(255) DEFAULT NULL,
+  `timezone` varchar(255) DEFAULT NULL,
+  `bouy1` varchar(255) DEFAULT NULL,
+  `bouy3` varchar(255) DEFAULT NULL,
+  `tidestation` int(11) DEFAULT NULL,
+  `bouy2` varchar(255) DEFAULT NULL,
+  `creator` mediumint(9) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
+
+--
+-- Dumping data for table `location`
+--
+
+INSERT INTO `location` VALUES(13, 'Ocean Beach, SF', 'America/Los_Angeles', '46237', NULL, 9414290, '46026', 27);
+INSERT INTO `location` VALUES(18, 'Half Moon Bay', 'America/Los_Angeles', '46012', NULL, NULL, NULL, 38);
+INSERT INTO `location` VALUES(23, 'Paia', 'Pacific/Honolulu', NULL, NULL, 1615680, NULL, 27);
+INSERT INTO `location` VALUES(28, 'Outer Banks', 'America/New_York', '41013', NULL, NULL, NULL, 39);
+INSERT INTO `location` VALUES(29, 'Cape Lookout, NC', 'America/New_York', 'CLKN7', NULL, NULL, NULL, 39);
+INSERT INTO `location` VALUES(30, 'Los Angeles', 'America/Los_Angeles', '46221', NULL, 9410647, NULL, 39);
+INSERT INTO `location` VALUES(31, 'half moon beach', NULL, NULL, NULL, NULL, NULL, 27);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report`
+--
+
+CREATE TABLE `report` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `text` varchar(255) DEFAULT NULL,
+  `locationid` int(11) DEFAULT NULL,
+  `reporterid` int(11) DEFAULT NULL,
+  `quality` tinyint(4) DEFAULT NULL,
+  `imagepath` varchar(255) DEFAULT NULL,
+  `obsdate` int(11) DEFAULT NULL,
+  `reportdate` int(11) NOT NULL,
+  `wavequality` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=556 ;
+
+--
+-- Dumping data for table `report`
+--
+
+INSERT INTO `report` VALUES(532, 'fun', 13, 27, NULL, '2011/10/27.29.14.37.57.jpg', 1319902677, 1319924277, NULL);
+INSERT INTO `report` VALUES(533, 'ok', 13, 27, NULL, '2011/10/27.29.14.39.12.jpg', 1319920752, 1319924352, NULL);
+INSERT INTO `report` VALUES(535, NULL, 13, 39, 3, NULL, 1319926325, 1319926325, NULL);
+INSERT INTO `report` VALUES(536, NULL, 13, 39, NULL, NULL, 1319918549, 1319943749, NULL);
+INSERT INTO `report` VALUES(537, NULL, 23, 39, NULL, NULL, 1319971430, 1319971430, NULL);
+INSERT INTO `report` VALUES(539, NULL, 13, 39, NULL, NULL, 1319999651, 1319999651, NULL);
+INSERT INTO `report` VALUES(540, NULL, 30, 39, 1, NULL, 1320211408, 1320211408, NULL);
+INSERT INTO `report` VALUES(548, NULL, 23, 27, NULL, NULL, 1320427070, 1320427070, NULL);
+INSERT INTO `report` VALUES(549, NULL, 13, 27, NULL, NULL, 1320691305, 1320691305, NULL);
+INSERT INTO `report` VALUES(550, NULL, 13, 27, NULL, NULL, 1321090379, 1321090379, NULL);
+INSERT INTO `report` VALUES(551, 'ok', 28, 39, 2, '2011/11/39.17.8.22.02.png', 1321546922, 1321546922, NULL);
+INSERT INTO `report` VALUES(552, NULL, 13, 27, 2, NULL, 1321748368, 1321769968, NULL);
+INSERT INTO `report` VALUES(553, NULL, 13, 27, 2, NULL, 1321748377, 1321769977, NULL);
+INSERT INTO `report` VALUES(554, ' its dark', 13, 27, 3, NULL, 1321770115, 1321770115, NULL);
+INSERT INTO `report` VALUES(555, NULL, 13, 27, NULL, NULL, 1321843134, 1321843134, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reporter`
+--
+
+CREATE TABLE `reporter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` char(32) DEFAULT NULL,
+  `joindate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=46 ;
+
+--
+-- Dumping data for table `reporter`
+--
+
+INSERT INTO `reporter` VALUES(27, 'tila', 'tila@e.com', 'c870d16332a62b89c80aff21028e90ad', NULL);
+INSERT INTO `reporter` VALUES(38, 'kale', 'kale@e.com', 'ac5236768fb71349bffbe554c152dd38', NULL);
+INSERT INTO `reporter` VALUES(39, 'dan', 'dan@e.com', '38624bc694e7d119971d34f8267336aa', NULL);
+INSERT INTO `reporter` VALUES(44, 'joey', 'joey@e.com', 'ac1ce564228491b42efe73ee2fee848b', NULL);
+INSERT INTO `reporter` VALUES(45, 'test person', 'test@test.com', 'f994aa6fe4e9ef040d941b184cd5e55d', '2011-12-03 18:10:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reporterlocation`
+--
+
+CREATE TABLE `reporterlocation` (
+  `reporterid` int(11) NOT NULL,
+  `locationid` int(11) NOT NULL,
+  UNIQUE KEY `reporterid` (`reporterid`,`locationid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `reporterlocation`
+--
+
+INSERT INTO `reporterlocation` VALUES(27, 13);
+INSERT INTO `reporterlocation` VALUES(27, 18);
+INSERT INTO `reporterlocation` VALUES(27, 23);
+INSERT INTO `reporterlocation` VALUES(27, 31);
+INSERT INTO `reporterlocation` VALUES(39, 13);
+INSERT INTO `reporterlocation` VALUES(39, 23);
+INSERT INTO `reporterlocation` VALUES(39, 28);
+INSERT INTO `reporterlocation` VALUES(39, 29);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tidedata`
+--
+
+CREATE TABLE `tidedata` (
+  `tide` float DEFAULT NULL,
+  `tidedate` int(11) DEFAULT NULL,
+  `tideres` float DEFAULT NULL,
+  `reportid` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tidedata`
+--
+
+INSERT INTO `tidedata` VALUES(3.48, 1319639760, 0.11, 502);
+INSERT INTO `tidedata` VALUES(6.71, 1319652000, 0.03, 503);
+INSERT INTO `tidedata` VALUES(2.29, 1319689080, 0.14, 504);
+INSERT INTO `tidedata` VALUES(1.6, 1319687280, 0.13, 506);
+INSERT INTO `tidedata` VALUES(0, 1319684040, 0, 509);
+INSERT INTO `tidedata` VALUES(-0.61, 1319680440, 0.08, 510);
+INSERT INTO `tidedata` VALUES(0.85, 1319682600, -0.06, 511);
+INSERT INTO `tidedata` VALUES(-0.21, 1319689800, -0.04, 512);
+INSERT INTO `tidedata` VALUES(-0.39, 1319697360, 0.02, 513);
+INSERT INTO `tidedata` VALUES(-0.39, 1319697360, 0.02, 514);
+INSERT INTO `tidedata` VALUES(-0.3, 1319698440, 0.03, 515);
+INSERT INTO `tidedata` VALUES(-0.22, 1319699160, 0.04, 516);
+INSERT INTO `tidedata` VALUES(1.92, 1319868000, 0.13, 517);
+INSERT INTO `tidedata` VALUES(4.39, 1319875560, 0.08, 523);
+INSERT INTO `tidedata` VALUES(4.63, 1319909400, 0.1, 524);
+INSERT INTO `tidedata` VALUES(4.63, 1319909400, 0.1, 526);
+INSERT INTO `tidedata` VALUES(2.95, 1319902560, 0.06, 0);
+INSERT INTO `tidedata` VALUES(6.63, 1319920920, -0.01, 533);
+INSERT INTO `tidedata` VALUES(5.58, 1319926320, -0.12, 535);
+INSERT INTO `tidedata` VALUES(6.57, 1319918400, 0.04, 536);
+INSERT INTO `tidedata` VALUES(0.73, 1319971320, 0.05, 537);
+INSERT INTO `tidedata` VALUES(4.71, 1319999760, 0.08, 539);
+INSERT INTO `tidedata` VALUES(-99.99, 1320211440, 0, 540);
+INSERT INTO `tidedata` VALUES(4.37, 1320335280, -0.06, 544);
+INSERT INTO `tidedata` VALUES(0.67, 1320336360, 0, 545);
+INSERT INTO `tidedata` VALUES(1.43, 1320427080, 0.03, 548);
+INSERT INTO `tidedata` VALUES(4.9, 1320691320, -0.09, 549);
+INSERT INTO `tidedata` VALUES(4.47, 1321090200, -0.02, 550);
+INSERT INTO `tidedata` VALUES(1.53, 1321770240, -0.07, 554);
+INSERT INTO `tidedata` VALUES(4.2, 1321842960, 0.03, 555);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tidestation`
+--
+
+CREATE TABLE `tidestation` (
+  `stationid` varchar(50) NOT NULL DEFAULT '',
+  `stationname` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`stationid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tidestation`
+--
+
+INSERT INTO `tidestation` VALUES('1615680', 'Maui');
+INSERT INTO `tidestation` VALUES('8774770', 'Adak');
+INSERT INTO `tidestation` VALUES('9410647', 'Los Angeles');
+INSERT INTO `tidestation` VALUES('9414290', 'San Francisco');
+INSERT INTO `tidestation` VALUES('9461380', 'Oregon');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usercookie`
+--
+
+CREATE TABLE `usercookie` (
+  `userid` int(11) DEFAULT NULL,
+  `userkey` varchar(255) DEFAULT NULL,
+  `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `usercookie`
+--
+
