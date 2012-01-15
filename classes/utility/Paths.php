@@ -2,7 +2,7 @@
 
 class Paths {
 	
-	const ROOT = '/';
+	const ROOT = '';
 	const SHORTURL = 'http://bouyreport.com/';
 	const URL = 'http://www.bouyreport.com/';
 	const LOCALURL = 'http://localhost:8888/br';

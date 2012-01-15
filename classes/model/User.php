@@ -1,8 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/utility/helpers.php';
-timer('user_bfore_include_pers');
 include_once $_SERVER['DOCUMENT_ROOT'] . '/reporter/classes/model/Persistence.php';
-timer('user_after_include_pers');
 
 class User {
 
@@ -11,7 +9,6 @@ class User {
 
 	//handles login/logouts and grants user with session access
 	public function userIsLoggedIn() {
-		timer('user_bfore_logout_check');
 		/* --------------- HANDLE LOGOUT FORM SUBMISSION --------------- */
 		if ((isset($_REQUEST['logout']) && $_REQUEST['logout']) || (isset($_POST['submit']) && $_POST['submit'] == 'logout')) {
 			$this->logOutUser();
@@ -19,16 +16,16 @@ class User {
 			header('Location:'.Paths::toIntro());
 			exit();
 		}		
-		timer('user_bfore_session_check');
+
 		/* ----------------- CHECK IF USER HAS SESSION ----------------- */
 		if (!isset($_SESSION)) session_start();
 		if (isset($_SESSION['userid']) && $_SESSION['userid'] != '')
 			return TRUE;		
-		timer('user_bfore_cookie_check');
+
 		/* ----------------- CHECK IF USER HAS COOKIE ----------------- */
 		if (isset($_COOKIE['surf-session']))
 			return $this->handleCookie();
-		timer('user_after_cookie_check');
+
 		return FALSE;
 	}
 
