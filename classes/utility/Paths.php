@@ -2,11 +2,11 @@
 
 class Paths {
 	
-	const ROOT = '/reporter';
-	const SHORTURL = 'http://hodaradesign.com';
-	const URL = 'http://www.hodaradesign.com';
+	const ROOT = '/br';
+	const SHORTURL = 'http://br.webbyapp.com/';
+	const URL = 'http://br.webbyapp.com/';
 	const LOCALURL = 'http://localhost:8888';
-	const COOKIEDOMAIN = '.hodaradesign.com';
+	const COOKIEDOMAIN = 'br.webbyapp.com';
 
 	public static function toUrl() {
 		global $local_dev;
