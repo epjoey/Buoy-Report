@@ -179,7 +179,6 @@ class Paths {
 		global $local_dev;
 
 		return Paths::toUrl() . '/utility/mobile-image-process.php';
-		//return 'http://192.168.1.105:8888/reporter/utility/mobile-image-process.php';
 
 	}
 

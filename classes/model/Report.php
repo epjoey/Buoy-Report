@@ -60,7 +60,7 @@ class Report {
 				$this->submitError = 'file-type'; //unknown file type
 			}	
 			if (!isset($this->submitError)) {
-				$imagePath = $_SERVER['DOCUMENT_ROOT'] . '/reporter/uploads/' . date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] .'.'. date('d.G.i.s') . $imageExt;
+				$imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] .'.'. date('d.G.i.s') . $imageExt;
 				
 				//stored in DB. full path prepended
 				$this->reportInfo['imagepath'] = date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] . '.' . date('d.G.i.s') . $imageExt;

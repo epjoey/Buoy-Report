@@ -145,7 +145,7 @@ function usePicup(callbackUrl, windowName) {
     currentParams = {
         'callbackURL'       : callbackUrl,
         'referrername'      : escape('Bouy Report'),
-        'referrerfavicon'   : escape('http://hodaradesign.com/reporter/images/favicon.ico'),
+        'referrerfavicon'   : escape('http://bouyreport.com/images/favicon.ico'),
         'purpose'           : escape('Select Photo'),
         'debug'             : 'false',
         'returnThumbnailDataURL': 'false'
