@@ -2,11 +2,11 @@
 
 class Paths {
 	
-	const ROOT = '/br';
-	const SHORTURL = 'http://br.webbyapp.com/';
-	const URL = 'http://br.webbyapp.com/';
-	const LOCALURL = 'http://localhost:8888';
-	const COOKIEDOMAIN = 'br.webbyapp.com';
+	const ROOT = '/';
+	const SHORTURL = 'http://bouyreport.com/';
+	const URL = 'http://www.bouyreport.com/';
+	const LOCALURL = 'http://localhost:8888/br';
+	const COOKIEDOMAIN = '.bouyreport.com';
 
 	public static function toUrl() {
 		global $local_dev;
