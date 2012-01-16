@@ -13,7 +13,6 @@ class Report {
 
 
 	public function __construct() {
-		ini_set("display_errors","On");
 
 		var_dump($_POST['locationname']);
 
