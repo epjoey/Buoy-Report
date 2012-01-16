@@ -5,10 +5,10 @@ class Persistence {
 
 		global $local_dev;
 		
-		$host = 'hodarareporter.db.3729469.hostedresource.com';
-		$db = 'hodarareporter';
-		$un = 'hodarareporter';
-		$pw = 'IvyTila99';
+		$host = 'mysql';
+		$db = 'br';
+		$un = 'root';
+		$pw = 'ivytila';
 		
 		if ($local_dev) {
 			$db = 'reportdb';
