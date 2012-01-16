@@ -2,9 +2,9 @@
 
 class Paths {
 	
-	const SHORTURL = 'http://bouyreport.com/';
-	const URL = 'http://www.bouyreport.com/';
-	const LOCALURL = 'http://localhost:8888/';
+	const SHORTURL = 'http://bouyreport.com';
+	const URL = 'http://www.bouyreport.com';
+	const LOCALURL = 'http://localhost:8888';
 	const COOKIEDOMAIN = '.bouyreport.com';
 
 	public static function toUrl() {

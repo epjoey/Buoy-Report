@@ -13,6 +13,7 @@ class Report {
 
 
 	public function __construct() {
+		ini_set("display_errors","On");
 
 		$this->reportInfo['reporterId'] = intval($_POST['reporterid']);
 		$this->reportInfo['locId'] = intval($_POST['locationid']);
