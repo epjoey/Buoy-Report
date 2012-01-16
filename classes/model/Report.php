@@ -48,6 +48,8 @@ class Report {
 		//image copied into directory during construction. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
 
+			vardump ($_FILES['upload']['tmp_name'] . ' ' . $imagePath);
+
 			if (!is_uploaded_file($_FILES['upload']['tmp_name'])) {
 				$this->submitError = 'upload-file';
 			}
@@ -69,7 +71,7 @@ class Report {
 				$image = new SimpleImage();
 				$image->load($_FILES['upload']['tmp_name']);
 				$image->fitDimensions(1000,1000);
-				print $_FILES['upload']['tmp_name'] . ' ' . $imagePath;
+
 				if (!copy($_FILES['upload']['tmp_name'], $imagePath)) {
 					$this->submitError = 'file-save';
 				}				
