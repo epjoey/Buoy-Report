@@ -48,7 +48,7 @@ class Report {
 		//image copied into directory during construction. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
 
-			die($_FILES['upload']['tmp_name'] . ' ' . $imagePath);
+			var_dump($_FILES['upload']['tmp_name']);
 
 			if (!is_uploaded_file($_FILES['upload']['tmp_name'])) {
 				$this->submitError = 'upload-file';
