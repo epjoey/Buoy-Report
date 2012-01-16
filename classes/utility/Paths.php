@@ -127,16 +127,16 @@ class Paths {
 			return $path;
 		}
 		if ($local_dev) {
-			return Paths::ROOT . '/uploads/' . $path;
+			return '/uploads/' . $path;
 		}
-		return Paths::URL . Paths::ROOT . '/uploads/' . $path;
+		return Paths::URL . '/uploads/' . $path;
 	}
 
 	public static function toImageFile($path, $isRemote = FALSE) {
 		if ($isRemote) {
 			return $path;
 		}
-		return $_SERVER['DOCUMENT_ROOT'] . Paths::ROOT . '/uploads/' . $path;
+		return $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $path;
 	}
 
 	public static function to404() {
