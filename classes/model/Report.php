@@ -13,7 +13,8 @@ class Report {
 
 
 	public function __construct() {
-		
+		ini_set("display_errors","On");
+
 		$this->reportInfo['reporterId'] = intval($_POST['reporterid']);
 		$this->reportInfo['locId'] = intval($_POST['locationid']);
 		$this->reportInfo['locName'] = $_POST['locationname'];
@@ -46,7 +47,9 @@ class Report {
 		
 		//image copied into directory during construction. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-		
+
+			var_dump($_FILES['upload']['tmp_name']);
+
 			if (!is_uploaded_file($_FILES['upload']['tmp_name'])) {
 				$this->submitError = 'upload-file';
 			}
