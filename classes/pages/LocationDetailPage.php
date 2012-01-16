@@ -6,7 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBouyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/magicquotes.php';
+
 
 
 

@@ -4,7 +4,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Report.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/magicquotes.php';
+
 
 
 class HomePage extends GeneralPage {

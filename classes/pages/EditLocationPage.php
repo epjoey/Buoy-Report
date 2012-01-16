@@ -1,7 +1,5 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/LocationDetailPage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/magicquotes.php';
-
 
 class EditLocationPage extends LocationDetailPage {
 
