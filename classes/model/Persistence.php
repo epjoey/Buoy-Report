@@ -5,7 +5,7 @@ class Persistence {
 
 		global $local_dev;
 		
-		$host = 'mysql';
+		$host = 'localhost';
 		$db = 'br';
 		$un = 'root';
 		$pw = 'ivytila';
