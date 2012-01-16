@@ -15,6 +15,9 @@ class Report {
 	public function __construct() {
 		ini_set("display_errors","On");
 
+		var_dump($_POST['locationname']);
+
+
 		$this->reportInfo['reporterId'] = intval($_POST['reporterid']);
 		$this->reportInfo['locId'] = intval($_POST['locationid']);
 		$this->reportInfo['locName'] = $_POST['locationname'];
