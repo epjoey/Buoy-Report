@@ -82,9 +82,14 @@ class Report {
 			$this->reportInfo['imagepath'] = rawurldecode($_POST['remoteImageURL']);
 		}
 		
+		
 		/* Storing report in session */
-		if (!isset($_SESSION)) session_start();
-		$_SESSION['new-report'] = $this->reportInfo; 		
+
+		if (!isset($this->submitError)) {
+			
+			if (!isset($_SESSION)) session_start();
+			$_SESSION['new-report'] = $this->reportInfo; 			
+		}
 		
 	}
 
