@@ -72,8 +72,6 @@ class Report {
 			$image->load($_FILES['upload']['tmp_name']);
 			$image->fitDimensions(1000,1000);
 
-			chmod($_FILES['upload']["tmp_name"], 0777);
-			chmod($imagePath, 0777);
 			if (!move_uploaded_file($_FILES['upload']["tmp_name"], $imagePath)) {
 				$this->submitError = 'file-save';	
 				return FALSE;
