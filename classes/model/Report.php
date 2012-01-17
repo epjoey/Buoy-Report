@@ -83,7 +83,8 @@ class Report {
 			
 		/* Storing report in session */			
 		if (!isset($_SESSION)) session_start();
-		$_SESSION['new-report'] = $this->reportInfo; 			
+		$_SESSION['new-report'] = $this->reportInfo; 
+		return TRUE;			
 		
 	}
 	
