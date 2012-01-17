@@ -450,24 +450,30 @@ class Persistence {
 
 		if (isset($options['newName'])) {
 			$newName = mysqli_real_escape_string($link, $options['newName']);
-			$newNameStr = "name = '$newName'";
+			$str[] = "name = '$newName'";
 		}
 		if (isset($options['newEmail'])) {
 			$newEmail = mysqli_real_escape_string($link, $options['newEmail']);
-			$newEmailStr = "email = '$newEmail'";
-			if ($newNameStr != "") $newNameStr .= ", ";
-		}		
+			$str[] = "email = '$newEmail'";
+		}	
+		if (isset($options['reportStatus'])) {
+			$reportStatus = intval($options['reportStatus']);
+			$str[] = "public = '$reportStatus'";
+		}			
 		if (isset($options['newPassword'])) {
 			$newPassword = mysqli_real_escape_string($link, $options['newPassword']);
-			$newPasswordStr = "password = '$newPassword'";
-			if ($newEmailStr != "") {
-				$newEmailStr .= ", ";
-			} else if ($newNameStr != "") {
-				$newNameStr .= ", ";
+			$str[] = "password = '$newPassword'";
+		}
+
+		$set = "";
+		foreach ($str as $key=>$val) {
+			$set .= $val;
+			if (isset($str[$key+1])) {
+				$set .= ", ";
 			}
 		}
 
-		$sql = "UPDATE reporter SET " . $newNameStr . $newEmailStr . $newPasswordStr . " WHERE id = '$reporterid'";
+		$sql = "UPDATE reporter SET " . $set . " WHERE id = '$reporterid'";
 		$result = mysqli_query($link, $sql) or die("Error updating user account" . mysqli_error($link));
 	}
 

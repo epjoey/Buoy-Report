@@ -5,36 +5,61 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 
 class EditProfilePage extends GeneralPage {
 
+	private $editAccountError = NULL;
+
 	public function loadData() {
 		parent::loadData();
 		$this->pageTitle = 'My Account';	
-		$this->editAccountError = NULL;	
+
+		if (isset($_GET['error']) && $_GET['error']) {
+			switch($_GET['error']) {
+				case 1: $e = 'You must enter your current password to edit account'; break;
+				case 2: $e = 'The password you entered is not correct'; break;
+				case 3: $e = 'Password must be more than 5 characters'; break;
+				case 4: $e = 'You must enter a valid email address'; break;
+				case 5: $e = 'No changes were specified'; break;
+			}
+			$this->editAccountError = $e;
+		}	
 	}
 
+	public function renderJs(){
+		parent::renderJs();
+		if (isset($this->editAccountError)) {
+			?>
+				<script type="text/javascript">
+					$(document).ready(function(){
+						window.scrollTo(0,document.body.scrollHeight);
+					});
+				</script>
+			<?
+		}
+
+	}
 
 	public function afterSubmit() {
 		if ($_POST['submit'] == 'edit-account') {
 			if (empty($_POST['current-password'])) {
-				$this->editAccountError = 'You must enter your current password to edit account';
-				$this->renderPage();
+				$error = 1;
+				header('Location:'.Paths::toProfile($this->userId, $error));
 				exit();				
 			}
 
 			$reporterId = Persistence::returnReporterId($this->userEmail, md5($_POST['current-password'] . 'reportdb'));
 			
 			if (!isset($reporterId)) {
-				$this->editAccountError = 'The password you entered is not correct';
-				$this->renderPage();
+				$error = 2;
+				header('Location:'.Paths::toProfile($this->userId, $error));
 				exit();
 			}
 			if (!empty($_POST['new-password']) && strlen($_POST['new-password']) < 5) {
-				$this->editAccountError = 'Password must be more than 5 characters';
-				$this->renderPage();
+				$error = 3;
+				header('Location:'.Paths::toProfile($this->userId, $error));
 				exit();				
 			}
 			if (!empty($_POST['new-email']) && filter_var($_POST['new-email'], FILTER_VALIDATE_EMAIL) != TRUE ) {
-				$this->editAccountError = 'You must enter a valid email address';
-				$this->renderPage();
+				$error = 4;
+				header('Location:'.Paths::toProfile($this->userId, $error));
 				exit();					
 			}
 
@@ -47,13 +72,17 @@ class EditProfilePage extends GeneralPage {
 			} 
 			if (!empty($_POST['new-password'])) {
 				$options['newPassword'] = md5($_POST['new-password'] . 'reportdb');
-			} 	
+			} 
+			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->userInfo['reportStatus']) {
+				$options['reportStatus'] = $_POST['report-status'];
+			} 		
+	
 			if (count($options) > 0) {
 				Persistence::updateUserInfo($this->userId, $options);
 				$this->user->updateUserSession($options);		
 			} else {
-				$this->editAccountError = 'No changes were specified';
-				$this->renderPage();
+				$error = 5;
+				header('Location:'.Paths::toProfile($this->userId, $error));
 				exit();					
 			}
 			header('HTTP/1.1 301 Moved Permanently');
@@ -89,7 +118,7 @@ class EditProfilePage extends GeneralPage {
 		<h1>My account</h1>
 		<?
 		$this->renderMyReports();
-		$this->renderEditInfo();
+		$this->renderEditInfo($this->editAccountError);
 	}
 
 	public function renderMyReports() {
@@ -140,6 +169,23 @@ class EditProfilePage extends GeneralPage {
 						<label for="new-password">Update password</label>
 						<input type="password" name="new-password" class="text-input" id="new-password" value="" />
 					</div>
+					<? /*
+					<div  class="field radio-menu">
+						<label for="reports-public">My Reports are</label>
+						<div class="radio-container">
+							<span class="radio-field">
+								<input type="radio" class="required" name="report-status" id="public-status" value="1" <?= 
+									$this->userInfo['reportStatus'] == 1 ? "checked = 'true'" : ""; 
+								?>/><label for="public-status"> Public</label>
+							</span>
+							<span class="radio-field">
+								<input type="radio" class="required" name="report-status" id="private-status" value="0" <?=
+									$this->userInfo['reportStatus'] == 0 ? "checked = 'true'" : ""; 
+								?>/><label for="private-status"> Private</label>
+							</span>		
+						</div>				
+					</div>	
+					*/ ?>					
 					<div class="field">
 						<label for="current-password"><b>Confirm current password</b>*</label>
 						<input type="password" name="current-password" class="text-input" id="current-password" value="" />

@@ -29,7 +29,7 @@ class SinglePostPage extends GeneralPage {
 		$this->reportView->renderSingleReport();
 		if ($this->report['reporterid'] == $this->userId) {
 			?>	
-				<p><a class="random" href="<?=Paths::toEditPost($this->report['id'])?>">Edit Post</a></p>
+				<p><a class="random" href="<?=Paths::toEditPost($this->report['id'])?>">Edit Report</a></p>
 			<?
 		}
 	}

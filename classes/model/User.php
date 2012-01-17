@@ -117,6 +117,7 @@ class User {
 		$_SESSION['name'] = $reporterInfo['name'];
 		$_SESSION['joindate'] = $reporterInfo['joindate'];
 		$_SESSION['justRegistered'] = $fromRegistration;
+		$_SESSION['reportStatus'] = $reporterInfo['public'];
 
 		
 		/*--------------- REPLACING AND RESETING EXISTING COOKIE ----------------*/
@@ -152,6 +153,7 @@ class User {
 		$this->userName = $_SESSION['name'];
 		$this->userJoinDate = $_SESSION['joindate'];
 		$this->userJustRegistered = $_SESSION['justRegistered'];
+		$this->reportStatus = $_SESSION['reportStatus'];
 		if (isset($_SESSION['new-report'])) {
 			$this->newReport = $_SESSION['new-report'];
 		} else {
@@ -168,6 +170,9 @@ class User {
 		if (isset($options['newName'])) {			
 			$_SESSION['name'] = $options['newName'];
 		}
+		if (isset($options['reportStatus'])) {			
+			$_SESSION['reportStatus'] = $options['reportStatus'];
+		}		
 	}
 
 	public static function unsetNewReport() {

@@ -201,15 +201,15 @@ class EditLocationPage extends LocationDetailPage {
 					<?
 				}
 				
-				if ($this->bouyCount < 3 && $this->userIsLoggedIn) {
-					$form = new AddBouyForm;
-					$form -> renderAddBouyForm($this->addBouyError);
-				}
+				// if ($this->bouyCount < 3 && $this->userIsLoggedIn) {
+				// 	$form = new AddBouyForm;
+				// 	$form -> renderAddBouyForm($this->addBouyError);
+				// }
 
-				if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
-					$form = new AddTideStationForm;
-					$form -> renderAddTideStationForm($this->addStationError);
-				}
+				// if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
+				// 	$form = new AddTideStationForm;
+				// 	$form -> renderAddTideStationForm($this->addStationError);
+				// }
 
 				?>
 				<form action="" method="post" class="delete-form" id="delete-location-form">

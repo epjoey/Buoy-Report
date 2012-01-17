@@ -34,7 +34,7 @@ class GeneralPage {
 			if (!empty($this->userLocations)) {
 				$this->userHasLocations = TRUE;		
 			} 
-			$this->userInfo = array('id'=>$this->userId, 'name'=>$this->userName, 'locations'=>$this->userLocations);			
+			$this->userInfo = array('id'=>$this->userId, 'name'=>$this->userName, 'locations'=>$this->userLocations, 'reportStatus'=>$this->user->reportStatus);
 		}
 		$this->detect = new Mobile_Detect();
 		$this->isMobile = $this->detect->isMobile();

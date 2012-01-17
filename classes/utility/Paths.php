@@ -79,8 +79,15 @@ class Paths {
 		return '/edit-post.php?id='.$reportId;
 	}	
 
-	public static function toProfile($reporterId) {
-		return '/profile.php?reporter='.$reporterId;
+	public static function toProfile($reporterId, $error) {
+		if (!isset($reporterId)) {
+			return Paths::to404();
+		}		
+		$url = '/profile.php?reporter='.$reporterId;
+		if (isset($error)) {
+			$url .= '&error='.$error;
+		}
+		return $url;		
 	}
 
 	public static function toLocation($locationId = null) {
