@@ -74,11 +74,10 @@ class Report {
 
 			chmod($_FILES['upload']["tmp_name"], 0777);
 			chmod($imagePath, 0777);
-			move_uploaded_file($_FILES['upload']["tmp_name"], $imagePath); 
-			
-			
-			$this->submitError = 'file-save';	
-
+			if (!move_uploaded_file($_FILES['upload']["tmp_name"], $imagePath)) {
+				$this->submitError = 'file-save';	
+				return FALSE;
+			} 
 						
 		} else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
 			$this->reportInfo['imagepath'] = rawurldecode($_POST['remoteImageURL']);
@@ -88,15 +87,6 @@ class Report {
 		if (!isset($_SESSION)) session_start();
 		$_SESSION['new-report'] = $this->reportInfo; 			
 		
-	}
-
-	public function processReport() {
-
-		if (isset($this->submitError)) {
-			return FALSE;				
-		} else {
-			return TRUE;
-		}		
 	}
 	
 	public static function submitData($reportInfo){
