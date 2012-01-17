@@ -74,7 +74,10 @@ class Report {
 				$image->load($_FILES['upload']['tmp_name']);
 				$image->fitDimensions(1000,1000);
 
-				if (!copy($_FILES['upload']['tmp_name'], $imagePath)) {
+				if (!move_uploaded_file($_FILES['upload']['tmp_name'], $imagePath)) {
+					error_reporting(E_ALL);
+					ini_set("display_errors", 1);
+					echo "<pre>" . PHP_EOL;
 					$this->submitError = 'file-save';
 				}				
 			} 			
