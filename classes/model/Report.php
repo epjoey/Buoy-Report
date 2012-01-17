@@ -12,10 +12,7 @@ class Report {
 	public $reportId = NULL;
 
 
-	public function __construct() {
-
-		var_dump($_POST['locationname']);
-
+	public function handleSubmission() {
 
 		$this->reportInfo['reporterId'] = intval($_POST['reporterid']);
 		$this->reportInfo['locId'] = intval($_POST['locationid']);
@@ -45,15 +42,15 @@ class Report {
 			$this->reportInfo['quality'] = $_POST['quality'];
 		} else {
 			$this->submitError = 'no-quality';
+			return FALSE;
 		}	
 		
 		//image copied into directory during construction. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
 
-			var_dump($_FILES['upload']['tmp_name']);
-
 			if (!is_uploaded_file($_FILES['upload']['tmp_name'])) {
 				$this->submitError = 'upload-file';
+				return FALSE;
 			}
 			if (preg_match('/^image\/p?jpeg$/i', $_FILES['upload']['type'])) {
 				$imageExt = '.jpg';
@@ -63,36 +60,31 @@ class Report {
 				$imageExt = '.png';
 			} else {
 				$this->submitError = 'file-type'; //unknown file type
+				return FALSE;
 			}	
-			if (!isset($this->submitError)) {
-				$imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] .'.'. date('d.G.i.s') . $imageExt;
-				
-				//stored in DB. full path prepended
-				$this->reportInfo['imagepath'] = date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] . '.' . date('d.G.i.s') . $imageExt;
 
-				$image = new SimpleImage();
-				$image->load($_FILES['upload']['tmp_name']);
-				$image->fitDimensions(1000,1000);
+			$imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] .'.'. date('d.G.i.s') . $imageExt;
+			
+			//stored in DB. full path prepended
+			$this->reportInfo['imagepath'] = date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] . '.' . date('d.G.i.s') . $imageExt;
 
-				if (!move_uploaded_file($_FILES['upload']['tmp_name'], $imagePath)) {
-					error_reporting(E_ALL);
-					ini_set("display_errors", 1);
-					echo "<pre>" . PHP_EOL;
-					$this->submitError = 'file-save';
-				}				
-			} 			
+			$image = new SimpleImage();
+			$image->load($_FILES['upload']['tmp_name']);
+			$image->fitDimensions(1000,1000);
+
+			move_uploaded_file($_FILES['upload']['tmp_name'], $imagePath);
+			chmod($imagePath, 0777);
+			
+			$this->submitError = 'file-save';	
+
+						
 		} else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
 			$this->reportInfo['imagepath'] = rawurldecode($_POST['remoteImageURL']);
 		}
-		
-		
-		/* Storing report in session */
-
-		if (!isset($this->submitError)) {
 			
-			if (!isset($_SESSION)) session_start();
-			$_SESSION['new-report'] = $this->reportInfo; 			
-		}
+		/* Storing report in session */			
+		if (!isset($_SESSION)) session_start();
+		$_SESSION['new-report'] = $this->reportInfo; 			
 		
 	}
 

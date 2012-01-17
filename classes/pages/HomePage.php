@@ -27,7 +27,7 @@ class HomePage extends GeneralPage {
 
 			//validating and storing report in Session, then redirecting back to report form or same page
 			$newReport = new Report;
-			if(!$newReport->processReport()) {
+			if(!$newReport->handleSubmission()) {
 				header('Location:'.Paths::toPostReport($newReport->reportInfo['locId'], $newReport->submitError));
 				exit();
 			}
