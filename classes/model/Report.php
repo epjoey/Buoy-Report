@@ -45,7 +45,7 @@ class Report {
 			return FALSE;
 		}	
 		
-		//image copied into directory during construction. wierd, I know.
+		//image copied into directory during form handle. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
 
 			if (!is_uploaded_file($_FILES['upload']['tmp_name'])) {
