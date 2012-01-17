@@ -64,7 +64,7 @@ function getLocalTimeFromGMT($gmtTime, $timezone) {
 	
 	$localTimezone = new DateTimeZone($timezone);
 	$offset = $localTimezone->getOffset(new DateTime('now', new DateTimeZone('GMT')));
-	if ( date("m/d/y", $gmtTime) == gmstrftime("%m/%d/%y", $gmtTime+$offset)) {
+	if ( gmstrftime("%m/%d/%y", time()+$offset) == gmstrftime("%m/%d/%y", $gmtTime+$offset)) {
 		$localTime = gmstrftime("%l:%M %p", $gmtTime+$offset);
 	} else {
 		$localTime = gmstrftime("%m/%d/%y %l:%M %p", $gmtTime+$offset);
