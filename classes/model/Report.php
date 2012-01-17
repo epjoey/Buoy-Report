@@ -72,8 +72,9 @@ class Report {
 			$image->load($_FILES['upload']['tmp_name']);
 			$image->fitDimensions(1000,1000);
 
-			move_uploaded_file($_FILES['upload']["tmp_name"], $f=$imagePath); 
-			chmod($f, 0777);
+			chmod($_FILES['upload']["tmp_name"], 0777);
+			move_uploaded_file($_FILES['upload']["tmp_name"], $imagePath); 
+			
 			
 			$this->submitError = 'file-save';	
 
