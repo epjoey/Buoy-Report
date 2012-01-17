@@ -1,6 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Report.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditReportForm.php';
 
 
@@ -60,39 +61,21 @@ class EditPostPage extends GeneralPage {
 			$this->reportInfo['imagepath'] = '';
 		}
 
+		//image copied into directory during form handle. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
+			
+			$uploadStatus = Report::handleUpload($_FILES['upload'], $this->userId);
 
-			if (!is_uploaded_file($_FILES['upload']['tmp_name'])) {
-				$this->submitError = 'upload-file';
-				return FALSE;
+			if (isset($uploadStatus['error'])) {
+				$this->submitError = $uploadStatus['error']; 
+				return FALSE;	
+			} else if (isset($uploadStatus['imagepath'])) {
+				$this->reportInfo['imagepath'] = $uploadStatus['imagepath'];
 			}
-			if (preg_match('/^image\/p?jpeg$/i', $_FILES['upload']['type'])) {
-				$imageExt = '.jpg';
-			} else if (preg_match('/^image\/gif$/i', $_FILES['upload']['type'])) {
-				$imageExt = '.gif';
-			} else if (preg_match('/^image\/(x-1)?png$/i', $_FILES['upload']['type'])) {
-				$imageExt = '.png';
-			} else {
-				$this->submitError = 'file-type'; //unknown file type
-				return FALSE;
-			}	
-			if (!isset($this->submitError)) {
-				$imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterid'] .'.'. date('d.G.i.s') . $imageExt;
-				
-				//stored in DB. full path prepended
-				$this->reportInfo['imagepath'] = date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterid'] . '.' . date('d.G.i.s') . $imageExt;
-
-				$image = new SimpleImage();
-				$image->load($_FILES['upload']['tmp_name']);
-				$image->fitDimensions(1000,1000);
-				if (!copy($_FILES['upload']['tmp_name'], $imagePath)) {
-					$this->submitError = 'file-save';
-					return FALSE;
-				}				
-			} 			
+						
 		} else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
 			$this->reportInfo['imagepath'] = rawurldecode($_POST['remoteImageURL']);
-		}	
+		}		
 
 		$this->reportInfo['text'] = $_POST['text'];
 

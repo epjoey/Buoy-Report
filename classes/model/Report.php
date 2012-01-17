@@ -47,35 +47,15 @@ class Report {
 		
 		//image copied into directory during form handle. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-
-			if (!is_uploaded_file($_FILES['upload']['tmp_name'])) {
-				$this->submitError = 'upload-file';
-				return FALSE;
-			}
-			if (preg_match('/^image\/p?jpeg$/i', $_FILES['upload']['type'])) {
-				$imageExt = '.jpg';
-			} else if (preg_match('/^image\/gif$/i', $_FILES['upload']['type'])) {
-				$imageExt = '.gif';
-			} else if (preg_match('/^image\/(x-1)?png$/i', $_FILES['upload']['type'])) {
-				$imageExt = '.png';
-			} else {
-				$this->submitError = 'file-type'; //unknown file type
-				return FALSE;
-			}	
-
-			$imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] .'.'. date('d.G.i.s') . $imageExt;
 			
-			//stored in DB. full path prepended
-			$this->reportInfo['imagepath'] = date('Y') . '/' . date('m') . '/' . $this->reportInfo['reporterId'] . '.' . date('d.G.i.s') . $imageExt;
+			$uploadStatus = $this->handleUpload($_FILES['upload'], $this->reportInfo['reporterId']);
 
-			$image = new SimpleImage();
-			$image->load($_FILES['upload']['tmp_name']);
-			$image->fitDimensions(1000,1000);
-
-			if (!move_uploaded_file($_FILES['upload']["tmp_name"], $imagePath)) {
-				$this->submitError = 'file-save';	
-				return FALSE;
-			} 
+			if (isset($uploadStatus['error'])) {
+				$this->submitError = $uploadStatus['error']; 
+				return FALSE;	
+			} else if (isset($uploadStatus['imagepath'])) {
+				$this->reportInfo['imagepath'] = $uploadStatus['imagepath'];
+			}
 						
 		} else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
 			$this->reportInfo['imagepath'] = rawurldecode($_POST['remoteImageURL']);
@@ -88,6 +68,41 @@ class Report {
 		
 	}
 	
+	public static function handleUpload($upload, $reporterId) {
+
+		$uploadStatus = array();
+
+		if (!is_uploaded_file($upload['tmp_name'])) {
+			$uploadStatus['error'] = 'upload-file';
+			return $uploadStatus;
+		}
+		if (preg_match('/^image\/p?jpeg$/i', $upload['type'])) {
+			$imageExt = '.jpg';
+		} else if (preg_match('/^image\/gif$/i', $upload['type'])) {
+			$imageExt = '.gif';
+		} else if (preg_match('/^image\/(x-1)?png$/i', $upload['type'])) {
+			$imageExt = '.png';
+		} else {
+			$uploadStatus['error'] = 'file-type'; //unknown file type
+			return $uploadStatus;
+		}	
+		
+		//stored in DB. full path prepended
+		$uploadStatus['imagepath'] = date('Y') . '/' . date('m') . '/' . $reporterId . '.' . date('d.G.i.s') . $imageExt;
+
+		$image = new SimpleImage();
+		$image->load($upload['tmp_name']);
+		$image->fitDimensions(1000,1000);
+
+		if (!move_uploaded_file($upload['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $uploadStatus['imagepath'])) {
+			$uploadStatus['error'] = 'file-save';	
+			return $uploadStatus;;
+		} 	
+		
+		//if we got here, image was copied and array contains image path
+		return $uploadStatus; 	
+	}
+
 	public static function submitData($reportInfo){
 		
 		$reportId = Persistence::insertReport($reportInfo);
