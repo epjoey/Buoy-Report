@@ -8,7 +8,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
 class ReportForm {
 
-	public function renderReportForm($locInfo, $reporterInfo, $submitError = NULL, $isMobile) {
+	public function renderReportForm($locInfo, $reporterInfo, $submitError = NULL, $needPicup) {
 		if (!in_array($locInfo, $reporterInfo['locations'])) {
 			$reporterHasLocation = 0;
 		} else {
@@ -110,7 +110,7 @@ class ReportForm {
 					<input type="file" name="upload" id="upload" capture="camera">
 					<span id="mobile-image-name" class="mobile-note">
 						<?
-						if($isMobile) {
+						if($needPicup) {
 							?>
 							You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
 							<?

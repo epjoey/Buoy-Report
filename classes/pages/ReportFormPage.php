@@ -6,6 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 class ReportFormPage extends GeneralPage {
 
 	public $submitError = NULL;
+	public $needPicup = FALSE;
 
 	public function loadData() {
 		parent::loadData();
@@ -18,6 +19,10 @@ class ReportFormPage extends GeneralPage {
 		$this->pageTitle = $this->locInfo['locname'] . ' Report';
 		if (isset($_GET['error']) && $_GET['error']) {
 			$this->submitError = $_GET['error'];
+		}
+
+		if ($this->detect->isIpad || $this->detect->isIphone) {
+			$this->needPicup = TRUE;
 		}
 		
 		//for picup callback
@@ -44,7 +49,7 @@ class ReportFormPage extends GeneralPage {
 
 	public function renderBodyContent() {
 		$form = new ReportForm;
-		$form->renderReportForm($this->locInfo, $this->userInfo, $this->submitError, $this->isMobile);	
+		$form->renderReportForm($this->locInfo, $this->userInfo, $this->submitError, $this->needPicup);	
 	}
 
 	public function renderFooterJs() {

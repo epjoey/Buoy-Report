@@ -89,4 +89,12 @@ class Mobile_Detect
 		return $return;
 	}
 
+	public function isSmallDevice() {
+		if ($this->isDevice('android') || $this->isDevice('blackberry') || $this->isDevice('iphone') || $this->isDevice('palm') || $this->isDevice('windowsphone') || $this->isDevice('generic')) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
 }

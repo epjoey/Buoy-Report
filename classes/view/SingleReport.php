@@ -4,6 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Mobile_Detect.php';
+
 
 
 class SingleReport {
@@ -127,7 +129,9 @@ class SingleReport {
 	}	
 
 	public function renderImage($imagePath) {
-		$image = getImageInfo($imagePath, 508, 400);
+		$detect = new Mobile_Detect();
+		$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(508,400);
+		$image = getImageInfo($imagePath, $dims[0], $dims[1]);
 		if (!empty($image)) {
 			?>
 			<li class="image-container"><a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/></a></li>

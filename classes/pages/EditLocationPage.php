@@ -35,31 +35,10 @@ class EditLocationPage extends LocationDetailPage {
 		}
 
 		if ($_POST['submit'] == 'enter-bouy') {
-
-			//make this one javascript
-			if (empty($_POST['bouy-id'])) {
-				$this->addBouyError = "Please fill in bouy number";
-				$this->renderPage();
-				exit();
-			}
-
-			if (in_array($_POST['bouy-id'], $this->bouys)) {
-				$this->addBouyError = "Bouy already assigned to location";
-				$this->renderPage();
-				exit();				
-			}
-
-			//dont need time because were just checking if data file exists/is online		
-			$bouy = new BouyData($_POST['bouy-id'], 0);
-			if (!$bouy->bouyExists) {
-				$this->addBouyError = "Bouy " . $_POST['bouy-id'] . " cannot be reached";
-				$this->renderPage();
-				exit();
-			}
-			Persistence::insertBouy($_POST['bouy-id'], $_POST['bouy-name'], $this->locationId, $this->bouyCount + 1);
-			header('Location:'.Paths::toEditLocation($this->locationId));
-			exit();	
 		}
+		
+		if ($_POST['submit'] == 'enter-tide-station') {
+		}		
 
 		if ($_POST['submit'] == 'remove-bouy') {
 			Persistence::removeBouyFromLocation($_POST['key'], $this->bouys, $this->locationId);
@@ -72,27 +51,6 @@ class EditLocationPage extends LocationDetailPage {
 			header('Location:'.Paths::toEditLocation($this->locationId));
 			exit();			
 		}		
-			
-		if ($_POST['submit'] == 'enter-tide-station') {
-
-			//make this one js
-			if (empty($_POST['station-id'])) {
-				$this->addStationError = "Please enter a station";
-				$this->renderPage();
-				exit();
-			}
-			
-			//dont need time because were just checking if data file exists/is online		
-			$tide = new TideData($_POST['station-id'], 0);
-			if (!$tide->stationExists) {
-				$this->addStationError = "Station " . $_POST['station-id'] . " cannot be reached";
-				$this->renderPage();
-				exit();
-			}
-			Persistence::insertTideStation($_POST['station-id'], $_POST['station-name'], $this->locationId);
-			header('Location:'.Paths::toEditLocation($this->locationId));
-			exit();	
-		}
 		
 		if ($_POST['submit'] == 'select-timezone') {
 			if (!empty($_POST['timezone']) && $_POST['timezone'] != $this->locInfo['timezone']) {
@@ -211,7 +169,15 @@ class EditLocationPage extends LocationDetailPage {
 				// 	$form -> renderAddTideStationForm($this->addStationError);
 				// }
 
+				if (isset($this->locInfo['forecast']))
 				?>
+				<form method="post" action="">
+					<div class="field">
+						<input type="text" name="forecast-link" class="text-input" value="<?=html($this->locInfo['forecast'])?>" />
+						<input type="hidden" name="submit" value="forecast-link" />
+						<input type="submit" name="update-name" value="Update Name" />
+					</div>
+				</form>				
 				<form action="" method="post" class="delete-form" id="delete-location-form">
 					<input type="hidden" name="submit" value="delete-location" />
 					<input type="button" id="delete-location-btn" class="delete-btn" value="Delete Location" />

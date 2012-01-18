@@ -20,8 +20,11 @@ class LocationDetailPage extends GeneralPage {
 		if (!isset($this->locInfo)) {
 			header('Location:'.Paths::to404());
 			exit();
-		}
-		$this->creator = Persistence::getReporterInfoById($this->locInfo['creator']);				
+		}			
+		
+		//ajax this
+		$this->creator = Persistence::getReporterInfoById($this->locInfo['creator']);
+		$this->foreCastLinks = array();			
 		
 		$this->bouys = array();
 		$this->bouyCount = 0;
