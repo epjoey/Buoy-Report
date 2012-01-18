@@ -4,11 +4,12 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/LocationDetailPage.php'
 class EditLocationPage extends LocationDetailPage {
 
 	private $editLocationError = NULL;
-	private $addBouyError = NULL;
-	private $addStationError = NULL;
 
 	public function loadData() {
 		parent::loadData();
+		$this->addBouyError = NULL;
+		$this->addStationError = NULL;
+
 
 		if (!Persistence::userCreatedLocation($this->userId, $this->locationId)) {
 			header('HTTP/1.1 301 Moved Permanently');
