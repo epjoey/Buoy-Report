@@ -3,6 +3,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/LocationDetailPage.php'
 
 class EditLocationPage extends LocationDetailPage {
 
+	private $editLocationError = NULL;
+
 	public function loadData() {
 		parent::loadData();
 
@@ -13,31 +15,93 @@ class EditLocationPage extends LocationDetailPage {
 		}
 
 		$this->pageTitle = 'Edit: ' . $this->locInfo['locname'];
+
+		if (isset($_GET['error']) && $_GET['error']) {
+			switch($_GET['error']) {
+				case 1: $e = "No Changes specified"; break;
+				case 2: $e = "Location name specified already exists"; break;
+				case 3: $this->addBouyError = "Please fill in bouy number"; break;
+				case 4: $this->addStationError = "Please enter a station"; break;
+			}
+			$this->editLocationError = $e;
+		}		
 	}
 
 	public function getBodyClassName() {
 		return 'edit-location-page';
+	}	
+	
+	public function renderJs() {
+		parent::renderJs();
+		?>
+		<script type="text/javascript">	
+			$(document).ready(function(){
+			//	$("#edit-location-name-form").validate();
+			});
+		</script>
+		<?
 	}		
 
 	public function afterSubmit() {
 		if ($_POST['submit'] == 'update-name') {
-			if (!empty($_POST['locname']) && $_POST['locname'] != $this->locInfo['locname']) {
-				Persistence::updateLocationName($this->locationId, $_POST['locname']);			
+			if (empty($_POST['locname']) || $_POST['locname'] == $this->locInfo['locname']) {
+				$error = 1;
+				header('Location:'.Paths::toEditLocation($this->locationId, $error));
+				exit();				
 			}
+			if (Persistence::dbContainsLocation($_POST['locname'])) {
+				$error = 2;
+				header('Location:'.Paths::toEditLocation($this->locationId, $error));
+				exit();		
+			}
+			Persistence::updateLocationName($this->locationId, $_POST['locname']);			
 			header('Location:'.Paths::toEditLocation($this->locationId));
 			exit();	
 		}
 
-		if ($_POST['submit'] == 'make-primary') {
-			Persistence::setPrimaryBouy($this->locationId, $_POST['bouy']);		
+		if ($_POST['submit'] == 'select-timezone') {
+			if (empty($_POST['timezone']) || $_POST['timezone'] == $this->locInfo['timezone']) {
+				$error = 1;
+				header('Location:'.Paths::toEditLocation($this->locationId, $error));
+				exit();				
+			}			
+			Persistence::updateLocationTimezone($this->locationId, $_POST['timezone']);	
 			header('Location:'.Paths::toEditLocation($this->locationId));
 			exit();	
-		}
+		}		
 
-		if ($_POST['submit'] == 'enter-bouy') {
-		}
-		
-		if ($_POST['submit'] == 'enter-tide-station') {
+		if ($_REQUEST['submit'] == 'enter-bouy') {
+			if (empty($_POST['bouy-id'])) {
+				$error = 3;
+				header('Location:'.Paths::toLocation($this->locationId, $error));
+				exit();	
+			}
+
+			if (!$this->isValidBouy($_POST['bouy-id'])) {
+				$this->renderPage();
+				exit();				
+			}
+
+			Persistence::insertBouy($_POST['bouy-id'], $_POST['bouy-name'], $this->locationId, $this->bouyCount + 1);
+			header('Location:'.Paths::toEditLocation($this->locationId));
+			exit();
+		}	
+
+		if ($_REQUEST['submit'] == 'enter-tide-station') {
+			if (empty($_POST['station-id'])) {
+				$error = 4;
+				header('Location:'.Paths::toLocation($this->locationId, $error));
+				exit();	
+			}
+
+			if (!$this->isValidTideStation($_POST['station-id'])) {
+				$this->renderPage();
+				exit();				
+			}			
+			
+			Persistence::insertTideStation($_POST['station-id'], $_POST['station-name'], $this->locationId);
+			header('Location:'.Paths::toEditLocation($this->locationId));
+			exit();	
 		}		
 
 		if ($_POST['submit'] == 'remove-bouy') {
@@ -51,14 +115,7 @@ class EditLocationPage extends LocationDetailPage {
 			header('Location:'.Paths::toEditLocation($this->locationId));
 			exit();			
 		}		
-		
-		if ($_POST['submit'] == 'select-timezone') {
-			if (!empty($_POST['timezone']) && $_POST['timezone'] != $this->locInfo['timezone']) {
-				Persistence::updateLocationTimezone($this->locationId, $_POST['timezone']);	
-			}
-			header('Location:'.Paths::toEditLocation($this->locationId));
-			exit();	
-		}
+	
 
 		if ($_POST['submit'] == 'delete-location') {
 			Persistence::deleteLocation($this->locationId);
@@ -78,9 +135,16 @@ class EditLocationPage extends LocationDetailPage {
 				<a href="<?=Paths::toLocation($this->locationId)?>"><?= html($this->locInfo['locname'])?></a> > Edit
 			</h2>
 			<div class="form-container">
-				<form method="post" action="">
+				<?
+				if (isset($this->editLocationError)) {
+					?>
+					<span class="submission-error"><?= $this->editLocationError ?></span>
+					<?
+				}
+				?>						
+				<form method="post" action="" id="edit-location-name-form">
 					<div class="field">
-						<input type="text" name="locname" class="text-input" value="<?=html($this->locInfo['locname'])?>" />
+						<input type="text" name="locname" class="text-input required" value="<?=html($this->locInfo['locname'])?>" />
 						<input type="hidden" name="submit" value="update-name" />
 						<input type="submit" name="update-name" value="Update Name" />
 					</div>
@@ -159,16 +223,22 @@ class EditLocationPage extends LocationDetailPage {
 					<?
 				}
 				
-				// if ($this->bouyCount < 3 && $this->userIsLoggedIn) {
-				// 	$form = new AddBouyForm;
-				// 	$form -> renderAddBouyForm($this->addBouyError);
-				// }
 
-				// if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
-				// 	$form = new AddTideStationForm;
-				// 	$form -> renderAddTideStationForm($this->addStationError);
-				// }
+				if ($this->bouyCount < 3) {
+					?>
+					<p id="add-bouy-btn" class="edit-loc-link block-link">Add Bouy</p>
+					<?
+				}
 
+				if (!isset($this->locInfo['tidestation'])) {
+					?>
+					<p id="add-tide-station-btn" class="edit-loc-link block-link">Add Tide Station</p>
+					<?					
+				}
+
+				$this->renderAddStationContainers();
+
+				/*
 				if (isset($this->locInfo['forecast']))
 				?>
 				<form method="post" action="">
@@ -177,7 +247,8 @@ class EditLocationPage extends LocationDetailPage {
 						<input type="hidden" name="submit" value="forecast-link" />
 						<input type="submit" name="update-name" value="Update Name" />
 					</div>
-				</form>				
+				</form>	
+				<? */ ?>			
 				<form action="" method="post" class="delete-form" id="delete-location-form">
 					<input type="hidden" name="submit" value="delete-location" />
 					<input type="button" id="delete-location-btn" class="delete-btn" value="Delete Location" />

@@ -49,6 +49,14 @@ class LocationDetailPage extends GeneralPage {
 		$this->addStationError = NULL;
 
 		$this->pageTitle = $this->locInfo['locname'];
+
+
+		if (isset($_GET['error']) && $_GET['error']) {
+			switch($_GET['error']) {
+				case 1: $this->addBouyError = "Please fill in bouy number"; break;
+				case 2: $this->addStationError = "Please fill in station number"; break;
+			}
+		}		
 	}
 
 	public function getBodyClassName() {
@@ -71,10 +79,10 @@ class LocationDetailPage extends GeneralPage {
 
 		if ($_REQUEST['submit'] == 'enter-bouy') {
 
-			if (empty($_POST['bouy-id'])) {
-				$this->addBouyError = "Please fill in bouy number";
-				$this->renderPage();
-				exit();
+			if (empty($_POST['bouy-id'])) {	
+				$error = 1;
+				header('Location:'.Paths::toEditLocation($this->locationId, $error));
+				exit();		
 			}
 
 			if (!$this->isValidBouy($_POST['bouy-id'])) {
@@ -104,9 +112,9 @@ class LocationDetailPage extends GeneralPage {
 
 			//make this one js
 			if (empty($_POST['station-id'])) {
-				$this->addStationError = "Please enter a station";
-				$this->renderPage();
-				exit();
+				$error = 2;
+				header('Location:'.Paths::toLocation($this->locationId, $error));
+				exit();	
 			}
 
 			if (!$this->isValidTideStation($_POST['station-id'])) {
@@ -146,6 +154,11 @@ class LocationDetailPage extends GeneralPage {
 
 	public function isValidBouy($bouy, $checkIfOnline = TRUE){	
 		
+		if (in_array($bouy, $this->bouys)) {
+			$this->addBouyError = "Bouy " . $bouy . " is already set up for this location";
+			return FALSE;			
+		}		
+		
 		if ($checkIfOnline) {
 			//dont need time (0) because were just checking if data file exists/is online		
 			$bouyData = new BouyData($bouy, 0);
@@ -154,10 +167,6 @@ class LocationDetailPage extends GeneralPage {
 				return FALSE;
 			}	
 		}	
-		if (in_array($bouy, $this->bouys)) {
-			$this->addBouyError = "Bouy " . $bouy . " is already set up for this location";
-			return FALSE;			
-		}
 		return TRUE;
 	}
 
@@ -203,57 +212,65 @@ class LocationDetailPage extends GeneralPage {
 			}
 			
 			if ($this->bouyCount < 3 && $this->userIsLoggedIn) {
-				?><span id="add-bouy-btn" class="edit-loc-link block-link" style="<?= isset($addBouyError) ? 'display:none;' : '' ?>">+ Bouy</span><?
+				?><span id="add-bouy-btn" class="edit-loc-link block-link <?=isset($this->addBouyError) ? 'active' : ''?>">+ Bouy</span><?
 			}
 
 			if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
-				?><span id="add-tide-station-btn" class="edit-loc-link block-link" style="<?= isset($addStationError) ? 'display:none;' : '' ?>">+ Tide Station</span><?
+				?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">+ Tide Station</span><?
+			}
+
+			$this->renderAddStationContainers();
+
+			?>
+		</div>
+		<?
+	}
+
+	protected function renderAddStationContainers() {	
+		?>
+		<div class="add-station-container">
+			<?
+			if ($this->bouyCount < 3 && $this->userIsLoggedIn) {
+				$bform = new AddBouyForm;
+				$bform -> renderAddBouyForm($this->addBouyError);
+			}
+			if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
+				$tform = new AddTideStationForm;
+				$tform -> renderAddTideStationForm($this->addStationError);
 			}
 			?>
-			<div class="add-station-container">
-				<?
-				if ($this->bouyCount < 3 && $this->userIsLoggedIn) {
-					$bform = new AddBouyForm;
-					$bform -> renderAddBouyForm($this->addBouyError);
-				}
-				if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
-					$tform = new AddTideStationForm;
-					$tform -> renderAddTideStationForm($this->addStationError);
-				}
-				?>
-				<script type="text/javascript"> 
-					(function(){
-						$('#add-bouy-btn').click(function(event){
-							$('#add-tide-station-div').hide();
-							$('#add-bouy-div').toggle();
-							$('#add-tide-station-btn').removeClass('active');
-							$('#add-bouy-btn').toggleClass('active');
-						});
-						$('#add-tide-station-btn').click(function(event){
-							$('#add-bouy-div').hide();
-							$('#add-tide-station-div').toggle();
-							$('#add-bouy-btn').removeClass('active');
-							$('#add-tide-station-btn').toggleClass('active');
-						});
-						$('#add-existing-bouy').click(function(event){
-							$('#existing-bouys-container').toggle().addClass('loading');
-							$('#existing-bouys-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=bouy&locationid=<?=$this->locationId?>',
-								function(){
-									$('#existing-bouys-container').removeClass('loading');
-								}
-							);
-						});
-						$('#add-existing-tidestation').click(function(event){
-							$('#existing-tidestation-container').toggle().addClass('loading');
-							$('#existing-tidestation-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=tidestation&locationid=<?=$this->locationId?>',
-								function(){
-									$('#existing-tidestation-container').removeClass('loading');
-								}
-							);
-						});						
-					})()
-				</script>				
-			</div>
+			<script type="text/javascript"> 
+				(function(){
+					$('#add-bouy-btn').click(function(event){
+						$('#add-tide-station-div').hide();
+						$('#add-bouy-div').toggle();
+						$('#add-tide-station-btn').removeClass('active');
+						$('#add-bouy-btn').toggleClass('active');
+					});
+					$('#add-tide-station-btn').click(function(event){
+						$('#add-bouy-div').hide();
+						$('#add-tide-station-div').toggle();
+						$('#add-bouy-btn').removeClass('active');
+						$('#add-tide-station-btn').toggleClass('active');
+					});
+					$('#add-existing-bouy').click(function(event){
+						$('#existing-bouys-container').toggle().addClass('loading');
+						$('#existing-bouys-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=bouy&locationid=<?=$this->locationId?>',
+							function(){
+								$('#existing-bouys-container').removeClass('loading');
+							}
+						);
+					});
+					$('#add-existing-tidestation').click(function(event){
+						$('#existing-tidestation-container').toggle().addClass('loading');
+						$('#existing-tidestation-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=tidestation&locationid=<?=$this->locationId?>',
+							function(){
+								$('#existing-tidestation-container').removeClass('loading');
+							}
+						);
+					});						
+				})()
+			</script>				
 		</div>
 		<?
 	}

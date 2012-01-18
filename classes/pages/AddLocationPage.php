@@ -5,9 +5,19 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 class AddLocationPage extends GeneralPage {
 
+	private $addLocationError = NULL;
+
 	public function loadData() {
 		parent::loadData();
 		$this->pageTitle = 'Submit Location';
+		
+		if (isset($_GET['error']) && $_GET['error']) {
+			switch($_GET['error']) {
+				case 1: $e = 'Please enter a location';; break;
+				case 2: $e = "Location name specified already exists"; break;
+			}
+			$this->addLocationError = $e;
+		}		
 	}
 
 	public function renderJs() {
@@ -29,12 +39,28 @@ class AddLocationPage extends GeneralPage {
 
 
 	public function afterSubmit() {
-		if(!$this->processSubmitForm()) {
-			$this->loadData();
-			$this->renderPage(); 
+
+		if (empty($_POST['locationname'])) {
+			$error = 1;
+			header('Location:'.Paths::toSubmitLocation($error));
 			exit();
 		}
-		header('Location:'.Paths::toLocation($this->newLocationId));
+		
+		if (Persistence::dbContainsLocation($_POST['locationname'])) {
+			$error = 2;
+			header('Location:'.Paths::toSubmitLocation($error));
+			exit();		
+		}
+
+		//success
+		if (!empty($_POST['timezone'])) {
+			$timezone = $_POST['timezone'];
+		} else {
+			$timezone = 'UTC';
+		}
+		
+		$newLocation = Persistence::insertLocation($_POST['locationname'], $timezone, $this->userId);
+		header('Location:'.Paths::toLocation($newLocation));
 		exit();
 	}
 
@@ -43,8 +69,8 @@ class AddLocationPage extends GeneralPage {
 			<h1 class="form-head">Submit New Location</h1>
 			<div class="form-container">
 				<form action="" method="post" id="add-loc-form" class="" >
-					<? if (isset($this->submitError)) { ?>
-						<span class="submission-error"><?= $this->submitError ?></span>
+					<? if (isset($this->addLocationError)) { ?>
+						<span class="submission-error"><?= $this->addLocationError ?></span>
 					<? } ?>			
 					<div class="field">
 						<label for="locationname">Location Name</label>
@@ -66,30 +92,6 @@ class AddLocationPage extends GeneralPage {
 			</script>
 		<?
 	}
-	
-	public function processSubmitForm() {
 
-		if (empty($_POST['locationname'])) {
-			$this->submitError = 'Please enter a location';
-			return FALSE;
-		}
-		
-		if (Persistence::dbContainsLocation($_POST['locationname'])) {
-			$this->submitError = $_POST['locationname'] . " already exists as an option";
-			return FALSE;
-		}
-
-		//success
-		if (!empty($_POST['timezone'])) {
-			$timezone = $_POST['timezone'];
-		} else {
-			$timezone = 'UTC';
-		}
-		
-		$newLocation = Persistence::insertLocation($_POST['locationname'], $timezone, $this->userId);
-		
-		$this->newLocationId = $newLocation;
-		return TRUE;
-	}
 }
 ?>

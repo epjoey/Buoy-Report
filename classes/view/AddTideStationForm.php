@@ -5,7 +5,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 
 class AddTideStationForm {
 
-	public function renderAddTideStationForm($addStationError = NULL) {
+	public function renderAddTideStationForm($addStationError = NULL, $showByDefult = FALSE) {
 		?>		
 		<div id="add-tide-station-div" class="form-container add-station-div" style="<?= isset($addStationError) ? '' : 'display:none;' ?> margin-top:12px">
 			<form id="add-tide-station-form" action="" method="post">

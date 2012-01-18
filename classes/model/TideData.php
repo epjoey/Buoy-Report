@@ -12,7 +12,7 @@ class TideData {
 		$data = $html->find('pre pre font', 0)->innertext;
 		$this->data = preg_split('/$\R?^/m', $data);
  
-		$this->data ? $this->stationExists = TRUE : $this->stationExists = FALSE;
+		isset($this->data[2]) ? $this->stationExists = TRUE : $this->stationExists = FALSE;
 		
 	}
 

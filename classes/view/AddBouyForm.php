@@ -5,9 +5,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 
 class AddBouyForm {
 
-	public function renderAddBouyForm($addBouyError = NULL) {
+	public function renderAddBouyForm($addBouyError = NULL, $showByDefult = FALSE) {
 		?>
-		<div id="add-bouy-div" class="form-container add-station-div" style="<?= isset($addBouyError) ? '' : 'display:none;' ?> margin-top:12px">
+		<div id="add-bouy-div" class="form-container add-station-div" style="<?= isset($addBouyError) || $showByDefult ? '' : 'display:none;' ?> margin-top:12px">
 			<form id="add-bouy-form" action="" method="post">
 				<p>Find nearby bouys <a target="_blank" href="http://www.ndbc.noaa.gov/rmd.shtml">here</a> or <a href="javascript:" id="add-existing-bouy">add existing bouy.</a></p>
 				<span id="existing-bouys-container" style="display:none" class="station-list ajax-load"></span>

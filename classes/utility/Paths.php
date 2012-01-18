@@ -90,12 +90,15 @@ class Paths {
 		return $url;		
 	}
 
-	public static function toLocation($locationId = null) {
-		if (isset($locationId)) {
-			return '/location.php?location='.$locationId;
-		} else { 
+	public static function toLocation($locationId = null, $error=NULL) {
+		if (!isset($locationId)) {
 			return Paths::toLocations();
 		}
+		$url = '/location.php?location='.$locationId;
+		if (isset($error)) {
+			$url .= '&error='.$error;
+		}
+		return $url;
 	}
 
 	public static function toLocations($reporterId = null, $toPost = FALSE) {
@@ -112,7 +115,7 @@ class Paths {
 		return $url;
 	}
 
-	public static function toReporters($locationId = null) {
+	public static function toReporters($locationId = NULL) {
 		$url = '/reporters.php';
 		if (isset($locationId)) {
 			$url .= '?location=' . $locationId;
@@ -120,12 +123,23 @@ class Paths {
 		return $url;
 	}
 
-	public static function toEditLocation($locationId) {
-		return '/edit-location.php?location='.$locationId;
+	public static function toEditLocation($locationId, $error = NULL) {
+		if (!isset($locationId)) {
+			return Paths::to404();
+		}		
+		$url = '/edit-location.php?location='.$locationId;
+		if (isset($error)) {
+			$url .= '&error='.$error;
+		}
+		return $url;		
 	}
 
-	public static function toSubmitLocation() {
-		return '/add-location.php';
+	public static function toSubmitLocation($error = NULL) {
+		$url = '/add-location.php';
+		if (isset($error)) {
+			$url .= '?error='.$error;
+		}
+		return $url;			
 	}
 
 	public static function toImageSrc($path, $isRemote = FALSE) {
