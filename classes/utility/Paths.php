@@ -79,7 +79,7 @@ class Paths {
 		return '/edit-post.php?id='.$reportId;
 	}	
 
-	public static function toProfile($reporterId, $error) {
+	public static function toProfile($reporterId, $error = NULL) {
 		if (!isset($reporterId)) {
 			return Paths::to404();
 		}		

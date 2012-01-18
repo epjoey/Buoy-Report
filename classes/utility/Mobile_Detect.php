@@ -97,4 +97,12 @@ class Mobile_Detect
 		}
 	}
 
+	public function isAppleDevice() {
+		if ($this->isDevice('iphone') || $this->isDevice('ipad')) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}		
+	}
+
 }

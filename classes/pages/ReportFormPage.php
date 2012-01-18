@@ -21,7 +21,7 @@ class ReportFormPage extends GeneralPage {
 			$this->submitError = $_GET['error'];
 		}
 
-		if ($this->detect->isIpad || $this->detect->isIphone) {
+		if ($this->detect->isAppleDevice()) {
 			$this->needPicup = TRUE;
 		}
 		
