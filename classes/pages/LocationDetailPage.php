@@ -8,10 +8,13 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBouyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
 
 
-
-
-
 class LocationDetailPage extends GeneralPage {
+
+	private $addBouyError = NULL;
+	private $addStationError = NULL;
+	protected $bouys = array();
+	protected $bouyCount = 0;
+	protected $foreCastLinks = array();
 
 	public function loadData() {
 		parent::loadData();
@@ -24,10 +27,7 @@ class LocationDetailPage extends GeneralPage {
 		
 		//ajax this
 		$this->creator = Persistence::getReporterInfoById($this->locInfo['creator']);
-		$this->foreCastLinks = array();			
 		
-		$this->bouys = array();
-		$this->bouyCount = 0;
 		if (isset($this->locInfo['bouy1'])) {
 			$this->bouys['bouy1'] = $this->locInfo['bouy1'];
 			$this->bouyCount = 1;
@@ -44,9 +44,6 @@ class LocationDetailPage extends GeneralPage {
 		if ($this->userIsLoggedIn && Persistence::userHasLocation($this->userId, $this->locationId)) {
 			$this->userHasLocation = TRUE;
 		} else $this->userHasLocation = FALSE;		
-		
-		$this->addBouyError = NULL;
-		$this->addStationError = NULL;
 
 		$this->pageTitle = $this->locInfo['locname'];
 

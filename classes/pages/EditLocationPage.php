@@ -4,6 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/LocationDetailPage.php'
 class EditLocationPage extends LocationDetailPage {
 
 	private $editLocationError = NULL;
+	private $addBouyError = NULL;
+	private $addStationError = NULL;
 
 	public function loadData() {
 		parent::loadData();
@@ -15,7 +17,7 @@ class EditLocationPage extends LocationDetailPage {
 		}
 
 		$this->pageTitle = 'Edit: ' . $this->locInfo['locname'];
-
+		
 		if (isset($_GET['error']) && $_GET['error']) {
 			switch($_GET['error']) {
 				case 1: $e = "No Changes specified"; break;
