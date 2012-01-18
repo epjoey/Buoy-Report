@@ -10,8 +10,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
 
 class LocationDetailPage extends GeneralPage {
 
-	private $addBouyError = NULL;
-	private $addStationError = NULL;
+	protected $addBouyError = NULL;
+	protected $addStationError = NULL;
 	protected $bouys = array();
 	protected $bouyCount = 0;
 	protected $foreCastLinks = array();
