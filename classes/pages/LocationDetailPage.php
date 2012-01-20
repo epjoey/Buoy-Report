@@ -414,9 +414,11 @@ class LocationDetailPage extends GeneralPage {
 				<script type="text/javascript">
 						$('#toggle-fc-list').click(function(){
 							doFcLinkAjax('');
+							$(this).preventDefault();
 						});						
 						$('#submit-fc-btn').click(function(){
 							doFcLinkAjax($('#fc-url').val());
+							$(this).preventDefault();
 						});
 						$('#delete-link-btn').click(function(){
 
