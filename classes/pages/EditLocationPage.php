@@ -7,9 +7,6 @@ class EditLocationPage extends LocationDetailPage {
 
 	public function loadData() {
 		parent::loadData();
-		$this->addBouyError = NULL;
-		$this->addStationError = NULL;
-
 
 		if (!Persistence::userCreatedLocation($this->userId, $this->locationId)) {
 			header('HTTP/1.1 301 Moved Permanently');
@@ -21,10 +18,8 @@ class EditLocationPage extends LocationDetailPage {
 		
 		if (isset($_GET['error']) && $_GET['error']) {
 			switch($_GET['error']) {
-				case 1: $e = "No Changes specified"; break;
-				case 2: $e = "Location name specified already exists"; break;
-				case 3: $this->addBouyError = "Please fill in bouy number"; break;
-				case 4: $this->addStationError = "Please enter a station"; break;
+				case 3: $e = "No Changes specified"; break;
+				case 4: $e = "Location name specified already exists"; break;
 			}
 			$this->editLocationError = $e;
 		}		
@@ -46,14 +41,17 @@ class EditLocationPage extends LocationDetailPage {
 	}		
 
 	public function afterSubmit() {
+
+		$this->handleStationSubmission('toEditLocation');
+
 		if ($_POST['submit'] == 'update-name') {
 			if (empty($_POST['locname']) || $_POST['locname'] == $this->locInfo['locname']) {
-				$error = 1;
+				$error = 3;
 				header('Location:'.Paths::toEditLocation($this->locationId, $error));
 				exit();				
 			}
 			if (Persistence::dbContainsLocation($_POST['locname'])) {
-				$error = 2;
+				$error = 4;
 				header('Location:'.Paths::toEditLocation($this->locationId, $error));
 				exit();		
 			}
@@ -64,61 +62,14 @@ class EditLocationPage extends LocationDetailPage {
 
 		if ($_POST['submit'] == 'select-timezone') {
 			if (empty($_POST['timezone']) || $_POST['timezone'] == $this->locInfo['timezone']) {
-				$error = 1;
+				$error = 3;
 				header('Location:'.Paths::toEditLocation($this->locationId, $error));
 				exit();				
 			}			
 			Persistence::updateLocationTimezone($this->locationId, $_POST['timezone']);	
 			header('Location:'.Paths::toEditLocation($this->locationId));
 			exit();	
-		}		
-
-		if ($_REQUEST['submit'] == 'enter-bouy') {
-			if (empty($_POST['bouy-id'])) {
-				$error = 3;
-				header('Location:'.Paths::toLocation($this->locationId, $error));
-				exit();	
-			}
-
-			if (!$this->isValidBouy($_POST['bouy-id'])) {
-				$this->renderPage();
-				exit();				
-			}
-
-			Persistence::insertBouy($_POST['bouy-id'], $_POST['bouy-name'], $this->locationId, $this->bouyCount + 1);
-			header('Location:'.Paths::toEditLocation($this->locationId));
-			exit();
-		}	
-
-		if ($_REQUEST['submit'] == 'enter-tide-station') {
-			if (empty($_POST['station-id'])) {
-				$error = 4;
-				header('Location:'.Paths::toLocation($this->locationId, $error));
-				exit();	
-			}
-
-			if (!$this->isValidTideStation($_POST['station-id'])) {
-				$this->renderPage();
-				exit();				
-			}			
-			
-			Persistence::insertTideStation($_POST['station-id'], $_POST['station-name'], $this->locationId);
-			header('Location:'.Paths::toEditLocation($this->locationId));
-			exit();	
-		}		
-
-		if ($_POST['submit'] == 'remove-bouy') {
-			Persistence::removeBouyFromLocation($_POST['key'], $this->bouys, $this->locationId);
-			header('Location:'.Paths::toEditLocation($this->locationId));
-			exit();			
-		}
-
-		if ($_POST['submit'] == 'remove-tide-station') {
-			Persistence::removeTideStationFromLocation($_POST['tidestation'], $this->locationId);
-			header('Location:'.Paths::toEditLocation($this->locationId));
-			exit();			
-		}		
-	
+		}			
 
 		if ($_POST['submit'] == 'delete-location') {
 			Persistence::deleteLocation($this->locationId);
@@ -225,22 +176,26 @@ class EditLocationPage extends LocationDetailPage {
 					</ul>
 					<?
 				}
-				
-
-				if ($this->bouyCount < 3) {
-					?>
-					<p id="add-bouy-btn" class="edit-loc-link block-link">Add Bouy</p>
+				?>
+				<div class="add-station-section">
 					<?
-				}
+					if ($this->bouyCount < 3) {
+						?>
+						<p id="add-bouy-btn" class="edit-loc-link block-link">Add Bouy</p>
+						<?
+					}
 
-				if (!isset($this->locInfo['tidestation'])) {
-					?>
-					<p id="add-tide-station-btn" class="edit-loc-link block-link">Add Tide Station</p>
-					<?					
-				}
+					if (!isset($this->locInfo['tidestation'])) {
+						?>
+						<p id="add-tide-station-btn" class="edit-loc-link block-link">Add Tide Station</p>
+						<?					
+					}
 
-				$this->renderAddStationContainers();
+					$this->renderAddStationContainers();
 
+				?>
+				</div>
+				<?
 				/*
 				if (isset($this->locInfo['forecast']))
 				?>

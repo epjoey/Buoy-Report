@@ -76,20 +76,16 @@
 	.add-station-form {
 		display:inline;
 		.edit-loc-link {cursor:pointer;}
-
 	}
-	.reporters {.sans-serif();
-		p { margin-bottom:10px;}
-		a {color:#FFF;}
-		.bookmark input {margin:12px 0;}
-	}
-	.current-data { .sans-serif(16px); 
-		.no-data { font:italic 14px georgia;}
-		.tidestation-data { border-bottom:1px dotted darken(@grey,20%); margin-top:4px; margin-bottom:4px; padding-bottom:2px;
-			a {color:#FFF; }	
-		} 		
-	}
-	.bouy-iframe-link { margin:0; display:block; padding:6px;}
+	.current-data {margin-bottom:20px;}
+	.fc-links input[type=submit] {padding:0 12px; margin:0; line-height:18px;}
+	.fc-link a { .text-overflow(); max-width:190px; display: inline-block;} 
+	.fc-link .delete-link-check { margin-right:12px;}
+	#fc-link-container { margin:8px 0;}
+	.edit-link-btn {font-style:italic; font-size:13px; cursor:pointer;}
+	.edit-link-btn:hover {text-decoration:underline;}
+	#delete-link-cancel {float:right; }
+	#delete-link-btn {color:#db5a5a;}	
 }
 
 /* =================== REPORT FORM PAGE =================== */
@@ -137,7 +133,10 @@
 	}
 	#delete-location-form .cancel {}
 	#delete-location-form input[type="submit"] {float:none; margin-left:8px; color:#000;} 
+	.add-station-div {.drop-shadow-reset(); padding:0;}
 	.add-station-div .text-input {float:right;}
+	.block-link {padding:0; margin:0 12px 0 2px;}
+	.block-link:hover, .block-link.active {background:none; text-decoration:underline;}	
 }
 
 /* =================== PROCESS MOBILE IMAGE PAGE =================== */

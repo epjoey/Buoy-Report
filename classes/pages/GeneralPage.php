@@ -198,6 +198,10 @@ class GeneralPage {
 		<script>
 			(function($){ 
 				$('input[placeholder], textarea[placeholder]').placeHoldize();
+
+				$('.toggle-btn').click(function(){
+					$(this).next('.toggle-area').toggle();
+				})
 			})(jQuery);					
 		</script>
 		<?

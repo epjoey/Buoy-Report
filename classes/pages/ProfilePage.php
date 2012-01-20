@@ -81,7 +81,7 @@ class ProfilePage extends GeneralPage {
 	}			
 	public function renderRight() {
 		?>
-		<div class="location-list sidebar-section">
+		<div class="location-list">
 			<h3><?=$this->pageOwnerName;?>&apos;s Locations</h3>
 			<? $this->renderLocations() ?>	
 		</div>		

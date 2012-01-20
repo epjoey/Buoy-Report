@@ -42,9 +42,6 @@
 	}
 }
 
-/* SIDEBAR */
-.sidebar-section {margin-bottom:20px;}
-
 
 /* LINKS */
 .block-link { cursor:pointer; .museo(500); background:@grey; padding:0 6px; color:@dark-blue; display:inline-block; letter-spacing:1px; .text-highlight(); margin-left:2px; /*border-left:1px solid @pink; background: #eee -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,.2)), color-stop(100%,rgba(0,0,0,.2))); */}
@@ -95,13 +92,6 @@
 	.tide-icon { height:20px; background-position:-20px 0px;}
 	.photo-icon { height:20px;}
 }
-
-/*.notification-icons { display:block; position:absolute; top:6px; right:8px; 
-	.icon {float:left; display:block; margin-left:4px; .bg-image('icon-sprite.png'); width:40px; height:40px;}
-	.bouy-icon { background-position:-80px 0px;}
-	.tide-icon { background-position:-40px 0px;}
-	.photo-icon { }
-}*/
 
 /* LIST */
 .list-title {float:left; min-width:180px;}
@@ -193,6 +183,19 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 	a:hover {.museo(500);}
 	.station-name {margin-left:10px; display:inline-block; .text-overflow(); max-width:160px;}
 }
+
+/* Sidebar Section */
+.sb-section {
+	border-bottom: 1px dotted #677C90; margin:6px 0; padding-bottom:4px; .sans-serif(16px); 
+	h5 {color:@grey; display:inline-block; margin-bottom:4px; 
+		.d-arrow {.bg-image('down-arrow.png', 50%, 0); background-size:50% auto; display:inline-block;}
+	}
+	a {color:#FFF; }	
+	.no-data { font:italic 14px georgia;}
+}
+.toggle-btn {cursor:pointer;}
+.toggle-btn:hover {color:#FFF;}
+.toggle-area {display:none;}
 
 /* Images */
 .image-container {overflow:hidden;text-align:center;}

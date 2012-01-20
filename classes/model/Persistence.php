@@ -4,7 +4,7 @@ class Persistence {
 	public static function dbConnect() {
 
 		global $local_dev;
-		
+
 		$host = 'localhost';
 		$db = 'br';
 		$un = 'root';
@@ -12,7 +12,6 @@ class Persistence {
 		
 		if ($local_dev) {
 			$db = 'reportdb';
-			$host = 'localhost';
 			$un = 'root';
 			$pw = 'joeyho99';
 		}
@@ -351,6 +350,78 @@ class Persistence {
 		$sql = "UPDATE location SET locname = '$name' WHERE id = '$locationid'";
 		$result = mysqli_query($link, $sql) or die("Error updating location name");
 	}
+
+	public static function insertLocationForecastUrl($locationid, $forecastUrl) {
+		$link = Persistence::dbConnect();
+		$locationid = intval($locationid);
+		$forecastUrl = mysqli_real_escape_string($link, $forecastUrl);
+		$sql = "INSERT INTO locationforecast SET locationid = '$locationid', forecasturl = '$forecastUrl'";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("Error inserting location forecast link into DB" . mysqli_error($link));
+		}		
+	}
+
+	public static function deleteLocationForecastUrl($locationid, $urls) {
+		$link = Persistence::dbConnect();
+		$locationid = intval($locationid);
+		$string = '';
+		foreach($urls as $key=>$url) {
+			$url = mysqli_real_escape_string($link, $url);
+			$string .= "forecasturl = '" . $url . "'";
+			if (isset($urls[$key+1])) {
+				$string .= " OR ";
+			}
+		}
+		$sql = "DELETE FROM locationforecast WHERE locationid = '$locationid' AND ($string)";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("Error deleting location forecast link from DB" . mysqli_error($link));
+		}		
+	}	
+
+
+	public static function updateLocationForecastUrl($locationid, $oldForecastUrl, $newForecastUrl) {
+		$link = Persistence::dbConnect();
+		$locationid = intval($locationid);
+		$forecastUrl = mysqli_real_escape_string($link, $forecastUrl);
+		$sql = "UPDATE locationforecast SET forecasturl = '$newForecastUrl' WHERE locationid = '$locationid' AND forecasturl = '$oldForecastUrl'";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("Error updating location forecast link in DB" . mysqli_error($link));
+		}		
+	}
+	
+
+	public static function getForecastUrlsByLocationId($locationid) {
+		$link = Persistence::dbConnect();
+		$locationid = intval($locationid);
+		$sql = "SELECT forecasturl FROM locationforecast WHERE locationid = '$locationid'";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("Error retrieving forecast links from DB" . mysqli_error($link));
+		}
+		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+			$urls[] = $row['forecasturl'];
+		}
+		return $urls;		
+	}	
+
+	public static function dbContainsLocationForecast($locationid, $forecastUrl) {
+		$link = Persistence::dbConnect();
+		$locationid = intval($locationid);
+		$sql = "SELECT COUNT(*) FROM locationforecast WHERE locationid = '$locationid' AND forecasturl = '$forecastUrl'";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("Error searching db for forecast links" . mysqli_error($link));
+		}
+		$row = mysqli_fetch_array($result);
+		if ($row[0] > 0) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}		
+	}				
 
 	public static function deleteLocation($id) {
 		$link = Persistence::dbConnect();

@@ -221,7 +221,7 @@ class EditProfilePage extends GeneralPage {
 
 	public function renderRight() {	
 		?>
-		<div class="location-list sidebar-section">
+		<div class="location-list">
 			<h3>My Locations</h3>
 			<? $this->renderMyLocations() ?>	
 		</div>		
