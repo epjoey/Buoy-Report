@@ -96,7 +96,6 @@ class LocationDetailPage extends GeneralPage {
 						elem.removeClass('loading').addClass('loaded');
 					}
 				);
-				return false;				
 			}	
 
 			function cancelDeleteLinks() {
