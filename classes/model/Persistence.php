@@ -9,12 +9,6 @@ class Persistence {
 		$db = 'br';
 		$un = 'root';
 		$pw = 'ivytila';
-		
-		if ($local_dev) {
-			$db = 'reportdb';
-			$un = 'root';
-			$pw = 'joeyho99';
-		}
 					
 		$link = mysqli_connect($host, $un, $pw);
 

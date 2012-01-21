@@ -96,7 +96,6 @@ class LocationDetailPage extends GeneralPage {
 						elem.removeClass('loading').addClass('loaded');
 					}
 				);
-				return false;				
 			}	
 
 			function cancelDeleteLinks() {
@@ -394,21 +393,17 @@ class LocationDetailPage extends GeneralPage {
 				<div class="toggle-area">
 					<div id="fc-link-container"></div>
 					<? if ($this->userIsLoggedIn) { ?>
-
-						<form id="add-fc-link-form" method="post">
+						<div class="enter-link-form">
 							<input type="url" id="fc-url" class="text-input" placeholder="Add Link"/>
-							<input type="hidden" name="locationid" value="<?=$this->locationId?>"/>
-							<input type="hidden" name="submit" value="add-fc-link"/>
 							<input type="submit" name="add-forecast" id="submit-fc-btn" value="Add Link"/>
-						</form>		
-
+						</div>
 					<? } 
 
 					if ($this->userIsLoggedIn && $this->locInfo['creator'] == $this->userId) { ?>
-
-						<span class="edit-link-btn" id="delete-link-btn">Delete links</span>	
-						<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>
-								
+						<div class="edit-link-btns">
+							<span class="edit-link-btn" id="delete-link-btn">Delete links</span>	
+							<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>
+						</div>		
 					<? } ?>
 				</div>
 				<script type="text/javascript">
@@ -417,7 +412,6 @@ class LocationDetailPage extends GeneralPage {
 						});						
 						$('#submit-fc-btn').click(function(){
 							doFcLinkAjax($('#fc-url').val());
-							$(this).preventDefault();
 						});
 						$('#delete-link-btn').click(function(){
 
