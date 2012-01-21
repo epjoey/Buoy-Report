@@ -3,10 +3,16 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 
 $locationId = $_REQUEST['locationid'];
+
 if ($_REQUEST['info'] == 'forecast') {
+
 	if (isset($_REQUEST['url']) && $_REQUEST['url']) {
-		if (!Persistence::dbContainsLocationForecast($locationId, $_REQUEST['url']))
-			Persistence::insertLocationForecastUrl($locationId, $_REQUEST['url']);
+		$url = $_REQUEST['url'];
+		if (substr($url, 0, 7) != 'http://' || substr($url, 0, 8) != 'https://') {
+			$url = "http://" . $url;
+		}
+		if (!Persistence::dbContainsLocationForecast($locationId, $url))
+			Persistence::insertLocationForecastUrl($locationId, $url);
 	}
 
 	$forecastLinks = Persistence::getForecastUrlsByLocationId($locationId);
