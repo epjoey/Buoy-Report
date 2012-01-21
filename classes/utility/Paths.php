@@ -163,6 +163,10 @@ class Paths {
 	public static function to404() {
 		return '/404.php';
 	}
+
+	public static function toAbout() {
+		return '/about.php';
+	}	
 		
 //-------------------------------------------------------------------------------//
 //-------------------------- CODE DIRECTORIES/FILES -----------------------------//

@@ -31,13 +31,6 @@ class EditLocationPage extends LocationDetailPage {
 	
 	public function renderJs() {
 		parent::renderJs();
-		?>
-		<script type="text/javascript">	
-			$(document).ready(function(){
-			//	$("#edit-location-name-form").validate();
-			});
-		</script>
-		<?
 	}		
 
 	public function afterSubmit() {
@@ -203,6 +196,7 @@ class EditLocationPage extends LocationDetailPage {
 				<script>
 					$('#delete-location-btn').click(function(){
 						$('#delete-btn-overlay').show();
+						window.scrollTo(0,0);
 					});
 
 					$('#delete-btn-overlay #cancel-deletion').click(function(){

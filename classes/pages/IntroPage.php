@@ -49,9 +49,9 @@ class IntroPage extends GeneralPage {
 			
 			<h1 class="welcome-to-br"><span class="welcome">Welcome to</span> Bouy Report<span class="pattern"></span></h1>
 			<div class="sub-text">
-				<div class="desc" id="desc-trigger">
-					<h2 class="tag-line">Log bouy data after you surf.</h2>
-					<a href="javascript:" class="what">What?</a>
+				<div class="desc">
+					<h2 class="tag-line" id="desc-trigger">Log bouy data after you surf.</h2>
+					<a href="<?=Paths::toAbout();?>" class="what">What?</a>
 					<h3 class="detail" id="desc-hidden">Bouy Report lets you log weather measurements that affect your surf sessions</h3>
 				</div>
 				<div class="reg-browse">

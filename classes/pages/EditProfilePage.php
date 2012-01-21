@@ -208,6 +208,7 @@ class EditProfilePage extends GeneralPage {
 				<script>
 					$('#delete-reporter-btn').click(function(){
 						$('#delete-btn-overlay').show();
+						window.scrollTo(0,0);
 					});
 
 					$('#delete-btn-overlay #cancel-deletion').click(function(){

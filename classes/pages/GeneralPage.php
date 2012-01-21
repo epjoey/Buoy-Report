@@ -127,20 +127,7 @@ class GeneralPage {
 		}
 
 		?>
-		<script type="text/javascript" src="<?=Paths::toJs()?>jquery.validate.min.js"></script>
-		<script type="text/javascript">
-			//scroll to. not being used
-			/*
-			(function($) {
-			    $.fn.goTo = function() {
-			        $('html, body').animate({
-			            scrollTop: $(this).offset().top + 'px'
-			        }, 'fast');
-			        return this; // for chaining...
-			    }
-			})(jQuery);	
-			*/	
-		</script>	
+		<script type="text/javascript" src="<?=Paths::toJs()?>jquery.validate.min.js"></script>	
 		<? 		
 	}
 
@@ -186,7 +173,7 @@ class GeneralPage {
 			<div class="bottom">
 				<div class="text">
 					<p class="footer-nav">
-					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a></p>
+					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a>&nbsp;|&nbsp;<a href="<?=Paths::toAbout()?>">About Bouy Report</a></p>
 					<p class="noaa">All bouy and tide data from <a target="_blank" href="http://noaa.gov">NOAA</a></p>
 				</div> 
 			</div>
