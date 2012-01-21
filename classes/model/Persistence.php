@@ -395,6 +395,7 @@ class Persistence {
 		if (!$result) {
 			die("Error retrieving forecast links from DB" . mysqli_error($link));
 		}
+		$urls = array();
 		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
 			$urls[] = $row['forecasturl'];
 		}

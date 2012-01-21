@@ -5,21 +5,24 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
 
 $stationType = $_REQUEST['stationType'];
 $locationId = $_REQUEST['locationid'];
-
+$to = $_REQUEST['to'];
 $limit = 1000;
-$stations = Persistence::getAllStations($stationType, $limit);
 
 if ($stationType == 'bouy') {
 	$stationId = 'bouyid';
 	$stationName = 'name';
-} else if ($stationType == 'tidestation') {
+	$table = 'bouy';
+} else if ($stationType == 'tide') {
 	$stationId = 'stationid';
-	$stationName = 'stationname';	
+	$stationName = 'stationname';
+	$table = 'tidestation';	
 } else {
 	?>
 	<span class="error">Station type is not specified</span>
 	<?
 }
+
+$stations = Persistence::getAllStations($table, $limit);
 
 ?>
 <h4>Choose a <?=$stationType?></h4>
@@ -29,12 +32,8 @@ if ($stationType == 'bouy') {
 		if (!isset($station[$stationName]) || $station[$stationName] == "") {
 			$station[$stationName] = 'No Label';
 		}
-
-		if ($stationType == 'bouy') {
-			$url = Paths::toLocation($locationId) . "&submit=existingbouy&bouy=" . $station[$stationId];
-		} else if ($stationType == 'tidestation') {
-			$url = Paths::toLocation($locationId) . "&submit=existingtide&tidestation=" . $station[$stationId];
-		}
+		
+		$url = Paths::$to($locationId) . "&submit=existing".$stationType."&".$stationType."=" . $station[$stationId];
 
 		?>
 		<a href="<?=$url?>" class="station" station-id="<?=$station[$stationId]?>" station-name = "<?=$station[$stationName]?>">

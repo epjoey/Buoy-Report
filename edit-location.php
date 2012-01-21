@@ -18,7 +18,7 @@ if (!isset($_GET['location']) || !$_GET['location']) {
 }
 
 $editlocpage = new EditLocationPage();
-if (isset($_POST['submit'])) {
+if (isset($_REQUEST['submit'])) {
 	$editlocpage->loadData();
 	$editlocpage->afterSubmit();
 	exit();

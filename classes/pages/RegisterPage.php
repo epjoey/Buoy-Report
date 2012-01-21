@@ -18,6 +18,7 @@ class RegisterPage extends GeneralPage {
 				case 3: $e = 'An account with that email already exists.'; break;
 				case 4: $e = 'An account with that username already exists.'; break;
 				case 5: $e = 'Password must contain at least 5 characters.';
+				case 6: $e = 'Your not human!';
 			}
 			$this->registerError = $e;
 		}	

@@ -185,6 +185,7 @@ class GeneralPage {
 			<div class="top"></div>
 			<div class="bottom">
 				<div class="text">
+					<p class="footer-nav">
 					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a></p>
 					<p class="noaa">All bouy and tide data from <a target="_blank" href="http://noaa.gov">NOAA</a></p>
 				</div> 

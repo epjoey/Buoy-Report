@@ -22,7 +22,7 @@ class EditLocationPage extends LocationDetailPage {
 				case 4: $e = "Location name specified already exists"; break;
 			}
 			$this->editLocationError = $e;
-		}		
+		}
 	}
 
 	public function getBodyClassName() {
@@ -125,11 +125,10 @@ class EditLocationPage extends LocationDetailPage {
 						<input type="submit" name="select-timezone" value="Update Timezone" />
 					</div>
 				</form>
+				<ul class="bouys">
 				<? 
 				if ($this->bouyCount > 0) {
-					?>
-					<ul class="bouys">
-					<?
+
 					foreach($this->bouys as $key=>$bouy){
 						
 						$bouyInfo = Persistence::getBouyInfo($bouy);
@@ -150,33 +149,29 @@ class EditLocationPage extends LocationDetailPage {
 								<input type="submit" name="remove-bouy" value="Remove" />
 							</form>					
 						</li>								
-						<?
-						}
-						if (isset($this->locInfo['tidestation'])) {
-
-							$stationInfo = Persistence::getTideStationInfo($this->locInfo['tidestation']);
-							?>
-							<li class="field bouy">
-								<label>Tide Station: </label>
-								<a target="_blank" href="http://tidesonline.noaa.gov/plotcomp.shtml?station_info=<?=$this->locInfo['tidestation']?>"><?=$this->locInfo['tidestation']?></a>
-								<? if(isset($stationInfo['stationname'])) { ?>
-									<span> (<?= $stationInfo['stationname'] ?>)</span>
-								<? } ?>
-							
-								<form action="" method="post" class="remove-bouy">
-									<input type="hidden" name="submit" value="remove-tide-station" />
-									<input type="hidden" name="tidestation" value="<?=$this->locInfo['tidestation']?>"/>
-									<input type="submit" name="remove-tide-station" value="Remove" />
-								</form>
-							</li>
-							<?
-						} 						
-
-					?>
-					</ul>
 					<?
+					}
 				}
-				?>
+				if (isset($this->locInfo['tidestation'])) {
+					$stationInfo = Persistence::getTideStationInfo($this->locInfo['tidestation']);
+					?>
+					<li class="field bouy">
+						<label>Tide Station: </label>
+						<a target="_blank" href="http://tidesonline.noaa.gov/plotcomp.shtml?station_info=<?=$this->locInfo['tidestation']?>"><?=$this->locInfo['tidestation']?></a>
+						<? if(isset($stationInfo['stationname'])) { ?>
+							<span> (<?= $stationInfo['stationname'] ?>)</span>
+						<? } ?>
+					
+						<form action="" method="post" class="remove-bouy">
+							<input type="hidden" name="submit" value="remove-tide-station" />
+							<input type="hidden" name="tidestation" value="<?=$this->locInfo['tidestation']?>"/>
+							<input type="submit" name="remove-tide-station" value="Remove" />
+						</form>
+					</li>
+					<?
+				} 						
+				?>	
+				</ul>
 				<div class="add-station-section">
 					<?
 					if ($this->bouyCount < 3) {
@@ -191,22 +186,10 @@ class EditLocationPage extends LocationDetailPage {
 						<?					
 					}
 
-					$this->renderAddStationContainers();
+					$this->renderAddStationContainers('toEditLocation');
 
 				?>
-				</div>
-				<?
-				/*
-				if (isset($this->locInfo['forecast']))
-				?>
-				<form method="post" action="">
-					<div class="field">
-						<input type="text" name="forecast-link" class="text-input" value="<?=html($this->locInfo['forecast'])?>" />
-						<input type="hidden" name="submit" value="forecast-link" />
-						<input type="submit" name="update-name" value="Update Name" />
-					</div>
-				</form>	
-				<? */ ?>			
+				</div>			
 				<form action="" method="post" class="delete-form" id="delete-location-form">
 					<input type="hidden" name="submit" value="delete-location" />
 					<input type="button" id="delete-location-btn" class="delete-btn" value="Delete Location" />

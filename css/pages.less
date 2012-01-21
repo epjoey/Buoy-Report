@@ -23,7 +23,8 @@
 		.reg-btn:hover {text-decoration:none;}
 		.form-container { display:none; position:absolute; background-color:@pink; .drop-shadow-reset();
 			form { max-width:280px; margin-top:2px;}
-			.field {margin-bottom:0px;}
+			label {.text-highlight();}
+			.field {margin:8px 0 0;}
 		}
 		.form-container.expanded {display:block;}
 		.reg-btn:hover { background-color:#FFF;}
@@ -82,11 +83,12 @@
 	.fc-link a { .text-overflow(); max-width:190px; display: inline-block;} 
 	.fc-link .delete-link-check { margin-right:12px;}
 	#fc-link-container { margin:8px 0;}
-	.edit-link-btns {margin-top:5px;}
+	.edit-link-btns {margin-top:8px;}
 	.edit-link-btn {font-style:italic; font-size:13px; cursor:pointer;}
 	.edit-link-btn:hover {text-decoration:underline;}
 	#delete-link-cancel {float:right; }
 	#delete-link-btn {color:#db5a5a;}	
+	.bouy-iframe-link {line-height: 1.6em;}
 }
 
 /* =================== REPORT FORM PAGE =================== */
@@ -137,8 +139,8 @@
 	.add-station-section {margin-top:12px;}
 	.add-station-div {.drop-shadow-reset(); padding:0;}
 	.add-station-div .text-input {float:right;}
-	.block-link {padding:0; margin:0 12px 0 2px;}
-	.block-link:hover, .block-link.active {background:none; text-decoration:underline;}	
+	.add-station-section .block-link {padding:0; margin:0 12px 0 2px;}
+	.add-station-section .block-link:hover, .block-link.active {background:none; text-decoration:underline;}	
 }
 
 /* =================== PROCESS MOBILE IMAGE PAGE =================== */

@@ -15,6 +15,8 @@ class LocationDetailPage extends GeneralPage {
 	protected $bouys = array();
 	protected $bouyCount = 0;
 	protected $forecastLinks = array();
+	protected $enteredBouy = FALSE;
+	protected $enteredTide = FALSE;
 
 	public function loadData() {
 		parent::loadData();
@@ -62,7 +64,13 @@ class LocationDetailPage extends GeneralPage {
 		}
 		if (isset($_GET['te']) && $_GET['te']) {
 			$this->addStationError = "Station " . $_GET['te'] . " cannot be reached";	
-		}		
+		}
+		if (isset($_GET['entered']) && $_GET['entered'] == 'bouy') {
+			$this->enteredBouy = TRUE;
+		}
+		if (isset($_GET['entered']) && $_GET['entered'] == 'tide') {
+			$this->enteredTide = TRUE;
+		}				
 							
 	}
 
@@ -167,19 +175,19 @@ class LocationDetailPage extends GeneralPage {
 			}
 
 			Persistence::insertBouy($_POST['bouy-id'], $_POST['bouy-name'], $this->locationId, $this->bouyCount + 1);
-			header('Location:'.Paths::$to($this->locationId));
+			header('Location:'.Paths::$to($this->locationId).'&entered=bouy');
 			exit();
 		}
 
 		if ($_REQUEST['submit'] == 'existingbouy' && isset($_GET['bouy'])) {
 			
 			if (!$this->isValidBouy($_GET['bouy'], FALSE)) {
-				header('Location:'.Paths::$to($this->locationId).'&be2='.$_GET['bouy']);
+				header('Location:'.Paths::$to($this->locationId).'&be1='.$_GET['bouy']);
 				exit();					
 			}
 
 			Persistence::insertBouy($_GET['bouy'], "", $this->locationId, $this->bouyCount + 1, $checkDb = FALSE);
-			header('Location:'.Paths::$to($this->locationId));
+			header('Location:'.Paths::$to($this->locationId).'&entered=bouy');
 			exit();	
 
 		}
@@ -200,19 +208,19 @@ class LocationDetailPage extends GeneralPage {
 			}			
 			
 			Persistence::insertTideStation($_POST['station-id'], $_POST['station-name'], $this->locationId);
-			header('Location:'.Paths::$to($this->locationId));
+			header('Location:'.Paths::$to($this->locationId).'&entered=tide');
 			exit();
 		}
 
-		if ($_REQUEST['submit'] == 'existingtide' && isset($_GET['tidestation'])) {
+		if ($_REQUEST['submit'] == 'existingtide' && isset($_GET['tide'])) {
 			
-			if (!$this->isValidTideStation($_GET['tidestation'], FALSE)) {
+			if (!$this->isValidTideStation($_GET['tide'], FALSE)) {
 				header('Location:'.Paths::$to($this->locationId).'&te='.$_POST['station-id']);
 				exit();					
 			}	
 
-			Persistence::insertTideStation($_GET['tidestation'], "", $this->locationId, $checkDb = FALSE);
-			header('Location:'.Paths::$to($this->locationId));
+			Persistence::insertTideStation($_GET['tide'], "", $this->locationId, $checkDb = FALSE);
+			header('Location:'.Paths::$to($this->locationId).'&entered=tide');
 			exit();
 		}	
 		
@@ -307,7 +315,7 @@ class LocationDetailPage extends GeneralPage {
 		<?
 	}
 
-	protected function renderAddStationContainers() {	
+	protected function renderAddStationContainers($to = 'toLocation') {	
 		?>
 		<div class="add-station-container">
 			<?
@@ -336,7 +344,7 @@ class LocationDetailPage extends GeneralPage {
 					});
 					$('#add-existing-bouy').click(function(event){
 						$('#existing-bouys-container').toggle().addClass('loading');
-						$('#existing-bouys-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=bouy&locationid=<?=$this->locationId?>',
+						$('#existing-bouys-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=bouy&locationid=<?=$this->locationId?>&to=<?=$to?>',
 							function(){
 								$('#existing-bouys-container').removeClass('loading');
 							}
@@ -344,7 +352,7 @@ class LocationDetailPage extends GeneralPage {
 					});
 					$('#add-existing-tidestation').click(function(event){
 						$('#existing-tidestation-container').toggle().addClass('loading');
-						$('#existing-tidestation-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=tidestation&locationid=<?=$this->locationId?>',
+						$('#existing-tidestation-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=tide&locationid=<?=$this->locationId?>&to=<?=$to?>',
 							function(){
 								$('#existing-tidestation-container').removeClass('loading');
 							}
@@ -437,7 +445,7 @@ class LocationDetailPage extends GeneralPage {
 				if (isset($this->locInfo['tidestation'])) {
 					$stationInfo = Persistence::getTideStationInfo($this->locInfo['tidestation']);
 					?>
-					<div class="toggle-area">
+					<div class="toggle-area" style="<?=$this->enteredTide ? 'display:block' : '';?>">
 						<a target="_blank" href="http://tidesonline.noaa.gov/plotcomp.shtml?station_info=<?=$this->locInfo['tidestation']?>"><?=$this->locInfo['tidestation']?></a>
 						<? 
 						if(isset($stationInfo['stationname'])) { 
@@ -460,7 +468,7 @@ class LocationDetailPage extends GeneralPage {
 				<?			
 				if ($this->bouyCount > 0) {
 					?>
-					<ul class="toggle-area">
+					<ul class="toggle-area" style="<?=$this->enteredBouy ? 'display:block' : '';?>">
 					<?
 					foreach($this->bouys as $bouy){
 						$bouyInfo = Persistence::getBouyInfo($bouy);

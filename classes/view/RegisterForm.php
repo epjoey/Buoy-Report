@@ -23,6 +23,7 @@ class RegisterForm {
 					<input class="text-input required password" type="password" name="reg-password" id="reg-password" placeholder="••••••••••" />
 				</div>
 				<div class="field">
+					<input type="text" name="bot-check" id="bot-check" value=""/>
 					<input type="hidden" name="submit" value="register" />
 					<input type="submit" name="register" value="Sign Up" />
 				</div>

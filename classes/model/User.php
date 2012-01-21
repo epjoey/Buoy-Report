@@ -57,8 +57,12 @@ class User {
 	public function handleRegFormSubmission() {
 		
 		/* --------------- HANDLE SIGNUP FORM SUBMISSION --------------- */
-	
-		if (!isset($_POST['reg-name']) || $_POST['reg-name'] == '' || !isset($_POST['reg-email']) || $_POST['reg-email'] == '' || !isset($_POST['reg-password']) || $_POST['reg-password'] == '') {
+
+		//first check for bot
+		if (isset($_POST['bot-check']) && $_POST['bot-check'] != '') {
+			$error = 6;
+		}
+		else if (!isset($_POST['reg-name']) || $_POST['reg-name'] == '' || !isset($_POST['reg-email']) || $_POST['reg-email'] == '' || !isset($_POST['reg-password']) || $_POST['reg-password'] == '') {
 			$error = 1;
 		}
 		else if (filter_var($_POST['reg-email'], FILTER_VALIDATE_EMAIL) != TRUE) {
