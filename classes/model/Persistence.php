@@ -181,6 +181,16 @@ class Persistence {
 		if (!$result) {
 			die("Error deleting report" . mysqli_error($link));
 		}
+		$sql = "DELETE FROM bouydata WHERE reportid = '$reportId'";
+		$result = mysqli_query(Persistence::dbConnect(), $sql);
+		if (!$result) {
+			die("Error deleting report from bouy data table" . mysqli_error($link));
+		}	
+		$sql = "DELETE FROM tidedata WHERE reportid = '$reportId'";
+		$result = mysqli_query(Persistence::dbConnect(), $sql);
+		if (!$result) {
+			die("Error deleting report from tide data table" . mysqli_error($link));
+		}				
 	}
 
 /*==================================================== Locations ====================================================*/
