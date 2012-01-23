@@ -1,2 +1,2 @@
 #! /bin/bash
-phd $0 br buoyreport.com
+phd $0 br buoy-report.com
