@@ -11,9 +11,9 @@ class SearchModule {
 		$this->items = $items;
 	}
 
-	public function renderFilterInput() {	
+	public function renderFilterInput($label = NULL) {	
 		?>
-		<input type="text" class="text-input" name="q" id="query" placeholder="Search" value="" />
+		<input type="text" class="text-input" name="q" id="query" placeholder="Search <?=isset($label) ? $label : '';?>" value="" />
 		<?		
 	}
 

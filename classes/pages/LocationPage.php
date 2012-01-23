@@ -45,13 +45,19 @@ class LocationPage extends GeneralPage {
 	}
 
 	public function renderBodyContent() {
-		?>
-		<h1 class="list-title"><?= $this->isUserLocations ? 'My ' : '';?> Locations</h1>
-		<? 
+		if ($this->isToPost) {
+			?>
+			<h1 class="list-title">Choose a location:</h1>
+			<?
+		} else {
+			?>
+			<h1 class="list-title"><?= $this->isUserLocations ? 'My ' : '';?> Locations</h1>
+			<? 
+		}
 		if (!$this->isUserLocations) {
 			?>
 			<div class="search-container">
-				<? $this->searchModule->renderFilterInput(); ?>
+				<? $this->searchModule->renderFilterInput('Locations'); ?>
 			</div>
 			<?			
 		}
