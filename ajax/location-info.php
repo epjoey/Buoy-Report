@@ -8,7 +8,7 @@ if ($_REQUEST['info'] == 'forecast') {
 
 	if (isset($_REQUEST['url']) && $_REQUEST['url']) {
 		$url = $_REQUEST['url'];
-		if (substr($url, 0, 7) != 'http://' || substr($url, 0, 8) != 'https://') {
+		if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') {
 			$url = "http://" . $url;
 		}
 		if (!Persistence::dbContainsLocationForecast($locationId, $url))
