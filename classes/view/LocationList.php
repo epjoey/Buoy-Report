@@ -3,7 +3,7 @@
 class LocationList {
 
 	protected $hasLocations = FALSE;
-	protected $locations = array(); //m.d. array containing name, id, bouys, and tide
+	protected $locations = array(); //m.d. array containing name, id, buoys, and tide
 	protected $selectedLocation = NULL;
 	protected $toPost = FALSE;
 	protected $showSeeMore = FALSE;
@@ -48,8 +48,8 @@ class LocationList {
 							<span class="name"><?= html($location['locname']) ?></span>
 						</a>
 						<span class="notification-icons">
-							<? if (isset($location['bouy1'])) { ?>
-								<span class="bouy-icon icon" title="<?=$location['locname']?> has bouy stations"></span>
+							<? if (isset($location['buoy1'])) { ?>
+								<span class="buoy-icon icon" title="<?=$location['locname']?> has buoy stations"></span>
 							<? } ?>
 							<? if (isset($location['tidestation'])) { ?>
 								<span class="tide-icon icon" title="<?=$location['locname']?> has tide station"></span>

@@ -47,12 +47,12 @@ class IntroPage extends GeneralPage {
 		?>
 			<img class="logo-graphic" id="large-logo" src="<?= Paths::toImages() ?>logo-lrg.png" width="101" height="101"/>
 			
-			<h1 class="welcome-to-br"><span class="welcome">Welcome to</span> Bouy Report<span class="pattern"></span></h1>
+			<h1 class="welcome-to-br"><span class="welcome">Welcome to</span> Buoy Report<span class="pattern"></span></h1>
 			<div class="sub-text">
 				<div class="desc">
-					<h2 class="tag-line" id="desc-trigger">Log bouy data after you surf.</h2>
+					<h2 class="tag-line" id="desc-trigger">Log buoy data after you surf.</h2>
 					<a href="<?=Paths::toAbout();?>" class="what">What?</a>
-					<h3 class="detail" id="desc-hidden">Bouy Report lets you log weather measurements that affect your surf sessions</h3>
+					<h3 class="detail" id="desc-hidden">Buoy Report lets you log weather measurements that affect your surf sessions</h3>
 				</div>
 				<div class="reg-browse">
 					<div class="reg-container">

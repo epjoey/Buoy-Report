@@ -1,21 +1,21 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/BouyData.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/BuoyData.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/TideData.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBouyForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
 
 
 class LocationDetailPage extends GeneralPage {
 
-	protected $addBouyError = NULL;
+	protected $addBuoyError = NULL;
 	protected $addStationError = NULL;
-	protected $bouys = array();
-	protected $bouyCount = 0;
+	protected $buoys = array();
+	protected $buoyCount = 0;
 	protected $forecastLinks = array();
-	protected $enteredBouy = FALSE;
+	protected $enteredBuoy = FALSE;
 	protected $enteredTide = FALSE;
 
 	public function loadData() {
@@ -30,17 +30,17 @@ class LocationDetailPage extends GeneralPage {
 		//ajax this
 		$this->creator = Persistence::getReporterInfoById($this->locInfo['creator']);
 		
-		if (isset($this->locInfo['bouy1'])) {
-			$this->bouys['bouy1'] = $this->locInfo['bouy1'];
-			$this->bouyCount = 1;
+		if (isset($this->locInfo['buoy1'])) {
+			$this->buoys['buoy1'] = $this->locInfo['buoy1'];
+			$this->buoyCount = 1;
 		}	
-		if (isset($this->locInfo['bouy2'])) {
-			$this->bouys['bouy2'] = $this->locInfo['bouy2'];
-			$this->bouyCount = 2;
+		if (isset($this->locInfo['buoy2'])) {
+			$this->buoys['buoy2'] = $this->locInfo['buoy2'];
+			$this->buoyCount = 2;
 		}
-		if (isset($this->locInfo['bouy3'])) {
-			$this->bouys['bouy3'] = $this->locInfo['bouy3'];
-			$this->bouyCount = 3;
+		if (isset($this->locInfo['buoy3'])) {
+			$this->buoys['buoy3'] = $this->locInfo['buoy3'];
+			$this->buoyCount = 3;
 		}	
 
 		if ($this->userIsLoggedIn && Persistence::userHasLocation($this->userId, $this->locationId)) {
@@ -52,21 +52,21 @@ class LocationDetailPage extends GeneralPage {
 
 		if (isset($_GET['error']) && $_GET['error']) {
 			switch($_GET['error']) {
-				case 1: $this->addBouyError = "Please fill in bouy number"; break;
+				case 1: $this->addBuoyError = "Please fill in buoy number"; break;
 				case 2: $this->addStationError = "Please fill in station number"; break;
 			}
 		}
 		if (isset($_GET['be1']) && $_GET['be1']) {
-			$this->addBouyError = "Bouy " . $_GET['be1'] . " is already set up for this location";
+			$this->addBuoyError = "Buoy " . $_GET['be1'] . " is already set up for this location";
 		}
 		if (isset($_GET['be2']) && $_GET['be2']) {
-			$this->addBouyError = "Bouy " . $_GET['be2'] . " cannot be reached";
+			$this->addBuoyError = "Buoy " . $_GET['be2'] . " cannot be reached";
 		}
 		if (isset($_GET['te']) && $_GET['te']) {
 			$this->addStationError = "Station " . $_GET['te'] . " cannot be reached";	
 		}
-		if (isset($_GET['entered']) && $_GET['entered'] == 'bouy') {
-			$this->enteredBouy = TRUE;
+		if (isset($_GET['entered']) && $_GET['entered'] == 'buoy') {
+			$this->enteredBuoy = TRUE;
 		}
 		if (isset($_GET['entered']) && $_GET['entered'] == 'tide') {
 			$this->enteredTide = TRUE;
@@ -83,7 +83,7 @@ class LocationDetailPage extends GeneralPage {
 		?>
 		<script type="text/javascript">	
 			$(document).ready(function(){
-				$("#add-bouy-form").validate();
+				$("#add-buoy-form").validate();
 				$("#add-tide-station-form").validate();
 			});
 
@@ -155,39 +155,39 @@ class LocationDetailPage extends GeneralPage {
 
 	protected function handleStationSubmission($to = 'toLocation') {
 
-		if ($_REQUEST['submit'] == 'enter-bouy') {
+		if ($_REQUEST['submit'] == 'enter-buoy') {
 
-			if (empty($_POST['bouy-id'])) {	
+			if (empty($_POST['buoy-id'])) {	
 				$error = 1;
 				header('Location:'.Paths::$to($this->locationId, $error));
 				exit();		
 			}
 
-			if (!$this->isValidBouy($_POST['bouy-id'])) {
-				if ($this->addBouyError == "bouy-exists") {
-					header('Location:'.Paths::$to($this->locationId).'&be1='.$_POST['bouy-id']);
+			if (!$this->isValidBuoy($_POST['buoy-id'])) {
+				if ($this->addBuoyError == "buoy-exists") {
+					header('Location:'.Paths::$to($this->locationId).'&be1='.$_POST['buoy-id']);
 					exit();						
 				}
-				if ($this->addBouyError == "bouy-offline") {
-					header('Location:'.Paths::$to($this->locationId).'&be2='.$_POST['bouy-id']);
+				if ($this->addBuoyError == "buoy-offline") {
+					header('Location:'.Paths::$to($this->locationId).'&be2='.$_POST['buoy-id']);
 					exit();						
 				}				
 			}
 
-			Persistence::insertBouy($_POST['bouy-id'], $_POST['bouy-name'], $this->locationId, $this->bouyCount + 1);
-			header('Location:'.Paths::$to($this->locationId).'&entered=bouy');
+			Persistence::insertBuoy($_POST['buoy-id'], $_POST['buoy-name'], $this->locationId, $this->buoyCount + 1);
+			header('Location:'.Paths::$to($this->locationId).'&entered=buoy');
 			exit();
 		}
 
-		if ($_REQUEST['submit'] == 'existingbouy' && isset($_GET['bouy'])) {
+		if ($_REQUEST['submit'] == 'existingbuoy' && isset($_GET['buoy'])) {
 			
-			if (!$this->isValidBouy($_GET['bouy'], FALSE)) {
-				header('Location:'.Paths::$to($this->locationId).'&be1='.$_GET['bouy']);
+			if (!$this->isValidBuoy($_GET['buoy'], FALSE)) {
+				header('Location:'.Paths::$to($this->locationId).'&be1='.$_GET['buoy']);
 				exit();					
 			}
 
-			Persistence::insertBouy($_GET['bouy'], "", $this->locationId, $this->bouyCount + 1, $checkDb = FALSE);
-			header('Location:'.Paths::$to($this->locationId).'&entered=bouy');
+			Persistence::insertBuoy($_GET['buoy'], "", $this->locationId, $this->buoyCount + 1, $checkDb = FALSE);
+			header('Location:'.Paths::$to($this->locationId).'&entered=buoy');
 			exit();	
 
 		}
@@ -225,8 +225,8 @@ class LocationDetailPage extends GeneralPage {
 		}	
 		
 			
-		if ($_POST['submit'] == 'remove-bouy') {
-			Persistence::removeBouyFromLocation($_POST['key'], $this->bouys, $this->locationId);
+		if ($_POST['submit'] == 'remove-buoy') {
+			Persistence::removeBuoyFromLocation($_POST['key'], $this->buoys, $this->locationId);
 			header('Location:'.Paths::$to($this->locationId));
 			exit();			
 		}
@@ -241,18 +241,18 @@ class LocationDetailPage extends GeneralPage {
 
 	}
 
-	public function isValidBouy($bouy, $checkIfOnline = TRUE){	
+	public function isValidBuoy($buoy, $checkIfOnline = TRUE){	
 		
-		if (in_array($bouy, $this->bouys)) {
-			$this->addBouyError = "bouy-exists";
+		if (in_array($buoy, $this->buoys)) {
+			$this->addBuoyError = "buoy-exists";
 			return FALSE;			
 		}		
 		
 		if ($checkIfOnline) {
 			//dont need time (0) because were just checking if data file exists/is online		
-			$bouyData = new BouyData($bouy, 0);
-			if (!$bouyData->bouyExists) {
-				$this->addBouyError = "bouy-offline";
+			$buoyData = new BuoyData($buoy, 0);
+			if (!$buoyData->buoyExists) {
+				$this->addBuoyError = "buoy-offline";
 				return FALSE;
 			}	
 		}	
@@ -300,8 +300,8 @@ class LocationDetailPage extends GeneralPage {
 				?><a class="post-report edit-loc-link  block-link" href="<?=Paths::toPostReport($this->locationId);?>">Post Report</a><? 
 			}
 			
-			if ($this->bouyCount < 3 && $this->userIsLoggedIn) {
-				?><span id="add-bouy-btn" class="edit-loc-link block-link <?=isset($this->addBouyError) ? 'active' : ''?>">+ Bouy</span><?
+			if ($this->buoyCount < 3 && $this->userIsLoggedIn) {
+				?><span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">+ Buoy</span><?
 			}
 
 			if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
@@ -319,9 +319,9 @@ class LocationDetailPage extends GeneralPage {
 		?>
 		<div class="add-station-container">
 			<?
-			if ($this->bouyCount < 3 && $this->userIsLoggedIn) {
-				$bform = new AddBouyForm;
-				$bform -> renderAddBouyForm($this->addBouyError);
+			if ($this->buoyCount < 3 && $this->userIsLoggedIn) {
+				$bform = new AddBuoyForm;
+				$bform -> renderAddBuoyForm($this->addBuoyError);
 			}
 			if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
 				$tform = new AddTideStationForm;
@@ -330,23 +330,23 @@ class LocationDetailPage extends GeneralPage {
 			?>
 			<script type="text/javascript"> 
 				(function(){
-					$('#add-bouy-btn').click(function(event){
+					$('#add-buoy-btn').click(function(event){
 						$('#add-tide-station-div').hide();
-						$('#add-bouy-div').toggle();
+						$('#add-buoy-div').toggle();
 						$('#add-tide-station-btn').removeClass('active');
-						$('#add-bouy-btn').toggleClass('active');
+						$('#add-buoy-btn').toggleClass('active');
 					});
 					$('#add-tide-station-btn').click(function(event){
-						$('#add-bouy-div').hide();
+						$('#add-buoy-div').hide();
 						$('#add-tide-station-div').toggle();
-						$('#add-bouy-btn').removeClass('active');
+						$('#add-buoy-btn').removeClass('active');
 						$('#add-tide-station-btn').toggleClass('active');
 					});
-					$('#add-existing-bouy').click(function(event){
-						$('#existing-bouys-container').toggle().addClass('loading');
-						$('#existing-bouys-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=bouy&locationid=<?=$this->locationId?>&to=<?=$to?>',
+					$('#add-existing-buoy').click(function(event){
+						$('#existing-buoys-container').toggle().addClass('loading');
+						$('#existing-buoys-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=buoy&locationid=<?=$this->locationId?>&to=<?=$to?>',
 							function(){
-								$('#existing-bouys-container').removeClass('loading');
+								$('#existing-buoys-container').removeClass('loading');
 							}
 						);
 					});
@@ -463,29 +463,29 @@ class LocationDetailPage extends GeneralPage {
 				}
 				?>
 			</div>
-			<div class="bouy-current-data sb-section">	
-				<h5 class="toggle-btn">Bouy Stations <?=$this->bouyCount > 0 ? '&darr;' : '';?></h5>
+			<div class="buoy-current-data sb-section">	
+				<h5 class="toggle-btn">Buoy Stations <?=$this->buoyCount > 0 ? '&darr;' : '';?></h5>
 				<?			
-				if ($this->bouyCount > 0) {
+				if ($this->buoyCount > 0) {
 					?>
-					<ul class="toggle-area" style="<?=$this->enteredBouy ? 'display:block' : '';?>">
+					<ul class="toggle-area" style="<?=$this->enteredBuoy ? 'display:block' : '';?>">
 					<?
-					foreach($this->bouys as $bouy){
-						$bouyInfo = Persistence::getBouyInfo($bouy);
+					foreach($this->buoys as $buoy){
+						$buoyInfo = Persistence::getBuoyInfo($buoy);
 						?>
 						<li>
-							<a class="bouy-iframe-link" target="_blank" href="http://www.ndbc.noaa.gov/station_page.php?station=<?=html($bouy)?>"><? 
-							if (isset($bouyInfo['name'])) { 
+							<a class="buoy-iframe-link" target="_blank" href="http://www.ndbc.noaa.gov/station_page.php?station=<?=html($buoy)?>"><? 
+							if (isset($buoyInfo['name'])) { 
 								?>
-								<span><?= html($bouyInfo['name'])?></span>
+								<span><?= html($buoyInfo['name'])?></span>
 								<? 
 							} else {
 								?>
-								<span><?= html($bouy) ?></span>
+								<span><?= html($buoy) ?></span>
 								<?
 							}														
 							?></a>
-							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=html($bouy)?>" style="width:100%; height:300px"></iframe>
+							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=html($buoy)?>" style="width:100%; height:300px"></iframe>
 						</li>								
 						<?
 						}
@@ -498,7 +498,7 @@ class LocationDetailPage extends GeneralPage {
 					<span class="no-data">None
 						<?
 						if (!$this->userIsLoggedIn) {
-							?><span class="must-log-in">- Log in to add bouys or stations</span><?
+							?><span class="must-log-in">- Log in to add buoys or stations</span><?
 						}
 						?>
 					</span>

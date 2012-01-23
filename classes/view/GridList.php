@@ -8,7 +8,7 @@ class GridList {
 
 	protected $itemLabel = 'Item';
 	protected $hasItems = FALSE;
-	protected $items = array(); //m.d. array containing name, id, bouys, and tide
+	protected $items = array(); //m.d. array containing name, id, buoys, and tide
 	protected $showSeeAllLink = FALSE;
 	protected $showAddLink = FALSE;
 	protected $showSeeMoreLink = FALSE;

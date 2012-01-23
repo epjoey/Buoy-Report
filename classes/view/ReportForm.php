@@ -70,24 +70,24 @@ class ReportForm {
 					<label>Include:</label>
 					<?
 					/* use js to get values of attributes on location selector */
-					if (isset($locInfo['bouy1'])) {
+					if (isset($locInfo['buoy1'])) {
 						?>
 						<span class="radio-field">
-							<input type="checkbox" name="bouy1" id="bouy1" value="<?=$locInfo['bouy1']?>" checked='checked' /><label for="bouy1"> Bouy <?=$locInfo['bouy1']?></label>
+							<input type="checkbox" name="buoy1" id="buoy1" value="<?=$locInfo['buoy1']?>" checked='checked' /><label for="buoy1"> Buoy <?=$locInfo['buoy1']?></label>
 						</span>	
 						<?
 					}
-					if (isset($locInfo['bouy2'])) {
+					if (isset($locInfo['buoy2'])) {
 						?>
 						<span class="radio-field">
-							<input type="checkbox" name="bouy2" id="bouy2" value="<?=$locInfo['bouy2']?>" checked='checked' /><label for="bouy2"> Bouy <?=$locInfo['bouy2']?></label>
+							<input type="checkbox" name="buoy2" id="buoy2" value="<?=$locInfo['buoy2']?>" checked='checked' /><label for="buoy2"> Buoy <?=$locInfo['buoy2']?></label>
 						</span>	
 						<?						
 					}
-					if (isset($locInfo['bouy3'])) {
+					if (isset($locInfo['buoy3'])) {
 						?>
 						<span class="radio-field">
-							<input type="checkbox" name="bouy3" id="bouy3" value="<?=$locInfo['bouy3']?>" checked='checked' /><label for="bouy3"> Bouy <?=$locInfo['bouy3']?></label>
+							<input type="checkbox" name="buoy3" id="buoy3" value="<?=$locInfo['buoy3']?>" checked='checked' /><label for="buoy3"> Buoy <?=$locInfo['buoy3']?></label>
 						</span>	
 						<?						
 					}					
@@ -98,9 +98,9 @@ class ReportForm {
 						</span>	
 						<?						
 					}
-					if (!isset($locInfo['tidestation']) && !isset($locInfo['bouy1']) && !isset($locInfo['bouy2']) && !isset($locInfo['bouy3'])) {
+					if (!isset($locInfo['tidestation']) && !isset($locInfo['buoy1']) && !isset($locInfo['buoy2']) && !isset($locInfo['buoy3'])) {
 						?>
-						<span>No bouys or tidestations to include. <a href="<?=Paths::toLocation($locInfo['id']);?>">Add one</a></span> 
+						<span>No buoys or tidestations to include. <a href="<?=Paths::toLocation($locInfo['id']);?>">Add one</a></span> 
 						<?
 					}
 					?>				

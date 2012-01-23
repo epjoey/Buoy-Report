@@ -7,8 +7,8 @@ $locationId = $_REQUEST['locationid'];
 
 $stations = Persistence::getAllStations($stationType);
 
-if ($stationType == 'bouy') {
-	$stationId = 'bouyid';
+if ($stationType == 'buoy') {
+	$stationId = 'buoyid';
 	$stationName = 'name';
 } else if ($stationType == 'tidestation') {
 	$stationId = 'stationid';
@@ -28,7 +28,7 @@ if ($stationType == 'bouy') {
 			$station[$stationName] = 'No Label';
 		}
 		?>
-		<a href="<?=Paths::toLocation($locationId);?>&submit=existingbouy&bouy=<?=$station[$stationId]?>" class="station" station-id="<?=$station[$stationId]?>" station-name = "<?=$station[$stationName]?>">
+		<a href="<?=Paths::toLocation($locationId);?>&submit=existingbuoy&buoy=<?=$station[$stationId]?>" class="station" station-id="<?=$station[$stationId]?>" station-name = "<?=$station[$stationName]?>">
 			<span class="station-id"><?= $station[$stationId] ?></span>
 			<span class="station-name"><?= $station[$stationName] ?></span>
 		</a>
@@ -37,7 +37,7 @@ if ($stationType == 'bouy') {
 	?>
 </ul>
 <script>	
-	$('#existing-bouys-container .station').click(function(){
+	$('#existing-buoys-container .station').click(function(){
 		var stationId = $(this).attr('station-id');
 		var stationName = $(this).attr('station-name');
 		console.log(stationId); console.log(stationName);								

@@ -39,7 +39,7 @@ class GeneralPage {
 		$this->detect = new Mobile_Detect();
 		$this->isMobile = $this->detect->isMobile();
 
-		$this->siteTitle = 'Bouy Report';
+		$this->siteTitle = 'Buoy Report';
 		$this->pageTitle = $this->siteTitle;
 				
 	}
@@ -81,7 +81,7 @@ class GeneralPage {
 		  ================================================== -->
 			<meta charset="utf-8">
 			<title><?=$this->pageTitle?></title>
-			<meta name="description" content="Bouy Report allows surfers, fisherman, or anyone who interacts with the ocean to save bouy measurements from a time in the past for their own records.">
+			<meta name="description" content="Buoy Report allows surfers, fisherman, or anyone who interacts with the ocean to save buoy measurements from a time in the past for their own records.">
 			<meta name="author" content="hodara">
 			<!--[if lt IE 9]>
 				<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -173,8 +173,8 @@ class GeneralPage {
 			<div class="bottom">
 				<div class="text">
 					<p class="footer-nav">
-					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a>&nbsp;|&nbsp;<a href="<?=Paths::toAbout()?>">About Bouy Report</a></p>
-					<p class="noaa">All bouy and tide data from <a target="_blank" href="http://noaa.gov">NOAA</a></p>
+					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a>&nbsp;|&nbsp;<a href="<?=Paths::toAbout()?>">About Buoy Report</a></p>
+					<p class="noaa">All buoy and tide data from <a target="_blank" href="http://noaa.gov">NOAA</a></p>
 				</div> 
 			</div>
 		</div>

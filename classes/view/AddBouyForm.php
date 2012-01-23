@@ -3,26 +3,26 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 
 
-class AddBouyForm {
+class AddBuoyForm {
 
-	public function renderAddBouyForm($addBouyError = NULL, $showByDefult = FALSE) {
+	public function renderAddBuoyForm($addBuoyError = NULL, $showByDefult = FALSE) {
 		?>
-		<div id="add-bouy-div" class="form-container add-station-div" style="<?= isset($addBouyError) || $showByDefult ? '' : 'display:none;' ?> margin-top:12px">
-			<form id="add-bouy-form" action="" method="post">
-				<p>Find nearby bouys <a target="_blank" href="http://www.ndbc.noaa.gov/rmd.shtml">here</a> or <a href="javascript:" id="add-existing-bouy">add existing bouy.</a></p>
-				<span id="existing-bouys-container" style="display:none" class="station-list ajax-load"></span>
-				<span class="submission-error"><?= isset($addBouyError) ? $addBouyError : '';?></span>
+		<div id="add-buoy-div" class="form-container add-station-div" style="<?= isset($addBuoyError) || $showByDefult ? '' : 'display:none;' ?> margin-top:12px">
+			<form id="add-buoy-form" action="" method="post">
+				<p>Find nearby buoys <a target="_blank" href="http://www.ndbc.noaa.gov/rmd.shtml">here</a> or <a href="javascript:" id="add-existing-buoy">add existing buoy.</a></p>
+				<span id="existing-buoys-container" style="display:none" class="station-list ajax-load"></span>
+				<span class="submission-error"><?= isset($addBuoyError) ? $addBuoyError : '';?></span>
 				<div class="field">	
-					<label for="bouy-id">Bouy Number </label>
-					<input type="text" class="text-input required" id="bouy-id" name="bouy-id" placeholder="Enter Bouy Number"/>
+					<label for="buoy-id">Buoy Number </label>
+					<input type="text" class="text-input required" id="buoy-id" name="buoy-id" placeholder="Enter Buoy Number"/>
 				</div>
 				<div class="field">	
-					<label for="bouy-name">Bouy Detail (optional)</label>
-					<input type="text" class="text-input" id="bouy-name" name="bouy-name" placeholder="location, coords, moored..."/>
+					<label for="buoy-name">Buoy Detail (optional)</label>
+					<input type="text" class="text-input" id="buoy-name" name="buoy-name" placeholder="location, coords, moored..."/>
 				</div>
 				<div class="field">	
-					<input type="hidden" name="submit" value="enter-bouy" />
-					<input type="submit" name="enter-bouy" value="Enter Bouy" />
+					<input type="hidden" name="submit" value="enter-buoy" />
+					<input type="submit" name="enter-buoy" value="Enter Buoy" />
 				</div>
 			</form>
 		</div>	

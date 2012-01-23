@@ -8,10 +8,10 @@ $locationId = $_REQUEST['locationid'];
 $to = $_REQUEST['to'];
 $limit = 1000;
 
-if ($stationType == 'bouy') {
-	$stationId = 'bouyid';
+if ($stationType == 'buoy') {
+	$stationId = 'buoyid';
 	$stationName = 'name';
-	$table = 'bouy';
+	$table = 'buoy';
 } else if ($stationType == 'tide') {
 	$stationId = 'stationid';
 	$stationName = 'stationname';
@@ -45,7 +45,7 @@ $stations = Persistence::getAllStations($table, $limit);
 	?>
 </ul>
 <script>	
-	$('#existing-bouys-container .station').click(function(){
+	$('#existing-buoys-container .station').click(function(){
 		var stationId = $(this).attr('station-id');
 		var stationName = $(this).attr('station-name');
 		console.log(stationId); console.log(stationName);								

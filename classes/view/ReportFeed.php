@@ -262,7 +262,7 @@ class ReportFeed {
 
 				var detailSection = report.find('.detail-section'),
 					reportId = report.attr('reportid'),
-					obouys = report.attr('hasbouys'),
+					obuoys = report.attr('hasbuoys'),
 					otideStation = report.attr('hastide'),
 					otimezone = report.attr('tz'),
 					oreportTime = report.attr('reporttime'),
@@ -279,7 +279,7 @@ class ReportFeed {
 					detailSection.addClass('loading');	
 				 	detailSection.load('<?=Paths::toAjax()?>report-details.php?id=' + reportId,
 				 		{
-				 			bouys:obouys,
+				 			buoys:obuoys,
 				 			tideStation:otideStation,
 				 			timezone:otimezone,
 				 			reportTime:oreportTime,

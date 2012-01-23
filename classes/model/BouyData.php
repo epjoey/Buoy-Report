@@ -1,20 +1,20 @@
 <?php
 
 
-class BouyData {
+class BuoyData {
 
-	public function __construct($bouy, $obsdate){
+	public function __construct($buoy, $obsdate){
 		$this->obsdate = $obsdate;
-		$this->bouyHasTide = FALSE;
+		$this->buoyHasTide = FALSE;
 
 		 
-		// last 15 days of data from bouy 46026
-		$this->data = file('http://www.ndbc.noaa.gov/data/realtime2/' . $bouy . '.txt');
+		// last 15 days of data from buoy 46026
+		$this->data = file('http://www.ndbc.noaa.gov/data/realtime2/' . $buoy . '.txt');
 
-		$this->data ? $this->bouyExists = TRUE : $this->bouyExists = FALSE;	
+		$this->data ? $this->buoyExists = TRUE : $this->buoyExists = FALSE;	
 	}
 
-	public function bouyHasAccurateData() {
+	public function buoyHasAccurateData() {
 		
 		//use first 200 lines if file has more than 200 lines
 		$numLines = count($this->data);
@@ -31,12 +31,12 @@ class BouyData {
 			//skip first line because it doesnt have data
 			if ($key > 1) {
 				//convert each lines date/time into a timestamp
-				$bouyDate = strtotime($line[1] . '/' . $line[2] . '/' .  $line[0] . ' ' .  $line[3] . ':' .  $line[4] . 'GMT');
+				$buoyDate = strtotime($line[1] . '/' . $line[2] . '/' .  $line[0] . ' ' .  $line[3] . ':' .  $line[4] . 'GMT');
 				
 				//get all reports within (4) hours and create array. use keys of lines as key of close lines
-				if (abs($this->obsdate - $bouyDate) < 60*60*4) {
-					$proximity[$key] = abs($this->obsdate - $bouyDate);
-					$bouyDates[$key] = $bouyDate;
+				if (abs($this->obsdate - $buoyDate) < 60*60*4) {
+					$proximity[$key] = abs($this->obsdate - $buoyDate);
+					$buoyDates[$key] = $buoyDate;
 				}
 			}
 		}
@@ -48,7 +48,7 @@ class BouyData {
 			$closest = reset($proximity);
 			$key = key($proximity);
 			$this->dataLine = $this->data[$key];
-			$this->bouyDate = $bouyDates[$key];
+			$this->buoyDate = $buoyDates[$key];
 			return TRUE;
 		}
 	}
@@ -88,7 +88,7 @@ class BouyData {
  	public function getTide() {
 		$this->tide = $this->dataLine[18];
 		if ($this->tide != "" || $this->tide != " " || $this->tide != "MM" || $this->tide != "mm") {
-			$this->bouyHasTide = TRUE;
+			$this->buoyHasTide = TRUE;
 		}
 		return $this->tide;
 	}

@@ -2,10 +2,10 @@
 
 class Paths {
 	
-	const SHORTURL = 'http://bouyreport.com';
-	const URL = 'http://www.bouyreport.com';
+	const SHORTURL = 'http://buoyreport.com';
+	const URL = 'http://www.buoyreport.com';
 	const LOCALURL = 'http://localhost:8888';
-	const COOKIEDOMAIN = '.bouyreport.com';
+	const COOKIEDOMAIN = '.buoyreport.com';
 
 	public static function toUrl() {
 		global $local_dev;

@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/BouyData.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/BuoyData.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/TideData.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
@@ -23,14 +23,14 @@ class Report {
   		$this->reportInfo['observationDate'] = intval(gmdate("U", time()-$offset));
   		$this->reportInfo['reporterHasLocation'] = $_POST['reporterhaslocation'];
 			
-		if (isset($_POST['bouy1'])) {
-			$this->reportInfo['bouy1'] = $_POST['bouy1'];
+		if (isset($_POST['buoy1'])) {
+			$this->reportInfo['buoy1'] = $_POST['buoy1'];
 		}
-		if (isset($_POST['bouy2'])) {
-			$this->reportInfo['bouy2']  = $_POST['bouy2'];
+		if (isset($_POST['buoy2'])) {
+			$this->reportInfo['buoy2']  = $_POST['buoy2'];
 		}
-		if (isset($_POST['bouy3'])) {
-			$this->reportInfo['bouy3'] = $_POST['bouy3'];
+		if (isset($_POST['buoy3'])) {
+			$this->reportInfo['buoy3'] = $_POST['buoy3'];
 		}				
 		if (isset($_POST['tidestation'])) {
 			$this->reportInfo['tidestation']  = $_POST['tidestation'];
@@ -107,18 +107,18 @@ class Report {
 		
 		$reportId = Persistence::insertReport($reportInfo);
 		
-		/* for each bouy included, check if it still exists, scrape it, and enter it into db */
+		/* for each buoy included, check if it still exists, scrape it, and enter it into db */
 		for ($i=1; $i<=3; $i++) {
-			if (isset($reportInfo['bouy' . $i])) {
-				$bouy = $reportInfo['bouy' . $i];
-				$data = new BouyData($bouy, $reportInfo['observationDate']);
-				if ($data->bouyExists && $data->bouyHasAccurateData()) {
+			if (isset($reportInfo['buoy' . $i])) {
+				$buoy = $reportInfo['buoy' . $i];
+				$data = new BuoyData($buoy, $reportInfo['observationDate']);
+				if ($data->buoyExists && $data->buoyHasAccurateData()) {
 					//NTH:check if noaa data is updated, if not just reuse last report
-					Persistence::insertBouyData(
+					Persistence::insertBuoyData(
 						$reportId,
 						array(
-							'bouy' => $bouy, 
-							'gmttime' => $data->bouyDate, 
+							'buoy' => $buoy, 
+							'gmttime' => $data->buoyDate, 
 							'winddir' => $data->getWindDir(), 
 							'windspeed' => $data->getWindSpeed(), 
 							'swellheight' => $data->getWaveHeight(), 

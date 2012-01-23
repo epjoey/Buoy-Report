@@ -53,7 +53,7 @@ class ReporterPage extends GeneralPage {
 				<a href="<?=Paths::toLocation($this->locInfo['id'])?>"><?=$this->locInfo['locname']?></a> 
 				<?
 			} else {
-				print 'Bouy';
+				print 'Buoy';
 			} 
 			?> 
 			Reporters

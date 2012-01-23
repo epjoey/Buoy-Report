@@ -136,7 +136,7 @@ class Persistence {
 		$sql = "SELECT * FROM report WHERE id = '$reportId'";
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
 		if (!$result) {
-			die("Error fetching bouys by location" . mysqli_error($link));
+			die("Error fetching buoys by location" . mysqli_error($link));
 		}
 		$row = mysqli_fetch_array($result, MYSQL_ASSOC);
 		if (!empty($row)) {
@@ -181,10 +181,10 @@ class Persistence {
 		if (!$result) {
 			die("Error deleting report" . mysqli_error($link));
 		}
-		$sql = "DELETE FROM bouydata WHERE reportid = '$reportId'";
+		$sql = "DELETE FROM buoydata WHERE reportid = '$reportId'";
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
 		if (!$result) {
-			die("Error deleting report from bouy data table" . mysqli_error($link));
+			die("Error deleting report from buoy data table" . mysqli_error($link));
 		}	
 		$sql = "DELETE FROM tidedata WHERE reportid = '$reportId'";
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
@@ -238,7 +238,7 @@ class Persistence {
 		$sql = "SELECT * FROM location WHERE id = '$locationId'";
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
-			die("Error fetching bouys by location" . mysqli_error($link));
+			die("Error fetching buoys by location" . mysqli_error($link));
 		}
 		$row = mysqli_fetch_array($result, MYSQL_ASSOC);
 		if (!empty($row)) {
@@ -672,38 +672,38 @@ class Persistence {
 		
 	}
 
-/*==================================================== Bouy ====================================================*/
+/*==================================================== Buoy ====================================================*/
 /*==============================================================================================================*/	
 
-	public static function insertBouy($id, $name = NULL, $locationid, $bouynum, $checkDbForBouy = TRUE) {
+	public static function insertBuoy($id, $name = NULL, $locationid, $buoynum, $checkDbForBuoy = TRUE) {
 		$link = Persistence::dbConnect();
 		$id = mysqli_real_escape_string($link, $id);
-		if ($checkDbForBouy) {
-			if (!Persistence::dbContainsBouy($id)) {
+		if ($checkDbForBuoy) {
+			if (!Persistence::dbContainsBuoy($id)) {
 		
 				if (!empty($name)) {
 					$name = mysqli_real_escape_string($link, $name);
 					$nameSql = ", name = '" . $name . "'";
 				} else $nameSql = "";
 				
-				$sqlbouy = "INSERT INTO bouy SET bouyid = '$id'" . $nameSql;
-				$result = mysqli_query($link, $sqlbouy);
+				$sqlbuoy = "INSERT INTO buoy SET buoyid = '$id'" . $nameSql;
+				$result = mysqli_query($link, $sqlbuoy);
 				if (!$result) {
-					die("Error inserting bouy into bouy table" . mysqli_error($link));
+					die("Error inserting buoy into buoy table" . mysqli_error($link));
 				}
 			}					
 		}
 		$locationid = intval($locationid);	
-		$bouynum = intval($bouynum);
-		$field = "bouy" . $bouynum;
+		$buoynum = intval($buoynum);
+		$field = "buoy" . $buoynum;
 		$sqllocation = "UPDATE location SET $field = '$id' WHERE id = '$locationid'";		
 		$result = mysqli_query($link, $sqllocation);
 		if (!$result) {
-			die("Error inserting bouy into location table" . mysqli_error($link));
+			die("Error inserting buoy into location table" . mysqli_error($link));
 		}
 	}
 
-	public static function insertBouyData($reportid, $fields = array()) {
+	public static function insertBuoyData($reportid, $fields = array()) {
 		$link = Persistence::dbConnect();
 		$reportid = intval($reportid);
 		$set = "reportid = '$reportid'";
@@ -714,24 +714,24 @@ class Persistence {
 			}
 		} 
 
-		$sql = "INSERT INTO bouydata SET $set";
+		$sql = "INSERT INTO buoydata SET $set";
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
-			die("Error inserting bouydata into DB" . mysqli_error($link));
+			die("Error inserting buoydata into DB" . mysqli_error($link));
 		}		
 	}
 	
-	public static function getBouyData($reportid) {
+	public static function getBuoyData($reportid) {
 		$reportid = intval($reportid);
-		$sql = "SELECT bouy, gmttime, winddir, windspeed, swellheight, swellperiod, swelldir, tide FROM bouydata WHERE reportid = '$reportid'";
+		$sql = "SELECT buoy, gmttime, winddir, windspeed, swellheight, swellperiod, swelldir, tide FROM buoydata WHERE reportid = '$reportid'";
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
 		if (!$result) {
-			die("Error fetching bouydata from db" . mysqli_error(Persistence::dbConnect()));
+			die("Error fetching buoydata from db" . mysqli_error(Persistence::dbConnect()));
 		}
 		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {	
-			$bouydatarows[] = $row;
+			$buoydatarows[] = $row;
 		}
-		if(!empty($bouydatarows)) return $bouydatarows;
+		if(!empty($buoydatarows)) return $buoydatarows;
 		else return NULL;
 	}
 
@@ -750,78 +750,78 @@ class Persistence {
 		return $stations;
 	}
 
-	public static function getBouyInfo($bouy) {
+	public static function getBuoyInfo($buoy) {
 		$link = Persistence::dbConnect();
-		$bouy =  mysqli_real_escape_string($link, $bouy);
-		$sql = "SELECT * FROM bouy WHERE bouyid = '$bouy'";
+		$buoy =  mysqli_real_escape_string($link, $buoy);
+		$sql = "SELECT * FROM buoy WHERE buoyid = '$buoy'";
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
-			die("Error fetching bouys by location" . mysqli_error($link));
+			die("Error fetching buoys by location" . mysqli_error($link));
 		}
 		return mysqli_fetch_array($result, MYSQL_ASSOC);
 	}
 
 
-	public static function setPrimaryBouy($locationid, $bouy) {
+	public static function setPrimaryBuoy($locationid, $buoy) {
 		$locInfo = Persistence::getLocationInfoById($locationid);
 		$link = Persistence::dbConnect();
-		$bouy = mysqli_real_escape_string($link, $bouy);
-		$bouy1 = $locInfo['bouy1'];
-		if ($bouy == $locInfo['bouy2']) {
-			$replace = "bouy2 = '$bouy1'";
+		$buoy = mysqli_real_escape_string($link, $buoy);
+		$buoy1 = $locInfo['buoy1'];
+		if ($buoy == $locInfo['buoy2']) {
+			$replace = "buoy2 = '$buoy1'";
 		} else {
-			$replace = "bouy3 = '$bouy1'";
+			$replace = "buoy3 = '$buoy1'";
 		}
-		$bouy3 = $locInfo['bouy3'];
-		$sql = "UPDATE location SET bouy1 = '$bouy', " . $replace . " WHERE id = '$locationid'";
+		$buoy3 = $locInfo['buoy3'];
+		$sql = "UPDATE location SET buoy1 = '$buoy', " . $replace . " WHERE id = '$locationid'";
 			//vardump($sql);exit();
 	
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
-			die("Error making Bouy primary" . mysqli_error($link));
+			die("Error making Buoy primary" . mysqli_error($link));
 		}		
 	}
 
-	public static function removeBouyFromLocation($key, $bouys, $locationid) {
+	public static function removeBuoyFromLocation($key, $buoys, $locationid) {
 		$link = Persistence::dbConnect();
 		$locationid = intval($locationid);
 		$key = mysqli_real_escape_string($link, $key);
 		$switch = '';
 
-		//this is crazy - should of made a seperate table for bouy-location relationships
-		if ($key == 'bouy3') {
-			$switch = "bouy3 = NULL";
+		//this is crazy - should of made a seperate table for buoy-location relationships
+		if ($key == 'buoy3') {
+			$switch = "buoy3 = NULL";
 		}
 		
-		if ($key == 'bouy2' && isset($bouys['bouy3'])) {
-			$bouy3 = $bouys['bouy3'];
-			$switch = "bouy2 = '$bouy3', bouy3 = NULL";
-		} else if ($key == 'bouy2' && !isset($bouys['bouy3'])) {
-			$switch = "bouy2 = NULL";
+		if ($key == 'buoy2' && isset($buoys['buoy3'])) {
+			$buoy3 = $buoys['buoy3'];
+			$switch = "buoy2 = '$buoy3', buoy3 = NULL";
+		} else if ($key == 'buoy2' && !isset($buoys['buoy3'])) {
+			$switch = "buoy2 = NULL";
 		}
 		
-		if ($key == 'bouy1' && isset($bouys['bouy2']) && isset($bouys['bouy3'])) {
-			$bouy2 = $bouys['bouy2'];
-			$bouy3 = $bouys['bouy3'];
-			$switch = "bouy1 = '$bouy2', bouy2 = '$bouy3', bouy3 = NULL";
-		} else if ($key == 'bouy1' && isset($bouys['bouy2'])) {
-			$bouy2 = $bouys['bouy2'];
-			$switch = "bouy1 = '$bouy2', bouy2 = NULL";
-		} else if ($key == 'bouy1') {
-			$switch = "bouy1 = NULL";
+		if ($key == 'buoy1' && isset($buoys['buoy2']) && isset($buoys['buoy3'])) {
+			$buoy2 = $buoys['buoy2'];
+			$buoy3 = $buoys['buoy3'];
+			$switch = "buoy1 = '$buoy2', buoy2 = '$buoy3', buoy3 = NULL";
+		} else if ($key == 'buoy1' && isset($buoys['buoy2'])) {
+			$buoy2 = $buoys['buoy2'];
+			$switch = "buoy1 = '$buoy2', buoy2 = NULL";
+		} else if ($key == 'buoy1') {
+			$switch = "buoy1 = NULL";
 		}
 
 		$sql = "UPDATE location SET " . $switch . " WHERE id = '$locationid'";
-		$result = mysqli_query($link, $sql) or die ('unable to remove bouy');
+		$result = mysqli_query($link, $sql) or die ('unable to remove buoy');
 	}
 
-	public static function dbContainsBouy($bouyid) {
+	public static function dbContainsBuoy($buoyid) {
 		$link = Persistence::dbConnect();
-		$bouyid = mysqli_real_escape_string($link, $bouyid);
-		$sql = "SELECT COUNT(*) FROM bouy WHERE bouyid = '$bouyid'";
+		$buoyid = mysqli_real_escape_string($link, $buoyid);
+		$sql = "SELECT COUNT(*) FROM buoy WHERE buoyid = '$buoyid'";
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
-			die("error searching for bouys in db");
+			die("error searching for buoys in db");
 		}
 		$row = mysqli_fetch_array($result);
 		if ($row[0] > 0) {
@@ -891,7 +891,7 @@ class Persistence {
 		$sql = "SELECT * FROM tidestation WHERE stationid = '$stationid'";
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
-			die("Error fetching bouys by location" . mysqli_error($link));
+			die("Error fetching buoys by location" . mysqli_error($link));
 		}
 		return mysqli_fetch_array($result, MYSQL_ASSOC);
 	}

@@ -8,8 +8,8 @@ $report = new SingleReport; //don't need to loadData
 if ($_POST['imagePath'] != '') {
 	$report->renderImage($_POST['imagePath']);	
 } 
-if ($_POST['bouys'] != 'FALSE') {
-	$report->renderBouyDetails($id, $_POST['timezone']);	
+if ($_POST['buoys'] != 'FALSE') {
+	$report->renderBuoyDetails($id, $_POST['timezone']);	
 } 
 if ($_POST['tideStation'] != 'FALSE') {
 	$report->renderTideDetails($id, $_POST['tideStation'], $_POST['timezone']);	

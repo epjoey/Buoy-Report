@@ -12,7 +12,7 @@ class SingleReport {
 	private $report;
 	private $locationInfo;
 	private $showDetails = FALSE;
-	private	$locationHasBouys = FALSE;
+	private	$locationHasBuoys = FALSE;
 	private	$locationHasTide = FALSE;
 	private	$tideStation = NULL;	
 	private	$imagePath = '';
@@ -41,8 +41,8 @@ class SingleReport {
 		}
 
 
-		if (isset($this->locationInfo['bouy1']) || isset($this->locationInfo['bouy2']) || isset($this->locationInfo['bouy3'])) {
-			$this->locationHasBouys = TRUE;
+		if (isset($this->locationInfo['buoy1']) || isset($this->locationInfo['buoy2']) || isset($this->locationInfo['buoy3'])) {
+			$this->locationHasBuoys = TRUE;
 		}
 
 		if (isset($this->locationInfo['tidestation'])) {
@@ -63,7 +63,7 @@ class SingleReport {
 
 	public function renderSingleReport() {
 		?>
-		<li class="<?=$this->className?>" reportid="<?= $this->report['id'] ?>" hasbouys=<?= $this->locationHasBouys ? "TRUE" : "FALSE" ; ?> hastide=<?= $this->locationHasTide ? "$this->tideStation" : "FALSE" ; ?> tz="<?=$this->locationInfo['timezone']?>" reporttime="<?=$this->reportTime?>" reporterid="<?=$this->report['reporterid']?>" imagepath="<?= $this->imagePath ?>">
+		<li class="<?=$this->className?>" reportid="<?= $this->report['id'] ?>" hasbuoys=<?= $this->locationHasBuoys ? "TRUE" : "FALSE" ; ?> hastide=<?= $this->locationHasTide ? "$this->tideStation" : "FALSE" ; ?> tz="<?=$this->locationInfo['timezone']?>" reporttime="<?=$this->reportTime?>" reporterid="<?=$this->report['reporterid']?>" imagepath="<?= $this->imagePath ?>">
 			<ul>
 				<li class="report-head">
 					<a class="loc-name" href="<?=Paths::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a>
@@ -92,7 +92,7 @@ class SingleReport {
 					<? 
 				} 
 
-				//loading bouy/tide details. setting up li's for ajax inserting. js will check if elems exist 
+				//loading buoy/tide details. setting up li's for ajax inserting. js will check if elems exist 
 				?>	
 				<li class="detail-section">
 					<?
@@ -102,8 +102,8 @@ class SingleReport {
 						if(isset($this->report['imagepath'])) { 
 							$this->renderImage($this->report['imagepath']);
 						}					
-						if ($this->locationHasBouys) {
-							$this->renderBouyDetails($this->report['id'], $this->locationInfo['timezone']);
+						if ($this->locationHasBuoys) {
+							$this->renderBuoyDetails($this->report['id'], $this->locationInfo['timezone']);
 						}	
 						if ($this->locationHasTide) {
 							$this->renderTideDetails($this->report['id'], $this->tideStation, $this->locationInfo['timezone']);
@@ -114,8 +114,8 @@ class SingleReport {
 				</li>
 			</ul>
 			<span class="notification-icons">
-				<? if ($this->locationHasBouys) { ?>
-					<span class="bouy-icon icon" title="<?=$this->locationInfo['locname']?> has bouy stations"></span>
+				<? if ($this->locationHasBuoys) { ?>
+					<span class="buoy-icon icon" title="<?=$this->locationInfo['locname']?> has buoy stations"></span>
 				<? } ?>
 				<? if ($this->locationHasTide) { ?>
 					<span class="tide-icon icon" title="<?=$this->locationInfo['locname']?> has tide station"></span>
@@ -139,67 +139,67 @@ class SingleReport {
 		}			
 	}
 
-	public function renderBouyDetails($reportid, $tz) {
-		$bouyDataRows = Persistence::getBouyData($reportid);
-		if (isset($bouyDataRows)) {
+	public function renderBuoyDetails($reportid, $tz) {
+		$buoyDataRows = Persistence::getBuoyData($reportid);
+		if (isset($buoyDataRows)) {
 			?>
-			<ul class="bouy-data">
-				<? foreach ($bouyDataRows as $bouyDataRow) { 
-					$bouyInfo = Persistence::getBouyInfo($bouyDataRow['bouy']);
-					$localBouyTime = getLocalTimeFromGMT($bouyDataRow['gmttime'], $tz);
+			<ul class="buoy-data">
+				<? foreach ($buoyDataRows as $buoyDataRow) { 
+					$buoyInfo = Persistence::getBuoyInfo($buoyDataRow['buoy']);
+					$localBuoyTime = getLocalTimeFromGMT($buoyDataRow['gmttime'], $tz);
 					$tzAbbrev = getTzAbbrev($tz);
 					?>
-					<li class="bouy-data-item">
+					<li class="buoy-data-item">
 						<span class="station-head">
-							<span>Bouy </span>
-							<a target="_blank" href="http://www.ndbc.noaa.gov/station_page.php?station=<?=$bouyDataRow['bouy']?>"><?=$bouyDataRow['bouy']?></a>
+							<span>Buoy </span>
+							<a target="_blank" href="http://www.ndbc.noaa.gov/station_page.php?station=<?=$buoyDataRow['buoy']?>"><?=$buoyDataRow['buoy']?></a>
 
-							<? if (isset($bouyInfo['name'])) { ?>
-								<span>(<?= html($bouyInfo['name'])?>)</span>
+							<? if (isset($buoyInfo['name'])) { ?>
+								<span>(<?= html($buoyInfo['name'])?>)</span>
 							<? } ?>
 						</span>
 						<ul class="station-data-fields">
-							<li><span class="label">Time of Report:</span> <?=$localBouyTime?> (<?=$tzAbbrev?>)</li>
+							<li><span class="label">Time of Report:</span> <?=$localBuoyTime?> (<?=$tzAbbrev?>)</li>
 							<? 
-							if (isset($bouyDataRow['winddir'])) { 
+							if (isset($buoyDataRow['winddir'])) { 
 								?>
 									<li>
-										<span class="label">Wind Direction:</span> <?=$bouyDataRow['winddir']?>&deg; (<?=getDirection($bouyDataRow['winddir'])?>)
+										<span class="label">Wind Direction:</span> <?=$buoyDataRow['winddir']?>&deg; (<?=getDirection($buoyDataRow['winddir'])?>)
 									</li>
 								<? 
 							}
-							if (isset($bouyDataRow['windspeed'])) { 
+							if (isset($buoyDataRow['windspeed'])) { 
 								?>
 									<li>
-										<span class="label">Wind Speed:</span> <?=$bouyDataRow['windspeed']?><span> mph</span>
+										<span class="label">Wind Speed:</span> <?=$buoyDataRow['windspeed']?><span> mph</span>
 									</li>
 								<? 
 							} 
-							if (isset($bouyDataRow['swellheight'])) { 
+							if (isset($buoyDataRow['swellheight'])) { 
 								?>
 									<li>
-										<span class="label">Swell Height:</span> <?=$bouyDataRow['swellheight']?><span> ft</span>
+										<span class="label">Swell Height:</span> <?=$buoyDataRow['swellheight']?><span> ft</span>
 									</li>
 								<? 
 							}
-							if (isset($bouyDataRow['swellperiod'])) { 
+							if (isset($buoyDataRow['swellperiod'])) { 
 								?>
 									<li>
-										<span class="label">Swell Period:</span> <?=$bouyDataRow['swellperiod']?><span> secs</span>
+										<span class="label">Swell Period:</span> <?=$buoyDataRow['swellperiod']?><span> secs</span>
 									</li>
 								<? 
 							}
-							if (isset($bouyDataRow['swelldir'])) { 
+							if (isset($buoyDataRow['swelldir'])) { 
 								?>
 									<li>
-										<span class="label">Swell Direction:</span> <?=$bouyDataRow['swelldir']?>&deg; (<?=getDirection($bouyDataRow['swelldir'])?>)
+										<span class="label">Swell Direction:</span> <?=$buoyDataRow['swelldir']?>&deg; (<?=getDirection($buoyDataRow['swelldir'])?>)
 									</li>
 								<? 
 							} 
-							if (isset($bouyDataRow['tide'])) { 
+							if (isset($buoyDataRow['tide'])) { 
 								?>
 									<li>
-										<span class="label">Swell Direction:</span> <?=$bouyDataRow['tide']?><span> ft</span>
+										<span class="label">Swell Direction:</span> <?=$buoyDataRow['tide']?><span> ft</span>
 									</li>
 								<? 
 							} 												
