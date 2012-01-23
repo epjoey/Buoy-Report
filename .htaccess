@@ -1,0 +1,5 @@
+#Options +FollowSymLinks
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^www.bouyreport.com$[OR]
+RewriteCond %{HTTP_HOST} ^bouyreport.com$
+RewriteRule ^(.*)$ http://www.buoy-report.com/$1 [R=301,L]
