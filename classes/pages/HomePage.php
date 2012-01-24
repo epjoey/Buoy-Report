@@ -92,5 +92,12 @@ class HomePage extends GeneralPage {
 		<?
 	}
 
+	private function renderHowTo(){
+		?>
+		<h3>Hey Reporter!</h3>
+		<p>If your local spot is not set up already, simply add the location along with any nearby buoys/tide stations. Next time you go, don't forget to snap a photo. You can upload the photo along with a rating of the conditions and an optional description of your session from your smart phone or computer at home. You'll have an insightful record of that session online!<p>
+		<?
+	}
+
 }
 ?>
