@@ -25,7 +25,7 @@ class LocationPage extends GeneralPage {
 			$this->isUserLocations = TRUE;
 		}	
 
-		if ($this->reporterId == $this->userId) {
+		if ($this->userIsLoggedIn && $this->reporterId == $this->userId) {
 			$this->isCurrentUserLocations = TRUE;
 		}
 
@@ -34,6 +34,7 @@ class LocationPage extends GeneralPage {
 			$this->reporterInfo = $this->userInfo;
 
 		} elseif ($this->isUserLocations) {
+
 			$this->reporterInfo = Persistence::getReporterInfoById($this->reporterId);
 			if (!isset($this->reporterInfo)) {
 				header('Location:'.Paths::to404());
