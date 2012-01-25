@@ -53,7 +53,7 @@ class Header {
 						<? } ?>
 						<div class="block-link user-options">
 							<span class="user" id="user-trigger">
-								<span class="username"><?= $this->userName; ?></span>
+								<span class="username"><?= html($this->userName); ?></span>
 								<img src="<?= Paths::toImages() ?>down-arrow.png" width="15" height="9"/>
 							</span>
 							<ul class="inner-user-menu" id="inner-user-menu">

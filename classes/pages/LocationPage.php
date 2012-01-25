@@ -76,7 +76,7 @@ class LocationPage extends GeneralPage {
 				$name = $this->reporterInfo['name'] . "'s";
 			}
 			?>
-			<h1 class="list-title"><?= $name ?> Locations</h1>
+			<h1 class="list-title"><?= html($name) ?> Locations</h1>
 			<? 
 		}
 		if (!$this->isUserLocations) {

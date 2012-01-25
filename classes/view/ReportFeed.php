@@ -148,7 +148,7 @@ class ReportFeed {
 				$exp .= '<span>with ' . $text . ' sessions</span>';
 			}
 			if (isset($this->filters['text'])) {
-				$exp .= "<span>with text '" . $this->filters['text'] . "'</span>";
+				$exp .= "<span>with text '" . html($this->filters['text']) . "'</span>";
 			}
 			if (isset($this->filters['image'])) {
 				$array = ReportOptions::hasImage();
@@ -156,12 +156,12 @@ class ReportFeed {
 				$exp .= "<span>" . $text . "</span>";
 			}
 			if (isset($this->filters['date'])) {
-				$exp .= "<span>on or before " . $_GET['date'] . "</span>";
+				$exp .= "<span>on or before " . html($_GET['date']) . "</span>";
 			}
 			if (isset($_GET['location'])) {
 				if (isset($this->locations[$_GET['location']]['locname'])) {
 					$locName = $this->locations[$_GET['location']]['locname'];
-					$exp .= "<span>from " . $locName . "</span>";
+					$exp .= "<span>from " . html($locName) . "</span>";
 				}
 			}
 			if (isset($this->options['on-page']) && $this->options['on-page'] == 'homepage') {

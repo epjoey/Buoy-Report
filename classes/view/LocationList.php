@@ -49,10 +49,10 @@ class LocationList {
 						</a>
 						<span class="notification-icons">
 							<? if (isset($location['buoy1'])) { ?>
-								<span class="buoy-icon icon" title="<?=$location['locname']?> has buoy stations"></span>
+								<span class="buoy-icon icon" title="<?=html($location['locname'])?> has buoy stations"></span>
 							<? } ?>
 							<? if (isset($location['tidestation'])) { ?>
-								<span class="tide-icon icon" title="<?=$location['locname']?> has tide station"></span>
+								<span class="tide-icon icon" title="<?=html($location['locname'])?> has tide station"></span>
 							<? } ?>	
 						</span>							
 					</li>

@@ -85,7 +85,7 @@ class EditLocationPage extends LocationDetailPage {
 				<?
 				if (isset($this->editLocationError)) {
 					?>
-					<span class="submission-error"><?= $this->editLocationError ?></span>
+					<span class="submission-error"><?= html($this->editLocationError) ?></span>
 					<?
 				}
 				?>						

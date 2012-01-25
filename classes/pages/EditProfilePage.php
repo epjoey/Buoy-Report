@@ -152,17 +152,17 @@ class EditProfilePage extends GeneralPage {
 					<?
 					if (isset($this->editAccountError)) {
 						?>
-						<span class="submission-error"><?= $this->editAccountError ?></span>
+						<span class="submission-error"><?= html($this->editAccountError) ?></span>
 						<?
 					}
 					?>		
 					<div class="field">
 						<label for="name-name">Update username</label>
-						<input type="text" name="new-name" class="text-input" id="new-name" value="<?=$this->userName?>" />
+						<input type="text" name="new-name" class="text-input" id="new-name" value="<?=html($this->userName)?>" />
 					</div>
 					<div class="field">
 						<label for="new-email">Update email address</label>
-						<input type="email" name="new-email" class="text-input" id="new-email" value="<?=$this->userEmail?>" />
+						<input type="email" name="new-email" class="text-input" id="new-email" value="<?=html($this->userEmail)?>" />
 						
 					</div>
 					<div class="field">

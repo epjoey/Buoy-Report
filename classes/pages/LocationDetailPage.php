@@ -57,13 +57,13 @@ class LocationDetailPage extends GeneralPage {
 			}
 		}
 		if (isset($_GET['be1']) && $_GET['be1']) {
-			$this->addBuoyError = "Buoy " . $_GET['be1'] . " is already set up for this location";
+			$this->addBuoyError = "Buoy " . html($_GET['be1']) . " is already set up for this location";
 		}
 		if (isset($_GET['be2']) && $_GET['be2']) {
-			$this->addBuoyError = "Buoy " . $_GET['be2'] . " cannot be reached";
+			$this->addBuoyError = "Buoy " . html($_GET['be2']) . " cannot be reached";
 		}
 		if (isset($_GET['te']) && $_GET['te']) {
-			$this->addStationError = "Station " . $_GET['te'] . " cannot be reached";	
+			$this->addStationError = "Station " . html($_GET['te']) . " cannot be reached";	
 		}
 		if (isset($_GET['entered']) && $_GET['entered'] == 'buoy') {
 			$this->enteredBuoy = TRUE;
@@ -165,11 +165,11 @@ class LocationDetailPage extends GeneralPage {
 
 			if (!$this->isValidBuoy($_POST['buoy-id'])) {
 				if ($this->addBuoyError == "buoy-exists") {
-					header('Location:'.Paths::$to($this->locationId).'&be1='.$_POST['buoy-id']);
+					header('Location:'.Paths::$to($this->locationId).'&be1='.html($_POST['buoy-id']));
 					exit();						
 				}
 				if ($this->addBuoyError == "buoy-offline") {
-					header('Location:'.Paths::$to($this->locationId).'&be2='.$_POST['buoy-id']);
+					header('Location:'.Paths::$to($this->locationId).'&be2='.html($_POST['buoy-id']));
 					exit();						
 				}				
 			}
@@ -182,7 +182,7 @@ class LocationDetailPage extends GeneralPage {
 		if ($_REQUEST['submit'] == 'existingbuoy' && isset($_GET['buoy'])) {
 			
 			if (!$this->isValidBuoy($_GET['buoy'], FALSE)) {
-				header('Location:'.Paths::$to($this->locationId).'&be1='.$_GET['buoy']);
+				header('Location:'.Paths::$to($this->locationId).'&be1='.html($_GET['buoy']));
 				exit();					
 			}
 
@@ -202,7 +202,7 @@ class LocationDetailPage extends GeneralPage {
 			}
 
 			if (!$this->isValidTideStation($_POST['station-id'])) {
-				header('Location:'.Paths::$to($this->locationId).'&te='.$_POST['station-id']);
+				header('Location:'.Paths::$to($this->locationId).'&te='.html($_POST['station-id']));
 				exit();						
 		
 			}			
@@ -215,7 +215,7 @@ class LocationDetailPage extends GeneralPage {
 		if ($_REQUEST['submit'] == 'existingtide' && isset($_GET['tide'])) {
 			
 			if (!$this->isValidTideStation($_GET['tide'], FALSE)) {
-				header('Location:'.Paths::$to($this->locationId).'&te='.$_POST['station-id']);
+				header('Location:'.Paths::$to($this->locationId).'&te='.html($_POST['station-id']));
 				exit();					
 			}	
 
@@ -515,7 +515,7 @@ class LocationDetailPage extends GeneralPage {
 		<div class="loc-meta">
 			<h3>Location Info</h3>
 			<div class="reporters">
-				<p class="creator sb-section">Set up by <a href="<?=Paths::toProfile($this->locInfo['creator']);?>"><?=$this->creator['name']?></a></p>
+				<p class="creator sb-section">Set up by <a href="<?=Paths::toProfile($this->locInfo['creator']);?>"><?=html($this->creator['name'])?></a></p>
 				<p class="sb-section"><a href="<?=Paths::toReporters($this->locationId);?>">See Reporters</a></p>
 				<?
 				if ($this->userIsLoggedIn && $this->locInfo['creator'] == $this->userId) {

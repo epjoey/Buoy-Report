@@ -20,7 +20,7 @@ if ($_REQUEST['info'] == 'forecast') {
 	if (!empty($forecastLinks)) {
 		foreach($forecastLinks as $link) {
 			?>
-			<p class="fc-link"><input type="checkbox" value="<?=$link?>" class="delete-link-check" style="display:none"><a target="_blank" href="<?=$link?>"><?=$link?></a></p>
+			<p class="fc-link"><input type="checkbox" value="<?=$link?>" class="delete-link-check" style="display:none"><a target="_blank" href="<?=$link?>"><?=html($link)?></a></p>
 			<?
 		}
 	} else {

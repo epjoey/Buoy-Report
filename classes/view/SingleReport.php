@@ -82,13 +82,13 @@ class SingleReport {
 							<li title="<?= $qualities[4]; ?>" class="level four"></li>
 							<li title="<?= $qualities[5]; ?>" class="level five"></li>
 						</ul>
-						<span class="text"><?= $text ?> session</span>
+						<span class="text"><?= html($text) ?> session</span>
 					</li>
 					<?
 				}
 				if(isset($this->report['text'])) { 
 					?>
-					<li class="text-report">&ldquo;<?= html($this->report['text']) ?>&rdquo;</li>
+					<li class="text-report">&ldquo;<?= bbcode2html($this->report['text']) ?>&rdquo;</li>
 					<? 
 				} 
 

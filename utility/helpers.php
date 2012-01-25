@@ -150,10 +150,18 @@ function bbcode2html($text) {
 	$text = str_replace("\n", '<br>', $text);
 
 	//[URL]link[/URL]
-	$text = preg_replace('/\[URL]([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)\[\/URL]/i', '<a href="$1">$1</a>', $text);
 
-	//[URL=url]link[/URL]
-	$text = preg_replace('/\[URL=([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)](.+?)\[\/URL]/i', '<a href="$1">$2</a>', $text);
+	if (substr(strtolower($text), 0, 5) == '[url]') {
+		$text = strtolower($text);
+		if (substr($text, 5, 7) != 'http://' && substr($text, 5, 8) != 'https://') {
+			$text = substr_replace($text, "http://", 5, 0);
+		}
+
+		$text = preg_replace('/\[url]([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)\[\/url]/i', '<a target="_blank" href="$1">$1</a>', $text);
+
+		//[URL=url]link[/URL]
+		$text = preg_replace('/\[url=([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)](.+?)\[\/url]/i', '<a href="$1">$2</a>', $text);	
+	}
 	
 	return $text;
 }
