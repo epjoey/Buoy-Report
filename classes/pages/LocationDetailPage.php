@@ -165,11 +165,11 @@ class LocationDetailPage extends GeneralPage {
 
 			if (!$this->isValidBuoy($_POST['buoy-id'])) {
 				if ($this->addBuoyError == "buoy-exists") {
-					header('Location:'.Paths::$to($this->locationId).'&be1='.html($_POST['buoy-id']));
+					header('Location:'.Paths::$to($this->locationId).'&be1='.urlencode($_POST['buoy-id']));
 					exit();						
 				}
 				if ($this->addBuoyError == "buoy-offline") {
-					header('Location:'.Paths::$to($this->locationId).'&be2='.html($_POST['buoy-id']));
+					header('Location:'.Paths::$to($this->locationId).'&be2='.urlencode($_POST['buoy-id']));
 					exit();						
 				}				
 			}
@@ -182,7 +182,7 @@ class LocationDetailPage extends GeneralPage {
 		if ($_REQUEST['submit'] == 'existingbuoy' && isset($_GET['buoy'])) {
 			
 			if (!$this->isValidBuoy($_GET['buoy'], FALSE)) {
-				header('Location:'.Paths::$to($this->locationId).'&be1='.html($_GET['buoy']));
+				header('Location:'.Paths::$to($this->locationId).'&be1='.urlencode($_GET['buoy']));
 				exit();					
 			}
 
@@ -202,7 +202,7 @@ class LocationDetailPage extends GeneralPage {
 			}
 
 			if (!$this->isValidTideStation($_POST['station-id'])) {
-				header('Location:'.Paths::$to($this->locationId).'&te='.html($_POST['station-id']));
+				header('Location:'.Paths::$to($this->locationId).'&te='.urlencode($_POST['station-id']));
 				exit();						
 		
 			}			
@@ -215,7 +215,7 @@ class LocationDetailPage extends GeneralPage {
 		if ($_REQUEST['submit'] == 'existingtide' && isset($_GET['tide'])) {
 			
 			if (!$this->isValidTideStation($_GET['tide'], FALSE)) {
-				header('Location:'.Paths::$to($this->locationId).'&te='.html($_POST['station-id']));
+				header('Location:'.Paths::$to($this->locationId).'&te='.urlencode($_POST['station-id']));
 				exit();					
 			}	
 

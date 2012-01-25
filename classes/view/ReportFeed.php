@@ -138,7 +138,7 @@ class ReportFeed {
 			<?
 			if (isset($this->filterError)) {
 				?>
-				<p class="filter-error error"><?=$this->filterError?></p>
+				<p class="filter-error error"><?=html($this->filterError)?></p>
 				<?	
 			}
 			$exp = 'Showing last ' . $this->limit . ' reports';
