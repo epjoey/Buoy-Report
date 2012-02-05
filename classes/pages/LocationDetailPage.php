@@ -485,7 +485,7 @@ class LocationDetailPage extends GeneralPage {
 								<?
 							}														
 							?></a>
-							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=html($buoy)?>" style="width:100%; max-height: 300px"></iframe>
+							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=html($buoy)?>" style="width:100%; min-height: 300px"></iframe>
 						</li>								
 						<?
 						}
