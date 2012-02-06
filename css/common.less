@@ -157,7 +157,7 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 			.level.five { background-color:@grey-blue; }
 		}					
 	}
-	.tz {.sans-serif(12px); color:darken(@grey,26%);}
+	.tz {font-size:10px; color:darken(@grey,26%);}
 	.text-report {color:@dark-blue; line-height:1.4em; }
 	.buoy-data-item {border-bottom:1px dotted @grey-blue;}
 	.station-data-fields li { margin-left:10px; color:@dark-blue; margin-bottom:4px; font-size:15px; line-height:1.4em;}
@@ -175,7 +175,7 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 	}
 }
 .report:hover {background:lighten(@grey, 20%);}
-.report:hover .click-to-expand {display:block;}
+.report.collapsed:hover .click-to-expand {display:block;}
 .click-to-expand { color:darken(@grey,30%); cursor:pointer;
 	position:absolute; bottom:7px; right:4px; display:none;
 	span {font-size:9px; line-height:9px; text-transform:uppercase; letter-spacing:2px; color:darken(@grey,12%);}
