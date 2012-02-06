@@ -67,7 +67,7 @@ class SingleReport {
 			<ul>
 				<li class="report-head">
 					<a class="loc-name" href="<?=Paths::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a>
-					<span class="obs-time"><?=$this->obsTime?> <span class="tz">(<?=$this->tzAbbrev?>)</span></span>
+					<span class="obs-time"><?=$this->obsTime?> <span class="tz"><?=$this->tzAbbrev?></span></span>
 				</li>
 				<? 
 				if (isset($this->report['quality'])) {
@@ -86,11 +86,17 @@ class SingleReport {
 					</li>
 					<?
 				}
+
+				//render a thumbnail image on page load.
+				if(isset($this->report['imagepath'])) { 
+					$this->renderImage($this->report['imagepath'], $thumb = TRUE);
+				}
+								
 				if(isset($this->report['text'])) { 
 					?>
 					<li class="text-report">&ldquo;<?= bbcode2html($this->report['text']) ?>&rdquo;</li>
 					<? 
-				} 
+				} 				
 
 				//loading buoy/tide details. setting up li's for ajax inserting. js will check if elems exist 
 				?>	
@@ -115,26 +121,34 @@ class SingleReport {
 			</ul>
 			<span class="notification-icons">
 				<? if ($this->locationHasBuoys) { ?>
-					<span class="buoy-icon icon" title="<?=$this->locationInfo['locname']?> has buoy stations"></span>
+					<span class="buoy-icon icon" title="<?=$this->locationInfo['locname']?> has buoy stations">B</span>
 				<? } ?>
 				<? if ($this->locationHasTide) { ?>
-					<span class="tide-icon icon" title="<?=$this->locationInfo['locname']?> has tide station"></span>
-				<? } ?>	
-				<? if ($this->imagePath != '') { ?>
-					<span class="photo-icon icon" title="<?=$this->locationInfo['locname']?> has an image"></span>
+					<span class="tide-icon icon" title="<?=$this->locationInfo['locname']?> has a tide station">T</span>
 				<? } ?>		
-			</span>				
+			</span>	
+			<div class="click-to-expand">
+				<span>Click To</span>
+				<div>Expand</div>
+			</div>
 		</li>
 		<?		
 	}	
 
-	public function renderImage($imagePath) {
+	public function renderImage($imagePath, $thumbnail=FALSE) {
 		$detect = new Mobile_Detect();
-		$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(508,400);
+		if ($thumbnail) {
+			$dims = array(80,80);	
+			$class = 'thumbnail-image';
+		}
+		else if (!$thumbnail) {
+			$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(508,400);	
+			$class = 'large-image';
+		}
 		$image = getImageInfo($imagePath, $dims[0], $dims[1]);
 		if (!empty($image)) {
 			?>
-			<li class="image-container"><a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/></a></li>
+			<li class="image-container <?=$class?>"><a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/></a></li>
 			<? 						
 		}			
 	}

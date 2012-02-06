@@ -86,11 +86,8 @@
 
 
 /* ICONS */
-.notification-icons { display:block; position:absolute; top:6px; right:6px; 
-	.icon {float:left; display:block; margin-left:1px; .bg-image('icon-sprite.png'); width:20px; height:20px;}
-	.buoy-icon { background-position:-40px 0px;}
-	.tide-icon { height:20px; background-position:-20px 0px;}
-	.photo-icon { height:20px;}
+.notification-icons { position:absolute; top:6px; right:6px; 
+	.icon {.museo500(12px,12px); color:darken(@grey,26%); border:1px solid @grey; padding:2px 3px; display:inline-block; vertical-align:top;}
 }
 
 /* LIST */
@@ -122,7 +119,7 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 .reports-container h2 .name {.text-overflow(); max-width:240px; display:inline-block;}
 .filter-explain {color:@grey; .sans-serif(15px); margin-bottom:6px;}
 .filter-explain span {border-left:1px dotted @grey; margin-left:6px; padding-left:6px;}
-.report { background:lighten(@grey,12%); padding:8px 6px; .sans-serif(18px, 1.3em); color:@dark-blue; position:relative; -webkit-font-smoothing: subpixel-antialiased; margin-bottom:6px; overflow:hidden;
+.report { background:lighten(@grey,12%); cursor:pointer; padding:8px 6px; .sans-serif(18px, 1.3em); color:@dark-blue; position:relative; -webkit-font-smoothing: subpixel-antialiased; margin-bottom:6px; overflow:hidden;
 	a {font-weight:bold; color:@dark-blue; text-decoration:underline;}
 	.loc-name {.text-overflow(); max-width:160px; display:inline-block;}
 	.obs-time {margin-left:4px; font:15px georgia;}
@@ -155,13 +152,13 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 			.level.five { background-color:@grey-blue; }
 		}					
 	}
-	.tz {font-size:12px;}
+	.tz {.sans-serif(12px); color:darken(@grey,26%);}
 	.text-report {color:@dark-blue; line-height:1.4em; }
 	.buoy-data-item {border-bottom:1px dotted @grey-blue;}
 	.station-data-fields li { margin-left:10px; color:@dark-blue; margin-bottom:4px; font-size:15px; line-height:1.4em;}
 	.station-data-fields li .label { color:@grey-blue; font-size:15px;}
 	.station-head {font-size:15px; display:block; margin-bottom:6px;}
-	.reporter-details {text-align:right; font:italic 13px georgia; margin-top:8px;
+	.reporter-details {font:italic 13px georgia; margin:12px 0 0 0;
 		a {text-decoration:none;}
 		a:hover {text-decoration:underline;}
 	}
@@ -169,10 +166,16 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 		.detail-section {display:none;}
 	}
 	&.expanded {
-		.detail-section {display:block; }
+		.detail-section {display:block; margin-bottom:0;}
 	}
 }
 .report:hover {background:lighten(@grey, 20%);}
+.report:hover .click-to-expand {display:block;}
+.click-to-expand { color:darken(@grey,30%); cursor:pointer;
+	position:absolute; bottom:7px; right:4px; display:none;
+	span {font-size:9px; line-height:9px; text-transform:uppercase; letter-spacing:2px; color:darken(@grey,12%);}
+	div {font-size:11px; text-transform:uppercase; line-height:11px; letter-spacing:2px;}	
+}
 #new-report {background-color:@grey; margin-bottom:6px;}
 
 /* Station list */
@@ -198,7 +201,9 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 .toggle-area {display:none;}
 
 /* Images */
-.image-container {overflow:hidden;text-align:center;}
+.image-container {overflow:hidden;text-align:center; clear:both;}
+.thumbnail-image {float:left; margin:0 10px 10px 0;}
+
 
 /* Ajax */
 .loading {.bg-image('ajax-loader.gif?v=2',50%,10px); min-height:40px; display:block; z-index:3;}
@@ -230,6 +235,7 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 .form-container label.error {color:@red; clear:both; .sans-serif(); display:block; float:right; }
 pre {color:black;}
 iframe {overflow:auto;}
+
 
 //not being used
 .autocomplete {background:@grey; color:@dark-blue; .text-highlight();
