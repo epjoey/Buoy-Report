@@ -296,6 +296,14 @@ class ReportFeed {
 				}
 			}
 
+			$(document).ready(function(){
+				$('.image-container.thumbnail-image img').each(function(elem){
+					src = $(this).attr('realUrl');
+					$(this).attr('src', src);
+					$(this).parent('.thumbnail-image').addClass('loaded');
+				});				
+			})
+
 		</script>
 		<?
 	}

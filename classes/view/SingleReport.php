@@ -139,17 +139,28 @@ class SingleReport {
 		$detect = new Mobile_Detect();
 		if ($thumbnail) {
 			$detect->isSmallDevice() ? $dims = array(50,50) : $dims = array(80,80);	
-			$class = 'thumbnail-image';
 		}
 		else if (!$thumbnail) {
 			$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(508,400);	
-			$class = 'large-image';
 		}
 		$image = getImageInfo($imagePath, $dims[0], $dims[1]);
 		if (!empty($image)) {
-			?>
-			<li class="image-container <?=$class?>"><a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/></a></li>
-			<? 						
+			
+			if ($thumbnail) {
+				?>
+				<li class="image-container thumbnail-image loading">
+					<image realUrl="<?= $image['src'] ?>" src="" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
+				</li>
+				<?
+			} else {
+				?>
+				<li class="image-container large-image">
+					<a href="<?=$image['src']?>" target="_blank">
+						<image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
+					</a>
+				</li>
+				<?	
+			}				
 		}			
 	}
 
