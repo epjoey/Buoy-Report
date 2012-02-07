@@ -138,7 +138,7 @@ class SingleReport {
 	public function renderImage($imagePath, $thumbnail=FALSE) {
 		$detect = new Mobile_Detect();
 		if ($thumbnail) {
-			$dims = array(80,80);	
+			$detect->isSmallDevice() ? $dims = array(50,50) : $dims = array(80,80);	
 			$class = 'thumbnail-image';
 		}
 		else if (!$thumbnail) {
