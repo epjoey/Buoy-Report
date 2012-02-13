@@ -134,7 +134,7 @@ class Persistence {
 
 		$sql = $select . $from . $where . $orderby . $limit;
 
-		var_dump($sql);
+		//var_dump($sql);
 
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
 		if (!$result) {
