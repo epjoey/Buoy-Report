@@ -90,7 +90,12 @@ class User {
 			exit();
 			
 		} else {		
-			$reporterId = Persistence::insertReporter($_POST['reg-name'], $_POST['reg-email'], md5($_POST['reg-password'] . 'reportdb', $_POST['report-status']));
+			$reporterId = Persistence::insertReporter(
+				$_POST['reg-name'], 
+				$_POST['reg-email'], 
+				md5($_POST['reg-password'] . 'reportdb'), 
+				$_POST['report-status']
+			);
 			$this->logInUser($reporterId, NULL, $newCookie = TRUE, $fromRegistration = TRUE);
 			header('Location:'.Paths::toUserHome());
 			exit();
