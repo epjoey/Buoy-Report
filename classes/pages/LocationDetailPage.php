@@ -89,20 +89,20 @@ class LocationDetailPage extends GeneralPage {
 			});
 
 			function doFcLinkAjax(newUrl) {
-				elem = $('#fc-link-container');
+				linkContainer = $('#fc-link-container');
 				if (newUrl != '') {
 					data = {url:newUrl}
 				} else {
 					data = {}
 				}
-				if (elem.hasClass('loaded') && newUrl == '') return;
-				elem.addClass('loading');
-				elem.load('<?=Paths::toAjax()?>location-info.php?info=forecast&locationid=<?=$this->locationId?>', 
+				if (linkContainer.hasClass('loaded') && newUrl == '') return;
+				linkContainer.addClass('loading');
+				linkContainer.load('<?=Paths::toAjax()?>location-info.php?info=forecast&locationid=<?=$this->locationId?>', 
 					
 					data,			
-					
 					function(){
-						elem.removeClass('loading').addClass('loaded');
+						linkContainer.removeClass('loading').addClass('loaded');
+						console.log(linkContainer);
 					}
 				);
 			}	
