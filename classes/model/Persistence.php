@@ -124,17 +124,17 @@ class Persistence {
 		//logged in, pull public and user's own reports
 		if (isset($_SESSION['userid']) && $_SESSION['userid'] != '') {
 			$userId = $_SESSION['userid'];
-			$where .= "AND (public = '1' OR reporterid = '$userId')";
+			$where .= " AND (public = '1' OR reporterid = '$userId')";
 		} 
 
 		//not logged in, only pull public reports
 		else {
-			$where .= "AND (public = '1')";
+			$where .= " AND (public = '1')";
 		}
 
 		$sql = $select . $from . $where . $orderby . $limit;
 
-		//var_dump($sql);
+		var_dump($sql);
 
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
 		if (!$result) {
