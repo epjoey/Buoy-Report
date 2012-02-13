@@ -4,17 +4,45 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 
 class User {
 
+	public $id = NULL;
+	public $name = NULL;
+	public $email = NULL;
+	public $password = NULL;
+	public $isLoggedIn = FALSE;
+	public $newReport = NULL;
+	public $isNew = FALSE;
+	public $joinDate = NULL;
+	public $locations = NULL;	
+	public $hasLocations = FALSE;	
 	public $loginError = NULL;
 	public $registerError = NULL;
 
-	//handles login/logouts and grants user with session access
-	public function userIsLoggedIn() {
-		/* --------------- HANDLE LOGOUT FORM SUBMISSION --------------- */
-		if ((isset($_REQUEST['logout']) && $_REQUEST['logout']) || (isset($_POST['submit']) && $_POST['submit'] == 'logout')) {
-			$this->logOutUser();
-			header('Location:'.Paths::toIntro());
-			exit();
+
+	public function __construct(){
+		if ($this->userIsLoggedIn()) {
+			$this->isLoggedIn = true;				
+			$this->email = $_SESSION['email'];
+			$this->id = $_SESSION['userid'];
+			$this->name = $_SESSION['name'];
+			$this->joinDate = $_SESSION['joindate'];
+			$this->isNew = $_SESSION['justRegistered'];
+			$this->reportStatus = $_SESSION['reportStatus'];
+			if (isset($_SESSION['new-report'])) {
+				$this->newReport = $_SESSION['new-report'];
+				$this->hasNewReport = TRUE;
+			}			
+		}
+	}
+
+	public function getUserLocations($userId){
+		$this->locations = Persistence::getUserLocations($userId);
+		if (!empty($this->locations)) {
+			$this->hasLocations = TRUE;		
 		}		
+	}
+
+	//handles login/logouts and grants user with session access
+	public function userIsLoggedIn() {	
 
 		/* ----------------- CHECK IF USER HAS SESSION ----------------- */
 		if (!isset($_SESSION)) session_start();
@@ -157,18 +185,40 @@ class User {
 	}
 	
 	public function getCurrentUser() {
-		if (!isset($_SESSION)) session_start();
-		$this->userEmail = $_SESSION['email'];
-		$this->userId = $_SESSION['userid'];
-		$this->userName = $_SESSION['name'];
-		$this->userJoinDate = $_SESSION['joindate'];
-		$this->userJustRegistered = $_SESSION['justRegistered'];
-		$this->reportStatus = $_SESSION['reportStatus'];
-		if (isset($_SESSION['new-report'])) {
-			$this->newReport = $_SESSION['new-report'];
+
+		if ($this->userIsLoggedIn()) {
+			if (!isset($_SESSION)) session_start();
+
+			$this->isLoggedIn = true;				
+			$this->email = $_SESSION['email'];
+			$this->userId = $_SESSION['userid'];
+			$this->name = $_SESSION['name'];
+			$this->joinDate = $_SESSION['joindate'];
+			$this->isNew = $_SESSION['justRegistered'];
+			$this->privacySetting = $_SESSION['reportStatus'];
+			if (isset($_SESSION['new-report'])) {
+				$this->hasNewReport = $_SESSION['new-report'];
+			} else {
+				$this->hasNewReport = NULL;
+			}			
+					
 		} else {
-			$this->newReport = NULL;
+			$this->isLoggedIn = false;	
 		}
+
+
+
+		// $this->userEmail = $_SESSION['email'];
+		// $this->userId = $_SESSION['userid'];
+		// $this->userName = $_SESSION['name'];
+		// $this->userJoinDate = $_SESSION['joindate'];
+		// $this->userJustRegistered = $_SESSION['justRegistered'];
+		// $this->reportStatus = $_SESSION['reportStatus'];
+		// if (isset($_SESSION['new-report'])) {
+		// 	$this->newReport = $_SESSION['new-report'];
+		// } else {
+		// 	$this->newReport = NULL;
+		// }
 	}
 
 	public function updateUserSession($options = array()) {

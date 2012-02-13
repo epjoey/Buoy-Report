@@ -17,25 +17,21 @@ class GeneralPage {
 
 		$this->user = new User;
 
-		if ($this->user->userIsLoggedIn()) {
-			$this->user->getCurrentUser();
-			$this->userIsLoggedIn = TRUE;
-			$this->userId = $this->user->userId;
-			$this->userName = $this->user->userName;
-			$this->userEmail = $this->user->userEmail;
-			$this->userLocations = Persistence::getUserLocations($this->userId);
-			if (isset($this->user->newReport)) {
-				$this->userHasNewReport = TRUE;
+		$this->user->getUserLocations($this->user->id);
 
-				if ($this->user->newReport['reporterHasLocation'] == '0') {
-					array_unshift($this->userLocations, array('id'=>$this->user->newReport['locId'], 'locname'=>$this->user->newReport['locName']));
-				}
+		if (isset($this->user->newReport)) {
+
+			if ($this->user->newReport['reporterHasLocation'] == '0') {
+				array_unshift(
+					$this->user->locations, 
+					array(
+						'id'=>$this->user->newReport['locId'], 
+						'locname'=>$this->user->newReport['locName']
+					)
+				);
 			}
-			if (!empty($this->userLocations)) {
-				$this->userHasLocations = TRUE;		
-			} 
-			$this->userInfo = array('id'=>$this->userId, 'name'=>$this->userName, 'locations'=>$this->userLocations, 'reportStatus'=>$this->user->reportStatus);
 		}
+
 		$this->detect = new Mobile_Detect();
 		$this->isMobile = $this->detect->isMobile();
 

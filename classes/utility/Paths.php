@@ -53,7 +53,7 @@ class Paths {
 	}	
 
 	public static function toLogout() {
-		return '/?logout=true';
+		return '/logout.php';
 	}	
 
 	public static function toRegister($error = NULL) {
@@ -73,6 +73,11 @@ class Paths {
 			$url .= '&error='.$submitError;
 		}
 		return $url;
+	}
+
+
+	public static function toHandleReportSubmission() {
+		return '/handle-report.php';
 	}
 
 	public static function toSinglePost($reportId) {

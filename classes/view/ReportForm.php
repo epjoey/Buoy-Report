@@ -18,7 +18,7 @@ class ReportForm {
 		<h1 class="form-head">Post Report For <a href="<?=Paths::toLocation($locInfo['id']);?>" id="location"><?= $locInfo['locname'] ?></a>
 		</h1>		
 		<div class="form-container">
-			<form id="report-form" action="<?=Paths::toUserHome()?>" enctype="multipart/form-data" method="post" >	
+			<form id="report-form" action="<?=Paths::toHandleReportSubmission()?>" enctype="multipart/form-data" method="post" >	
 			
 			<? if (isset($submitError)) {
 				if ($submitError == 'upload-file') {

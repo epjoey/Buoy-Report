@@ -1,5 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditAccountForm.php';
 
 
 
@@ -10,6 +11,7 @@ class EditProfilePage extends GeneralPage {
 	public function loadData() {
 		parent::loadData();
 		$this->pageTitle = 'My Account';	
+		$this->editAccountForm = new EditAccountForm;
 
 		if (isset($_GET['error']) && $_GET['error']) {
 			switch($_GET['error']) {
@@ -26,20 +28,6 @@ class EditProfilePage extends GeneralPage {
 	public function getBodyClassName() {
 		return 'edit-profile-page';
 	}	
-
-	public function renderJs(){
-		parent::renderJs();
-		if (isset($this->editAccountError)) {
-			?>
-				<script type="text/javascript">
-					$(document).ready(function(){
-						window.scrollTo(0,document.body.scrollHeight);
-					});
-				</script>
-			<?
-		}
-
-	}
 
 	public function afterSubmit() {
 		if ($_POST['submit'] == 'edit-account') {
@@ -76,10 +64,7 @@ class EditProfilePage extends GeneralPage {
 			} 
 			if (!empty($_POST['new-password'])) {
 				$options['newPassword'] = md5($_POST['new-password'] . 'reportdb');
-			} 
-			// vardump(isset($_POST['report-status']) && $_POST['report-status'] != $this->userInfo['reportStatus']);
-			// vardump($this->userInfo['reportStatus']); 
-			// vardump($_POST['report-status']); 
+			}
 
 			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->userInfo['reportStatus']) {
 				//vardump($_POST['report-status']); exit();
@@ -133,7 +118,7 @@ class EditProfilePage extends GeneralPage {
 		?>
 		<h1>My account</h1>
 		<?
-		$this->renderEditInfo($this->editAccountError);
+		$this->renderEditInfo();
 		$this->renderMyReports();
 		
 	}
@@ -164,85 +149,7 @@ class EditProfilePage extends GeneralPage {
 		?>
 		<div class="account-details">
 			<h3>Account Settings</h3>
-			<div class="form-container">
-
-				<form action="" method="POST">
-					<?
-					if (isset($this->editAccountError)) {
-						?>
-						<span class="submission-error"><?= html($this->editAccountError) ?></span>
-						<?
-					}
-					?>		
-					<div class="field">
-						<label for="name-name">Update username</label>
-						<input type="text" name="new-name" class="text-input" id="new-name" value="<?=html($this->userName)?>" />
-					</div>
-					<div class="field">
-						<label for="new-email">Update email address</label>
-						<input type="email" name="new-email" class="text-input" id="new-email" value="<?=html($this->userEmail)?>" />
-						
-					</div>
-					<div class="field">
-						<label for="new-password">Update password</label>
-						<input type="password" name="new-password" class="text-input" id="new-password" value="" />
-					</div>
-					
-					<? /* Privacy Settings */ ?>
-					<div class="field radio-menu privacy-settings">
-						<label for="reports-public">Privacy Settings</label>
-						<div class="radio-container">
-							<span class="radio-field">
-								<input type="radio" class="required" name="report-status" id="public-status" value="1" <?= 
-									$this->userInfo['reportStatus'] == 1 ? "checked = 'true'" : ""; 
-								?>/><label for="public-status"> My reports are public</label>
-							</span>
-							<span class="radio-field">
-								<input type="radio" class="required" name="report-status" id="private-status" value="0" <?=
-									$this->userInfo['reportStatus'] == 0 ? "checked = 'true'" : ""; 
-								?>/><label for="private-status"> My reports are private</label>
-							</span>	
-							<? /*
-							<span class="radio-field">
-								<input type="radio" class="required" name="report-status" id="public-status-all" value="all-public" /><label for="public-status-all"> Make all (past &amp; future) reports public</label>
-							</span>
-							<span class="radio-field">
-								<input type="radio" class="required" name="report-status" id="private-status-all" value="all-private" /><label for="private-status-all"> Make all (past &amp; future) reports private</label>
-							</span>	
-							*/ ?>								
-						</div>				
-					</div>	
-					
-					<div class="field">
-						<label for="current-password"><b>Confirm current password</b>*</label>
-						<input type="password" name="current-password" class="text-input" id="current-password" value="" />
-					</div>
-					<div  class="field">
-						<input type="hidden" name="submit" value="edit-account" />
-						<input type="submit" name="edit-account" value="Save" />
-					</div>
-				</form>
-				<form action="" method="post" class="delete-form" id="delete-reporter-form">
-					<input type="hidden" name="submit" value="delete-reporter" />
-					<input type="button" id="delete-reporter-btn" class="delete-btn" value="Delete My Account" />
-					<div class="overlay" id="delete-btn-overlay" style="display:none;">
-						<p>Are you sure you want to delete your account? <strong>All your reports will be deleted!</strong></p>
-						<input type="button" class="cancel" id="cancel-deletion" value="Cancel"/>
-						<input class="confirm" type="submit" name="delete-location" id="confirm-deletion" value="Confirm"/>
-					</div>
-				</form>
-
-				<script>
-					$('#delete-reporter-btn').click(function(){
-						$('#delete-btn-overlay').show();
-						window.scrollTo(0,0);
-					});
-
-					$('#delete-btn-overlay #cancel-deletion').click(function(){
-						$('#delete-btn-overlay').hide();
-					});				
-				</script>	
-			</div>
+			<? $this->editAccountForm->renderForm($this->userInfo, $this->editAccountError); ?>
 		</div>
 		<?
 	}	
