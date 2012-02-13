@@ -15,6 +15,7 @@ class Report {
 	public function handleSubmission() {
 
 		$this->reportInfo['reporterId'] = intval($_POST['reporterid']);
+		$this->reportInfo['reportStatus'] = $_POST['reportStatus'];
 		$this->reportInfo['locId'] = intval($_POST['locationid']);
 		$this->reportInfo['locName'] = $_POST['locationname'];
 		$this->reportInfo['reportDate'] = intval(gmdate("U")); 

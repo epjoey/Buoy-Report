@@ -23,6 +23,10 @@ class EditProfilePage extends GeneralPage {
 		}	
 	}
 
+	public function getBodyClassName() {
+		return 'edit-profile-page';
+	}	
+
 	public function renderJs(){
 		parent::renderJs();
 		if (isset($this->editAccountError)) {
@@ -73,8 +77,20 @@ class EditProfilePage extends GeneralPage {
 			if (!empty($_POST['new-password'])) {
 				$options['newPassword'] = md5($_POST['new-password'] . 'reportdb');
 			} 
+			// vardump(isset($_POST['report-status']) && $_POST['report-status'] != $this->userInfo['reportStatus']);
+			// vardump($this->userInfo['reportStatus']); 
+			// vardump($_POST['report-status']); 
+
 			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->userInfo['reportStatus']) {
-				$options['reportStatus'] = $_POST['report-status'];
+				//vardump($_POST['report-status']); exit();
+				if ($_POST['report-status'] == '0') {
+					Persistence::makeAllUserReportsPrivate($this->userId);
+					$options['reportStatus'] = 0;
+				} 
+				else if ($_POST['report-status'] == '1') {
+					Persistence::makeAllUserReportsPublic($this->userId);
+					$options['reportStatus'] = 1;
+				} 				
 			} 		
 	
 			if (count($options) > 0) {
@@ -117,8 +133,9 @@ class EditProfilePage extends GeneralPage {
 		?>
 		<h1>My account</h1>
 		<?
-		$this->renderMyReports();
 		$this->renderEditInfo($this->editAccountError);
+		$this->renderMyReports();
+		
 	}
 
 	public function renderMyReports() {
@@ -127,12 +144,13 @@ class EditProfilePage extends GeneralPage {
 			<h3>My Reports</h3>
 			<?
 			$options['locations'] = $this->userLocations;
+			$options['limit'] = 3;	
 			$options['on-page'] = 'edit-profile-page';	
 			$reports = new ReportFeed;
 			$reports->loadData($options);
 			$reports->renderFilterIcon();							
 			?>
-			<div id="report-feed-container">		
+			<div id="report-feed-container" onPage="edit-profile-page">		
 				<? $reports->renderReportFeed(); ?>
 			</div>	
 			<?
@@ -145,7 +163,7 @@ class EditProfilePage extends GeneralPage {
 	public function renderEditInfo() {
 		?>
 		<div class="account-details">
-			<h3>Edit my account details</h3>
+			<h3>Account Settings</h3>
 			<div class="form-container">
 
 				<form action="" method="POST">
@@ -169,23 +187,32 @@ class EditProfilePage extends GeneralPage {
 						<label for="new-password">Update password</label>
 						<input type="password" name="new-password" class="text-input" id="new-password" value="" />
 					</div>
-					<? /*
-					<div  class="field radio-menu">
-						<label for="reports-public">My Reports are</label>
+					
+					<? /* Privacy Settings */ ?>
+					<div class="field radio-menu privacy-settings">
+						<label for="reports-public">Privacy Settings</label>
 						<div class="radio-container">
 							<span class="radio-field">
 								<input type="radio" class="required" name="report-status" id="public-status" value="1" <?= 
 									$this->userInfo['reportStatus'] == 1 ? "checked = 'true'" : ""; 
-								?>/><label for="public-status"> Public</label>
+								?>/><label for="public-status"> My reports are public</label>
 							</span>
 							<span class="radio-field">
 								<input type="radio" class="required" name="report-status" id="private-status" value="0" <?=
 									$this->userInfo['reportStatus'] == 0 ? "checked = 'true'" : ""; 
-								?>/><label for="private-status"> Private</label>
-							</span>		
+								?>/><label for="private-status"> My reports are private</label>
+							</span>	
+							<? /*
+							<span class="radio-field">
+								<input type="radio" class="required" name="report-status" id="public-status-all" value="all-public" /><label for="public-status-all"> Make all (past &amp; future) reports public</label>
+							</span>
+							<span class="radio-field">
+								<input type="radio" class="required" name="report-status" id="private-status-all" value="all-private" /><label for="private-status-all"> Make all (past &amp; future) reports private</label>
+							</span>	
+							*/ ?>								
 						</div>				
 					</div>	
-					*/ ?>					
+					
 					<div class="field">
 						<label for="current-password"><b>Confirm current password</b>*</label>
 						<input type="password" name="current-password" class="text-input" id="current-password" value="" />
@@ -199,7 +226,7 @@ class EditProfilePage extends GeneralPage {
 					<input type="hidden" name="submit" value="delete-reporter" />
 					<input type="button" id="delete-reporter-btn" class="delete-btn" value="Delete My Account" />
 					<div class="overlay" id="delete-btn-overlay" style="display:none;">
-						<p>Are you sure you want to delete your account? <strong>All your reports will be deleted</strong></p>
+						<p>Are you sure you want to delete your account? <strong>All your reports will be deleted!</strong></p>
 						<input type="button" class="cancel" id="cancel-deletion" value="Cancel"/>
 						<input class="confirm" type="submit" name="delete-location" id="confirm-deletion" value="Confirm"/>
 					</div>

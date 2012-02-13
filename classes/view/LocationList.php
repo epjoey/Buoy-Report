@@ -91,7 +91,7 @@ class LocationList {
 
 		if ($this->showSeeAll) {
 			?>
-			<a class="block-link outer-link see-all" href="<?=Paths::toLocations(null, $this->toPost);?>"><span>All locations</span></a>
+			<a class="block-link outer-link see-all" href="<?=Paths::toLocations(null, $this->toPost);?>"><span>See all locations</span></a>
 			<?
 		}				
 	}

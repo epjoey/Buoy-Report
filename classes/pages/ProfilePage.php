@@ -70,7 +70,7 @@ class ProfilePage extends GeneralPage {
 			$reports->loadData($options);
 			$reports->renderFilterIcon();				
 			?>
-			<div id="report-feed-container">		
+			<div id="report-feed-container" onPage="profile-page">		
 				<? $reports->renderReportFeed(); ?>
 			</div>
 			<?

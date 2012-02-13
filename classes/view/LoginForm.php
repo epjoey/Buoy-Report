@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
 
 class LoginForm {
-	public function renderForm($logInError = NULL) {
+	public function renderForm($logInError = NULL, $rel = NULL) {
 		?>
 		<div class="form-container <?= isset($logInError) ? 'expanded' : '';?>" id="login-form-container">			
 			<form action="<?=Paths::toLogin()?>" method="post" id="login-form">
@@ -18,6 +18,13 @@ class LoginForm {
 					<input class="text-input required" type="password" name="login-password" id="login-password" placeholder="Enter password" />
 				</div>
 				<div class="field">
+					<?
+						if (isset($rel)) {
+							?>
+							<input type="hidden" name="login-rel" value="<?=$rel?>" />
+							<?
+						}
+					?>
 					<input type="hidden" name="submit" value="login" />
 					<input type="submit" class="submit" name="login" value="Log In" />
 				</div>

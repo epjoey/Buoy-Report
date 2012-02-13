@@ -5,6 +5,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LoginForm.php';
 class LoginPage extends GeneralPage {
 
 	private $loginError = NULL;
+	private $loginRel = NULL;
 
 	public function loadData(){
 		parent::loadData();
@@ -15,7 +16,10 @@ class LoginPage extends GeneralPage {
 				case 2: $e = 'The specified email address or password was incorrect.';
 			}
 			$this->loginError = $e;
-		}					
+		}		
+		if (isset($_GET['rel']) && $_GET['rel'] != '') {
+			$this->loginRel = $_GET['rel'];
+		}			
 	}
 
 	public function getBodyClassName() {
@@ -39,7 +43,7 @@ class LoginPage extends GeneralPage {
 		<h1 class="form-head">Log In</h1>
 		<?	
 		$login = new LoginForm;	
-		$login->renderForm($this->loginError);
+		$login->renderForm($this->loginError, $this->loginRel);
 		?>
 			<p class="need-account">Need an account? <a href="<?=Paths::toRegister();?>">Sign up!</a></p>
 		<?	

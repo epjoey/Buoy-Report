@@ -12,9 +12,17 @@ class ReportFeed {
 	private $filterError = NULL;
 	private $filters = array();
 	private $options = array();
+	protected $offset = 0;
 
 	public function loadData($options=array()) {
 		$this->options = $options;
+
+		if (!empty($options['offset']))
+			$this->offset = $options['offset'];
+
+		if (!empty($options['limit']))
+			$this->limit = $options['limit'];
+								
 
 		/*reporter info array passed in from page */
 		if (!empty($options['reporters'])) {
@@ -66,23 +74,34 @@ class ReportFeed {
 		}
 
 		if (!empty($_GET['date'])) {
-			if (!strtotime($_GET['date'])) $this->filterError = 'Date is not valid. Must be in mm/dd/yyyy format.';
-			else $this->filters['date'] = strtotime($_GET['date']) + 60*60*24;
-		}	
-		
+			if (strlen($_GET['date']) < 10 || !strtotime($_GET['date'])) 
+				$this->filterError = 'Date is not valid. Must be in mm/dd/yyyy format.';
+			else 
+				$this->filters['date'] = strtotime($_GET['date']) + 60*60*24;
+		}
+				
 		//report feed needs either reporters or locations
 		if (!empty($this->filters['locations']) || !empty($this->filters['reporters']))
-			$this->reports = Persistence::getReports($this->filters,$this->limit);	
+			$this->reports = Persistence::getReports($this->filters,$this->limit, $this->offset);	
 			
 	}
 
 	public function renderReportFeed() {
 
 		$this->renderFilterNote();
+
+		$this->renderReportList();
  
+ 		if (isset($this->reports) && count($this->reports) >= $this->limit)
+ 			$this->renderSeeMoreButton();
+
+ 	}
+
+ 	public function renderReportList() {
+
 		if (!isset($this->reports) && !isset($_SESSION['new-report'])) {
 			?>
-				<div class="no-data">No Reports</div>
+				<div class="no-data">No Public Reports</div>
 			<?
 		} else {
 			?>
@@ -114,6 +133,14 @@ class ReportFeed {
 		}
 	}
 
+	protected function renderSeeMoreButton() {
+		?>
+			<p class="button-container see-more">
+				<button id="more-reports">See More Reports</button>
+			</p>
+		<?
+	}
+
 	private function renderNewReport($newReport) {
 		?>
 		<span id="new-report" class="loading"></span>
@@ -141,7 +168,9 @@ class ReportFeed {
 				<p class="filter-error error"><?=html($this->filterError)?></p>
 				<?	
 			}
-			$exp = 'Showing last ' . $this->limit . ' reports';
+			$numReports = $this->limit + $this->offset;
+			$exp = "Showing last <b id='numReports'>" . $numReports . "</b> reports";
+
 			if (isset($this->filters['quality'])) {
 				$qualities = ReportOptions::quality();
 				$text = $qualities[$this->filters['quality']];
@@ -175,90 +204,165 @@ class ReportFeed {
 	}
 
 	public function renderReportFeedJS() {
-		$onPage = $this->options['on-page'];
 		?>
 		<script type="text/javascript">
-			$(document).ready(function() {
-     
-			    //Filter AJAX
-			    $('#filter-submit').click(function() {        
-			         
-			        var feed = $('#report-feed-container');
-			        var params = {
-				        'quality' : $('select[name=quality]').val(),
-				        'image' : $('select[name=image]').val(),
-				        'text' : $('input[name=text]').val(),
-				        'date' : $('input[name=date]').val(),
-				        'on-page' : "<?=$onPage?>"		        	
-			       	
-			        };
+			$(document).ready(function() {	
 
-			        //Get the data from all the fields
-			        if ($('input[name=location]').length>0) {
-			        	 params['location'] = $('input[name=location]').val();
-			        }
-			        if ($('select[name=location]').length>0) {
-			        	 params['location'] = $('select[name=location]').val();
-			        }		        
-			        if ($('input[name=reporter]').length>0) {
-			        	 params['reporter'] = $('input[name=reporter]').val();
-			        }		        
+			    var feed = $('#report-feed-container');
+				var onPage = feed.attr('onPage');				
+				
+				bindEventHandlers(feed, onPage);
 
-			         
-			        var data = '';
-			        for(var index in params) {
-					  data += index + "=" + params[index] + "&";
-					} 
-			         
-			        //show the loading sign
-			        feed.addClass('loading');
-			         
-			        //start the ajax
-			        $.ajax({
-			            //this is the php file that processes the data
-			            url: "<?=Paths::toAjax()?>filter-reports.php", 
-			             
-			            //GET method is used
-			            type: "GET",
-			 
-			            //pass the data         
-			            data: data,     
-			             
-			            //Do not cache the page
-			            cache: false,
-			             
-			            //success
-			            success: function (reports) {    
-			            	$('#outer-container').removeClass('filter-expanded');                        
-			                feed.html(reports); 
-			                feed.removeClass('loading');
-							$('#report-feed-container .report').on('click', function(){
-								loadReportDetails($(this));
-							});
-		                
-	   		            }       
-			        });
-			         
-			        //cancel the submit button default behaviours
-			        return false;
-			    }); 
-		
+				//load the thumnails
+				loadThumbnails();	
+				updateNumReports(feed)			    
+
+			});
+
+			function bindEventHandlers(feed, onPage) {
+
+			    //Filter ajax
+			    $('#filter-submit').click(function() {  
+			    	filterReports(feed, onPage);
+			    	return false;
+			    });
+
+			    //More reports ajax
+			    $('#more-reports').click(function() {
+			    	if (!$('#more-reports').hasClass('disabled')) {
+			    		loadMoreReports(feed, onPage);
+			    		event.stop(); //click being registered exponentionally for some reason	
+			    	}
+			    });
+
 				//Filter trigger toggle
 				$('.filter-trigger').click(function(){
 					$('#outer-container').toggleClass('filter-expanded');
 				});
 
+				//Load report details
 				$('.reports .report').on('click', function(){
 					loadReportDetails($(this));
-				});
+				});					
+			}
 
-			});
+		    function getFilterValues() {
+				
+				var filterValues = {
+					
+					//Set the current filter form values
+			        'quality' : $('select[name=quality]').val(),
+			        'image' : $('select[name=image]').val(),
+			        'text' : $('input[name=text]').val(),
+			        'date' : $('input[name=date]').val()
+				}
+
+				//On some pages, a locationid is pre-selected using a hidden input
+		        if ($('input[name=location]').length>0) {
+		        	filterValues['location'] = $('input[name=location]').val();
+		        }
+
+		        //On other pages, the user can choose a location
+		        if ($('select[name=location]').length>0) {
+		        	filterValues['location'] = $('select[name=location]').val();
+		        }
+		        	
+		        //On some pages, a reporterid is pre-selected	        
+		        if ($('input[name=reporter]').length>0) {
+		        	filterValues['reporter'] = $('input[name=reporter]').val();
+		        }
+		        				
+				return filterValues;		    	
+		    }
+
+		    function filterReports(feed, onPage) {    
+		    
+		    	params = getFilterValues();   
+		    	params['on-page'] = onPage;
+
+		        var data = '';
+		        for(var index in params) {
+				  data += index + "=" + params[index] + "&";
+				} 
+
+		        //show the loading sign
+		        feed.addClass('loading');
+		         
+		        //start the ajax
+		        $.ajax({
+		            //this is the php file that processes the data
+		            url: "<?=Paths::toAjax()?>filter-reports.php", 
+		             
+		            //GET method is used
+		            type: "GET",
+		 
+		            //pass the data         
+		            data: data,     
+		             
+		            //Do not cache the page
+		            cache: false,
+		             
+		            //success
+		            success: function(reports) {   
+		            	$('#outer-container').removeClass('filter-expanded');  
+		                feed.html(reports); 
+		                feed.removeClass('loading');
+		                loadThumbnails();		               
+						bindEventHandlers(feed, onPage);
+   		            }       
+		        });
+		    }; 	
+		    
+		    function loadMoreReports(feed, onPage) {
+		    	params = getFilterValues(); 
+		    	params['on-page'] = onPage;
+		    	params['num-reports'] = feed.find('.report').length;
+
+		    	var data = '';
+		        for(var index in params) {
+				  	data += index + "=" + params[index] + "&";
+				} 
+				console.log(data);
+
+				//find the last list of reports (only one until "See more reports" is clicked)
+		        reportsList = feed.find('ul.reports').last();
+
+		        //insert temporary loading sign after current list
+		        reportsList.after("<div id='temp-loading' class='loading'></div>");
+
+		        //start the ajax
+		        $.ajax({
+		            //this is the php file that processes the data
+		            url: "<?=Paths::toAjax()?>load-more-reports.php", 
+		             
+		            //GET method is used
+		            type: "GET",
+		 
+		            //pass the data         
+		            data: data,     
+		             
+		            //Do not cache the page
+		            cache: false,
+		             
+		            //success
+		            success: function(reports) { 
+		            	$('#temp-loading').remove();  
+		                reportsList.after(reports); 
+		                loadThumbnails();		               
+						bindEventHandlers(feed, onPage);
+						
+						//rewrite feed count at top
+						updateNumReports(feed);
+
+						//disable button if no more reports
+						//console.log(reports.match('<li'));
+						if (reports.match('<li') == null)
+							disableMoreReportsButton();
+   		            }       
+		        });				 
+		    }		
 
 			function loadReportDetails(report) {
-			
-			//$('.reports .report').each(function(){
-				
-			//	$(this).click(function(){
 
 				var detailSection = report.find('.detail-section'),
 					reportId = report.attr('reportid'),
@@ -296,13 +400,24 @@ class ReportFeed {
 				}
 			}
 
-			$(document).ready(function(){
+			function loadThumbnails(){
 				$('.image-container.thumbnail-image img').each(function(elem){
 					src = $(this).attr('realUrl');
 					$(this).attr('src', src);
 					$(this).parent('.thumbnail-image').removeClass('loading').addClass('loaded');
 				});				
-			})
+			}
+
+			function updateNumReports(feed){
+				elem = feed.find('#numReports').first();
+				numReports = feed.find('.report').length;
+				elem.text(numReports);
+			}
+
+			function disableMoreReportsButton(){
+				$('#more-reports').addClass('disabled');
+
+			}
 
 		</script>
 		<?

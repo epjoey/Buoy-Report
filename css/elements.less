@@ -11,19 +11,25 @@
     More info at: http://lesselements.com
 -----------------------------------------------------*/
 
-.gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
-  background: @color;
+.gradient(@top: #FFF, @bottom: #EEE) {
+  background: @top;
   background: -webkit-gradient(linear,
                                left bottom,
                                left top,
-                               color-stop(0, @start),
-                               color-stop(1, @stop));
+                               color-stop(0, @bottom),
+                               color-stop(1, @top));
   background: -ms-linear-gradient(bottom,
-                                  @start,
-                                  @stop);
+                                  @bottom,
+                                  @top);
   background: -moz-linear-gradient(center bottom,
-                                   @start 0%,
-                                   @stop 100%);
+                                   @bottom 0%,
+                                   @top 100%);
+  background: -o-linear-gradient(bottom, 
+                                @bottom 0%, 
+                                @top 100%);                                
+  background: linear-gradient(bottom, 
+                              @bottom 0%,
+                              @top 100%); 
 }
 
 .bordered(@width: 1px, @color: #EEE, @style: solid, @sides: 1px) {
@@ -105,6 +111,12 @@
   -webkit-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
   -moz-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
   box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+}
+
+.inner-highlight(@blur:3px, @alpha: 0.4) {
+  -webkit-box-shadow: inset 0 0 @blur rgba(255,255,255, @alpha);
+  -moz-box-shadow: inset 0 0 @blur rgba(255,255,255, @alpha);
+  box-shadow: inset 0 0 @blur rgba(255,255,255, @alpha);
 }
 
 .translate3d(@x:0,@y:0,@z:0) {

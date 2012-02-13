@@ -22,6 +22,21 @@ class RegisterForm {
 					<label for="reg-password">Choose a Password:</label>
 					<input class="text-input required password" type="password" name="reg-password" id="reg-password" placeholder="••••••••••" />
 				</div>
+
+				<? /* Privacy Settings */ ?>
+				<div class="field radio-menu privacy-settings">
+					<label for="reports-public">Privacy Settings</label>
+					<div class="radio-container">
+						<span class="radio-field">
+							<input type="radio" class="required" name="report-status" id="public-status" value="1" checked="true"/><label for="public-status"> Report publicly</label>
+						</span>
+						<span class="radio-field">
+							<input type="radio" class="required" name="report-status" id="private-status" value="0"/><label for="private-status"> Report privately</label>
+						</span>								
+					</div>				
+				</div>
+					
+									
 				<div class="field">
 					<input type="text" name="bot-check" id="bot-check" value=""/>
 					<input type="hidden" name="submit" value="register" />

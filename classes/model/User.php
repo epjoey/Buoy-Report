@@ -12,7 +12,6 @@ class User {
 		/* --------------- HANDLE LOGOUT FORM SUBMISSION --------------- */
 		if ((isset($_REQUEST['logout']) && $_REQUEST['logout']) || (isset($_POST['submit']) && $_POST['submit'] == 'logout')) {
 			$this->logOutUser();
-			header('HTTP/1.1 301 Moved Permanently');			
 			header('Location:'.Paths::toIntro());
 			exit();
 		}		
@@ -30,7 +29,11 @@ class User {
 	}
 
 	public function handleLoginFormSubmission() {
-		if (!isset($_POST['login-email']) || $_POST['login-email'] == '' || !isset($_POST['login-password']) || $_POST['login-password'] == '') {
+		if (!isset($_POST['login-email']) || 
+			$_POST['login-email'] == '' || 
+			!isset($_POST['login-password']) || 
+			$_POST['login-password'] == '') {
+			
 			$error = 1;
 		}
 			
@@ -47,8 +50,12 @@ class User {
 			
 		} else {		
 			$this->logInUser($reporterId, NULL, $newCookie = TRUE);
-			header('HTTP/1.1 301 Moved Permanently');			
-			header('Location:'.Paths::toUserHome());
+				
+			if (isset($_POST['login-rel']) && $_POST['login-rel'] != '' )
+				header('Location:'.$_POST['login-rel']);
+			else 
+				header('Location:'.Paths::toUserHome());	
+			
 			exit();
 		}		
 	}
@@ -83,9 +90,8 @@ class User {
 			exit();
 			
 		} else {		
-			$reporterId = Persistence::insertReporter($_POST['reg-name'], $_POST['reg-email'], md5($_POST['reg-password'] . 'reportdb'));
+			$reporterId = Persistence::insertReporter($_POST['reg-name'], $_POST['reg-email'], md5($_POST['reg-password'] . 'reportdb', $_POST['report-status']));
 			$this->logInUser($reporterId, NULL, $newCookie = TRUE, $fromRegistration = TRUE);
-			header('HTTP/1.1 301 Moved Permanently');			
 			header('Location:'.Paths::toUserHome());
 			exit();
 		}

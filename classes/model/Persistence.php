@@ -32,12 +32,13 @@ class Persistence {
  
 	public static function insertReport($reportInfo = array()) {
 		//to do:create $fields
+		$public = intval($reportInfo['reportStatus']);
 		$link = Persistence::dbConnect();
 		$locationid = intval($reportInfo['locId']);
 		$reporterid = intval($reportInfo['reporterId']);
 		$obsdate = intval($reportInfo['observationDate']);
 		$reportdate = intval($reportInfo['reportDate']);
-		$fields = "locationid = '$locationid', reporterid = '$reporterid', obsdate = '$obsdate', reportdate = '$reportdate'";
+		$fields = "locationid = '$locationid', reporterid = '$reporterid', public = '$public', obsdate = '$obsdate', reportdate = '$reportdate'";
 		if (isset($reportInfo['quality'])) {
 			$quality = mysqli_real_escape_string($link, $reportInfo['quality']);
 			$fields .= ", quality = '" . $quality . "'";
@@ -62,13 +63,14 @@ class Persistence {
 		return $reportid;
 	}	
 
-	public static function getReports($filters = array(), $limit = 6) {		
+	public static function getReports($filters = array(), $limit = 6, $offset = 0) {
+	
 		//the basic SELECT statement
 		$select = 'SELECT *';
 		$from = ' FROM report';
-		$where = ' WHERE TRUE';
+		$where = " WHERE TRUE";
 		$orderby = ' ORDER BY obsdate DESC';
-		$limit = ' LIMIT ' . $limit;
+		$limit = ' LIMIT ' . $offset . ',' . $limit;
 
 		if (!empty($filters['reporters'])) {
 			$where .= " AND (";
@@ -116,7 +118,23 @@ class Persistence {
 		}		
 	
 
+		//finally, only pull reports our user is allowed to see
+		if (!isset($_SESSION)) session_start();
+		
+		//logged in, pull public and user's own reports
+		if (isset($_SESSION['userid']) && $_SESSION['userid'] != '') {
+			$userId = $_SESSION['userid'];
+			$where .= "AND (public = '1' OR reporterid = '$userId')";
+		} 
+
+		//not logged in, only pull public reports
+		else {
+			$where .= "AND (public = '1')";
+		}
+
 		$sql = $select . $from . $where . $orderby . $limit;
+
+		//var_dump($sql);
 
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
 		if (!$result) {
@@ -456,12 +474,13 @@ class Persistence {
 		} else return NULL;				
 	}
 
-	public static function insertReporter($name, $email, $password) {
+	public static function insertReporter($name, $email, $password, $privacy) {
 		$link = Persistence::dbConnect();
 		isset($name) ? $name = mysqli_real_escape_string($link, $name) : $name=NULL;
 		$email = mysqli_real_escape_string($link, $email);	
 		$password = mysqli_real_escape_string($link, $password);
-		$sql = "INSERT INTO reporter SET name = '$name', email = '$email', password = '$password'";
+		$privacy = intval($privacy);
+		$sql = "INSERT INTO reporter SET name = '$name', email = '$email', password = '$password', public = '$privacy'";
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
 			die("Error inserting reporter into DB" . mysqli_error($link));
@@ -550,6 +569,20 @@ class Persistence {
 		}
 
 		$sql = "UPDATE reporter SET " . $set . " WHERE id = '$reporterid'";
+		$result = mysqli_query($link, $sql) or die("Error updating user account" . mysqli_error($link));
+	}
+
+	public static function makeAllUserReportsPublic($userId){
+		$link = Persistence::dbConnect();
+		$userId = intval($userId);
+		$sql = "UPDATE report SET public = '1' WHERE reporterid = '$userId'";
+		$result = mysqli_query($link, $sql) or die("Error updating user account" . mysqli_error($link));
+	}
+
+	public static function makeAllUserReportsPrivate($userId){
+		$link = Persistence::dbConnect();
+		$userId = intval($userId);
+		$sql = "UPDATE report SET public = '0' WHERE reporterid = '$userId'";
 		$result = mysqli_query($link, $sql) or die("Error updating user account" . mysqli_error($link));
 	}
 

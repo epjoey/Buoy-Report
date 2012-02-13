@@ -40,11 +40,15 @@ class Paths {
 		return '/';
 	}	
 
-	public static function toLogin($error = NULL) {
+	public static function toLogin($error = NULL, $rel = NULL) {
 		$url = '/login.php';
 		if (isset($error)) {
 			$url .= '?error=' . $error;
 		}
+		if (isset($rel)) {
+			$url .= isset($error) ? '&' : '?';
+			$url .= 'rel=' . $rel;
+		}		
 		return $url;
 	}	
 

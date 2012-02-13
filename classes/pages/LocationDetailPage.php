@@ -85,6 +85,7 @@ class LocationDetailPage extends GeneralPage {
 			$(document).ready(function(){
 				$("#add-buoy-form").validate();
 				$("#add-tide-station-form").validate();
+				doFcLinkAjax('');
 			});
 
 			function doFcLinkAjax(newUrl) {
@@ -296,10 +297,9 @@ class LocationDetailPage extends GeneralPage {
 		?>
 		<div class="loc-details">
 			<h1><?= html($this->locInfo['locname'])?></h1>
-			<? if ($this->userIsLoggedIn) { 
-				?><a class="post-report edit-loc-link  block-link" href="<?=Paths::toPostReport($this->locationId);?>">Post Report</a><? 
-			}
 			
+			<a class="post-report edit-loc-link block-link" href="<?=Paths::toPostReport($this->locationId);?>">Post Report</a><?
+
 			if ($this->buoyCount < 3 && $this->userIsLoggedIn) {
 				?><span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">+ Buoy</span><?
 			}
@@ -375,7 +375,7 @@ class LocationDetailPage extends GeneralPage {
 			$reports->loadData($options);	
 			$reports->renderFilterIcon();	
 			?>
-			<div id="report-feed-container">		
+			<div id="report-feed-container" onPage="location-page">		
 				<? $reports->renderReportFeed(); ?>
 			</div>
 			<?
@@ -414,10 +414,7 @@ class LocationDetailPage extends GeneralPage {
 						</div>		
 					<? } ?>
 				</div>
-				<script type="text/javascript">
-						$('#toggle-fc-list').click(function(){
-							doFcLinkAjax('');
-						});						
+				<script type="text/javascript">					
 						$('#submit-fc-btn').click(function(){
 							doFcLinkAjax($('#fc-url').val());
 						});

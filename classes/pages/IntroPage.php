@@ -1,7 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LoginForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/RegisterForm.php';
 
 
 class IntroPage extends GeneralPage {
@@ -9,9 +8,7 @@ class IntroPage extends GeneralPage {
 	public function loadData(){
 		parent::loadData();
 		$this->pageTitle = 'Welcome to ' . $this->siteTitle;
-		$this->login = new LoginForm;
-		$this->register = new RegisterForm;
-			
+		$this->login = new LoginForm;			
 	}
 
 	public function getBodyClassName() {
@@ -25,7 +22,6 @@ class IntroPage extends GeneralPage {
 		<script type="text/javascript">	
 			$(document).ready(function(){
 				$("#login-form").validate();
-				$("#reg-form").validate();
 			});
 		</script>
 		<?
@@ -56,9 +52,7 @@ class IntroPage extends GeneralPage {
 				</div>
 				<div class="reg-browse">
 					<div class="reg-container">
-						<a href="#reg-form-container" class="reg-btn" id="reg-trigger">Get Started ></a>
-						<? $this->register->renderForm(); ?>
-						<span id="cancel-reg" style="display:none;">[ X ]</span>
+						<a href="<?=Paths::toRegister()?>" class="reg-btn" id="reg-trigger">Get Started ></a>
 					</div>
  					<span class="browse-spots">or <a href="<?=Paths::toLocations()?>">Browse Spots ></a></span>
 				</div>
@@ -89,19 +83,7 @@ class IntroPage extends GeneralPage {
 					$('#login-email').focus()
 					}, 200);
 			});
-
-			$('#reg-trigger').click(function(){
-				$('#reg-form-container').slideToggle(duration);
-				$('#cancel-reg').toggle();
-				setTimeout(function(){
-					$('#reg-name').focus()
-					}, 200);
-				return false;
-			});
-			$('#cancel-reg').click(function(){
-				$('#reg-form-container').slideToggle(duration);
-				$('#cancel-reg').toggle();
-			});
+			
 			$(window).resize(function() { console.log($(window).width()) });
 
 		</script>	

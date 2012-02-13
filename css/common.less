@@ -11,8 +11,7 @@
 
 	.header-right {float:right;}	
 	.user-menu { position:relative; z-index:2;
-		&>.block-link {margin-left:0;}
-		.post-report {position:relative; }
+		.post-report {position:relative; float: left;}
 		.location-drop-down {display:none; position:absolute; top:32px; right:0;
 			.locations { margin:0; }
 			.location {width:188px; margin:0;}
@@ -44,7 +43,7 @@
 
 
 /* LINKS */
-.block-link { cursor:pointer; .museo(500); background:@grey; padding:0 6px; color:@dark-blue; display:inline-block; letter-spacing:1px; .text-highlight(); margin-left:2px; /*border-left:1px solid @pink; background: #eee -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,.2)), color-stop(100%,rgba(0,0,0,.2))); */}
+.block-link { cursor:pointer; .museo(500); background:@grey; margin-left:3px; padding:0 6px; color:@dark-blue; display:inline-block; letter-spacing:1px; .text-highlight(); }
 .block-link:hover { background:@pink; text-decoration:none; }	
 .block-link.active { background:@pink;}
 .no-data-post {margin-bottom:20px; }
@@ -54,12 +53,13 @@
 /* FORMS */
 .form-container { overflow:hidden; .rounded-corner(0 0 0 6px); background-color:@grey; clear:both; .drop-shadow();
 	form { overflow:hidden; margin:10px; }
-	label { display:inline-block; .text-highlight(); line-height:34px; color:@dark-blue; float:left; }
-	input[type="submit"] { .museo500(18px, 30px); color:@pink; border:1px solid darken(@grey, 13%); padding:0px 22px; margin-top:8px; float:right; }
-	.field {clear:both; margin-bottom: 5px; overflow:hidden;}
+	label { display:inline-block; .text-highlight(); line-height:34px; color:@dark-blue; float:left; .museo(500); }
+	input[type="submit"] { .museo500(18px, 30px); color:@pink; padding:0px 22px; margin-top:8px; float:right; }
+	.field {clear:both; margin-bottom: 12px; overflow:hidden;}
 	.radio-field label {width:auto; float:none;}	
 	.radio-container {float:right;}
-	.radio-menu span {line-height:34px; margin-right:8px; font-size:18px;}
+	.radio-menu span { margin-right:8px; }
+	.radio-menu .radio-container label { .museo300(18px, 34px); }
 	.note {.sans-serif(14px); color:@grey-blue;}	
 	p {color:black;}
 }
@@ -81,7 +81,6 @@
 	}
 	label {color:@grey; .sans-serif(16px,1em); float:left; margin-right:8px; padding-bottom:2px;}
 }
-.bookmark input {padding:2px 6px;}
 #bot-check {height:0; visibility:hidden; border:0 none; padding:0;}
 
 
@@ -233,7 +232,7 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 	input { .museo500(18px, 30px); color:@dark-blue; border:1px solid darken(@grey, 10%); padding:0px 22px; display:inline-block; float:none; }
 	input.confirm {float:none; color:#000;}
 }
-.delete-form .delete-btn { margin-top:30px; border:0 none; background:0 none; color:@red; padding:0; font-size:12px; .text-shadow-reset();}
+.delete-form .delete-btn { border:0 none; background:0 none; color:@red; padding:0; font-size:12px; .text-shadow-reset(); .drop-shadow-reset();}
 .delete-form .delete-btn:hover { border:0 none; background:0 none; color:@red; padding:0; font-size:12px; .text-shadow-reset(); text-decoration:underline; }
 
 /* MISC */
