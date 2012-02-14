@@ -37,7 +37,7 @@ class EditProfilePage extends GeneralPage {
 				exit();				
 			}
 
-			$reporterId = Persistence::returnReporterId($this->userEmail, md5($_POST['current-password'] . 'reportdb'));
+			$reporterId = Persistence::returnReporterId($this->user->email, md5($_POST['current-password'] . 'reportdb'));
 			
 			if (!isset($reporterId)) {
 				$error = 2;
@@ -56,17 +56,17 @@ class EditProfilePage extends GeneralPage {
 			}
 
 			$options = array();
-			if (!empty($_POST['new-email']) && $_POST['new-email'] != $this->userEmail) {
+			if (!empty($_POST['new-email']) && $_POST['new-email'] != $this->user->email) {
 				$options['newEmail'] = $_POST['new-email'];
 			}
-			if (!empty($_POST['new-name']) && $_POST['new-name'] != $this->userName) {
+			if (!empty($_POST['new-name']) && $_POST['new-name'] != $this->user->name) {
 				$options['newName'] = $_POST['new-name'];
 			} 
 			if (!empty($_POST['new-password'])) {
 				$options['newPassword'] = md5($_POST['new-password'] . 'reportdb');
 			}
 
-			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->userInfo['reportStatus']) {
+			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->user->reportStatus) {
 				//vardump($_POST['report-status']); exit();
 				if ($_POST['report-status'] == '0') {
 					Persistence::makeAllUserReportsPrivate($this->user->id);

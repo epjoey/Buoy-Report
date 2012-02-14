@@ -11,6 +11,7 @@ class User {
 	public $isLoggedIn = FALSE;
 	public $newReport = NULL;
 	public $hasNewReport = NULL;
+	public $reportStatus = NULL;
 	public $isNew = FALSE;
 	public $joinDate = NULL;
 	public $locations = NULL;	
