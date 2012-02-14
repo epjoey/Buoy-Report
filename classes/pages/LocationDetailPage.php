@@ -43,7 +43,7 @@ class LocationDetailPage extends GeneralPage {
 			$this->buoyCount = 3;
 		}	
 
-		if ($this->userIsLoggedIn && Persistence::userHasLocation($this->userId, $this->locationId)) {
+		if ($this->user->isLoggedIn && Persistence::userHasLocation($this->user->id, $this->locationId)) {
 			$this->userHasLocation = TRUE;
 		} else $this->userHasLocation = FALSE;		
 
@@ -102,7 +102,6 @@ class LocationDetailPage extends GeneralPage {
 					data,			
 					function(){
 						linkContainer.removeClass('loading').addClass('loaded');
-						console.log(linkContainer);
 					}
 				);
 			}	
@@ -142,13 +141,13 @@ class LocationDetailPage extends GeneralPage {
 		$this->handleStationSubmission('toLocation');
 
 		if ($_REQUEST['submit'] == 'bookmark') {
-			Persistence::insertUserLocation($this->userId, $this->locationId);
+			Persistence::insertUserLocation($this->user->id, $this->locationId);
 			header('Location:'.Paths::toLocation($this->locationId));
 			exit();
 		}
 
 		if ($_REQUEST['submit'] == 'un-bookmark') {
-			Persistence::removeLocationFromUser($this->locationId, $this->userId);
+			Persistence::removeLocationFromUser($this->locationId, $this->user->id);
 			header('Location:'.Paths::toLocation($this->locationId));
 			exit();
 		}		
@@ -300,11 +299,11 @@ class LocationDetailPage extends GeneralPage {
 			
 			<a class="post-report edit-loc-link block-link" href="<?=Paths::toPostReport($this->locationId);?>">Post Report</a><?
 
-			if ($this->buoyCount < 3 && $this->userIsLoggedIn) {
+			if ($this->buoyCount < 3 && $this->user->isLoggedIn) {
 				?><span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">+ Buoy</span><?
 			}
 
-			if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
+			if (!isset($this->locInfo['tidestation']) && $this->user->isLoggedIn) {
 				?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">+ Tide Station</span><?
 			}
 
@@ -319,11 +318,11 @@ class LocationDetailPage extends GeneralPage {
 		?>
 		<div class="add-station-container">
 			<?
-			if ($this->buoyCount < 3 && $this->userIsLoggedIn) {
+			if ($this->buoyCount < 3 && $this->user->isLoggedIn) {
 				$bform = new AddBuoyForm;
 				$bform -> renderAddBuoyForm($this->addBuoyError);
 			}
-			if (!isset($this->locInfo['tidestation']) && $this->userIsLoggedIn) {
+			if (!isset($this->locInfo['tidestation']) && $this->user->isLoggedIn) {
 				$tform = new AddTideStationForm;
 				$tform -> renderAddTideStationForm($this->addStationError);
 			}
@@ -400,14 +399,14 @@ class LocationDetailPage extends GeneralPage {
 				<h5 class="toggle-btn" id="toggle-fc-list">Forecast Links &darr;</h5>
 				<div class="toggle-area">
 					<div id="fc-link-container"></div>
-					<? if ($this->userIsLoggedIn) { ?>
+					<? if ($this->user->isLoggedIn) { ?>
 						<div class="enter-link-form">
 							<input type="url" id="fc-url" class="text-input" placeholder="Add Link"/>
 							<input type="submit" name="add-forecast" id="submit-fc-btn" value="Add Link"/>
 						</div>
 					<? } 
 
-					if ($this->userIsLoggedIn && $this->locInfo['creator'] == $this->userId) { ?>
+					if ($this->user->isLoggedIn && $this->locInfo['creator'] == $this->user->id) { ?>
 						<div class="edit-link-btns">
 							<span class="edit-link-btn" id="delete-link-btn">Delete links</span>	
 							<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>
@@ -494,7 +493,7 @@ class LocationDetailPage extends GeneralPage {
 					?> 
 					<span class="no-data">None
 						<?
-						if (!$this->userIsLoggedIn) {
+						if (!$this->user->isLoggedIn) {
 							?><span class="must-log-in">- Log in to add buoys or stations</span><?
 						}
 						?>
@@ -514,12 +513,10 @@ class LocationDetailPage extends GeneralPage {
 			<div class="reporters">
 				<p class="creator sb-section">Set up by <a href="<?=Paths::toProfile($this->locInfo['creator']);?>"><?=html($this->creator['name'])?></a></p>
 				<p class="sb-section"><a href="<?=Paths::toReporters($this->locationId);?>">See Reporters</a></p>
-				<?
-				if ($this->userIsLoggedIn && $this->locInfo['creator'] == $this->userId) {
-					?><p class="sb-section"><a class="edit-location" href="<?=Paths::toEditLocation($this->locationId);?>">Edit Location</a></p><?
-				}
+				<p class="sb-section"><a class="edit-location" href="<?=Paths::toEditLocation($this->locationId);?>">Edit Location</a></p>
 
-				if ($this->userIsLoggedIn && $this->userHasLocation == FALSE) {
+				<?
+				if ($this->user->isLoggedIn && $this->userHasLocation == FALSE) {
 					?>
 					<form action="" method="post" class="bookmark">
 						<input type="hidden" name="submit" value="bookmark"/>
@@ -528,7 +525,7 @@ class LocationDetailPage extends GeneralPage {
 					<?
 				}
 
-				else if ($this->userIsLoggedIn && $this->userHasLocation == TRUE) {
+				else if ($this->user->isLoggedIn && $this->userHasLocation == TRUE) {
 					?>
 					<form action="" method="post" class="bookmark">
 						<input type="hidden" name="submit" value="un-bookmark"/>

@@ -41,7 +41,7 @@ class HomePage extends GeneralPage {
 		<div class="reports-container">
 			<h2>Recent Reports</h2>		
 			<?
-			$options['locations'] = $this->userLocations;
+			$options['locations'] = $this->user->locations;
 			$options['on-page'] = 'homepage';			
 			$reports = new ReportFeed;
 			$reports->loadData($options);
@@ -64,8 +64,8 @@ class HomePage extends GeneralPage {
 		<div class="location-list">
 			<h3>My Locations</h3>
 			<?
-			if ($this->userHasLocations) {
-				$options['locations'] = $this->userLocations;
+			if ($this->user->hasLocations) {
+				$options['locations'] = $this->user->locations;
 			}
 			$options['showAddLocation'] = TRUE;
 			$options['showSeeAll'] = TRUE;

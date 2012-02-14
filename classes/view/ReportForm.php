@@ -8,8 +8,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
 class ReportForm {
 
-	public function renderReportForm($locInfo, $reporterInfo, $submitError = NULL, $needPicup) {
-		if (!in_array($locInfo, $reporterInfo['locations'])) {
+	public function renderReportForm($locInfo, $user, $submitError = NULL, $needPicup) {
+		if (!in_array($locInfo, $user->locations)) {
 			$reporterHasLocation = 0;
 		} else {
 			$reporterHasLocation = 1;
@@ -119,8 +119,8 @@ class ReportForm {
 					</span>
 				</div>
 				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
-				<input type="hidden" name="reporterid" value="<?=$reporterInfo['id']?>" />
-				<input type="hidden" name="reportStatus" value="<?=$reporterInfo['reportStatus']?>" />
+				<input type="hidden" name="reporterid" value="<?=$user->id?>" />
+				<input type="hidden" name="reportStatus" value="<?=$user->reportStatus?>" />
 				<input type="hidden" name="locationid" value="<?=$locInfo['id']?>" />
 				<input type="hidden" name="locationname" value="<?=$locInfo['locname']?>" /> 
 				<input type="hidden" name="reporterhaslocation" value="<?=$reporterHasLocation?>" />

@@ -33,7 +33,7 @@ class EditProfilePage extends GeneralPage {
 		if ($_POST['submit'] == 'edit-account') {
 			if (empty($_POST['current-password'])) {
 				$error = 1;
-				header('Location:'.Paths::toProfile($this->userId, $error));
+				header('Location:'.Paths::toProfile($this->user->id, $error));
 				exit();				
 			}
 
@@ -41,17 +41,17 @@ class EditProfilePage extends GeneralPage {
 			
 			if (!isset($reporterId)) {
 				$error = 2;
-				header('Location:'.Paths::toProfile($this->userId, $error));
+				header('Location:'.Paths::toProfile($this->user->id, $error));
 				exit();
 			}
 			if (!empty($_POST['new-password']) && strlen($_POST['new-password']) < 5) {
 				$error = 3;
-				header('Location:'.Paths::toProfile($this->userId, $error));
+				header('Location:'.Paths::toProfile($this->user->id, $error));
 				exit();				
 			}
 			if (!empty($_POST['new-email']) && filter_var($_POST['new-email'], FILTER_VALIDATE_EMAIL) != TRUE ) {
 				$error = 4;
-				header('Location:'.Paths::toProfile($this->userId, $error));
+				header('Location:'.Paths::toProfile($this->user->id, $error));
 				exit();					
 			}
 
@@ -69,30 +69,30 @@ class EditProfilePage extends GeneralPage {
 			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->userInfo['reportStatus']) {
 				//vardump($_POST['report-status']); exit();
 				if ($_POST['report-status'] == '0') {
-					Persistence::makeAllUserReportsPrivate($this->userId);
+					Persistence::makeAllUserReportsPrivate($this->user->id);
 					$options['reportStatus'] = 0;
 				} 
 				else if ($_POST['report-status'] == '1') {
-					Persistence::makeAllUserReportsPublic($this->userId);
+					Persistence::makeAllUserReportsPublic($this->user->id);
 					$options['reportStatus'] = 1;
 				} 				
 			} 		
 	
 			if (count($options) > 0) {
-				Persistence::updateUserInfo($this->userId, $options);
+				Persistence::updateUserInfo($this->user->id, $options);
 				$this->user->updateUserSession($options);		
 			} else {
 				$error = 5;
-				header('Location:'.Paths::toProfile($this->userId, $error));
+				header('Location:'.Paths::toProfile($this->user->id, $error));
 				exit();					
 			}
 			header('HTTP/1.1 301 Moved Permanently');
-			header('Location:'.Paths::toProfile($this->userId));
+			header('Location:'.Paths::toProfile($this->user->id));
 			exit();		
 		}
 		
 		if ($_POST['submit'] == 'delete-reporter') {
-			Persistence::deleteReporter($this->userId);
+			Persistence::deleteReporter($this->user->id);
 			header('Location:'.Paths::toLogout());
 			exit();	
 		}
@@ -106,7 +106,7 @@ class EditProfilePage extends GeneralPage {
 				<? 
 				$filterform = new FilterForm;
 				$options['showlocations'] = TRUE;
-				$options['locations'] = $this->userLocations;					
+				$options['locations'] = $this->user->locations;					
 				$filterform->renderFilterForm($options);
 	
 				?>
@@ -128,7 +128,7 @@ class EditProfilePage extends GeneralPage {
 		<div class="reports-container">
 			<h3>My Reports</h3>
 			<?
-			$options['locations'] = $this->userLocations;
+			$options['locations'] = $this->user->locations;
 			$options['limit'] = 3;	
 			$options['on-page'] = 'edit-profile-page';	
 			$reports = new ReportFeed;
@@ -149,7 +149,7 @@ class EditProfilePage extends GeneralPage {
 		?>
 		<div class="account-details">
 			<h3>Account Settings</h3>
-			<? $this->editAccountForm->renderForm($this->userInfo, $this->editAccountError); ?>
+			<? $this->editAccountForm->renderForm($this->user, $this->editAccountError); ?>
 		</div>
 		<?
 	}	
@@ -164,8 +164,8 @@ class EditProfilePage extends GeneralPage {
 	}
 	
 	public function renderMyLocations() {
-		if ($this->userHasLocations) {
-			$options['locations'] = $this->userLocations;
+		if ($this->user->hasLocations) {
+			$options['locations'] = $this->user->locations;
 		}
 		$options['showAddLocation'] = TRUE;
 		$options['showSeeAll'] = TRUE;

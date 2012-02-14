@@ -2,7 +2,7 @@
 
 class EditAccountForm {
 
-	public function renderForm($userInfo, $editAccountError = NULL) {	
+	public function renderForm($user, $editAccountError = NULL) {	
 		?>
 		<div class="form-container">
 
@@ -16,11 +16,11 @@ class EditAccountForm {
 				?>		
 				<div class="field">
 					<label for="name-name">Update username</label>
-					<input type="text" name="new-name" class="text-input" id="new-name" value="<?=html($userInfo['name'])?>" />
+					<input type="text" name="new-name" class="text-input" id="new-name" value="<?=html($user->name)?>" />
 				</div>
 				<div class="field">
 					<label for="new-email">Update email address</label>
-					<input type="email" name="new-email" class="text-input" id="new-email" value="<?=html($userInfo['email'])?>" />
+					<input type="email" name="new-email" class="text-input" id="new-email" value="<?=html($user->email)?>" />
 					
 				</div>
 				<div class="field">
@@ -34,12 +34,12 @@ class EditAccountForm {
 					<div class="radio-container">
 						<span class="radio-field">
 							<input type="radio" class="required" name="report-status" id="public-status" value="1" <?= 
-								$userInfo['reportStatus'] == 1 ? "checked = 'true'" : ""; 
+								$user->reportStatus == 1 ? "checked = 'true'" : ""; 
 							?>/><label for="public-status"> My reports are public</label>
 						</span>
 						<span class="radio-field">
 							<input type="radio" class="required" name="report-status" id="private-status" value="0" <?=
-								$userInfo['reportStatus'] == 0 ? "checked = 'true'" : ""; 
+								$user->reportStatus == 0 ? "checked = 'true'" : ""; 
 							?>/><label for="private-status"> My reports are private</label>
 						</span>	
 						<? /*

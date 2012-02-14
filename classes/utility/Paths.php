@@ -52,6 +52,10 @@ class Paths {
 		return $url;
 	}	
 
+	public static function toHandleLogin() {
+		return '/form-handlers/login-form-handler.php';
+	}	
+
 	public static function toLogout() {
 		return '/logout.php';
 	}	
@@ -62,6 +66,10 @@ class Paths {
 			$url .= '?error=' . $error;
 		} 
 		return $url;
+	}
+
+	public static function toHandleRegistration() {
+		return '/form-handlers/register-form-handler.php';
 	}
 
 	public static function toPostReport($locationid = NULL, $submitError = NULL) {
@@ -212,7 +220,7 @@ class Paths {
 	public static function toMobileImageProcess() {
 		global $local_dev;
 
-		return Paths::toUrl() . '/utility/mobile-image-process.php';
+		return Paths::toUrl() . '/mobile-image-process.php';
 
 	}
 

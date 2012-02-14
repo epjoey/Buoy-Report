@@ -149,10 +149,8 @@ class ReportFeed {
 		 	$('#new-report').load('<?=Paths::toAjax()?>new-report.php',
 				function(){
 					$('#new-report').removeClass('loading');
-					$('#new-report .report').click(function(){
-						$(this).toggleClass('expanded');
-						$(this).toggleClass('collapsed');
-					})	
+					loadThumbnails();	
+					bindEventHandlers();
 		 		}
 		 	);		
 		</script>
@@ -309,6 +307,7 @@ class ReportFeed {
 		                feed.removeClass('loading');
 		                loadThumbnails();		               
 						bindEventHandlers(feed, onPage);
+						updateNumReports(feed);
    		            }       
 		        });
 		    }; 	
@@ -322,7 +321,6 @@ class ReportFeed {
 		        for(var index in params) {
 				  	data += index + "=" + params[index] + "&";
 				} 
-				console.log(data);
 
 				//find the last list of reports (only one until "See more reports" is clicked)
 		        reportsList = feed.find('ul.reports').last();
@@ -409,14 +407,13 @@ class ReportFeed {
 			}
 
 			function updateNumReports(feed){
-				elem = feed.find('#numReports').first();
+				numReportsElem = feed.find('#numReports').first();
 				numReports = feed.find('.report').length;
-				elem.text(numReports);
+				numReportsElem.text(numReports);
 			}
 
 			function disableMoreReportsButton(){
 				$('#more-reports').addClass('disabled');
-
 			}
 
 		</script>

@@ -8,12 +8,6 @@ class EditLocationPage extends LocationDetailPage {
 	public function loadData() {
 		parent::loadData();
 
-		if (!Persistence::userCreatedLocation($this->userId, $this->locationId)) {
-			header('HTTP/1.1 301 Moved Permanently');
-			header('Location:'.Paths::toLocation($this->locationId));
-			exit();	
-		}
-
 		$this->pageTitle = 'Edit: ' . $this->locInfo['locname'];
 		
 		if (isset($_GET['error']) && $_GET['error']) {
@@ -32,6 +26,14 @@ class EditLocationPage extends LocationDetailPage {
 	public function renderJs() {
 		parent::renderJs();
 	}		
+
+	public function renderForbiddenMessage(){
+		?>
+			<p class="forbidden-message overlay">
+				You must be the creator of the location to edit the location. However, you can still add forecast links, bouys, and tidestation (if the creator hasn't done so yet). <a href="<?=Paths::toLocation($this->locationId);?>">Return to Location</a>
+			</p>
+		<?
+	}
 
 	public function afterSubmit() {
 
@@ -73,10 +75,17 @@ class EditLocationPage extends LocationDetailPage {
 	}
 
 	public function renderBodyContent() {
-		$this->renderLocDetails();	
+
+		if ($this->locInfo['creator'] != $this->user->id) {
+			$this->renderForbiddenMessage();
+		}
+		else {
+			$this->renderForm();		
+		}		
+		
 	}
 
-	public function renderLocDetails() {
+	public function renderForm() {
 		?>
 			<h2>
 				<a href="<?=Paths::toLocation($this->locationId)?>"><?= html($this->locInfo['locname'])?></a> > Edit

@@ -6,14 +6,15 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/EditLocationPage.php';
 
 
 
-$user = new User;
-if (!$user->userIsLoggedIn()) {
-	header('Location:'.Paths::toLogin());
+if (!isset($_GET['location']) || !$_GET['location']) {
+	header('Location:'.Paths::to404());
 	exit();
 }
 
-if (!isset($_GET['location']) || !$_GET['location']) {
-	header('Location:'.Paths::to404());
+$user = new User;
+
+if (!$user->isLoggedIn) {
+	header('Location:'.Paths::toLogin(null, Paths::toEditLocation($_GET['location'])));
 	exit();
 }
 

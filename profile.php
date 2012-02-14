@@ -15,7 +15,7 @@ $profile = new ProfilePage;
 $profile->loadData();
 
 
-if ($profile->userIsLoggedIn && $_GET['reporter'] == $profile->userId) {
+if ($profile->user->isLoggedIn && $_GET['reporter'] == $profile->user->id) {
 	$editprofile = new EditProfilePage;
 	$editprofile->loadData();
 
