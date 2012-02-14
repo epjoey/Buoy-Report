@@ -152,7 +152,6 @@ function bbcode2html($text) {
 	//[URL]link[/URL]
 
 	if (substr(strtolower($text), 0, 4) == '[url') {
-		$text = strtolower($text);
 		if (substr($text, 5, 7) != 'http://' && substr($text, 5, 8) != 'https://') {
 			$text = substr_replace($text, "http://", 5, 0);
 		}
