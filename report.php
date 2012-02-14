@@ -12,7 +12,7 @@ if (!isset($_GET['location'])) {
 	exit();	
 }
 
-if (!$user->userIsLoggedIn()) {
+if (!$user->isLoggedIn) {
 	header('Location:'.Paths::toLogin(null, Paths::toPostReport($_GET['location'])));
 	exit();
 }

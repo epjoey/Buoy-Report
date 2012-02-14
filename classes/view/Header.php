@@ -4,42 +4,25 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 class Header {
 
-	protected $userIsLoggedIn = FALSE;
-	protected $userHasLocations = FALSE;
-	protected $userLocations = NULL;
-	protected $userName = NULL;
-	protected $userEmail = NULL;
-	protected $userId = NULL;	
-
-
-	public function __construct($options = array()) {
-		$this->userIsLoggedIn = $options['userIsLoggedIn'];
-		$this->userHasLocations = $options['userHasLocations'];
-		$this->userLocations = $options['userLocations'];
-		$this->userName = $options['userName'];		
-		$this->userEmail = $options['userEmail'];		
-		$this->userId = $options['userId'];		
-	}
-
-	public function renderHeader() {
+	public function renderHeader($user) {
 		?>
 		<div id="header" class="header"> 
 			<div class="container">
 				<span class="header-left">
-					<a href="<?= $this->userIsLoggedIn ? Paths::toUserHome() : Paths::toIntro();?>" class="br-icon"><img class="logo-graphic" id="large-logo" src="<?= Paths::toImages() ?>logo-lrg.png" width="46" height="46"/></a>
-					<a class="home left-link" href="<?=$this->userIsLoggedIn ? Paths::toUserHome() : Paths::toIntro();?>">Home</a>
+					<a href="<?= $user->isLoggedIn ? Paths::toUserHome() : Paths::toIntro();?>" class="br-icon"><img class="logo-graphic" id="large-logo" src="<?= Paths::toImages() ?>logo-lrg.png" width="46" height="46"/></a>
+					<a class="home left-link" href="<?=$user->isLoggedIn ? Paths::toUserHome() : Paths::toIntro();?>">Home</a>
 					<a class="location left-link" href="<?=Paths::toLocations();?>">Locations</a>
 				</span>
 				<div class="header-right">
 
-				<? if ($this->userIsLoggedIn) { ?>
+				<? if ($user->isLoggedIn) { ?>
 
 					<div class="user-menu" id="user-menu">
-						<? if (!$this->userHasLocations) { ?>
+						<? if (!$user->hasLocations) { ?>
 							<a class="block-link post-report" href="<?=Paths::toLocations($reporter = null,$toPost = true)?>">Report</a>
 						<? 
 						} else { 
-							$locOptions['locations'] = $this->userLocations;
+							$locOptions['locations'] = $user->locations;
 							$locOptions['showSeeAll'] = TRUE;
 							$locOptions['toPost'] = TRUE;
 							$locationDrop = new LocationList($locOptions);
@@ -53,15 +36,15 @@ class Header {
 						<? } ?>
 						<div class="block-link user-options">
 							<span class="user" id="user-trigger">
-								<span class="username"><?= html($this->userName); ?></span>
+								<span class="username"><?= html($user->name); ?></span>
 								<img src="<?= Paths::toImages() ?>down-arrow.png" width="15" height="9"/>
 							</span>
 							<ul class="inner-user-menu" id="inner-user-menu">
-								<li><a class="block-link" href="<?=Paths::toUserHome($this->userId);?>">My Home</a></li>
+								<li><a class="block-link" href="<?=Paths::toUserHome($user->id);?>">My Home</a></li>
 								<li id="my-locations-btn">
-									<a class="block-link" href="<?=Paths::tolocations($this->userId);?>">My Locations</a>
+									<a class="block-link" href="<?=Paths::tolocations($user->id);?>">My Locations</a>
 								</li>
-								<li><a class="block-link" href="<?=Paths::toProfile($this->userId);?>">My Account</a></li>
+								<li><a class="block-link" href="<?=Paths::toProfile($user->id);?>">My Account</a></li>
 								<li><a class="block-link" href="<?=Paths::toLogout();?>">Log Out</a></li>
 							</ul>		
 						</div>

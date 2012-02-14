@@ -154,11 +154,11 @@ class SingleReport {
 				<?
 			} else {
 				?>
-				<li class="image-container large-image">
+				<div class="image-container large-image">
 					<a href="<?=$image['src']?>" target="_blank">
 						<image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
 					</a>
-				</li>
+				</div>
 				<?	
 			}				
 		}			

@@ -56,10 +56,9 @@
 	label { display:inline-block; .text-highlight(); line-height:34px; color:@dark-blue; float:left; .museo(500); }
 	input[type="submit"] { .museo500(18px, 30px); color:@pink; padding:0px 22px; margin-top:8px; float:right; }
 	.field {clear:both; margin-bottom: 12px; overflow:hidden;}
-	.radio-field label {width:auto; float:none;}	
+	.radio-field label {width:auto; float:none; .museo300(18px, 34px);}	
 	.radio-container {float:right;}
 	.radio-menu span { margin-right:8px; }
-	.radio-menu .radio-container label { .museo300(18px, 34px); }
 	.note {.sans-serif(14px); color:@grey-blue;}	
 	p {color:black;}
 }
@@ -163,7 +162,7 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 	.station-data-fields li { margin-left:10px; color:@dark-blue; margin-bottom:4px; font-size:15px; line-height:1.4em;}
 	.station-data-fields li .label { color:@grey-blue; font-size:15px;}
 	.station-head {font-size:15px; display:block; margin-bottom:6px;}
-	.reporter-details {font:italic 13px georgia; margin:12px 0 0 0;
+	.reporter-details {font:italic 13px georgia; margin:12px 0 8px 0;
 		a {text-decoration:none;}
 		a:hover {text-decoration:underline;}
 	}
@@ -227,7 +226,7 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 }
 
 /* OVERLAYS */
-.overlay { background:@dark-blue; background:rgba(0,0,0,.9); color:#FFF; padding:4% 5%; width:80%; position:absolute; text-align:center; .rounded-corner(8px); top:0px; left:5%; z-index:4;
+.overlay { background:@dark-blue; background:rgba(0,0,0,.9); color:#FFF; padding:4% 5%; width:80%; position:absolute; text-align:center; .rounded-corner(8px); top:0; left:5%; z-index:4; max-width:800px;
 	p {color:#FFF;}
 	input { .museo500(18px, 30px); color:@dark-blue; border:1px solid darken(@grey, 10%); padding:0px 22px; display:inline-block; float:none; }
 	input.confirm {float:none; color:#000;}

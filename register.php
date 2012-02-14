@@ -6,13 +6,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/RegisterPage.php';
 
 $user = new User;
 
-if ($user->userIsLoggedIn()) {
+if ($user->isLoggedIn) {
 	header('Location:'.Paths::toUserHome());
 	exit();
-}
-
-if (isset($_POST['submit']) && $_POST['submit'] == 'register') {
-	$user->handleRegFormSubmission();
 }
 
 $form = new RegisterPage;

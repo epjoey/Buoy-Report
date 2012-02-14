@@ -6,13 +6,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/LoginPage.php';
 
 $user = new User;
 
-if ($user->userIsLoggedIn()) {
+if ($user->isLoggedIn) {
 	header('Location:'.Paths::toUserHome());
 	exit();
-}
-
-if (isset($_POST['submit']) && $_POST['submit'] == 'login') {
-	$user->handleLoginFormSubmission();
 }
 
 $form = new LoginPage;

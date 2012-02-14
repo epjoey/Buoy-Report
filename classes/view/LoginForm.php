@@ -5,7 +5,7 @@ class LoginForm {
 	public function renderForm($logInError = NULL, $rel = NULL) {
 		?>
 		<div class="form-container <?= isset($logInError) ? 'expanded' : '';?>" id="login-form-container">			
-			<form action="<?=Paths::toLogin()?>" method="post" id="login-form">
+			<form action="<?=Paths::toHandleLogin()?>" method="post" id="login-form">
 				<? if(isset($logInError)) { ?>
 					<span class="submission-error"><?= $logInError ?></span>
 				<? } ?>			

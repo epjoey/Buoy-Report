@@ -1,6 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
 
 class ReportFormPage extends GeneralPage {
@@ -10,8 +11,8 @@ class ReportFormPage extends GeneralPage {
 
 	public function loadData() {
 		parent::loadData();
-		$this->location = $_GET['location'];
-		$this->locInfo = Persistence::getLocationInfoById($this->location);
+		$this->locationId = $_GET['location'];
+		$this->locInfo = Persistence::getLocationInfoById($this->locationId);
 		if (!isset($this->locInfo)) {
 			header('Location:'.Paths::to404());
 			exit();	
@@ -25,10 +26,8 @@ class ReportFormPage extends GeneralPage {
 			$this->needPicup = TRUE;
 		}
 		
-		//for picup callback
-		if (!isset($_SESSION)) session_start();
-		$_SESSION['location-for-image'] = $this->location;
-	
+		//for picup callback. - mobile app redirection based on session var
+		setPicupSessionId('report-form', $this->locationId);
 	}
 
 	public function renderJs() {
@@ -49,7 +48,7 @@ class ReportFormPage extends GeneralPage {
 
 	public function renderBodyContent() {
 		$form = new ReportForm;
-		$form->renderReportForm($this->locInfo, $this->userInfo, $this->submitError, $this->needPicup);	
+		$form->renderReportForm($this->locInfo, $this->user, $this->submitError, $this->needPicup);	
 	}
 
 	public function renderFooterJs() {

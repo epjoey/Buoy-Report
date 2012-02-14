@@ -1,13 +1,23 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
+
 
 class MobileImageProcessPage extends GeneralPage {
 
-	public $location = NULL;
+	public $callbackUrl = NULL;
 
-	public function loadData($location) {
-		$this->location = $location;
+	public function loadData() {
 		$this->pageTitle = 'Upload Successful';
+
+		$sessionInfo = getPicupSessionInfo();
+
+		if ($sessionInfo['form'] == 'report-form') {
+			$this->callbackUrl = Paths::toPostReport($sessionInfo['id']);
+		} 
+		if ($sessionInfo['form'] == 'edit-report-form') {
+			$this->callbackUrl = Paths::toEditPost($sessionInfo['id']);
+		}
 	}
 
 	public function renderHeader() {}
@@ -23,7 +33,7 @@ class MobileImageProcessPage extends GeneralPage {
 	public function renderBodyContent() {
 		?>
 		<h1>Image Upload Complete</h1>
-		<a class="block-link" href="javascript:window.open('<?=Paths::toPostReport($this->location)?>'+window.location.hash, 'report_form');window.close()">Return to Report Form</a>	
+		<a class="block-link" href="javascript:window.open('<?=$this->callbackUrl?>'+window.location.hash, 'report_form');window.close()">Return to Report Form</a>	
 		<?	
 	}
 

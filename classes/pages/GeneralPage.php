@@ -4,43 +4,21 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/Header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Mobile_Detect.php';
 
 class GeneralPage {
-
-	public $userIsLoggedIn = FALSE;
-	public $userHasNewReport = FALSE;
-	public $userHasLocations = FALSE;
-	public $userLocations = array();
-	public $userName = NULL;
-	public $userEmail = NULL;
-	public $userId = NULL;		
+	
 
 	public function loadData() {
 
 		$this->user = new User;
 
-		if ($this->user->userIsLoggedIn()) {
-			$this->user->getCurrentUser();
-			$this->userIsLoggedIn = TRUE;
-			$this->userId = $this->user->userId;
-			$this->userName = $this->user->userName;
-			$this->userEmail = $this->user->userEmail;
-			$this->userLocations = Persistence::getUserLocations($this->userId);
-			if (isset($this->user->newReport)) {
-				$this->userHasNewReport = TRUE;
+		if ($this->user->isLoggedIn)
+			$this->user->getUserLocations($this->user->id);
 
-				if ($this->user->newReport['reporterHasLocation'] == '0') {
-					array_unshift($this->userLocations, array('id'=>$this->user->newReport['locId'], 'locname'=>$this->user->newReport['locName']));
-				}
-			}
-			if (!empty($this->userLocations)) {
-				$this->userHasLocations = TRUE;		
-			} 
-			$this->userInfo = array('id'=>$this->userId, 'name'=>$this->userName, 'locations'=>$this->userLocations, 'reportStatus'=>$this->user->reportStatus);
-		}
 		$this->detect = new Mobile_Detect();
 		$this->isMobile = $this->detect->isMobile();
 
 		$this->siteTitle = 'Buoy Report';
 		$this->pageTitle = $this->siteTitle;
+		$this->header = new Header;
 				
 	}
 
@@ -156,15 +134,7 @@ class GeneralPage {
 
 	public function renderHeader() {
 
-		$options['userIsLoggedIn'] = $this->userIsLoggedIn;
-		$options['userHasLocations'] = $this->userHasLocations;
-		$options['userLocations'] = $this->userLocations;
-		$options['userName'] = $this->userName;
-		$options['userEmail'] = $this->userEmail;
-		$options['userId'] = $this->userId;
-
-		$header = new Header($options);
-		$header->renderHeader();
+		$this->header->renderHeader($this->user);
 	}
 
 	public function getBodyClassName() {}

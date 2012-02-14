@@ -6,7 +6,7 @@ class RegisterForm {
 		?>
 
 		<div class="form-container <?= isset($registerError) ? 'expanded' : '';?>" id="reg-form-container">			
-			<form action="<?=Paths::toRegister()?>" method="post" id="reg-form">
+			<form action="<?=Paths::toHandleRegistration()?>" method="post" id="reg-form">
 				<? if(isset($registerError)) { ?>
 					<span class="submission-error"><?= $registerError ?></span>
 				<? } ?>				

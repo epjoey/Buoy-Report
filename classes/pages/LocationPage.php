@@ -7,11 +7,19 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 class LocationPage extends GeneralPage {
 
+	//whether the locations link straight to the report form
 	private $isToPost = FALSE;
-	private $isUserLocations = FALSE;
+
+	//whether the locations are for a specific reporter
+	private $isReporterLocations = FALSE;
+
+	//whether the locations are for the current user
 	private $isCurrentUserLocations = FALSE;
+
+	//the reporter whose locations are listed
 	private $reporterId = NULL;
 	private $reporterInfo = NULL;
+
 
 	public function loadData() {
 		parent::loadData();
@@ -22,18 +30,17 @@ class LocationPage extends GeneralPage {
 		}
 
 		if (isset($this->reporterId)) {
-			$this->isUserLocations = TRUE;
+			$this->isReporterLocations = TRUE;
 		}	
 
-		if ($this->userIsLoggedIn && $this->reporterId == $this->userId) {
+		if ($this->user->isLoggedIn && $this->reporterId == $this->user->id) {
 			$this->isCurrentUserLocations = TRUE;
 		}
 
 		if ($this->isCurrentUserLocations) {
-			$this->locations = $this->userLocations;
-			$this->reporterInfo = $this->userInfo;
+			$this->locations = $this->user->locations;
 
-		} elseif ($this->isUserLocations) {
+		} elseif ($this->isReporterLocations) {
 
 			$this->reporterInfo = Persistence::getReporterInfoById($this->reporterId);
 			if (!isset($this->reporterInfo)) {
@@ -72,14 +79,14 @@ class LocationPage extends GeneralPage {
 			$name = '';
 			if ($this->isCurrentUserLocations) {
 				$name = 'My';
-			} elseif ($this->isUserLocations) {
+			} elseif ($this->isReporterLocations) {
 				$name = $this->reporterInfo['name'] . "'s";
 			}
 			?>
 			<h1 class="list-title"><?= html($name) ?> Locations</h1>
 			<? 
 		}
-		if (!$this->isUserLocations) {
+		if (!$this->isReporterLocations) {
 			?>
 			<div class="search-container">
 				<? $this->searchModule->renderFilterInput('Locations'); ?>

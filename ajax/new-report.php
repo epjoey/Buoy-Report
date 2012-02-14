@@ -10,7 +10,7 @@ if (!isset($_SESSION)) session_start();
 $newReport = Persistence::getReportById(Report::submitData($_SESSION['new-report']));
 $newReportLocation = Persistence::getLocationInfoById($_SESSION['new-report']['locId']);
 /* clearing session */
-unset ($_SESSION['new-report']);
+unset($_SESSION['new-report']);
 
 
 $showDetails = TRUE; //auto loads all ajax content

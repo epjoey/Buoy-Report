@@ -59,7 +59,7 @@ class AddLocationPage extends GeneralPage {
 			$timezone = 'UTC';
 		}
 		
-		$newLocation = Persistence::insertLocation($_POST['locationname'], $timezone, $this->userId);
+		$newLocation = Persistence::insertLocation($_POST['locationname'], $timezone, $this->user->id);
 		header('Location:'.Paths::toLocation($newLocation));
 		exit();
 	}
@@ -78,7 +78,7 @@ class AddLocationPage extends GeneralPage {
 					</div>
 					<div class="field">
 						<input id="local-timezone" name="timezone" type="hidden" value="" />
-						<input name="reporterid" type="hidden" value="<?=$this->userId?>" />
+						<input name="reporterid" type="hidden" value="<?=$this->user->id?>" />
 						<input name="submit-location" type="submit" value="Submit Location" />
 					</div>
 				</form>

@@ -3,6 +3,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Report.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditReportForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
+
 
 
 
@@ -15,16 +17,21 @@ class EditPostPage extends GeneralPage {
 		$this->pageTitle = $this->siteTitle . '';
 
 		$this->reportInfo = Persistence::getReportById($id);
-		if(($this->reportInfo['reporterid'] != $this->userId) || !isset($this->reportInfo)) {
+
+		if(($this->reportInfo['reporterid'] != $this->user->id) || !isset($this->reportInfo)) {
 			header('HTTP/1.1 301 Moved Permanently');			
 			header('Location:'.Paths::to404());
 			exit();	
 		}		
+		
 		$this->locationInfo = Persistence::getLocationInfoById($this->reportInfo['locationid']);
 		$this->showDetails = TRUE;
 		
 		$this->editForm = new EditReportForm;
 		$this->editForm->loadData($this->reportInfo, $this->locationInfo, $this->showDetails);
+
+		//for picup callback. - mobile app redirection based on session var
+		setPicupSessionId('edit-report-form', $id);
 	}		
 
 	public function getBodyClassName() {
@@ -64,7 +71,7 @@ class EditPostPage extends GeneralPage {
 		//image copied into directory during form handle. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
 			
-			$uploadStatus = Report::handleUpload($_FILES['upload'], $this->userId);
+			$uploadStatus = Report::handleUpload($_FILES['upload'], $this->user->id);
 
 			if (isset($uploadStatus['error'])) {
 				$this->submitError = $uploadStatus['error']; 

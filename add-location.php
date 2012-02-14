@@ -6,8 +6,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/AddLocationPage.php';
 
 
 $user = new User;
-if (!$user->userIsLoggedIn()) {
-	header('Location:'.Paths::toLogin('add-location'));
+if (!$user->isLoggedIn) {
+	header('Location:'.Paths::toLogin(null, Paths::toSubmitLocation()));
 	exit();
 }
 

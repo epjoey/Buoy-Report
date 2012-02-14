@@ -4,17 +4,65 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 
 class User {
 
+	public $id = NULL;
+	public $name = NULL;
+	public $email = NULL;
+	public $password = NULL;
+	public $isLoggedIn = FALSE;
+	public $newReport = NULL;
+	public $hasNewReport = NULL;
+	public $isNew = FALSE;
+	public $joinDate = NULL;
+	public $locations = NULL;	
+	public $hasLocations = FALSE;	
 	public $loginError = NULL;
 	public $registerError = NULL;
 
-	//handles login/logouts and grants user with session access
-	public function userIsLoggedIn() {
-		/* --------------- HANDLE LOGOUT FORM SUBMISSION --------------- */
-		if ((isset($_REQUEST['logout']) && $_REQUEST['logout']) || (isset($_POST['submit']) && $_POST['submit'] == 'logout')) {
-			$this->logOutUser();
-			header('Location:'.Paths::toIntro());
-			exit();
+
+	public function __construct(){
+		if ($this->userIsLoggedIn()) {
+			$this->isLoggedIn = true;				
+			$this->email = $_SESSION['email'];
+			$this->id = $_SESSION['userid'];
+			$this->name = $_SESSION['name'];
+			$this->joinDate = $_SESSION['joindate'];
+			$this->isNew = $_SESSION['justRegistered'];
+			$this->reportStatus = $_SESSION['reportStatus'];
+			if (isset($_SESSION['new-report'])) {
+				$this->newReport = $_SESSION['new-report'];
+				$this->hasNewReport = TRUE;
+			}			
+		}
+	}
+
+	public function getUserLocations($userId){
+		$this->locations = Persistence::getUserLocations($userId);
+		if (!empty($this->locations)) {
+			$this->hasLocations = TRUE;		
 		}		
+
+		/* 
+		 * Squish the new report info into 
+		 * the locations array before new 
+		 * report is submitted into DB.
+		 * 
+		 */
+		if ($this->hasNewReport) {
+
+			if ($this->newReport['reporterHasLocation'] == '0') {
+				array_unshift(
+					$this->locations, 
+					array(
+						'id'=>$this->newReport['locId'], 
+						'locname'=>$this->newReport['locName']
+					)
+				);
+			}
+		}		
+	}
+
+	//handles login/logouts and grants user with session access
+	public function userIsLoggedIn() {	
 
 		/* ----------------- CHECK IF USER HAS SESSION ----------------- */
 		if (!isset($_SESSION)) session_start();
@@ -27,80 +75,6 @@ class User {
 
 		return FALSE;
 	}
-
-	public function handleLoginFormSubmission() {
-		if (!isset($_POST['login-email']) || 
-			$_POST['login-email'] == '' || 
-			!isset($_POST['login-password']) || 
-			$_POST['login-password'] == '') {
-			
-			$error = 1;
-		}
-			
-		else {
-			$reporterId = Persistence::returnReporterId($_POST['login-email'], md5($_POST['login-password'] . 'reportdb'));
-			if (!isset($reporterId)) {
-				$error = 2;	
-			}
-		}
-
-		if (isset($error)) {
-			header('Location:'.Paths::toLogin($error));
-			exit();
-			
-		} else {		
-			$this->logInUser($reporterId, NULL, $newCookie = TRUE);
-				
-			if (isset($_POST['login-rel']) && $_POST['login-rel'] != '' )
-				header('Location:'.$_POST['login-rel']);
-			else 
-				header('Location:'.Paths::toUserHome());	
-			
-			exit();
-		}		
-	}
-	
-	//registers new user and signs them in
-	public function handleRegFormSubmission() {
-		
-		/* --------------- HANDLE SIGNUP FORM SUBMISSION --------------- */
-
-		//first check for bot
-		if (isset($_POST['bot-check']) && $_POST['bot-check'] != '') {
-			$error = 6;
-		}
-		else if (!isset($_POST['reg-name']) || $_POST['reg-name'] == '' || !isset($_POST['reg-email']) || $_POST['reg-email'] == '' || !isset($_POST['reg-password']) || $_POST['reg-password'] == '') {
-			$error = 1;
-		}
-		else if (filter_var($_POST['reg-email'], FILTER_VALIDATE_EMAIL) != TRUE) {
-			$error = 2;
-		}
-		else if (strlen($_POST['reg-password']) < 5) {
-			$error = 5;
-		} 		
-		else if (Persistence::databaseContainsEmail($_POST['reg-email'])) {
-			$error = 3;
-		}
-		else if (Persistence::databaseContainsName($_POST['reg-name'])) {
-			$error = 4;
-		}
-
-		if (isset($error)) {
-			header('Location:'.Paths::toRegister($error));
-			exit();
-			
-		} else {		
-			$reporterId = Persistence::insertReporter(
-				$_POST['reg-name'], 
-				$_POST['reg-email'], 
-				md5($_POST['reg-password'] . 'reportdb'), 
-				$_POST['report-status']
-			);
-			$this->logInUser($reporterId, NULL, $newCookie = TRUE, $fromRegistration = TRUE);
-			header('Location:'.Paths::toUserHome());
-			exit();
-		}
-	}	
 
 	public function handleCookie() {
 
@@ -161,20 +135,6 @@ class User {
 	    session_destroy();
 	}
 	
-	public function getCurrentUser() {
-		if (!isset($_SESSION)) session_start();
-		$this->userEmail = $_SESSION['email'];
-		$this->userId = $_SESSION['userid'];
-		$this->userName = $_SESSION['name'];
-		$this->userJoinDate = $_SESSION['joindate'];
-		$this->userJustRegistered = $_SESSION['justRegistered'];
-		$this->reportStatus = $_SESSION['reportStatus'];
-		if (isset($_SESSION['new-report'])) {
-			$this->newReport = $_SESSION['new-report'];
-		} else {
-			$this->newReport = NULL;
-		}
-	}
 
 	public function updateUserSession($options = array()) {
 		if (!isset($_SESSION)) session_start();

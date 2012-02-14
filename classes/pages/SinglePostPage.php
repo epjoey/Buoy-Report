@@ -27,7 +27,7 @@ class SinglePostPage extends GeneralPage {
 
 	public function renderBodyContent() {
 		$this->reportView->renderSingleReport();
-		if ($this->report['reporterid'] == $this->userId) {
+		if ($this->report['reporterid'] == $this->user->id) {
 			?>	
 				<p class="button-container edit-report">
 					<a class="button" href="<?=Paths::toEditPost($this->report['id'])?>">Edit Report</a>
