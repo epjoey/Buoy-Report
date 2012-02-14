@@ -64,7 +64,7 @@ class ReportForm {
 				</div>
 				<div class="field text">
 					<label for="text">Report:</label>
-					<input type="text" name="text" id="text" placeholder="how was it?" />
+					<textarea name="text" id="text" class="text-input" placeholder="how was it?" ></textarea>
 				</div>
 				<div class="field radio-menu include">	
 					<label>Include:</label>

@@ -151,7 +151,7 @@ function bbcode2html($text) {
 
 	//[URL]link[/URL]
 
-	if (substr(strtolower($text), 0, 5) == '[url]') {
+	if (substr(strtolower($text), 0, 4) == '[url') {
 		$text = strtolower($text);
 		if (substr($text, 5, 7) != 'http://' && substr($text, 5, 8) != 'https://') {
 			$text = substr_replace($text, "http://", 5, 0);
@@ -160,7 +160,7 @@ function bbcode2html($text) {
 		$text = preg_replace('/\[url]([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)\[\/url]/i', '<a target="_blank" href="$1">$1</a>', $text);
 
 		//[URL=url]link[/URL]
-		$text = preg_replace('/\[url=([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)](.+?)\[\/url]/i', '<a href="$1">$2</a>', $text);	
+		$text = preg_replace('/\[url=([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)](.+?)\[\/url]/i', '<a href="$1">$2</a>', $text);
 	}
 	
 	return $text;

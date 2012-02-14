@@ -83,7 +83,7 @@ class EditReportForm {
 
 				<div class="field text">
 					<label for="text">Report:</label>
-					<input type="text" name="text" id="text" value="<?=$this->report['text']?>" />
+					<textarea name="text" class="text-input" id="text"><?=$this->report['text']?></textarea>
 				</div>	
 
 				<?
