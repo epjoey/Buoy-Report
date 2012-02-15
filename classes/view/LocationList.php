@@ -44,7 +44,7 @@ class LocationList {
 				foreach ($this->locations as $location):
 					?>
 					<li class="location block-list-item <?=isset($this->selectedLocation) && $this->selectedLocation == $location['id'] ? "selected" : "" ?>">
-						<a class="location-inner" href="<?= $this->toPost ? Paths::toPostReport($location['id']) : Paths::toLocation($location['id'])?>">
+						<a class="location-inner" href="<?= $this->toPost ? Path::toPostReport($location['id']) : Path::toLocation($location['id'])?>">
 							<span class="name"><?= html($location['locname']) ?></span>
 						</a>
 						<span class="notification-icons">
@@ -85,13 +85,13 @@ class LocationList {
 
 		if ($this->showAddLocation) {
 			?>
-			<a class="block-link outer-link add" href="<?=Paths::toSubmitLocation();?>"><span>+ Add Location</span></a>
+			<a class="block-link outer-link add" href="<?=Path::toSubmitLocation();?>"><span>+ Add Location</span></a>
 			<?
 		}
 
 		if ($this->showSeeAll) {
 			?>
-			<a class="block-link outer-link see-all" href="<?=Paths::toLocations(null, $this->toPost);?>"><span>See all locations</span></a>
+			<a class="block-link outer-link see-all" href="<?=Path::toLocations(null, $this->toPost);?>"><span>See all locations</span></a>
 			<?
 		}				
 	}

@@ -17,7 +17,7 @@ class ProfilePage extends GeneralPage {
 		$this->pageOwnerInfo = Persistence::getReporterInfoById($this->pageOwnerId);
 		if (!isset($this->pageOwnerInfo)) {
 			header('HTTP/1.1 301 Moved Permanently');			
-			header('Location:'.Paths::to404());
+			header('Location:'.Path::to404());
 			exit();
 		}
 		$this->pageOwnerName = $this->pageOwnerInfo['name'];

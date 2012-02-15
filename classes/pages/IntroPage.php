@@ -41,20 +41,20 @@ class IntroPage extends GeneralPage {
 
 	public function renderBodyContent() {
 		?>
-			<img class="logo-graphic" id="large-logo" src="<?= Paths::toImages() ?>logo-lrg.png" width="101" height="101"/>
+			<img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="101" height="101"/>
 			
 			<h1 class="welcome-to-br"><span class="welcome">Welcome to</span> Buoy Report<span class="pattern"></span></h1>
 			<div class="sub-text">
 				<div class="desc">
 					<h2 class="tag-line" id="desc-trigger">Log buoy data after you surf.</h2>
-					<a href="<?=Paths::toAbout();?>" class="what">What?</a>
+					<a href="<?=Path::toAbout();?>" class="what">What?</a>
 					<h3 class="detail" id="desc-hidden">Buoy Report lets you log weather measurements that affect your surf sessions</h3>
 				</div>
 				<div class="reg-browse">
 					<div class="reg-container">
-						<a href="<?=Paths::toRegister()?>" class="reg-btn" id="reg-trigger">Get Started ></a>
+						<a href="<?=Path::toRegister()?>" class="reg-btn" id="reg-trigger">Get Started ></a>
 					</div>
- 					<span class="browse-spots">or <a href="<?=Paths::toLocations()?>">Browse Spots ></a></span>
+ 					<span class="browse-spots">or <a href="<?=Path::toLocations()?>">Browse Spots ></a></span>
 				</div>
 				<div class="clear"></div>
 			</div>

@@ -83,18 +83,18 @@ class GeneralPage {
 		global $local_dev;
 
 		if ($local_dev) {
-			?><link rel="stylesheet" type="text/css" href="<?=Paths::toCss()?>styles.php" media="screen, projection" /><?
+			?><link rel="stylesheet" type="text/css" href="<?=Path::toCss()?>styles.php" media="screen, projection" /><?
 		} else {
-			?><link rel="stylesheet" type="text/css" href="<?=Paths::toCss()?>cache.css" media="screen, projection" /><?
+			?><link rel="stylesheet" type="text/css" href="<?=Path::toCss()?>cache.css" media="screen, projection" /><?
 		}		
 		?>
 
 		<!-- Favicons
 		================================================== -->
-		<link rel="shortcut icon" href="<?=Paths::toImages()?>favicon.ico">
-		<link rel="apple-touch-icon" sizes="57x57" href="<?=Paths::toImages()?>apple-touch-icon.png">
-		<link rel="apple-touch-icon" sizes="72x72" href="<?=Paths::toImages()?>apple-touch-icon-72x72.png">
-		<link rel="apple-touch-icon" sizes="114x114" href="<?=Paths::toImages()?>apple-touch-icon-114x114.png">		
+		<link rel="shortcut icon" href="<?=Path::toImages()?>favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="<?=Path::toImages()?>apple-touch-icon.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="<?=Path::toImages()?>apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="<?=Path::toImages()?>apple-touch-icon-114x114.png">		
 		<?
 	}
 
@@ -102,13 +102,13 @@ class GeneralPage {
 		global $local_dev;
 
 		if ($local_dev) {
-			?><script type="text/javascript" src="<?=Paths::toJs()?>jquery-1.7.1.min.js"></script><?
+			?><script type="text/javascript" src="<?=Path::toJs()?>jquery-1.7.1.min.js"></script><?
 		} else {
 			?><script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script><?
 		}
 
 		?>
-		<script type="text/javascript" src="<?=Paths::toJs()?>jquery.validate.min.js"></script>	
+		<script type="text/javascript" src="<?=Path::toJs()?>jquery.validate.min.js"></script>	
 		<? 		
 	}
 
@@ -166,7 +166,7 @@ class GeneralPage {
 			<div class="bottom">
 				<div class="text">
 					<p class="footer-nav">
-					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a>&nbsp;|&nbsp;<a href="<?=Paths::toAbout()?>">About Buoy Report</a></p>
+					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a>&nbsp;|&nbsp;<a href="<?=Path::toAbout()?>">About Buoy Report</a></p>
 					<p class="noaa">All buoy and tide data from <a target="_blank" href="http://noaa.gov">NOAA</a></p>
 				</div> 
 			</div>

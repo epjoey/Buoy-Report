@@ -146,7 +146,7 @@ class ReportFeed {
 		<span id="new-report" class="loading"></span>
 		<script type="text/javascript">
 				
-		 	$('#new-report').load('<?=Paths::toAjax()?>new-report.php',
+		 	$('#new-report').load('<?=Path::toAjax()?>new-report.php',
 				function(){
 					$('#new-report').removeClass('loading');
 					loadThumbnails();	
@@ -289,7 +289,7 @@ class ReportFeed {
 		        //start the ajax
 		        $.ajax({
 		            //this is the php file that processes the data
-		            url: "<?=Paths::toAjax()?>filter-reports.php", 
+		            url: "<?=Path::toAjax()?>filter-reports.php", 
 		             
 		            //GET method is used
 		            type: "GET",
@@ -331,7 +331,7 @@ class ReportFeed {
 		        //start the ajax
 		        $.ajax({
 		            //this is the php file that processes the data
-		            url: "<?=Paths::toAjax()?>load-more-reports.php", 
+		            url: "<?=Path::toAjax()?>load-more-reports.php", 
 		             
 		            //GET method is used
 		            type: "GET",
@@ -379,7 +379,7 @@ class ReportFeed {
 					}
 
 					detailSection.addClass('loading');	
-				 	detailSection.load('<?=Paths::toAjax()?>report-details.php?id=' + reportId,
+				 	detailSection.load('<?=Path::toAjax()?>report-details.php?id=' + reportId,
 				 		{
 				 			buoys:obuoys,
 				 			tideStation:otideStation,
@@ -424,7 +424,7 @@ class ReportFeed {
 		?>
 		<span class="filter-trigger mobile-only" id="filter-trigger">
 			<span class='filter-label'>FILTER</span>
-			<img src="<?=Paths::toImages()?>/filter-icon.png" width="20" height="27" id="filter-icon" title="Filter Reports"/>
+			<img src="<?=Path::toImages()?>/filter-icon.png" width="20" height="27" id="filter-icon" title="Filter Reports"/>
 		</span>			
 		<?
 	}

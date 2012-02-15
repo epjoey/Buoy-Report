@@ -30,7 +30,7 @@ class EditLocationPage extends LocationDetailPage {
 	public function renderForbiddenMessage(){
 		?>
 			<p class="forbidden-message overlay">
-				You must be the creator of the location to edit the location. However, you can still add forecast links, bouys, and tidestation (if the creator hasn't done so yet). <a href="<?=Paths::toLocation($this->locationId);?>">Return to Location</a>
+				You must be the creator of the location to edit the location. However, you can still add forecast links, bouys, and tidestation (if the creator hasn't done so yet). <a href="<?=Path::toLocation($this->locationId);?>">Return to Location</a>
 			</p>
 		<?
 	}
@@ -42,33 +42,33 @@ class EditLocationPage extends LocationDetailPage {
 		if ($_POST['submit'] == 'update-name') {
 			if (empty($_POST['locname']) || $_POST['locname'] == $this->locInfo['locname']) {
 				$error = 3;
-				header('Location:'.Paths::toEditLocation($this->locationId, $error));
+				header('Location:'.Path::toEditLocation($this->locationId, $error));
 				exit();				
 			}
 			if (Persistence::dbContainsLocation($_POST['locname'])) {
 				$error = 4;
-				header('Location:'.Paths::toEditLocation($this->locationId, $error));
+				header('Location:'.Path::toEditLocation($this->locationId, $error));
 				exit();		
 			}
 			Persistence::updateLocationName($this->locationId, $_POST['locname']);			
-			header('Location:'.Paths::toEditLocation($this->locationId));
+			header('Location:'.Path::toEditLocation($this->locationId));
 			exit();	
 		}
 
 		if ($_POST['submit'] == 'select-timezone') {
 			if (empty($_POST['timezone']) || $_POST['timezone'] == $this->locInfo['timezone']) {
 				$error = 3;
-				header('Location:'.Paths::toEditLocation($this->locationId, $error));
+				header('Location:'.Path::toEditLocation($this->locationId, $error));
 				exit();				
 			}			
 			Persistence::updateLocationTimezone($this->locationId, $_POST['timezone']);	
-			header('Location:'.Paths::toEditLocation($this->locationId));
+			header('Location:'.Path::toEditLocation($this->locationId));
 			exit();	
 		}			
 
 		if ($_POST['submit'] == 'delete-location') {
 			Persistence::deleteLocation($this->locationId);
-			header('Location:'.Paths::toUserHome());
+			header('Location:'.Path::toUserHome());
 			exit();	
 		}
 
@@ -88,7 +88,7 @@ class EditLocationPage extends LocationDetailPage {
 	public function renderForm() {
 		?>
 			<h2>
-				<a href="<?=Paths::toLocation($this->locationId)?>"><?= html($this->locInfo['locname'])?></a> > Edit
+				<a href="<?=Path::toLocation($this->locationId)?>"><?= html($this->locInfo['locname'])?></a> > Edit
 			</h2>
 			<div class="form-container">
 				<?

@@ -1,5 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 class Header {
@@ -9,9 +9,9 @@ class Header {
 		<div id="header" class="header"> 
 			<div class="container">
 				<span class="header-left">
-					<a href="<?= $user->isLoggedIn ? Paths::toUserHome() : Paths::toIntro();?>" class="br-icon"><img class="logo-graphic" id="large-logo" src="<?= Paths::toImages() ?>logo-lrg.png" width="46" height="46"/></a>
-					<a class="home left-link" href="<?=$user->isLoggedIn ? Paths::toUserHome() : Paths::toIntro();?>">Home</a>
-					<a class="location left-link" href="<?=Paths::toLocations();?>">Locations</a>
+					<a href="<?= $user->isLoggedIn ? Path::toUserHome() : Path::toIntro();?>" class="br-icon"><img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="46" height="46"/></a>
+					<a class="home left-link" href="<?=$user->isLoggedIn ? Path::toUserHome() : Path::toIntro();?>">Home</a>
+					<a class="location left-link" href="<?=Path::toLocations();?>">Locations</a>
 				</span>
 				<div class="header-right">
 
@@ -19,7 +19,7 @@ class Header {
 
 					<div class="user-menu" id="user-menu">
 						<? if (!$user->hasLocations) { ?>
-							<a class="block-link post-report" href="<?=Paths::toLocations($reporter = null,$toPost = true)?>">Report</a>
+							<a class="block-link post-report" href="<?=Path::toLocations($reporter = null,$toPost = true)?>">Report</a>
 						<? 
 						} else { 
 							$locOptions['locations'] = $user->locations;
@@ -37,22 +37,22 @@ class Header {
 						<div class="block-link user-options">
 							<span class="user" id="user-trigger">
 								<span class="username"><?= html($user->name); ?></span>
-								<img src="<?= Paths::toImages() ?>down-arrow.png" width="15" height="9"/>
+								<img src="<?= Path::toImages() ?>down-arrow.png" width="15" height="9"/>
 							</span>
 							<ul class="inner-user-menu" id="inner-user-menu">
-								<li><a class="block-link" href="<?=Paths::toUserHome($user->id);?>">My Home</a></li>
+								<li><a class="block-link" href="<?=Path::toUserHome($user->id);?>">My Home</a></li>
 								<li id="my-locations-btn">
-									<a class="block-link" href="<?=Paths::tolocations($user->id);?>">My Locations</a>
+									<a class="block-link" href="<?=Path::tolocations($user->id);?>">My Locations</a>
 								</li>
-								<li><a class="block-link" href="<?=Paths::toProfile($user->id);?>">My Account</a></li>
-								<li><a class="block-link" href="<?=Paths::toLogout();?>">Log Out</a></li>
+								<li><a class="block-link" href="<?=Path::toProfile($user->id);?>">My Account</a></li>
+								<li><a class="block-link" href="<?=Path::toLogout();?>">Log Out</a></li>
 							</ul>		
 						</div>
 					</div>
 									
 				<? } else { ?>
 
-					<a class="block-link" href="<?=Paths::toLogin();?>">Log In</a><a class="block-link" href="<?=Paths::toRegister();?>">Sign Up</a>
+					<a class="block-link" href="<?=Path::toLogin();?>">Log In</a><a class="block-link" href="<?=Path::toRegister();?>">Sign Up</a>
 			
 				<? } ?>	
 

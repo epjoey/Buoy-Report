@@ -33,7 +33,7 @@ class EditProfilePage extends GeneralPage {
 		if ($_POST['submit'] == 'edit-account') {
 			if (empty($_POST['current-password'])) {
 				$error = 1;
-				header('Location:'.Paths::toProfile($this->user->id, $error));
+				header('Location:'.Path::toProfile($this->user->id, $error));
 				exit();				
 			}
 
@@ -41,17 +41,17 @@ class EditProfilePage extends GeneralPage {
 			
 			if (!isset($reporterId)) {
 				$error = 2;
-				header('Location:'.Paths::toProfile($this->user->id, $error));
+				header('Location:'.Path::toProfile($this->user->id, $error));
 				exit();
 			}
 			if (!empty($_POST['new-password']) && strlen($_POST['new-password']) < 5) {
 				$error = 3;
-				header('Location:'.Paths::toProfile($this->user->id, $error));
+				header('Location:'.Path::toProfile($this->user->id, $error));
 				exit();				
 			}
 			if (!empty($_POST['new-email']) && filter_var($_POST['new-email'], FILTER_VALIDATE_EMAIL) != TRUE ) {
 				$error = 4;
-				header('Location:'.Paths::toProfile($this->user->id, $error));
+				header('Location:'.Path::toProfile($this->user->id, $error));
 				exit();					
 			}
 
@@ -83,17 +83,17 @@ class EditProfilePage extends GeneralPage {
 				$this->user->updateUserSession($options);		
 			} else {
 				$error = 5;
-				header('Location:'.Paths::toProfile($this->user->id, $error));
+				header('Location:'.Path::toProfile($this->user->id, $error));
 				exit();					
 			}
 			header('HTTP/1.1 301 Moved Permanently');
-			header('Location:'.Paths::toProfile($this->user->id));
+			header('Location:'.Path::toProfile($this->user->id));
 			exit();		
 		}
 		
 		if ($_POST['submit'] == 'delete-reporter') {
 			Persistence::deleteReporter($this->user->id);
-			header('Location:'.Paths::toLogout());
+			header('Location:'.Path::toLogout());
 			exit();	
 		}
 	}	

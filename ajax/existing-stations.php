@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 
 $stationType = $_REQUEST['stationType'];
 $locationId = $_REQUEST['locationid'];
@@ -33,7 +33,7 @@ $stations = Persistence::getAllStations($table, $limit);
 			$station[$stationName] = 'No Label';
 		}
 		
-		$url = Paths::$to($locationId) . "&submit=existing".$stationType."&".$stationType."=" . $station[$stationId];
+		$url = Path::$to($locationId) . "&submit=existing".$stationType."&".$stationType."=" . $station[$stationId];
 
 		?>
 		<a href="<?=$url?>" class="station" station-id="<?=$station[$stationId]?>" station-name = "<?=$station[$stationName]?>">

@@ -1,11 +1,11 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 
 class LoginForm {
 	public function renderForm($logInError = NULL, $rel = NULL) {
 		?>
 		<div class="form-container <?= isset($logInError) ? 'expanded' : '';?>" id="login-form-container">			
-			<form action="<?=Paths::toHandleLogin()?>" method="post" id="login-form">
+			<form action="<?=Path::toHandleLogin()?>" method="post" id="login-form">
 				<? if(isset($logInError)) { ?>
 					<span class="submission-error"><?= $logInError ?></span>
 				<? } ?>			

@@ -13,10 +13,10 @@ class MobileImageProcessPage extends GeneralPage {
 		$sessionInfo = getPicupSessionInfo();
 
 		if ($sessionInfo['form'] == 'report-form') {
-			$this->callbackUrl = Paths::toPostReport($sessionInfo['id']);
+			$this->callbackUrl = Path::toPostReport($sessionInfo['id']);
 		} 
 		if ($sessionInfo['form'] == 'edit-report-form') {
-			$this->callbackUrl = Paths::toEditPost($sessionInfo['id']);
+			$this->callbackUrl = Path::toEditPost($sessionInfo['id']);
 		}
 	}
 

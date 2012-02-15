@@ -23,7 +23,7 @@ class AddLocationPage extends GeneralPage {
 	public function renderJs() {
 		parent::renderJs();
 		?>
-		<script type="text/javascript" src="<?=Paths::toJs()?>timezone.js"></script>	
+		<script type="text/javascript" src="<?=Path::toJs()?>timezone.js"></script>	
 		<script type="text/javascript">	
 			$(document).ready(function(){
 				$('#locationname').focus();
@@ -42,13 +42,13 @@ class AddLocationPage extends GeneralPage {
 
 		if (empty($_POST['locationname'])) {
 			$error = 1;
-			header('Location:'.Paths::toSubmitLocation($error));
+			header('Location:'.Path::toSubmitLocation($error));
 			exit();
 		}
 		
 		if (Persistence::dbContainsLocation($_POST['locationname'])) {
 			$error = 2;
-			header('Location:'.Paths::toSubmitLocation($error));
+			header('Location:'.Path::toSubmitLocation($error));
 			exit();		
 		}
 
@@ -60,7 +60,7 @@ class AddLocationPage extends GeneralPage {
 		}
 		
 		$newLocation = Persistence::insertLocation($_POST['locationname'], $timezone, $this->user->id);
-		header('Location:'.Paths::toLocation($newLocation));
+		header('Location:'.Path::toLocation($newLocation));
 		exit();
 	}
 

@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
@@ -15,10 +15,10 @@ class ReportForm {
 			$reporterHasLocation = 1;
 		}
 		?>
-		<h1 class="form-head">Post Report For <a href="<?=Paths::toLocation($locInfo['id']);?>" id="location"><?= $locInfo['locname'] ?></a>
+		<h1 class="form-head">Post Report For <a href="<?=Path::toLocation($locInfo['id']);?>" id="location"><?= $locInfo['locname'] ?></a>
 		</h1>		
 		<div class="form-container">
-			<form id="report-form" action="<?=Paths::toHandleReportSubmission()?>" enctype="multipart/form-data" method="post" >	
+			<form id="report-form" action="<?=Path::toHandleReportSubmission()?>" enctype="multipart/form-data" method="post" >	
 			
 			<? if (isset($submitError)) {
 				if ($submitError == 'upload-file') {
@@ -100,7 +100,7 @@ class ReportForm {
 					}
 					if (!isset($locInfo['tidestation']) && !isset($locInfo['buoy1']) && !isset($locInfo['buoy2']) && !isset($locInfo['buoy3'])) {
 						?>
-						<span>No buoys or tidestations to include. <a href="<?=Paths::toLocation($locInfo['id']);?>">Add one</a></span> 
+						<span>No buoys or tidestations to include. <a href="<?=Path::toLocation($locInfo['id']);?>">Add one</a></span> 
 						<?
 					}
 					?>				

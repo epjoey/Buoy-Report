@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 
 /* GLOBALS */
 $local_dev = FALSE;
@@ -19,13 +19,13 @@ function timer($where){
 
 function dropCookie($name, $value='', $expire = 0, $path = '', $domain='', $secure=false, $httponly=false) {	
 	$_COOKIE[$name] = $value; 	
-	$domain = Paths::toCookieDomain();
+	$domain = Path::toCookieDomain();
 	setcookie($name, $value, $expire, $path, $domain, $secure, $httponly); 
 }
 
 function eatCookie($name) { 
     unset($_COOKIE[$name]); 
-    $domain = Paths::toCookieDomain();
+    $domain = Path::toCookieDomain();
     setcookie($name, NULL, -1, '', $domain); 
 } 
 
@@ -40,7 +40,7 @@ function getImageInfo($imagePath, $width, $height) {
 		$imageIsRemote = FALSE;
 	}
 
-	$image->load(Paths::toImageFile($imagePath, $imageIsRemote));
+	$image->load(Path::toImageFile($imagePath, $imageIsRemote));
 	if (isset($image->image)) {
 		$image->fitDimensions($width,$height);
 		$width = $image->getWidth();

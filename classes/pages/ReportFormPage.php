@@ -14,7 +14,7 @@ class ReportFormPage extends GeneralPage {
 		$this->locationId = $_GET['location'];
 		$this->locInfo = Persistence::getLocationInfoById($this->locationId);
 		if (!isset($this->locInfo)) {
-			header('Location:'.Paths::to404());
+			header('Location:'.Path::to404());
 			exit();	
 		}		
 		$this->pageTitle = $this->locInfo['locname'] . ' Report';
@@ -59,10 +59,10 @@ class ReportFormPage extends GeneralPage {
 		if($this->detect->isIphone() || $this->detect->isIpad()) {
 			?>
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
-			<script type="text/javascript" src="<?=Paths::toJs()?>picup.js"></script>
+			<script type="text/javascript" src="<?=Path::toJs()?>picup.js"></script>
 			<script type="text/javascript">
 				document.observe('dom:loaded', function(){
-					usePicup('<?=Paths::toMobileImageProcess()?>', 'report_form');
+					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
 				});
 			</script>	
 			<?	

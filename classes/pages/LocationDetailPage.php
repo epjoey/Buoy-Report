@@ -23,7 +23,7 @@ class LocationDetailPage extends GeneralPage {
 		$this->locationId = $_GET['location'];
 		$this->locInfo = Persistence::getLocationInfoById($this->locationId);
 		if (!isset($this->locInfo)) {
-			header('Location:'.Paths::to404());
+			header('Location:'.Path::to404());
 			exit();
 		}			
 		
@@ -97,7 +97,7 @@ class LocationDetailPage extends GeneralPage {
 				}
 				if (linkContainer.hasClass('loaded') && newUrl == '') return;
 				linkContainer.addClass('loading');
-				linkContainer.load('<?=Paths::toAjax()?>location-info.php?info=forecast&locationid=<?=$this->locationId?>', 
+				linkContainer.load('<?=Path::toAjax()?>location-info.php?info=forecast&locationid=<?=$this->locationId?>', 
 					
 					data,			
 					function(){
@@ -122,7 +122,7 @@ class LocationDetailPage extends GeneralPage {
 				});
 
 				$.ajax({
-					url: "<?=Paths::toAjax()?>location-info.php?info=deletelinks&locationid=<?=$this->locationId?>",
+					url: "<?=Path::toAjax()?>location-info.php?info=deletelinks&locationid=<?=$this->locationId?>",
 					type: "GET",
 					data: { links : links },
 					cache: false,
@@ -142,13 +142,13 @@ class LocationDetailPage extends GeneralPage {
 
 		if ($_REQUEST['submit'] == 'bookmark') {
 			Persistence::insertUserLocation($this->user->id, $this->locationId);
-			header('Location:'.Paths::toLocation($this->locationId));
+			header('Location:'.Path::toLocation($this->locationId));
 			exit();
 		}
 
 		if ($_REQUEST['submit'] == 'un-bookmark') {
 			Persistence::removeLocationFromUser($this->locationId, $this->user->id);
-			header('Location:'.Paths::toLocation($this->locationId));
+			header('Location:'.Path::toLocation($this->locationId));
 			exit();
 		}		
 	}
@@ -159,35 +159,35 @@ class LocationDetailPage extends GeneralPage {
 
 			if (empty($_POST['buoy-id'])) {	
 				$error = 1;
-				header('Location:'.Paths::$to($this->locationId, $error));
+				header('Location:'.Path::$to($this->locationId, $error));
 				exit();		
 			}
 
 			if (!$this->isValidBuoy($_POST['buoy-id'])) {
 				if ($this->addBuoyError == "buoy-exists") {
-					header('Location:'.Paths::$to($this->locationId).'&be1='.urlencode($_POST['buoy-id']));
+					header('Location:'.Path::$to($this->locationId).'&be1='.urlencode($_POST['buoy-id']));
 					exit();						
 				}
 				if ($this->addBuoyError == "buoy-offline") {
-					header('Location:'.Paths::$to($this->locationId).'&be2='.urlencode($_POST['buoy-id']));
+					header('Location:'.Path::$to($this->locationId).'&be2='.urlencode($_POST['buoy-id']));
 					exit();						
 				}				
 			}
 
 			Persistence::insertBuoy($_POST['buoy-id'], $_POST['buoy-name'], $this->locationId, $this->buoyCount + 1);
-			header('Location:'.Paths::$to($this->locationId).'&entered=buoy');
+			header('Location:'.Path::$to($this->locationId).'&entered=buoy');
 			exit();
 		}
 
 		if ($_REQUEST['submit'] == 'existingbuoy' && isset($_GET['buoy'])) {
 			
 			if (!$this->isValidBuoy($_GET['buoy'], FALSE)) {
-				header('Location:'.Paths::$to($this->locationId).'&be1='.urlencode($_GET['buoy']));
+				header('Location:'.Path::$to($this->locationId).'&be1='.urlencode($_GET['buoy']));
 				exit();					
 			}
 
 			Persistence::insertBuoy($_GET['buoy'], "", $this->locationId, $this->buoyCount + 1, $checkDb = FALSE);
-			header('Location:'.Paths::$to($this->locationId).'&entered=buoy');
+			header('Location:'.Path::$to($this->locationId).'&entered=buoy');
 			exit();	
 
 		}
@@ -197,43 +197,43 @@ class LocationDetailPage extends GeneralPage {
 			//make this one js
 			if (empty($_POST['station-id'])) {
 				$error = 2;
-				header('Location:'.Paths::$to($this->locationId, $error));
+				header('Location:'.Path::$to($this->locationId, $error));
 				exit();	
 			}
 
 			if (!$this->isValidTideStation($_POST['station-id'])) {
-				header('Location:'.Paths::$to($this->locationId).'&te='.urlencode($_POST['station-id']));
+				header('Location:'.Path::$to($this->locationId).'&te='.urlencode($_POST['station-id']));
 				exit();						
 		
 			}			
 			
 			Persistence::insertTideStation($_POST['station-id'], $_POST['station-name'], $this->locationId);
-			header('Location:'.Paths::$to($this->locationId).'&entered=tide');
+			header('Location:'.Path::$to($this->locationId).'&entered=tide');
 			exit();
 		}
 
 		if ($_REQUEST['submit'] == 'existingtide' && isset($_GET['tide'])) {
 			
 			if (!$this->isValidTideStation($_GET['tide'], FALSE)) {
-				header('Location:'.Paths::$to($this->locationId).'&te='.urlencode($_POST['station-id']));
+				header('Location:'.Path::$to($this->locationId).'&te='.urlencode($_POST['station-id']));
 				exit();					
 			}	
 
 			Persistence::insertTideStation($_GET['tide'], "", $this->locationId, $checkDb = FALSE);
-			header('Location:'.Paths::$to($this->locationId).'&entered=tide');
+			header('Location:'.Path::$to($this->locationId).'&entered=tide');
 			exit();
 		}	
 		
 			
 		if ($_POST['submit'] == 'remove-buoy') {
 			Persistence::removeBuoyFromLocation($_POST['key'], $this->buoys, $this->locationId);
-			header('Location:'.Paths::$to($this->locationId));
+			header('Location:'.Path::$to($this->locationId));
 			exit();			
 		}
 
 		if ($_POST['submit'] == 'remove-tide-station') {
 			Persistence::removeTideStationFromLocation($_POST['tidestation'], $this->locationId);
-			header('Location:'.Paths::$to($this->locationId));
+			header('Location:'.Path::$to($this->locationId));
 			exit();			
 		}		
 			
@@ -297,7 +297,7 @@ class LocationDetailPage extends GeneralPage {
 		<div class="loc-details">
 			<h1><?= html($this->locInfo['locname'])?></h1>
 			
-			<a class="post-report edit-loc-link block-link" href="<?=Paths::toPostReport($this->locationId);?>">Post Report</a><?
+			<a class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->locationId);?>">Post Report</a><?
 
 			if ($this->buoyCount < 3 && $this->user->isLoggedIn) {
 				?><span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">+ Buoy</span><?
@@ -343,7 +343,7 @@ class LocationDetailPage extends GeneralPage {
 					});
 					$('#add-existing-buoy').click(function(event){
 						$('#existing-buoys-container').toggle().addClass('loading');
-						$('#existing-buoys-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=buoy&locationid=<?=$this->locationId?>&to=<?=$to?>',
+						$('#existing-buoys-container').load('<?=Path::toAjax()?>existing-stations.php?stationType=buoy&locationid=<?=$this->locationId?>&to=<?=$to?>',
 							function(){
 								$('#existing-buoys-container').removeClass('loading');
 							}
@@ -351,7 +351,7 @@ class LocationDetailPage extends GeneralPage {
 					});
 					$('#add-existing-tidestation').click(function(event){
 						$('#existing-tidestation-container').toggle().addClass('loading');
-						$('#existing-tidestation-container').load('<?=Paths::toAjax()?>existing-stations.php?stationType=tide&locationid=<?=$this->locationId?>&to=<?=$to?>',
+						$('#existing-tidestation-container').load('<?=Path::toAjax()?>existing-stations.php?stationType=tide&locationid=<?=$this->locationId?>&to=<?=$to?>',
 							function(){
 								$('#existing-tidestation-container').removeClass('loading');
 							}
@@ -511,9 +511,9 @@ class LocationDetailPage extends GeneralPage {
 		<div class="loc-meta">
 			<h3>Location Info</h3>
 			<div class="reporters">
-				<p class="creator sb-section">Set up by <a href="<?=Paths::toProfile($this->locInfo['creator']);?>"><?=html($this->creator['name'])?></a></p>
-				<p class="sb-section"><a href="<?=Paths::toReporters($this->locationId);?>">See Reporters</a></p>
-				<p class="sb-section"><a class="edit-location" href="<?=Paths::toEditLocation($this->locationId);?>">Edit Location</a></p>
+				<p class="creator sb-section">Set up by <a href="<?=Path::toProfile($this->locInfo['creator']);?>"><?=html($this->creator['name'])?></a></p>
+				<p class="sb-section"><a href="<?=Path::toReporters($this->locationId);?>">See Reporters</a></p>
+				<p class="sb-section"><a class="edit-location" href="<?=Path::toEditLocation($this->locationId);?>">Edit Location</a></p>
 
 				<?
 				if ($this->user->isLoggedIn && $this->userHasLocation == FALSE) {

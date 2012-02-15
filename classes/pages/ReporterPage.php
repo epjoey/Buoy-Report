@@ -19,7 +19,7 @@ class ReporterPage extends GeneralPage {
 			$this->locationId = $_GET['location'];	
 			$this->locInfo = Persistence::getLocationInfoById($this->locationId);
 			if (!isset($this->locInfo)) {
-				header('Location:'.Paths::to404());
+				header('Location:'.Path::to404());
 				exit();
 			} 
 			$this->isLocationReporters = TRUE;		
@@ -50,7 +50,7 @@ class ReporterPage extends GeneralPage {
 			<? 
 			if($this->isLocationReporters) {
 				?>
-				<a href="<?=Paths::toLocation($this->locInfo['id'])?>"><?=$this->locInfo['locname']?></a> 
+				<a href="<?=Path::toLocation($this->locInfo['id'])?>"><?=$this->locInfo['locname']?></a> 
 				<?
 			} else {
 				print 'Buoy';
@@ -68,11 +68,11 @@ class ReporterPage extends GeneralPage {
 			$options['items'] = $this->reporters;
 			$count = count($options['items']);
 			for($i = 0; $i < $count; $i++) {
-				$options['items'][$i]['path'] = Paths::toProfile($options['items'][$i]['id']);
+				$options['items'][$i]['path'] = Path::toProfile($options['items'][$i]['id']);
 			} 
 			$options['itemLabel'] = 'reporter';
 			$options['showSeeAllLink'] = TRUE;
-			$options['pathToAll'] = Paths::toReporters();
+			$options['pathToAll'] = Path::toReporters();
 			$options['isSearchable'] = TRUE;
 			$list = new GridList($options);
 			$list->renderGridList();

@@ -1,5 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/User.php';
 		
@@ -38,7 +38,7 @@ else if (Persistence::databaseContainsName($_POST['reg-name'])) {
 }
 
 if (isset($error)) {
-	header('Location:'.Paths::toRegister($error));
+	header('Location:'.Path::toRegister($error));
 	exit();
 	
 } else {		
@@ -50,7 +50,7 @@ if (isset($error)) {
 	);
 	$user = new User;
 	$user->logInUser($reporterId, NULL, $newCookie = TRUE, $fromRegistration = TRUE);
-	header('Location:'.Paths::toUserHome());
+	header('Location:'.Path::toUserHome());
 	exit();
 }
 

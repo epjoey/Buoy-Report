@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 
 $stationType = $_REQUEST['stationType'];
 $locationId = $_REQUEST['locationid'];
@@ -28,7 +28,7 @@ if ($stationType == 'buoy') {
 			$station[$stationName] = 'No Label';
 		}
 		?>
-		<a href="<?=Paths::toLocation($locationId);?>&submit=existingbuoy&buoy=<?=$station[$stationId]?>" class="station" station-id="<?=$station[$stationId]?>" station-name = "<?=$station[$stationName]?>">
+		<a href="<?=Path::toLocation($locationId);?>&submit=existingbuoy&buoy=<?=$station[$stationId]?>" class="station" station-id="<?=$station[$stationId]?>" station-name = "<?=$station[$stationName]?>">
 			<span class="station-id"><?= $station[$stationId] ?></span>
 			<span class="station-name"><?= $station[$stationName] ?></span>
 		</a>

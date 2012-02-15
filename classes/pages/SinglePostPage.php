@@ -11,7 +11,7 @@ class SinglePostPage extends GeneralPage {
 		$this->report = Persistence::getReportById($id);
 		if(!isset($this->report)) {
 			header('HTTP/1.1 301 Moved Permanently');			
-			header('Location:'.Paths::to404());
+			header('Location:'.Path::to404());
 			exit();	
 		}		
 		$this->locationInfo = Persistence::getLocationInfoById($this->report['locationid']);
@@ -30,7 +30,7 @@ class SinglePostPage extends GeneralPage {
 		if ($this->report['reporterid'] == $this->user->id) {
 			?>	
 				<p class="button-container edit-report">
-					<a class="button" href="<?=Paths::toEditPost($this->report['id'])?>">Edit Report</a>
+					<a class="button" href="<?=Path::toEditPost($this->report['id'])?>">Edit Report</a>
 				</p>
 			<?
 		}

@@ -10,7 +10,7 @@ class UserList {
 		<ul>
 			<? foreach (Persistence::getReporters() as $reporter): ?>
 				<li>
-					<a href="<?=Paths::toProfile($reporter['id']);?>"><?= isset($reporter['name']) ? html($reporter['name']) : html($reporter['email']);?></a>
+					<a href="<?=Path::toProfile($reporter['id']);?>"><?= isset($reporter['name']) ? html($reporter['name']) : html($reporter['email']);?></a>
 				</li>
 			<? endforeach; ?>
 		</ul>

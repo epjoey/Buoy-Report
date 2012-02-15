@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Mobile_Detect.php';
 
@@ -66,7 +66,7 @@ class SingleReport {
 		<li class="<?=$this->className?>" reportid="<?= $this->report['id'] ?>" hasbuoys=<?= $this->locationHasBuoys ? "TRUE" : "FALSE" ; ?> hastide=<?= $this->locationHasTide ? "$this->tideStation" : "FALSE" ; ?> tz="<?=$this->locationInfo['timezone']?>" reporttime="<?=$this->reportTime?>" reporterid="<?=$this->report['reporterid']?>" imagepath="<?= $this->imagePath ?>">
 			<ul>
 				<li class="report-head">
-					<a class="loc-name" href="<?=Paths::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a>
+					<a class="loc-name" href="<?=Path::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a>
 					<span class="obs-time"><?=$this->obsTime?> <span class="tz"><?=$this->tzAbbrev?></span></span>
 				</li>
 				<? 
@@ -258,7 +258,7 @@ class SingleReport {
 		$tzAbbrev = getTzAbbrev($tz);
 		?>
 		<div class="reporter-details">
-			<a href="<?=Paths::toSinglePost($reportId)?>">report #<?=$reportId?></a> by <a href="<?=Paths::toProfile($reporterid);?>"><?= html($reporterInfo['name']); ?></a> on <?= $reportTime ?> <span class="tz">(<?=$tzAbbrev?>)</span>
+			<a href="<?=Path::toSinglePost($reportId)?>">report #<?=$reportId?></a> by <a href="<?=Path::toProfile($reporterid);?>"><?= html($reporterInfo['name']); ?></a> on <?= $reportTime ?> <span class="tz">(<?=$tzAbbrev?>)</span>
 		</div>
 		<?
 	}

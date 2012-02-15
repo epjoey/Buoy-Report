@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 
 
@@ -40,7 +40,7 @@ class EditReportForm {
 		?>
 		<h1 class="form-head">Edit Report <?= $this->report['id'] ?></h1>
 		<h4>
-			<a class="loc-name" href="<?=Paths::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a> - 
+			<a class="loc-name" href="<?=Path::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a> - 
 			<span class="obs-time"><?=$this->obsTime?> <span class="tz">(<?=$this->tzAbbrev?>)</span></span>
 		</h4>
 		<div class="form-container">

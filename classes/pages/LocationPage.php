@@ -44,7 +44,7 @@ class LocationPage extends GeneralPage {
 
 			$this->reporterInfo = Persistence::getReporterInfoById($this->reporterId);
 			if (!isset($this->reporterInfo)) {
-				header('Location:'.Paths::to404());
+				header('Location:'.Path::to404());
 				exit();
 			}			
 			$this->locations = Persistence::getUserLocations($this->reporterId);	

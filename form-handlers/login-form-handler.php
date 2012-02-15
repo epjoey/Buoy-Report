@@ -1,5 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/User.php';
 
@@ -21,7 +21,7 @@ else {
 
 
 if (isset($error)) {
-	header('Location:'.Paths::toLogin($error));
+	header('Location:'.Path::toLogin($error));
 	exit();	
 } 
 else {	
@@ -32,7 +32,7 @@ else {
 		header('Location:'.$_POST['login-rel']);
 	} 
 	else {
-		header('Location:'.Paths::toUserHome());	
+		header('Location:'.Path::toUserHome());	
 	}
 }		
 ?>

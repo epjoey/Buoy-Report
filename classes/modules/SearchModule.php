@@ -128,7 +128,7 @@ class SearchModule {
 			var options, a;
 			$(function(){
 			  	options = { 
-				  	serviceUrl:'<?= Paths::toAjax(); ?>locationAutoComplete.php', 
+				  	serviceUrl:'<?= Path::toAjax(); ?>locationAutoComplete.php', 
 				    minChars:2, 
 				    delimiter: /(,|;)\s*/, // regex or character
 				    maxHeight:400,

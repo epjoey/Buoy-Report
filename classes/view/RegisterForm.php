@@ -1,12 +1,12 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Paths.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 
 class RegisterForm {
 	public function renderForm($registerError = NULL) {	
 		?>
 
 		<div class="form-container <?= isset($registerError) ? 'expanded' : '';?>" id="reg-form-container">			
-			<form action="<?=Paths::toHandleRegistration()?>" method="post" id="reg-form">
+			<form action="<?=Path::toHandleRegistration()?>" method="post" id="reg-form">
 				<? if(isset($registerError)) { ?>
 					<span class="submission-error"><?= $registerError ?></span>
 				<? } ?>				

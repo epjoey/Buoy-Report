@@ -20,7 +20,7 @@ class EditPostPage extends GeneralPage {
 
 		if(($this->reportInfo['reporterid'] != $this->user->id) || !isset($this->reportInfo)) {
 			header('HTTP/1.1 301 Moved Permanently');			
-			header('Location:'.Paths::to404());
+			header('Location:'.Path::to404());
 			exit();	
 		}		
 		
@@ -51,13 +51,13 @@ class EditPostPage extends GeneralPage {
 			}
 
 			Persistence::updateReport($this->reportInfo);
-			header('Location:'.Paths::toSinglePost($this->reportInfo['id']));
+			header('Location:'.Path::toSinglePost($this->reportInfo['id']));
 		}
 
 		if ($_POST['submit'] == 'delete-report') {
 			Persistence::deleteReport($this->reportInfo['id']);
 			header('HTTP/1.1 301 Moved Permanently');			
-			header('Location:'.Paths::toUserHome());
+			header('Location:'.Path::toUserHome());
 			exit();	
 		}		
 	}	
@@ -104,10 +104,10 @@ class EditPostPage extends GeneralPage {
 		if($this->detect->isIphone() || $this->detect->isIpad()) {
 			?>
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
-			<script type="text/javascript" src="<?=Paths::toJs()?>picup.js"></script>
+			<script type="text/javascript" src="<?=Path::toJs()?>picup.js"></script>
 			<script type="text/javascript">
 				document.observe('dom:loaded', function(){
-					usePicup('<?=Paths::toMobileImageProcess()?>', 'report_form');
+					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
 				});
 			</script>	
 			<?	
