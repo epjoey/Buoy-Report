@@ -45,7 +45,7 @@ function getImageInfo($imagePath, $width, $height) {
 		$image->fitDimensions($width,$height);
 		$width = $image->getWidth();
 		$height = $image->getHeight();
-		$src = PATHS::toImageSrc($imagePath, $imageIsRemote);
+		$src = Path::toImageSrc($imagePath, $imageIsRemote);
 		$imageInfo = array('src'=>$src, 'width'=>$width, 'height'=>$height);
 	}
 	
