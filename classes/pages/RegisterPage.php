@@ -34,7 +34,14 @@ class RegisterPage extends GeneralPage {
 		<script type="text/javascript">	
 			$(document).ready(function(){
 				$('#reg-name').focus();
-				$("#reg-form").validate();
+				$("#reg-form").validate({
+					rules: {
+					    "reg-password": {
+					        required: true,
+					        minlength: 5
+					    }
+					}
+				});
 			});
 		</script>
 		<?
