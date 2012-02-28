@@ -62,9 +62,23 @@ class ReportForm {
 					}
 					?>
 				</div>
+				<div class="field wave-height radio-menu">
+					<label for="quality">Wave Height:</label>
+					<?
+					foreach (ReportOptions::waveHeight() as $key=>$value) {
+						?>
+						<span class="radio-field">
+							<input type="radio" name="waveheight" id="waveheight-<?=$key?>" value="<?=$key?>" /><label for="waveheight-<?=$key?>"> <?=$value?></label>
+						</span>
+						<?
+					}
+					?>
+				</div>				
 				<div class="field text">
 					<label for="text">Report:</label>
 					<textarea name="text" id="text" class="text-input" placeholder="how was it?" ></textarea>
+<!-- 					<button class="url-how-to">URL</button>
+ -->					
 				</div>
 				<div class="field radio-menu include">	
 					<label>Include:</label>
@@ -120,10 +134,10 @@ class ReportForm {
 				</div>
 				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
 				<input type="hidden" name="reporterid" value="<?=$user->id?>" />
-				<input type="hidden" name="reportStatus" value="<?=$user->reportStatus?>" />
+				<input type="hidden" name="public" value="<?=$user->privacySetting?>" />
 				<input type="hidden" name="locationid" value="<?=$locInfo['id']?>" />
 				<input type="hidden" name="locationname" value="<?=$locInfo['locname']?>" /> 
-				<input type="hidden" name="reporterhaslocation" value="<?=$reporterHasLocation?>" />
+				<input type="hidden" name="reporterHasLocation" value="<?=$reporterHasLocation?>" />
 				<input type="hidden" name="submit" value="submit-report" />				
 				<input type="submit" name="submit_report" value="Submit Report" />
 			</form>

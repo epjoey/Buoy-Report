@@ -8,9 +8,9 @@ class UserList {
 	public function renderUserList() { 
 		?>
 		<ul>
-			<? foreach (Persistence::getReporters() as $reporter): ?>
+			<? foreach (Persistence::getUsers() as $user): ?>
 				<li>
-					<a href="<?=Path::toProfile($reporter['id']);?>"><?= isset($reporter['name']) ? html($reporter['name']) : html($reporter['email']);?></a>
+					<a href="<?=Path::toProfile($user['id']);?>"><?= isset($user['name']) ? html($user['name']) : html($user['email']);?></a>
 				</li>
 			<? endforeach; ?>
 		</ul>

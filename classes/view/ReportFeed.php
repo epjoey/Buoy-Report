@@ -110,7 +110,13 @@ class ReportFeed {
 
 					//render empty element to fill with new report that will be loaded via ajax
 					if (isset($_SESSION['new-report']) && $_SESSION['new-report']) {
-						$this->renderNewReport($_SESSION['new-report']);
+						?>
+						<script type="text/javascript">
+							$(document).ready(function(){
+								loadNewReport();
+							});	
+						</script>
+						<?						
 					}
 
 					//render Feed loop
@@ -138,22 +144,6 @@ class ReportFeed {
 			<p class="button-container see-more">
 				<button id="more-reports">See More Reports</button>
 			</p>
-		<?
-	}
-
-	private function renderNewReport($newReport) {
-		?>
-		<span id="new-report" class="loading"></span>
-		<script type="text/javascript">
-				
-		 	$('#new-report').load('<?=Path::toAjax()?>new-report.php',
-				function(){
-					$('#new-report').removeClass('loading');
-					loadThumbnails();	
-					bindEventHandlers();
-		 		}
-		 	);		
-		</script>
 		<?
 	}
 
@@ -201,6 +191,15 @@ class ReportFeed {
 		<?		
 	}
 
+	public function renderFilterIcon() {
+		?>
+		<span class="filter-trigger mobile-only" id="filter-trigger">
+			<span class='filter-label'>FILTER</span>
+			<img src="<?=Path::toImages()?>/filter-icon.png" width="20" height="27" id="filter-icon" title="Filter Reports"/>
+		</span>			
+		<?
+	}	
+
 	public function renderReportFeedJS() {
 		?>
 		<script type="text/javascript">
@@ -213,7 +212,7 @@ class ReportFeed {
 
 				//load the thumnails
 				loadThumbnails();	
-				updateNumReports(feed)			    
+				updateNumReports()			    
 
 			});
 
@@ -307,7 +306,7 @@ class ReportFeed {
 		                feed.removeClass('loading');
 		                loadThumbnails();		               
 						bindEventHandlers(feed, onPage);
-						updateNumReports(feed);
+						updateNumReports();
    		            }       
 		        });
 		    }; 	
@@ -350,7 +349,7 @@ class ReportFeed {
 						bindEventHandlers(feed, onPage);
 						
 						//rewrite feed count at top
-						updateNumReports(feed);
+						updateNumReports();
 
 						//disable button if no more reports
 						//console.log(reports.match('<li'));
@@ -361,7 +360,7 @@ class ReportFeed {
 		    }		
 
 			function loadReportDetails(report) {
-
+				//alert('ok');
 				var detailSection = report.find('.detail-section'),
 					reportId = report.attr('reportid'),
 					obuoys = report.attr('hasbuoys'),
@@ -372,6 +371,7 @@ class ReportFeed {
 					oimagePath = report.attr('imagepath');
 					
 				if (report.hasClass('collapsed')) {
+					console.log(report);
 					report.removeClass('collapsed').addClass('expanded');	
 					
 					if (detailSection.hasClass('loaded')) {
@@ -398,6 +398,32 @@ class ReportFeed {
 				}
 			}
 
+			function loadNewReport() {
+
+				$('ul.reports').prepend("<li class=\"report loading\" id=\"new-report\"></li>");
+
+		        $.ajax({
+		            //this is the php file that processes the data
+		            url: "<?=Path::toAjax()?>new-report.php", 
+		             
+		            //GET method is used
+		            type: "GET",
+
+		            //Do not cache the page
+		            cache: false,
+		             
+		            //success
+		            success: function(newReport) {   
+		            	$('#new-report').replaceWith(newReport); 
+		            	$('.reports .report').first().click(function(){
+		            		$(this).toggleClass('expanded').toggleClass('collapsed');
+		            	}); 	
+						loadThumbnails();	
+						updateNumReports();	            		               
+   		            }       
+		        });		 		
+			};			
+
 			function loadThumbnails(){
 				$('.image-container.thumbnail-image img').each(function(elem){
 					src = $(this).attr('realUrl');
@@ -406,9 +432,9 @@ class ReportFeed {
 				});				
 			}
 
-			function updateNumReports(feed){
-				numReportsElem = feed.find('#numReports').first();
-				numReports = feed.find('.report').length;
+			function updateNumReports(){
+				numReportsElem = $('#report-feed-container').find('#numReports').first();
+				numReports = $('#report-feed-container').find('.report').length;
 				numReportsElem.text(numReports);
 			}
 
@@ -417,15 +443,6 @@ class ReportFeed {
 			}
 
 		</script>
-		<?
-	}
-
-	public function renderFilterIcon() {
-		?>
-		<span class="filter-trigger mobile-only" id="filter-trigger">
-			<span class='filter-label'>FILTER</span>
-			<img src="<?=Path::toImages()?>/filter-icon.png" width="20" height="27" id="filter-icon" title="Filter Reports"/>
-		</span>			
 		<?
 	}
 }

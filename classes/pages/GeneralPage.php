@@ -83,7 +83,7 @@ class GeneralPage {
 		global $local_dev;
 
 		if ($local_dev) {
-			?><link rel="stylesheet" type="text/css" href="<?=Path::toCss()?>styles.php" media="screen, projection" /><?
+			?><link rel="stylesheet" type="text/css" href="<?=Path::toCss()?>css-aggregator.php" media="screen, projection" /><?
 		} else {
 			?><link rel="stylesheet" type="text/css" href="<?=Path::toCss()?>cache.css" media="screen, projection" /><?
 		}		
@@ -109,6 +109,7 @@ class GeneralPage {
 
 		?>
 		<script type="text/javascript" src="<?=Path::toJs()?>jquery.validate.min.js"></script>	
+		<script type="text/javascript" src="<?=Path::toJs()?>overlay.js"></script>	
 		<? 		
 	}
 

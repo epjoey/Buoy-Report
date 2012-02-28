@@ -11,28 +11,28 @@ if (!isset($_POST['login-email'])
 	|| $_POST['login-password'] == '') 
 {
 	$error = 1;
+	header('Location:'.Path::toLogin($error));
+	exit();		
 } 
-else {
-	$reporterId = Persistence::returnReporterId($_POST['login-email'], md5($_POST['login-password'] . 'reportdb'));
-	if (!isset($reporterId)) {
-		$error = 2;	
-	}
+
+
+$userId = Persistence::returnUserId($_POST['login-email'], md5($_POST['login-password'] . 'reportdb'));
+
+if (!isset($userId)) {
+	$error = 2;	
+	header('Location:'.Path::toLogin($error));
+	exit();		
 }
 
-
-if (isset($error)) {
-	header('Location:'.Path::toLogin($error));
+$user = new User;	
+$user->logInUser($userId, NULL, $newCookie = TRUE);
+	
+if (isset($_POST['login-rel']) && $_POST['login-rel']) {
+	header('Location:'.$_POST['login-rel']);
 	exit();	
 } 
-else {	
-	$user = new User;	
-	$user->logInUser($reporterId, NULL, $newCookie = TRUE);
+
+header('Location:'.Path::toUserHome());	
+
 		
-	if (isset($_POST['login-rel']) && $_POST['login-rel'] != '') {
-		header('Location:'.$_POST['login-rel']);
-	} 
-	else {
-		header('Location:'.Path::toUserHome());	
-	}
-}		
 ?>

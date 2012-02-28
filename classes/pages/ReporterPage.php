@@ -23,13 +23,13 @@ class ReporterPage extends GeneralPage {
 				exit();
 			} 
 			$this->isLocationReporters = TRUE;		
-			$reporterIds = Persistence::getReportersByLocation($this->locationId);	
+			$reporterIds = Persistence::getUsersByLocation($this->locationId);	
 			foreach($reporterIds as $id) {
-				$this->reporters[] = Persistence::getReporterInfoById($id['reporterid']);
+				$this->users[] = Persistence::getUserInfoById($id['reporterid']);
 			} 
 			$this->pageTitle = $this->locInfo['locname'] . ' Reporters';			
 		} else {
-			$this->reporters = Persistence::getReporters();
+			$this->users = Persistence::getUsers();
 		}
 		$this->searchModule = new SearchModule;
 	}
@@ -65,7 +65,7 @@ class ReporterPage extends GeneralPage {
 
 		<div class="rep-page-list">
 			<?
-			$options['items'] = $this->reporters;
+			$options['items'] = $this->users;
 			$count = count($options['items']);
 			for($i = 0; $i < $count; $i++) {
 				$options['items'][$i]['path'] = Path::toProfile($options['items'][$i]['id']);

@@ -11,7 +11,7 @@ class User {
 	public $isLoggedIn = FALSE;
 	public $newReport = NULL;
 	public $hasNewReport = NULL;
-	public $reportStatus = NULL;
+	public $privacySetting = NULL;
 	public $isNew = FALSE;
 	public $joinDate = NULL;
 	public $locations = NULL;	
@@ -28,7 +28,7 @@ class User {
 			$this->name = $_SESSION['name'];
 			$this->joinDate = $_SESSION['joindate'];
 			$this->isNew = $_SESSION['justRegistered'];
-			$this->reportStatus = $_SESSION['reportStatus'];
+			$this->privacySetting = $_SESSION['privacySetting'];
 			if (isset($_SESSION['new-report'])) {
 				$this->newReport = $_SESSION['new-report'];
 				$this->hasNewReport = TRUE;
@@ -54,8 +54,8 @@ class User {
 				array_unshift(
 					$this->locations, 
 					array(
-						'id'=>$this->newReport['locId'], 
-						'locname'=>$this->newReport['locName']
+						'id'=>$this->newReport['locationid'], 
+						'locname'=>$this->newReport['locationname']
 					)
 				);
 			}
@@ -97,7 +97,7 @@ class User {
 	}
 	
 	public function logInUser($userId, $curCookieKey = NULL, $newCookie = TRUE, $fromRegistration = FALSE) {
-		$reporterInfo = Persistence::getReporterInfoById($userId);
+		$reporterInfo = Persistence::getUserInfoById($userId);
 
 		if (!isset($_SESSION))	
 			session_start();
@@ -107,7 +107,7 @@ class User {
 		$_SESSION['name'] = $reporterInfo['name'];
 		$_SESSION['joindate'] = $reporterInfo['joindate'];
 		$_SESSION['justRegistered'] = $fromRegistration;
-		$_SESSION['reportStatus'] = $reporterInfo['public'];
+		$_SESSION['privacySetting'] = $reporterInfo['public']; //should rename db table
 
 		
 		/*--------------- REPLACING AND RESETING EXISTING COOKIE ----------------*/
@@ -146,8 +146,8 @@ class User {
 		if (isset($options['newName'])) {			
 			$_SESSION['name'] = $options['newName'];
 		}
-		if (isset($options['reportStatus'])) {			
-			$_SESSION['reportStatus'] = $options['reportStatus'];
+		if (isset($options['privacySetting'])) {			
+			$_SESSION['privacySetting'] = $options['privacySetting'];
 		}		
 	}
 

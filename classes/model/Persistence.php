@@ -30,25 +30,25 @@ class Persistence {
 /*==================================================== General Reports ====================================================*/
 /*=========================================================================================================================*/
  
-	public static function insertReport($reportInfo = array()) {
+	public static function insertReport($report = array()) {
 		//to do:create $fields
-		$public = intval($reportInfo['reportStatus']);
+		$public = intval($report['public']);
 		$link = Persistence::dbConnect();
-		$locationid = intval($reportInfo['locId']);
-		$reporterid = intval($reportInfo['reporterId']);
-		$obsdate = intval($reportInfo['observationDate']);
-		$reportdate = intval($reportInfo['reportDate']);
+		$locationid = intval($report['locationid']);
+		$reporterid = intval($report['reporterid']);
+		$obsdate = intval($report['obsdate']);
+		$reportdate = intval($report['reportdate']);
 		$fields = "locationid = '$locationid', reporterid = '$reporterid', public = '$public', obsdate = '$obsdate', reportdate = '$reportdate'";
-		if (isset($reportInfo['quality'])) {
-			$quality = mysqli_real_escape_string($link, $reportInfo['quality']);
+		if (isset($report['quality'])) {
+			$quality = mysqli_real_escape_string($link, $report['quality']);
 			$fields .= ", quality = '" . $quality . "'";
 		}
-		if (isset($reportInfo['text'])) {
-			$text = mysqli_real_escape_string($link, $reportInfo['text']);
+		if (isset($report['text'])) {
+			$text = mysqli_real_escape_string($link, $report['text']);
 			$fields .= ", text = '" . $text . "'";			
 		}
-		if (isset($reportInfo['imagepath'])) {
-			$imagepath = mysqli_real_escape_string($link, $reportInfo['imagepath']);
+		if (isset($report['imagepath'])) {
+			$imagepath = mysqli_real_escape_string($link, $report['imagepath']);
 			$fields .= ", imagepath = '" . $imagepath . "'";			
 		}		
 		$sql = "INSERT INTO report SET $fields";
@@ -57,7 +57,7 @@ class Persistence {
 			die("Error inserting report into DB" . mysqli_error($link));
 		}
 		$reportid = mysqli_insert_id($link);
-		if (Persistence::userHasLocation($reporterid, $locationid) == FALSE) {
+		if (!$report['reporterHasLocation']) {
 			Persistence::insertUserLocation($reporterid, $locationid);		
 		}
 		return $reportid;
@@ -457,10 +457,10 @@ class Persistence {
 		$result = mysqli_query($link, $sql) or die("Error deleting location report associations");
 	}
 		
-/*==================================================== Reporters ====================================================*/
+/*==================================================== Users ====================================================*/
 /*===================================================================================================================*/			
 
-	public static function getReporters() {
+	public static function getUsers() {
 		$sql = "SELECT id, name, email FROM reporter";
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
 		if (!$result) {
@@ -474,7 +474,7 @@ class Persistence {
 		} else return NULL;				
 	}
 
-	public static function insertReporter($name, $email, $password, $privacy) {
+	public static function insertUser($name, $email, $password, $privacy) {
 		$link = Persistence::dbConnect();
 		isset($name) ? $name = mysqli_real_escape_string($link, $name) : $name=NULL;
 		$email = mysqli_real_escape_string($link, $email);	
@@ -488,7 +488,7 @@ class Persistence {
 		return mysqli_insert_id($link);	
 	}
 
-	public static function deleteReporter($reporterId){
+	public static function deleteUser($reporterId){
 		$link = Persistence::dbConnect();
 		$id = intval($reporterId);
 		$sql = "DELETE FROM reporter WHERE id = '$id'";
@@ -510,7 +510,7 @@ class Persistence {
 		}		
 	}
 
-	public static function getReporterInfoById($id) {
+	public static function getUserInfoById($id) {
 		$id = intval($id);
 		$sql = "SELECT * FROM reporter WHERE id = '$id'";
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
@@ -523,7 +523,7 @@ class Persistence {
 		} else return NULL;		
 	}
 
-	public static function getReportersByLocation($locid) {
+	public static function getUsersByLocation($locid) {
 		$locid = intval($locid);
 		$sql = "SELECT reporterid FROM reporterlocation WHERE locationid = '$locid'";
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
@@ -551,9 +551,9 @@ class Persistence {
 			$newEmail = mysqli_real_escape_string($link, $options['newEmail']);
 			$str[] = "email = '$newEmail'";
 		}	
-		if (isset($options['reportStatus'])) {
-			$reportStatus = intval($options['reportStatus']);
-			$str[] = "public = '$reportStatus'";
+		if (isset($options['privacySetting'])) {
+			$privacySetting = intval($options['privacySetting']);
+			$str[] = "public = '$privacySetting'";
 		}			
 		if (isset($options['newPassword'])) {
 			$newPassword = mysqli_real_escape_string($link, $options['newPassword']);
@@ -606,7 +606,7 @@ class Persistence {
 		else return FALSE;
 	}
 		
-	public static function returnReporterName($email) {
+	public static function returnUserName($email) {
 		$link = Persistence::dbConnect();
 		$email = mysqli_real_escape_string($link, $email);
 		$sql = "SELECT name FROM reporter WHERE email='$email'";
@@ -618,7 +618,7 @@ class Persistence {
 		return $row['name'];	
 	}
 	
-	public static function returnReporterId($email, $password = NULL) {
+	public static function returnUserId($email, $password = NULL) {
 		$link = Persistence::dbConnect();
 		$email = mysqli_real_escape_string($link, $email);
 		$sql = "SELECT id FROM reporter WHERE email='$email'";
@@ -638,7 +638,7 @@ class Persistence {
 		}
 	}
 		
-	public static function returnReporterEmail($id) {
+	public static function returnUserEmail($id) {
 		$link = Persistence::dbConnect();
 		$id = intval($id);
 		$sql = "SELECT email FROM reporter WHERE id='$id'";

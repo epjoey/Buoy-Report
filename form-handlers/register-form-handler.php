@@ -8,9 +8,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/User.php';
 //first check for bot
 if (isset($_POST['bot-check']) && $_POST['bot-check'] != '') {
 	$error = 6;
+	header('Location:'.Path::toRegister($error));
+	exit();	
 }
 
-else if (
+if (
 	!isset($_POST['reg-name']) 
 	|| $_POST['reg-name'] == '' 
 	|| !isset($_POST['reg-email']) 
@@ -19,40 +21,46 @@ else if (
 	|| $_POST['reg-password'] == '') 
 {
 	$error = 1;
+	header('Location:'.Path::toRegister($error));
+	exit();	
 }
 
-else if (filter_var($_POST['reg-email'], FILTER_VALIDATE_EMAIL) != TRUE) {
+if (filter_var($_POST['reg-email'], FILTER_VALIDATE_EMAIL) != TRUE) {
 	$error = 2;
+	header('Location:'.Path::toRegister($error));
+	exit();	
 }
 
-else if (strlen($_POST['reg-password']) < 5) {
+if (strlen($_POST['reg-password']) < 5) {
 	$error = 5;
+	header('Location:'.Path::toRegister($error));
+	exit();	
 }
  		
-else if (Persistence::databaseContainsEmail($_POST['reg-email'])) {
+if (Persistence::databaseContainsEmail($_POST['reg-email'])) {
 	$error = 3;
-}
-
-else if (Persistence::databaseContainsName($_POST['reg-name'])) {
-	$error = 4;
-}
-
-if (isset($error)) {
 	header('Location:'.Path::toRegister($error));
-	exit();
-	
-} else {		
-	$reporterId = Persistence::insertReporter(
-		$_POST['reg-name'], 
-		$_POST['reg-email'], 
-		md5($_POST['reg-password'] . 'reportdb'), 
-		$_POST['report-status']
-	);
-	$user = new User;
-	$user->logInUser($reporterId, NULL, $newCookie = TRUE, $fromRegistration = TRUE);
-	header('Location:'.Path::toUserHome());
-	exit();
+	exit();	
 }
+
+if (Persistence::databaseContainsName($_POST['reg-name'])) {
+	$error = 4;
+	header('Location:'.Path::toRegister($error));
+	exit();	
+}
+
+			
+$reporterId = Persistence::insertUser(
+	$_POST['reg-name'], 
+	$_POST['reg-email'], 
+	md5($_POST['reg-password'] . 'reportdb'), 
+	$_POST['report-status']
+);
+$user = new User;
+$user->logInUser($reporterId, NULL, $newCookie = TRUE, $fromRegistration = TRUE);
+header('Location:'.Path::toUserHome());
+exit();
+
 
 
 ?>

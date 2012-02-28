@@ -94,7 +94,7 @@ class SingleReport {
 								
 				if(isset($this->report['text'])) { 
 					?>
-					<li class="text-report">&ldquo;<?= bbcode2html($this->report['text']) ?>&rdquo;</li>
+					<li class="text-report"><?= bbcode2html($this->report['text']) ?></li>
 					<? 
 				} 				
 
@@ -254,7 +254,7 @@ class SingleReport {
 	}
 
 	public function renderReporterDetails($reportId, $reporterid, $reportTime, $tz) {
-		$reporterInfo = Persistence::getReporterInfoById($reporterid);
+		$reporterInfo = Persistence::getUserInfoById($reporterid);
 		$tzAbbrev = getTzAbbrev($tz);
 		?>
 		<div class="reporter-details">

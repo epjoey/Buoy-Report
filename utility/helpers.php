@@ -150,17 +150,31 @@ function bbcode2html($text) {
 	$text = str_replace("\n", '<br>', $text);
 
 	//[URL]link[/URL]
-
-	if (substr(strtolower($text), 0, 4) == '[url') {
-		if (substr($text, 5, 7) != 'http://' && substr($text, 5, 8) != 'https://') {
-			$text = substr_replace($text, "http://", 5, 0);
+	if(stristr($text, '[url')) {
+		$url = stristr($text, '[url');
+		if (substr($url, 5, 7) != 'http://' && substr($url, 5, 8) != 'https://') {
+			$url = substr_replace($url, "http://", 5, 0);
+			$text = substr_replace($text, $url, stripos($text, '[url'));
 		}
 
 		$text = preg_replace('/\[url]([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)\[\/url]/i', '<a target="_blank" href="$1">$1</a>', $text);
 
 		//[URL=url]link[/URL]
-		$text = preg_replace('/\[url=([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)](.+?)\[\/url]/i', '<a href="$1">$2</a>', $text);
+		$text = preg_replace('/\[url=([-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)](.+?)\[\/url]/i', '<a target="_blank" href="$1">$2</a>', $text);
 	}
+	else {
+		
+		//better link finder
+		$reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+
+		// Check if there is a url in the text
+		if(preg_match($reg_exUrl, $text, $url)) {
+
+	       // make the urls hyper links
+	       return preg_replace($reg_exUrl, "<a target='blank' href=" . $url[0] . ">link</a> ", $text);
+		}			
+	}
+
 	
 	return $text;
 }
@@ -169,5 +183,35 @@ function bbcodeout($text) {
 	echo bbcode2html($text);
 }
 
+function handleFileUpload($upload, $reporterId) {
+
+	$uploadStatus = array();
+
+	if (!is_uploaded_file($upload['tmp_name'])) {
+		$uploadStatus['error'] = 'upload-file';
+		return $uploadStatus;
+	}
+	if (preg_match('/^image\/p?jpeg$/i', $upload['type'])) {
+		$imageExt = '.jpg';
+	} else if (preg_match('/^image\/gif$/i', $upload['type'])) {
+		$imageExt = '.gif';
+	} else if (preg_match('/^image\/(x-1)?png$/i', $upload['type'])) {
+		$imageExt = '.png';
+	} else {
+		$uploadStatus['error'] = 'file-type'; //unknown file type
+		return $uploadStatus;
+	}	
+	
+	//stored in DB. full path prepended
+	$uploadStatus['imagepath'] = date('Y') . '/' . date('m') . '/' . $reporterId . '.' . date('d.G.i.s') . $imageExt;
+
+	if (!move_uploaded_file($upload['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $uploadStatus['imagepath'])) {
+		$uploadStatus['error'] = 'file-save';	
+		return $uploadStatus;;
+	} 	
+	
+	//if we got here, image was copied and array contains image path
+	return $uploadStatus; 	
+}
 
 ?>

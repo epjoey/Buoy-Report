@@ -37,7 +37,7 @@ class EditProfilePage extends GeneralPage {
 				exit();				
 			}
 
-			$reporterId = Persistence::returnReporterId($this->user->email, md5($_POST['current-password'] . 'reportdb'));
+			$reporterId = Persistence::returnUserId($this->user->email, md5($_POST['current-password'] . 'reportdb'));
 			
 			if (!isset($reporterId)) {
 				$error = 2;
@@ -66,15 +66,15 @@ class EditProfilePage extends GeneralPage {
 				$options['newPassword'] = md5($_POST['new-password'] . 'reportdb');
 			}
 
-			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->user->reportStatus) {
+			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->user->privacySetting) {
 				//vardump($_POST['report-status']); exit();
 				if ($_POST['report-status'] == '0') {
 					Persistence::makeAllUserReportsPrivate($this->user->id);
-					$options['reportStatus'] = 0;
+					$options['privacySetting'] = 0;
 				} 
 				else if ($_POST['report-status'] == '1') {
 					Persistence::makeAllUserReportsPublic($this->user->id);
-					$options['reportStatus'] = 1;
+					$options['privacySetting'] = 1;
 				} 				
 			} 		
 	
@@ -92,7 +92,7 @@ class EditProfilePage extends GeneralPage {
 		}
 		
 		if ($_POST['submit'] == 'delete-reporter') {
-			Persistence::deleteReporter($this->user->id);
+			Persistence::deleteUser($this->user->id);
 			header('Location:'.Path::toLogout());
 			exit();	
 		}

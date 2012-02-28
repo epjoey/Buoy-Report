@@ -71,7 +71,7 @@ class EditPostPage extends GeneralPage {
 		//image copied into directory during form handle. wierd, I know.
 		if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
 			
-			$uploadStatus = Report::handleUpload($_FILES['upload'], $this->user->id);
+			$uploadStatus = handleFileUpload($_FILES['upload'], $this->user->id);
 
 			if (isset($uploadStatus['error'])) {
 				$this->submitError = $uploadStatus['error']; 
@@ -84,7 +84,8 @@ class EditPostPage extends GeneralPage {
 			$this->reportInfo['imagepath'] = rawurldecode($_POST['remoteImageURL']);
 		}		
 
-		$this->reportInfo['text'] = $_POST['text'];
+
+		$this->reportInfo['text'] = $_POST['text'] === '' ? NULL : $_POST['text'];
 
 
 		if (!empty($_POST['quality'])) {

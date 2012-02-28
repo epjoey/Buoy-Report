@@ -34,12 +34,12 @@ class EditAccountForm {
 					<div class="radio-container">
 						<span class="radio-field">
 							<input type="radio" class="required" name="report-status" id="public-status" value="1" <?= 
-								$user->reportStatus == 1 ? "checked = 'true'" : ""; 
+								$user->privacySetting == 1 ? "checked = 'true'" : ""; 
 							?>/><label for="public-status"> My reports are public</label>
 						</span>
 						<span class="radio-field">
 							<input type="radio" class="required" name="report-status" id="private-status" value="0" <?=
-								$user->reportStatus == 0 ? "checked = 'true'" : ""; 
+								$user->privacySetting == 0 ? "checked = 'true'" : ""; 
 							?>/><label for="private-status"> My reports are private</label>
 						</span>	
 						<? /*

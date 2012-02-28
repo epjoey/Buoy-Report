@@ -15,6 +15,10 @@ class ReportOptions {
 		return array(1=>'Terrible',2=>'Crap',3=>'OK', 4=>'Pretty Fun',5=>'Great' );
 	}
 
+	public static function waveheight() {
+		return array(1=>'1-2',2=>'2-3',3=>'4-6', 4=>'6-8',5=>'8-10',6=>'10-12',7=>'12-15',8=>'15-20',9=>'20-30' );
+	}
+
 	public static function hasImage() {
 		return array(0=>'Image?', 1=>'With Image', 2=>'Without Image');
 	}

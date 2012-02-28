@@ -27,9 +27,7 @@ class SearchModule {
 
 					if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 13) {
 						//if esc is pressed or nothing is entered clear the value of search box
-				    	if (event.keyCode == 27 || $(this).val() == '') {  
-				      		$(this).val('');  
-				      		//also remove any lingering visible class names and add classname to all
+				    	if ($(this).val() == '') {  
 				      		$('#grid-list-container li').removeClass('visible').show().addClass('visible'); 	
 				      	}	
 					    var filter = $(this).val(), 

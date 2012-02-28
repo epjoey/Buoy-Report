@@ -1,6 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/BuoyData.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/TideData.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Buoy.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/TideStation.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
@@ -28,7 +28,7 @@ class LocationDetailPage extends GeneralPage {
 		}			
 		
 		//ajax this
-		$this->creator = Persistence::getReporterInfoById($this->locInfo['creator']);
+		$this->creator = Persistence::getUserInfoById($this->locInfo['creator']);
 		
 		if (isset($this->locInfo['buoy1'])) {
 			$this->buoys['buoy1'] = $this->locInfo['buoy1'];
@@ -213,11 +213,13 @@ class LocationDetailPage extends GeneralPage {
 		}
 
 		if ($_REQUEST['submit'] == 'existingtide' && isset($_GET['tide'])) {
-			
-			if (!$this->isValidTideStation($_GET['tide'], FALSE)) {
+
+			/*			
+			if (!$this->isValidTideStation($_GET['tide'])) {
 				header('Location:'.Path::$to($this->locationId).'&te='.urlencode($_POST['station-id']));
 				exit();					
 			}	
+			*/
 
 			Persistence::insertTideStation($_GET['tide'], "", $this->locationId, $checkDb = FALSE);
 			header('Location:'.Path::$to($this->locationId).'&entered=tide');
@@ -250,8 +252,8 @@ class LocationDetailPage extends GeneralPage {
 		
 		if ($checkIfOnline) {
 			//dont need time (0) because were just checking if data file exists/is online		
-			$buoyData = new BuoyData($buoy, 0);
-			if (!$buoyData->buoyExists) {
+			$buoyData = new Buoy($buoy);
+			if (!$buoyData->isValid()) {
 				$this->addBuoyError = "buoy-offline";
 				return FALSE;
 			}	
@@ -259,15 +261,12 @@ class LocationDetailPage extends GeneralPage {
 		return TRUE;
 	}
 
-	public function isValidTideStation($tideStation, $checkIfOnline = TRUE){	
-
-		if ($checkIfOnline) {
-			$tide = new TideData($tideStation, 0);
-			if (!$tide->stationExists) {
-				$this->addStationError = "station-offline";
-				return FALSE;	
-			}				
-		}
+	public function isValidTideStation($tideStation){	
+		$station = new TideStation($tideStation);
+		if (!$station->isValid()) {
+			$this->addStationError = "station-offline";
+			return FALSE;	
+		}				
 		return TRUE;
 	}	
 	

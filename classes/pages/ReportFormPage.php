@@ -55,7 +55,6 @@ class ReportFormPage extends GeneralPage {
 
 		parent::renderFooterJs();
 
-
 		if($this->detect->isIphone() || $this->detect->isIpad()) {
 			?>
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>

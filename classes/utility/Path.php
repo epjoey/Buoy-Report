@@ -85,7 +85,7 @@ class Path {
 
 
 	public static function toHandleReportSubmission() {
-		return '/handle-report.php';
+		return '/form-handlers/report-form-handler.php';
 	}
 
 	public static function toSinglePost($reportId) {

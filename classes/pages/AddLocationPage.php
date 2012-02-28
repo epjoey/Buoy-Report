@@ -59,8 +59,8 @@ class AddLocationPage extends GeneralPage {
 			$timezone = 'UTC';
 		}
 		
-		$newLocation = Persistence::insertLocation($_POST['locationname'], $timezone, $this->user->id);
-		header('Location:'.Path::toLocation($newLocation));
+		$newLocationId = Persistence::insertLocation($_POST['locationname'], $timezone, $this->user->id);
+		header('Location:'.Path::toLocation($newLocationId));
 		exit();
 	}
 

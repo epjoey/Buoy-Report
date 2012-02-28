@@ -14,7 +14,7 @@ class ProfilePage extends GeneralPage {
 	public function loadData(){
 		parent::loadData();
 		$this->pageOwnerId = $_GET['reporter'];
-		$this->pageOwnerInfo = Persistence::getReporterInfoById($this->pageOwnerId);
+		$this->pageOwnerInfo = Persistence::getUserInfoById($this->pageOwnerId);
 		if (!isset($this->pageOwnerInfo)) {
 			header('HTTP/1.1 301 Moved Permanently');			
 			header('Location:'.Path::to404());

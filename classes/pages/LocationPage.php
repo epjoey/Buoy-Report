@@ -42,7 +42,7 @@ class LocationPage extends GeneralPage {
 
 		} elseif ($this->isReporterLocations) {
 
-			$this->reporterInfo = Persistence::getReporterInfoById($this->reporterId);
+			$this->reporterInfo = Persistence::getUserInfoById($this->reporterId);
 			if (!isset($this->reporterInfo)) {
 				header('Location:'.Path::to404());
 				exit();
@@ -68,6 +68,13 @@ class LocationPage extends GeneralPage {
 	public function renderJs() {
 		parent::renderJs();
 		$this->searchModule->renderFilterJs();
+		?>
+		<script type="text/javascript">	
+			$(document).ready(function(){
+				$('#query').focus();
+			});
+		</script>
+		<?		
 	}
 
 	public function renderBodyContent() {
