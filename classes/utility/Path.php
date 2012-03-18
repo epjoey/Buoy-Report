@@ -170,6 +170,21 @@ class Path {
 		return Path::URL . '/uploads/' . $path;
 	}
 
+	public static function toBuoys() {	
+		return '/buoys.php';
+	}
+
+	public static function toAddBuoy($error = NULL) {
+		$str = http_build_query(array('error'=>$error));
+		return '/add-buoy.php?' . $str;
+	}	
+
+	public static function toEditBuoy($id = NULL, $error = NULL) {
+		$str = http_build_query(array('id'=>$id, 'error'=>$error));
+
+		return '/edit-buoy.php?' . $str;
+	}	
+
 	public static function toImageFile($path, $isRemote = FALSE) {
 		if ($isRemote) {
 			return $path;

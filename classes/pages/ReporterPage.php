@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/modules/SearchModule.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/GridList.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ItemList.php';
 
 
 
@@ -71,11 +71,9 @@ class ReporterPage extends GeneralPage {
 				$options['items'][$i]['path'] = Path::toProfile($options['items'][$i]['id']);
 			} 
 			$options['itemLabel'] = 'reporter';
-			$options['showSeeAllLink'] = TRUE;
 			$options['pathToAll'] = Path::toReporters();
 			$options['isSearchable'] = TRUE;
-			$list = new GridList($options);
-			$list->renderGridList();
+			ItemList::renderList($options);
 			?>
 		</div>
 		<?

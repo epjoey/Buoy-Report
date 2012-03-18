@@ -708,7 +708,7 @@ class Persistence {
 /*==================================================== Buoy ====================================================*/
 /*==============================================================================================================*/	
 
-	public static function insertBuoy($id, $name = NULL, $locationid, $buoynum, $checkDbForBuoy = TRUE) {
+	public static function insertBuoy($id, $name = NULL, $locationid = null, $buoynum = null, $checkDbForBuoy = TRUE) {
 		$link = Persistence::dbConnect();
 		$id = mysqli_real_escape_string($link, $id);
 		if ($checkDbForBuoy) {
@@ -726,13 +726,17 @@ class Persistence {
 				}
 			}					
 		}
-		$locationid = intval($locationid);	
-		$buoynum = intval($buoynum);
-		$field = "buoy" . $buoynum;
-		$sqllocation = "UPDATE location SET $field = '$id' WHERE id = '$locationid'";		
-		$result = mysqli_query($link, $sqllocation);
-		if (!$result) {
-			die("Error inserting buoy into location table" . mysqli_error($link));
+
+		/* this buoy is associated with a location */
+		if (isset($locationid)) {
+			$locationid = intval($locationid);		
+			$buoynum = intval($buoynum);
+			$field = "buoy" . $buoynum;
+			$sqllocation = "UPDATE location SET $field = '$id' WHERE id = '$locationid'";			
+			$result = mysqli_query($link, $sqllocation);
+			if (!$result) {
+				die("Error inserting buoy into location table" . mysqli_error($link));
+			}
 		}
 	}
 
@@ -863,6 +867,22 @@ class Persistence {
 			return FALSE;
 		}
 	}
+
+	public static function deleteBuoy($id) {
+		$link = Persistence::dbConnect();
+		$id = mysqli_real_escape_string($link, $id);
+		$sql = "DELETE FROM buoy WHERE buoyid = '$id'";
+		$result = mysqli_query($link, $sql) or die("Error deleting buoy");
+	}
+
+
+	public static function updateBuoy($oldId, $id, $name) {
+		$link = Persistence::dbConnect();
+		$id = mysqli_real_escape_string($link, $id);
+		$name = mysqli_real_escape_string($link, $name);
+		$sql = "UPDATE buoy SET buoyid = '$id', name = '$name' WHERE buoyid = '$oldId'";
+		$result = mysqli_query($link, $sql) or die("Error updating buoy");
+	}	
 
 /*==================================================== Tide stations ====================================================*/
 /*========================================================================================================================*/	

@@ -1,6 +1,5 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/GridList.php';
 
 
 
@@ -21,6 +20,12 @@ class SearchModule {
 	?>
 		<script type="text/javascript">
 			jQuery(function ($) {
+
+				$(document).ready(function(){
+					$('#query').focus();
+				});	
+
+
 				//add class to all items
 				$('#grid-list-container li').addClass('visible');
 				$("#query").keyup(function (event) {
@@ -72,6 +77,11 @@ class SearchModule {
 			                    next = current.next('.visible');                
 			                    break; 
 			                case 13: // Enter
+			                	//if on the buoy list page, hitting enter triggers the onclick event (opens the div with the iframe)
+			                	if (searchModuleList == 'buoylist') {
+			                		handleBuoyClick(current);
+			                		return false;
+			                	}
 			                    if (results.hasClass('selected')) {
 			                        location.href = current.find('a').attr('href');
 			                        return false;
