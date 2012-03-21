@@ -96,13 +96,13 @@ class Path {
 		return '/edit-post.php?id='.$reportId;
 	}	
 
-	public static function toProfile($reporterId, $error = NULL) {
+	public static function toProfile($reporterId, $status = NULL) {
 		if (!isset($reporterId)) {
 			return Path::to404();
 		}		
 		$url = '/profile.php?reporter='.$reporterId;
-		if (isset($error)) {
-			$url .= '&error='.$error;
+		if (isset($status)) {
+			$url .= '&status='.$status;
 		}
 		return $url;		
 	}

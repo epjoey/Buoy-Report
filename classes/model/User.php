@@ -140,9 +140,11 @@ class User {
 	public function updateUserSession($options = array()) {
 		if (!isset($_SESSION)) session_start();
 
+		
 		if (isset($options['newEmail'])) {
 			$_SESSION['email'] = $options['newEmail'];
 		}
+		
 		if (isset($options['newName'])) {			
 			$_SESSION['name'] = $options['newName'];
 		}

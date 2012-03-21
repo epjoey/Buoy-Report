@@ -5,8 +5,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/User.php';
 
 /* --------------- HANDLE LOGIN FORM SUBMISSION --------------- */
 
-if (!isset($_POST['login-email']) 
-	|| $_POST['login-email'] == '' 
+if (
+	//!isset($_POST['login-email']) 
+	//|| $_POST['login-email'] == '' 
+	!isset($_POST['login-username']) 
+	|| $_POST['login-username'] == '' 
 	|| !isset($_POST['login-password']) 
 	|| $_POST['login-password'] == '') 
 {
@@ -16,7 +19,7 @@ if (!isset($_POST['login-email'])
 } 
 
 
-$userId = Persistence::returnUserId($_POST['login-email'], md5($_POST['login-password'] . 'reportdb'));
+$userId = Persistence::returnUserId($_POST['login-username'], md5($_POST['login-password'] . 'reportdb'));
 
 if (!isset($userId)) {
 	$error = 2;	

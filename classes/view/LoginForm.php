@@ -10,8 +10,8 @@ class LoginForm {
 					<span class="submission-error"><?= $logInError ?></span>
 				<? } ?>			
 				<div class="field">
-					<label for="login-email">Email Address:</label>
-					<input class="text-input required email" type="email" name="login-email" id="login-email" placeholder="Enter email" />
+					<label for="login-username">Username:</label>
+					<input class="text-input required username" type="text" name="login-username" id="login-username" placeholder="Enter Username" />
 				</div>
 				<div class="field">
 					<label for="login-password">Password:</label>

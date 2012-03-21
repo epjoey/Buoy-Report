@@ -13,11 +13,13 @@ class RegisterForm {
 				<div class="field">
 					<label for="reg-name">Choose a Username:</label>
 					<input class="text-input required username" type="text" name="reg-name" id="reg-name" placeholder="Choose a username"/>
-				</div>		
+				</div>	
+				<? /*	
 				<div class="field">
 					<label for="reg-email">Your Email Address:</label>
 					<input class="text-input required email" type="email" name="reg-email" id="reg-email" placeholder="joe@example.com" />
 				</div>
+				*/ ?>
 				<div class="field">
 					<label for="reg-password">Choose a Password:</label>
 					<input class="text-input required password" type="password" name="reg-password" id="reg-password" placeholder="••••••••••" />

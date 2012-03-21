@@ -474,13 +474,13 @@ class Persistence {
 		} else return NULL;				
 	}
 
-	public static function insertUser($name, $email, $password, $privacy) {
+	public static function insertUser($name = null, /* $email = null,*/ $password = null, $privacy = null) {
 		$link = Persistence::dbConnect();
-		isset($name) ? $name = mysqli_real_escape_string($link, $name) : $name=NULL;
-		$email = mysqli_real_escape_string($link, $email);	
-		$password = mysqli_real_escape_string($link, $password);
-		$privacy = intval($privacy);
-		$sql = "INSERT INTO reporter SET name = '$name', email = '$email', password = '$password', public = '$privacy'";
+		$nameStr = isset($name) ? "name = '" . mysqli_real_escape_string($link, $name) . "'" : '';
+		//$emailStr = isset($email) ? ", email = '" . mysqli_real_escape_string($link, $email) . "'" : '';
+		$passwordStr = isset($password) ? ", password = '" . mysqli_real_escape_string($link, $password) . "'" : '';
+		$privacyStr = isset($privacy) ? ", public = '" . intval($privacy) . "'" : '';
+		$sql = "INSERT INTO reporter SET " . $nameStr . /* $emailStr .*/ $passwordStr . $privacyStr;
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
 			die("Error inserting reporter into DB" . mysqli_error($link));
@@ -569,7 +569,7 @@ class Persistence {
 		}
 
 		$sql = "UPDATE reporter SET " . $set . " WHERE id = '$reporterid'";
-		$result = mysqli_query($link, $sql) or die("Error updating user account" . mysqli_error($link));
+		$result = mysqli_query($link, $sql) or print("Error updating user account" . mysqli_error($link));
 	}
 
 	public static function makeAllUserReportsPublic($userId){
@@ -618,10 +618,10 @@ class Persistence {
 		return $row['name'];	
 	}
 	
-	public static function returnUserId($email, $password = NULL) {
+	public static function returnUserId($username, $password = NULL) {
 		$link = Persistence::dbConnect();
-		$email = mysqli_real_escape_string($link, $email);
-		$sql = "SELECT id FROM reporter WHERE email='$email'";
+		$username = mysqli_real_escape_string($link, $username);
+		$sql = "SELECT id FROM reporter WHERE name='$username'";
 		if (isset($password)) {
 			$password = mysqli_real_escape_string($link, $password);
 			$sql .= " AND password='$password'";

@@ -2,15 +2,15 @@
 
 class EditAccountForm {
 
-	public function renderForm($user, $editAccountError = NULL) {	
+	public function renderForm($user, $editAccountStatus = NULL) {	
 		?>
 		<div class="form-container">
 
 			<form action="" method="POST">
 				<?
-				if (isset($editAccountError)) {
+				if (isset($editAccountStatus)) {
 					?>
-					<span class="submission-error"><?= html($editAccountError) ?></span>
+					<span class="submission-error"><?= html($editAccountStatus) ?></span>
 					<?
 				}
 				?>		

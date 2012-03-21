@@ -54,8 +54,11 @@ class IntroPage extends GeneralPage {
 					<div class="reg-container">
 						<a href="<?=Path::toRegister()?>" class="reg-btn" id="reg-trigger">Get Started ></a>
 					</div>
- 					<span class="browse-spots">or <a href="<?=Path::toLocations()?>">Browse Spots ></a></span>
 				</div>
+				<div class="browse-link">
+ 					<a class="browse-spots" href="<?=Path::toLocations()?>">Browse Spots ></a>
+ 					<? /*<a class="browse-spots" href="<?=Path::toBuoys()?>">Browse Buoys ></a> */?>			
+ 				</div>
 				<div class="clear"></div>
 			</div>
 
@@ -80,7 +83,7 @@ class IntroPage extends GeneralPage {
 			$('#login-trigger').click(function(){
 				$('#login-form-container').slideToggle(duration);
 				setTimeout(function(){
-					$('#login-email').focus()
+					$('#login-username').focus()
 					}, 200);
 			});
 			

@@ -6,22 +6,25 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditAccountForm.php';
 
 class EditProfilePage extends GeneralPage {
 
-	private $editAccountError = NULL;
+	private $editAccountStatus = NULL;
+	protected $statusSuccess = FALSE;
 
 	public function loadData() {
 		parent::loadData();
 		$this->pageTitle = 'My Account';	
 		$this->editAccountForm = new EditAccountForm;
 
-		if (isset($_GET['error']) && $_GET['error']) {
-			switch($_GET['error']) {
+		if (isset($_GET['status']) && $_GET['status']) {
+			switch($_GET['status']) {
 				case 1: $e = 'You must enter your current password to edit account'; break;
 				case 2: $e = 'The password you entered is not correct'; break;
 				case 3: $e = 'Password must be more than 5 characters'; break;
 				case 4: $e = 'You must enter a valid email address'; break;
 				case 5: $e = 'No changes were specified'; break;
+				case 6: $e = 'That username is already taken'; break;
+				case 'success': $e = 'Your changes have been made';
 			}
-			$this->editAccountError = $e;
+			$this->editAccountStatus = $e;
 		}	
 	}
 
@@ -37,7 +40,7 @@ class EditProfilePage extends GeneralPage {
 				exit();				
 			}
 
-			$reporterId = Persistence::returnUserId($this->user->email, md5($_POST['current-password'] . 'reportdb'));
+			$reporterId = Persistence::returnUserId($this->user->name, md5($_POST['current-password'] . 'reportdb'));
 			
 			if (!isset($reporterId)) {
 				$error = 2;
@@ -60,6 +63,11 @@ class EditProfilePage extends GeneralPage {
 				$options['newEmail'] = $_POST['new-email'];
 			}
 			if (!empty($_POST['new-name']) && $_POST['new-name'] != $this->user->name) {
+				if (Persistence::databaseContainsName($_POST['new-name'])) {
+					$error = 6;
+					header('Location:'.Path::toProfile($this->user->id, $error));
+					exit();	
+				}				
 				$options['newName'] = $_POST['new-name'];
 			} 
 			if (!empty($_POST['new-password'])) {
@@ -78,16 +86,16 @@ class EditProfilePage extends GeneralPage {
 				} 				
 			} 		
 	
-			if (count($options) > 0) {
-				Persistence::updateUserInfo($this->user->id, $options);
-				$this->user->updateUserSession($options);		
-			} else {
+			if (empty($options)) {
 				$error = 5;
 				header('Location:'.Path::toProfile($this->user->id, $error));
 				exit();					
 			}
-			header('HTTP/1.1 301 Moved Permanently');
-			header('Location:'.Path::toProfile($this->user->id));
+
+			Persistence::updateUserInfo($this->user->id, $options);
+			$this->user->updateUserSession($options);					
+			
+			header('Location:'.Path::toProfile($this->user->id, $status = 'success'));
 			exit();		
 		}
 		
@@ -149,7 +157,7 @@ class EditProfilePage extends GeneralPage {
 		?>
 		<div class="account-details">
 			<h3>Account Settings</h3>
-			<? $this->editAccountForm->renderForm($this->user, $this->editAccountError); ?>
+			<? $this->editAccountForm->renderForm($this->user, $this->editAccountStatus); ?>
 		</div>
 		<?
 	}	

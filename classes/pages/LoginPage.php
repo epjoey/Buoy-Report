@@ -13,7 +13,7 @@ class LoginPage extends GeneralPage {
 		if (isset($_GET['error']) && $_GET['error']) {
 			switch($_GET['error']) {
 				case 1: $e = 'Please fill in both fields'; break;
-				case 2: $e = 'The specified email address or password was incorrect.';
+				case 2: $e = 'The specified username or password was incorrect.';
 			}
 			$this->loginError = $e;
 		}		
