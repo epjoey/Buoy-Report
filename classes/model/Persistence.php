@@ -50,6 +50,10 @@ class Persistence {
 		if (isset($report['imagepath'])) {
 			$imagepath = mysqli_real_escape_string($link, $report['imagepath']);
 			$fields .= ", imagepath = '" . $imagepath . "'";			
+		}
+		if (isset($report['waveheight'])) {
+			$waveheight = floatval($report['waveheight']);
+			$fields .= ", waveheight = '" . $waveheight . "'";			
 		}		
 		$sql = "INSERT INTO report SET $fields";
 		$result = mysqli_query($link, $sql);

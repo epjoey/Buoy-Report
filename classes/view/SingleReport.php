@@ -92,6 +92,14 @@ class SingleReport {
 					$this->renderImage($this->report['imagepath'], $thumb = TRUE);
 				}
 								
+				if(isset($this->report['waveheight'])) { 
+					$heights = ReportOptions::waveHeight();
+					$height = $this->report['waveheight'];
+					?>
+					<li class="waveheight"><?= $heights[$height][0] . '-' . $heights[$height][1] . '&rdquo;' ?></li>
+					<? 
+				} 	
+
 				if(isset($this->report['text'])) { 
 					?>
 					<li class="text-report"><?= bbcode2html($this->report['text']) ?></li>

@@ -68,7 +68,7 @@ class ReportForm {
 					foreach (ReportOptions::waveHeight() as $key=>$value) {
 						?>
 						<span class="radio-field">
-							<input type="radio" name="waveheight" id="waveheight-<?=$key?>" value="<?=$key?>" /><label for="waveheight-<?=$key?>"> <?=$value?></label>
+							<input type="radio" name="waveheight" id="waveheight-<?=$value[0]?>" value="<?=$key?>" /><label for="waveheight-<?=$value[0]?>"> <?=$value[0] . '-' . $value[1]?></label>
 						</span>
 						<?
 					}

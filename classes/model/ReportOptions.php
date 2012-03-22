@@ -16,7 +16,17 @@ class ReportOptions {
 	}
 
 	public static function waveheight() {
-		return array(1=>'1-2',2=>'2-3',3=>'4-6', 4=>'6-8',5=>'8-10',6=>'10-12',7=>'12-15',8=>'15-20',9=>'20-30' );
+		return array(
+			'1.5'=>array(1,2),
+			'2.5'=>array(2,3),
+			'5'=>array(4,6),
+			'7'=>array(6,8),
+			'9'=>array(8,10),
+			'11'=>array(10,12),
+			'13.5'=>array(12,15),
+			'17.5'=>array(15,20),
+			'25'=>array(20,30)
+		);
 	}
 
 	public static function hasImage() {
