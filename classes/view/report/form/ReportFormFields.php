@@ -5,7 +5,7 @@ class ReportFormFields {
 	public static function renderWaveHeightField($preselected = null) {
 		?>
 		<div class="field wave-height radio-menu">
-			<label for="quality">Wave Height:</label>
+			<label for="quality">Wave Height: (backs)</label>
 			<?
 			foreach (ReportOptions::waveHeight() as $key=>$value) {
 				$selected = isset($preselected) && $preselected == $key ? "checked = 'true'" : ''; 
