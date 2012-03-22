@@ -31,7 +31,7 @@ class LoginPage extends GeneralPage {
 		?>
 		<script type="text/javascript">	
 			$(document).ready(function(){
-				$('#login-email').focus();
+				$('#login-username').focus();
 				$("#login-form").validate();
 			});
 		</script>

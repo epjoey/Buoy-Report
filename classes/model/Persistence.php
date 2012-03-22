@@ -188,6 +188,10 @@ class Persistence {
 				$fields .= ", imagepath = NULL";
 			}
 		}
+		if (isset($reportInfo['waveheight'])) {
+			$waveheight = floatval($reportInfo['waveheight']);
+			$fields .= ", waveheight = '" . $waveheight . "'";			
+		}		
 		$sql = "UPDATE report SET $fields WHERE id = '$reportId'";	
 		$result = mysqli_query($link, $sql);
 		if (!$result) {

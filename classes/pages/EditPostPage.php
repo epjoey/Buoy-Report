@@ -87,6 +87,8 @@ class EditPostPage extends GeneralPage {
 
 		$this->reportInfo['text'] = $_POST['text'] === '' ? NULL : $_POST['text'];
 
+		$this->reportInfo['waveheight'] = $_POST['waveheight'] === '' ? NULL : $_POST['waveheight'];
+
 
 		if (!empty($_POST['quality'])) {
 			$this->reportInfo['quality'] = $_POST['quality'];

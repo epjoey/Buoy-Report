@@ -4,6 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/form/ReportFormFields.php';
+
 
 
 class ReportForm {
@@ -62,18 +64,9 @@ class ReportForm {
 					}
 					?>
 				</div>
-				<div class="field wave-height radio-menu">
-					<label for="quality">Wave Height:</label>
-					<?
-					foreach (ReportOptions::waveHeight() as $key=>$value) {
-						?>
-						<span class="radio-field">
-							<input type="radio" name="waveheight" id="waveheight-<?=$value[0]?>" value="<?=$key?>" /><label for="waveheight-<?=$value[0]?>"> <?=$value[0] . '-' . $value[1]?></label>
-						</span>
-						<?
-					}
-					?>
-				</div>				
+
+				<? ReportFormFields::renderWaveHeightField();?>
+				
 				<div class="field text">
 					<label for="text">Report:</label>
 					<textarea name="text" id="text" class="text-input" placeholder="how was it?" ></textarea>

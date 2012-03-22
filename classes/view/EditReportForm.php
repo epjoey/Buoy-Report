@@ -4,6 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/form/ReportFormFields.php';
+
 
 
 class EditReportForm {
@@ -80,6 +82,8 @@ class EditReportForm {
 					}
 					?>
 				</div>
+
+				<? ReportFormFields::renderWaveHeightField($this->report['waveheight']);?>
 
 				<div class="field text">
 					<label for="text">Report:</label>
