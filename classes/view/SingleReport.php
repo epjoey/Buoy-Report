@@ -93,7 +93,7 @@ class SingleReport {
 				}
 								
 				if(isset($this->report['waveheight'])) { 
-					$heights = ReportOptions::waveHeight();
+					$heights = ReportOptions::getWaveHeights();
 					$height = $this->report['waveheight'];
 					?>
 					<li class="waveheight"><?= $heights[$height][0] . '-' . $heights[$height][1] . '&rdquo;' ?></li>

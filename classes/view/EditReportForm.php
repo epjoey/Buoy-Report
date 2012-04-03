@@ -83,7 +83,7 @@ class EditReportForm {
 					?>
 				</div>
 
-				<? ReportFormFields::renderWaveHeightField($this->report['waveheight']);?>
+				<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights(), $this->report['waveheight']);?>
 
 				<div class="field text">
 					<label for="text">Report:</label>
@@ -125,28 +125,28 @@ class EditReportForm {
 					
 				
 			</form>	
-		<form action="" method="post" class="delete-form" id="delete-report-form">
-			<input type="hidden" name="submit" value="delete-report" />
-			<input type="button" id="delete-btn" class="delete-btn" value="Delete Report" />
-			<div class="overlay" id="delete-btn-overlay" style="display:none;">
-				<p>Are you sure you want to delete this report? <strong>All data will be lost!</strong></p>
-				<input type="button" class="cancel" id="cancel-deletion" value="Cancel"/>
-				<input class="confirm" type="submit" name="delete-report" id="confirm-deletion" value="Confirm"/>
-			</div>
-		</form>
+			<form action="" method="post" class="delete-form" id="delete-report-form">
+				<input type="hidden" name="submit" value="delete-report" />
+				<input type="button" id="delete-btn" class="delete-btn" value="Delete Report" />
+				<div class="overlay" id="delete-btn-overlay" style="display:none;">
+					<p>Are you sure you want to delete this report? <strong>All data will be lost!</strong></p>
+					<input type="button" class="cancel" id="cancel-deletion" value="Cancel"/>
+					<input class="confirm" type="submit" name="delete-report" id="confirm-deletion" value="Confirm"/>
+				</div>
+			</form>
 
-		<script>
-			(function($) {
-				$('#delete-btn').click(function(){
-					$('#delete-btn-overlay').show();
-					window.scrollTo(0,0);
-				});
+			<script>
+				(function($) {
+					$('#delete-btn').click(function(){
+						$('#delete-btn-overlay').show();
+						window.scrollTo(0,0);
+					});
 
-				$('#delete-btn-overlay #cancel-deletion').click(function(){
-					$('#delete-btn-overlay').hide();
-				});	
-			})(jQuery);		
-		</script>					
+					$('#delete-btn-overlay #cancel-deletion').click(function(){
+						$('#delete-btn-overlay').hide();
+					});	
+				})(jQuery);		
+			</script>					
 		</div>
 		
 

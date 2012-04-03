@@ -39,7 +39,7 @@ class ReportForm {
 			<? } ?>
 			
 			
-				<div class="field time first">
+				<div class="field time first select-field">
 					<label for="time_offset">Time:</label>
 					<select name="time_offset" id="time-offset">
 						<option value="0">Now</option>
@@ -65,7 +65,7 @@ class ReportForm {
 					?>
 				</div>
 
-				<? ReportFormFields::renderWaveHeightField();?>
+				<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights());?>
 				
 				<div class="field text">
 					<label for="text">Report:</label>

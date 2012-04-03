@@ -17,6 +17,10 @@ if ($_POST['text'] === '') {
 	$_POST['text'] = null;
 }
 
+//unset empty waveheight input
+if ($_POST['waveheight'] === '') {
+	$_POST['waveheight'] = null;
+}
 
 /* the current date to be stored */
 $_POST['reportdate'] = intval(gmdate("U")); 

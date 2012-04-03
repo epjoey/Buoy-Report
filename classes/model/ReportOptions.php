@@ -15,10 +15,11 @@ class ReportOptions {
 		return array(1=>'Terrible',2=>'Crap',3=>'OK', 4=>'Pretty Fun',5=>'Great' );
 	}
 
-	public static function waveheight() {
+	public static function getWaveHeights() {
 		return array(
 			'1.5'=>array(1,2),
 			'2.5'=>array(2,3),
+			'3.5'=>array(3,4),
 			'5'=>array(4,6),
 			'7'=>array(6,8),
 			'9'=>array(8,10),

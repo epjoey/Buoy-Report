@@ -96,10 +96,6 @@ class BuoyPage extends GeneralPage {
 		</div>
 
 		<script type="text/javascript">
-			// $('.buoys .block-list-item').click(function(){
-			// 	handleBuoyClick($(this));
-			// })
-
 
 			var searchModuleList = 'buoylist';
 
@@ -109,21 +105,12 @@ class BuoyPage extends GeneralPage {
 				} else {
 					showBuoyDetails(elem);	
 				}
-			}
-
-			// //handle enter key being pressed
-		 //    function (event) {
-		 //        if (event.which == 13 || event.keyCode == 13) {
-		 //            //code to execute here
-		 //            return false;
-		 //        }
-		 //        return true;
-		 //    });			
+			}		
 			
 		 	function showBuoyDetails(elem) {
 		 		var id = elem.attr('buoyid');
 
-		 		elem.addClass('loading');
+		 		//elem.addClass('loading');
 
 		        $.ajax({
 		            //this is the php file that processes the data
@@ -137,8 +124,9 @@ class BuoyPage extends GeneralPage {
 		             
 		            //success
 		            success: function(iframe) { 
-		            	elem.removeClass('loading').addClass('loaded');
 		            	elem.find('.iframe-container').append(iframe).show();     				    		               
+		            	elem.addClass('loaded');
+		            	//elem.removeClass('loading');
    		            }       
 		        });		 		
 			};			

@@ -1,21 +1,20 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
-
 class ReportFormFields {
-	public static function renderWaveHeightField($preselected = null) {
+	public static function renderWaveHeightField($waveHeights = array(), $preselected = null) {
 		?>
-		<div class="field wave-height radio-menu">
+		<div class="field wave-height select-field">
 			<label for="quality">Wave Height: (backs)</label>
-			<?
-			foreach (ReportOptions::waveHeight() as $key=>$value) {
-				$selected = isset($preselected) && $preselected == $key ? "checked = 'true'" : ''; 
-				?>
-				<span class="radio-field">
-					<input type="radio" name="waveheight" id="waveheight-<?=$value[0]?>" value="<?=$key?>" <?=$selected?> /><label for="waveheight-<?=$value[0]?>"> <?=$value[0] . '-' . $value[1]?></label>
-				</span>
+			<select name="waveheight" id="waveheight">
+				<option value="" />select</option>
 				<?
-			}
-			?>
+				foreach ($waveHeights as $key=>$value) {
+					$selected = isset($preselected) && $preselected == $key ? "selected = 'selected'" : ''; 
+					?>
+					<option value="<?=$key?>" <?=$selected?> /><?=$value[0] . '-' . $value[1]?></option>
+					<?
+				}
+				?>
+			</select>
 		</div>	
 		<?
 	}
