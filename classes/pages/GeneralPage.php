@@ -167,7 +167,7 @@ class GeneralPage {
 			<div class="bottom">
 				<div class="text">
 					<p class="footer-nav">
-					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a>&nbsp;|&nbsp;<a href="<?=Path::toAbout()?>">About Buoy Report</a>&nbsp;|&nbsp;<a class="" href="<?=Path::toBuoys()?>">Browse Buoys</a></p>
+					<p class="copyright">&copy; <a href="http://www.hodaradesign.com" target="_blank">hodara design 2012</a>&nbsp;|&nbsp;<a href="<?=Path::toAbout()?>">About Buoy Report</a>&nbsp;|&nbsp;<a class="" href="<?=Path::toBuoys()?>">Browse Buoys</a>&nbsp;|&nbsp;<a class="" href="<?=Path::toReporters()?>">Browse Reporters</a></p>
 					<p class="noaa">All buoy and tide data from <a target="_blank" href="http://noaa.gov">NOAA</a></p>
 				</div> 
 			</div>
