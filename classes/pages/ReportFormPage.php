@@ -16,7 +16,8 @@ class ReportFormPage extends GeneralPage {
 		if (!isset($this->locInfo)) {
 			header('Location:'.Path::to404());
 			exit();	
-		}		
+		}	
+		$this->locInfo['sublocations'] = Persistence::getSubLocationsByLocation($this->locationId);
 		$this->pageTitle = $this->locInfo['locname'] . ' Report';
 		if (isset($_GET['error']) && $_GET['error']) {
 			$this->submitError = $_GET['error'];

@@ -11,35 +11,44 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/form/ReportFormFi
 class ReportForm {
 
 	public function renderReportForm($locInfo, $user, $submitError = NULL, $needPicup) {
-		if (!in_array($locInfo, $user->locations)) {
+		if (!in_array($locInfo['id'], $user->locationIds)) {
 			$reporterHasLocation = 0;
 		} else {
 			$reporterHasLocation = 1;
 		}
+		//var_dump($locInfo);
 		?>
 		<h1 class="form-head">Post Report For <a href="<?=Path::toLocation($locInfo['id']);?>" id="location"><?= $locInfo['locname'] ?></a>
 		</h1>		
 		<div class="form-container">
 			<form id="report-form" action="<?=Path::toHandleReportSubmission()?>" enctype="multipart/form-data" method="post" >	
-			
-			<? if (isset($submitError)) {
-				if ($submitError == 'upload-file') {
-					$errorText = 'Error uploading file';
-				} else if ($submitError == 'file-type') {
-					$errorText = 'You must upload a .gif, .jpeg, or .png';
-				} else if ($submitError == 'file-save') {
-					$errorText = 'Error Saving File';
-				} else if ($submitError == 'no-quality') {
-					$errorText = 'You must choose a quality.';					
-				} else {
-					$errorText = 'Error submitting report';
+				
+				<? 
+				if (isset($submitError)) {
+					if ($submitError == 'upload-file') {
+						$submitError = 'Error uploading file';
+					} else if ($submitError == 'file-type') {
+						$submitError = 'You must upload a .gif, .jpeg, or .png';
+					} else if ($submitError == 'file-save') {
+						$submitError = 'Error Saving File';
+					} else if ($submitError == 'no-quality') {
+						$submitError = 'You must choose a quality.';					
+					} else {
+						$submitError = 'Error submitting report';
+					}
+					?>
+					<span class="submission-error"><?= $submitError ?></span>
+				<? 
+				} 
+
+
+				if (!empty($locInfo['sublocations'])) {
+					ReportFormFields::renderSubLocationSelect($locInfo['sublocations']);
 				}
 				?>
-				<span class="submission-error"><?= $errorText ?></span>
-			<? } ?>
 			
 			
-				<div class="field time first select-field">
+				<div class="field time select-field">
 					<label for="time_offset">Time:</label>
 					<select name="time_offset" id="time-offset">
 						<option value="0">Now</option>

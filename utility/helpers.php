@@ -17,7 +17,7 @@ function timer($where){
 	$timer[$where] = $time;
 }
 
-function dropCookie($name, $value='', $expire = 0, $path = '', $domain='', $secure=false, $httponly=false) {	
+function dropCookie($name, $value='', $expire = 0, $path = '/', $domain='', $secure=false, $httponly=false) {	
 	$_COOKIE[$name] = $value; 	
 	$domain = Path::toCookieDomain();
 	setcookie($name, $value, $expire, $path, $domain, $secure, $httponly); 

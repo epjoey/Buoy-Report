@@ -18,4 +18,23 @@ class ReportFormFields {
 		</div>	
 		<?
 	}
+
+	public static function renderSubLocationSelect($sublocations, $preselected = null) {
+		?>
+		<div class="field sublocations select-field">
+			<label for="sublocation">Sub-Spot:</label>
+			<select name="sublocation" id="sublocation">
+				<option value="" />select</option>
+				<?
+				foreach ($sublocations as $sublocation) {
+					$selected = isset($preselected) && $preselected == $key ? "selected = 'selected'" : ''; 
+					?>
+					<option value="<?=$sublocation->sl_id?>" <?=$selected?> /><?=$sublocation->sl_name?></option>
+					<?
+				}
+				?>
+			</select>
+		</div>	
+		<?
+	}	
 }

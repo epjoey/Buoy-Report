@@ -8,6 +8,7 @@ class FilterForm {
 		?>
 		<form method="get" action="" id="filter-form">
 			<span class="cancel filter-trigger">[ close ]</span>
+
 			<?
 
 			//if on profile page, reports automatically filtered by reporter (need this here because query string gets overwritten when filtering)
@@ -41,6 +42,25 @@ class FilterForm {
 				</div>
 				<?	
 			}
+
+			if(isset($options['sublocations'])) {
+				?>
+				<div class="field location">
+					<select name="sublocation" id="sublocation">
+						<option value="0">Any Sub-Spot</option>
+						<? 
+						foreach ($options['sublocations'] as $sublocation) { 
+							?>
+							<option value="<?= $sublocation->sl_id ?>" <?= 
+								isset($_GET['sublocation']) && $_GET['sublocation'] == $sublocation->sl_id ? "selected='selected'" :'';
+								?>><?= $sublocation->sl_name ?></option>
+							<? 
+						} 
+						?>
+					</select>
+				</div>
+				<?	
+			}			
 			?>
 			<div class="field quality">			
 				<select name="quality" id="quality">
@@ -82,6 +102,13 @@ class FilterForm {
 				?>
 				<a href="<?=$url?>">Reset</a>
 			</p>
+			<script type="text/javascript">
+			    //Filter ajax
+			    // $('#filter-submit').click(function() {  
+			    // 	filterReports(onPage);
+			    // 	return false;
+			    // });			
+			</script>
 		</form>
 		<?
 	}

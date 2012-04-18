@@ -15,6 +15,12 @@ if ($options['on-page'] == 'location-page') {
 if ($options['on-page'] == 'profile-page' || $options['on-page'] == 'edit-profile-page') {
 	$options['locations'] = Persistence::getUserLocations($_GET['reporter']);
 }
+
+if (isset($_GET['sublocation'])) {
+	$options['sublocation'] = $_GET['sublocation'];
+	$options['sublocationInfo'] = Persistence::getSubLocationInfoById($_GET['sublocation']);
+}
+
 $reports = new ReportFeed;
 $reports->loadData($options);
 $reports->renderReportFeed();

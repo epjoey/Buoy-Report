@@ -159,6 +159,20 @@ class Path {
 		return $url;			
 	}
 
+	public static function toSubmitCrew($error = NULL) {
+		$url = '/add-crew.php';
+		if (isset($error)) {
+			$url .= '?error='.$error;
+		}
+		return $url;			
+	}
+
+	public static function toCrew($id = NULL) {
+		if (!isset($id)) 
+			return self::toSubmitCrew(); //make this go to list of crews
+		return '/crew.php?id=' . $id;			
+	}	
+
 	public static function toImageSrc($path, $isRemote = FALSE) {
 		global $local_dev;
 		if ($isRemote) {

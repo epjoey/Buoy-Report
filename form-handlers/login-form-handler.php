@@ -27,8 +27,7 @@ if (!isset($userId)) {
 	exit();		
 }
 
-$user = new User;	
-$user->logInUser($userId, NULL, $newCookie = TRUE);
+User::logInUser($userId, NULL, $newCookie = TRUE);
 	
 if (isset($_POST['login-rel']) && $_POST['login-rel']) {
 	header('Location:'.$_POST['login-rel']);

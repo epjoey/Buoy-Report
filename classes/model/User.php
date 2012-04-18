@@ -21,6 +21,7 @@ class User {
 
 
 	public function __construct(){
+
 		if ($this->userIsLoggedIn()) {
 			$this->isLoggedIn = true;				
 			$this->email = $_SESSION['email'];
@@ -36,44 +37,19 @@ class User {
 		}
 	}
 
-	public function getUserLocations($userId){
-		$this->locations = Persistence::getUserLocations($userId);
-		if (!empty($this->locations)) {
-			$this->hasLocations = TRUE;		
-		}		
-
-		/* 
-		 * Squish the new report info into 
-		 * the locations array before new 
-		 * report is submitted into DB.
-		 * 
-		 */
-		if ($this->hasNewReport) {
-
-			if ($this->newReport['reporterHasLocation'] == '0') {
-				array_unshift(
-					$this->locations, 
-					array(
-						'id'=>$this->newReport['locationid'], 
-						'locname'=>$this->newReport['locationname']
-					)
-				);
-			}
-		}		
-	}
 
 	//handles login/logouts and grants user with session access
-	public function userIsLoggedIn() {	
-
+	public function userIsLoggedIn() {
 		/* ----------------- CHECK IF USER HAS SESSION ----------------- */
 		if (!isset($_SESSION)) session_start();
-		if (isset($_SESSION['userid']) && $_SESSION['userid'] != '')
+		if (isset($_SESSION['userid']) && $_SESSION['userid'] != '') {
 			return TRUE;		
+		}
 
 		/* ----------------- CHECK IF USER HAS COOKIE ----------------- */
-		if (isset($_COOKIE['surf-session']))
+		if (isset($_COOKIE['surf-session'])) {
 			return $this->handleCookie();
-
+		}
 		return FALSE;
 	}
 
@@ -90,13 +66,14 @@ class User {
 		if (!Persistence::userCookieExists($userId, $curCookieKey)) {
 			 return FALSE;
 		} else {
-			$this->logInUser($userId, $curCookieKey, $newCookie = TRUE);
+			self::logInUser($userId, $curCookieKey, $newCookie = TRUE);
 			return TRUE;
 		}		
 		
 	}
 	
-	public function logInUser($userId, $curCookieKey = NULL, $newCookie = TRUE, $fromRegistration = FALSE) {
+	public static function logInUser($userId, $curCookieKey = NULL, $newCookie = TRUE, $fromRegistration = FALSE) {
+
 		$reporterInfo = Persistence::getUserInfoById($userId);
 
 		if (!isset($_SESSION))	
@@ -157,5 +134,38 @@ class User {
 		if (!isset($_SESSION)) session_start();
 		unset ($_SESSION['new-report']);
 	}
+
+	/* this should go in a UserLocation class */
+	public function getUserLocations($userId){
+		$this->locations = Persistence::getUserLocations($userId);
+		if (!empty($this->locations)) {
+			$this->hasLocations = TRUE;		
+		}		
+
+		/* 
+		 * Squish the new report info into 
+		 * the locations array before new 
+		 * report is submitted into DB.
+		 * 
+		 */
+		if ($this->hasNewReport) {
+
+			if ($this->newReport['reporterHasLocation'] == '0') {
+				array_unshift(
+					$this->locations, 
+					array(
+						'id'=>$this->newReport['locationid'], 
+						'locname'=>$this->newReport['locationname']
+					)
+				);
+			}
+		}	
+		if ($this->hasLocations) {
+			foreach($this->locations as $location) {
+				$this->locationIds[] = $location['id'];
+			}		
+		}
+		
+	}	
 }
 ?>

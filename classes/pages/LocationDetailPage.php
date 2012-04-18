@@ -26,6 +26,8 @@ class LocationDetailPage extends GeneralPage {
 			header('Location:'.Path::to404());
 			exit();
 		}			
+
+		$this->locInfo['sublocations'] = Persistence::getSubLocationsByLocation($this->locationId);
 		
 		//ajax this
 		$this->creator = Persistence::getUserInfoById($this->locInfo['creator']);
@@ -277,6 +279,9 @@ class LocationDetailPage extends GeneralPage {
 				<h3>Filter</h2>
 				<? 
 				$filterform = new FilterForm;
+				if (!empty($this->locInfo['sublocations'])) {
+					$options['sublocations'] = $this->locInfo['sublocations'];
+				}
 				$options['location-page'] = $this->locationId;
 				$filterform->renderFilterForm($options);
 				?>

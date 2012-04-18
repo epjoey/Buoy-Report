@@ -12,15 +12,13 @@ if (!isset($_POST['quality']) || $_POST['quality'] === '') {
 	exit();
 }
 
-//unset empty text input
-if ($_POST['text'] === '') {
-	$_POST['text'] = null;
+//unset empty inputs
+foreach($_POST as $key => $post) {
+	if ($post === '') {
+		$_POST[$key] = null;
+	}
 }
 
-//unset empty waveheight input
-if ($_POST['waveheight'] === '') {
-	$_POST['waveheight'] = null;
-}
 
 /* the current date to be stored */
 $_POST['reportdate'] = intval(gmdate("U")); 
@@ -31,9 +29,10 @@ $_POST['obsdate'] = intval(gmdate("U", time()-$offset));
 	
 		
 
-/* image copied into directory during form handle. wierd, I know. */
+/* image handling */
 if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-	
+
+	/* handleFileUpload either saves photo and returns path, or returns an error */	
 	$uploadStatus = handleFileUpload($_FILES['upload'], $_POST['reporterid']);
 
 	/* redirect back to form if handleFileUpload returns error */
@@ -43,10 +42,12 @@ if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') 
 	
 	}
 
+	/* store image path in post if saved succesfully */
 	if (isset($uploadStatus['imagepath'])) {
 		$_POST['imagepath'] = $uploadStatus['imagepath'];
 	}
-				
+
+/* in case they used picup, its a remote url */	
 } else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
 	$_POST['imagepath'] = rawurldecode($_POST['remoteImageURL']);
 }
@@ -58,6 +59,6 @@ if (!isset($_SESSION)) session_start();
 $_SESSION['new-report'] = $_POST; 
 
 
-
+/* redirect to user home page where page will look for session[new-report] and load via ajax. */
 header('Location:'.Path::toUserHome());
 ?>

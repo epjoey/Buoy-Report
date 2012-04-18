@@ -67,6 +67,13 @@ class SingleReport {
 			<ul>
 				<li class="report-head">
 					<a class="loc-name" href="<?=Path::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a>
+					<?
+					if (isset($this->report['sl_name'])) {
+						?>
+						<span class="tz"><?= html($this->report['sl_name']) ?></span>
+						<?
+					}
+					?>
 					<span class="obs-time"><?=$this->obsTime?> <span class="tz"><?=$this->tzAbbrev?></span></span>
 				</li>
 				<? 

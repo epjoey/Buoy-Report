@@ -3,8 +3,6 @@
 class Persistence {
 	public static function dbConnect() {
 
-		global $local_dev;
-
 		$host = 'localhost';
 		$db = 'br';
 		$un = 'root';
@@ -32,8 +30,9 @@ class Persistence {
  
 	public static function insertReport($report = array()) {
 		//to do:create $fields
-		$public = intval($report['public']);
 		$link = Persistence::dbConnect();
+
+		$public = intval($report['public']);
 		$locationid = intval($report['locationid']);
 		$reporterid = intval($report['reporterid']);
 		$obsdate = intval($report['obsdate']);
@@ -54,24 +53,30 @@ class Persistence {
 		if (isset($report['waveheight'])) {
 			$waveheight = floatval($report['waveheight']);
 			$fields .= ", waveheight = '" . $waveheight . "'";			
-		}		
+		}	
+		if (isset($report['sublocation'])) {
+			$sublocationId = intval($report['sublocation']);
+			$fields .= ", sublocationid = '" . $sublocationId . "'";			
+		}				
 		$sql = "INSERT INTO report SET $fields";
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
 			die("Error inserting report into DB" . mysqli_error($link));
 		}
 		$reportid = mysqli_insert_id($link);
+
 		if (!$report['reporterHasLocation']) {
 			Persistence::insertUserLocation($reporterid, $locationid);		
 		}
+
 		return $reportid;
 	}	
 
 	public static function getReports($filters = array(), $limit = 6, $offset = 0) {
 	
 		//the basic SELECT statement
-		$select = 'SELECT *';
-		$from = ' FROM report';
+		$select = 'SELECT * ';
+		$from = ' FROM report a LEFT JOIN sublocation b ON a.sublocationid = b.sl_id ';
 		$where = " WHERE TRUE";
 		$orderby = ' ORDER BY obsdate DESC';
 		$limit = ' LIMIT ' . $offset . ',' . $limit;
@@ -97,6 +102,11 @@ class Persistence {
 			}
 			$where .= ") "; 			
 		}	
+
+		if (!empty($filters['sublocation'])) {
+			$sublocation = $filters['sublocation'];
+			$where .= " AND (sublocationid = '$sublocation') ";			
+		}
 
 		if (isset($filters['quality'])) {
 			$quality = intval($filters['quality']);
@@ -148,6 +158,8 @@ class Persistence {
 		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {	
 			$reports[] = $row;
 		}
+
+		//var_dump($reports);
 
 		if(!empty($reports)) return $reports;
 		else return NULL;
@@ -464,6 +476,38 @@ class Persistence {
 		$sql = "DELETE FROM report WHERE locationid = '$id'";
 		$result = mysqli_query($link, $sql) or die("Error deleting location report associations");
 	}
+
+			
+		
+/*================================================== Sub Locations ==================================================*/
+/*===================================================================================================================*/		
+
+	public static function getSubLocationsByLocation($id) {
+		$link = Persistence::dbConnect();
+		$id = intval($id);
+		$sql = "SELECT a.* 
+				FROM sublocation a 
+				INNER JOIN locationsublocation b ON a.sl_id = b.sublocationid 
+				WHERE b.locationid = '$id'";
+		$result = mysqli_query($link, $sql);
+		$rows = array();
+		while ($row = mysqli_fetch_object($result)) {
+			$rows[] = $row;
+		}
+		return $rows;			
+	}
+
+	public static function getSubLocationInfoById($id) {
+		$link = Persistence::dbConnect();
+		$id = intval($id);
+		$sql = "SELECT * 
+				FROM sublocation 
+				WHERE sl_id = '$id'";
+		$result = mysqli_query($link, $sql);
+		$row = mysqli_fetch_object($result);
+		return $row;			
+	}	
+			
 		
 /*==================================================== Users ====================================================*/
 /*===================================================================================================================*/			
@@ -983,6 +1027,96 @@ class Persistence {
 			return FALSE;
 		}
 	}
+
+/*======================================================== CREWS ========================================================*/
+/*========================================================================================================================*/	
+
+	public static function insertCrew($crew = array()) {
+		
+		if (empty($crew)) return;
+
+		$link = Persistence::dbConnect();
+
+		$creator = intval($crew['creator']); //needs to be passed in!
+
+		$nameStr = '';
+		if (isset($crew['name'])) {
+			$name = mysqli_real_escape_string($link, $crew['name']);
+			$nameStr = ", name = '$name'";
+		}
+
+		$descriptionStr = '';
+		if (isset($crew['description'])) {
+			$description = mysqli_real_escape_string($link, $crew['description']);
+			$descriptionStr = ", description = '$description'";
+		}		
+
+		$sql = "INSERT INTO crew SET creator = '$creator'" . $nameStr . $descriptionStr;
+		//var_dump($sql); exit;
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("error creating crew");
+		}
+		return mysqli_insert_id($link);
+
+	}
+
+	public static function getCrewById($crewId) {
+		$link = Persistence::dbConnect();
+		$crewId = intval($crewId);
+		$sql = "SELECT * FROM crew WHERE id = '$crewId'";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("error fetching crew by id");
+		}
+		return mysqli_fetch_array($result, MYSQL_ASSOC);	
+	}
+
+	public static function getCrewByName($crewName) {
+		$link = Persistence::dbConnect();
+		$crewName = mysqli_real_escape_string($link, $crewName);
+		$sql = "SELECT * FROM crew WHERE name = '$crewName'";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("error fetching crew by name");
+		}
+		return mysqli_fetch_array($result, MYSQL_ASSOC);	
+	}	
+
+	public static function getUsersByCrew($crewId) {
+		$link = Persistence::dbConnect();
+		$crewId = intval($crewId);
+		$sql = "SELECT * FROM reporter a INNER JOIN reportercrew b ON a.id = b.reporter WHERE b.crew = '$crewId'";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("error fetching crew members by crewid");
+		}
+		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {	
+			$reporters[] = $row;
+		}
+		return $reporters;	
+	}		
+
+
+	public static function insertUserIntoCrew($reporterId, $crewId) {
+		$link = Persistence::dbConnect();
+		$reporterId = intval($reporterId);
+		$crewId = intval($crewId);
+		$sql = "INSERT INTO reportercrew SET reporter = '$reporterId', crew = '$crewId'";
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("error inserting user into crew");
+		}
+	}
+
+	public static function removeUserFromCrew($user, $crew) {}
+
+	public static function deleteCrew($crew) {}
+
+	public static function updateCrew($crew) {}
+
+
+
 }
 
 
