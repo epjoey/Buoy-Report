@@ -123,7 +123,15 @@ class EditReportForm {
 					
 				
 			</form>	
-			<form action="" method="post" class="delete-form" id="delete-report-form">
+		</div>			
+		<?
+	}
+
+	public static function renderDeleteReportForm($report) {
+		?>
+		<div>
+			<form action="<?=Path::toHandleEditReportSubmission();?>" method="post" class="delete-form" id="delete-report-form">
+				<input type="hidden" name="id" value="<?=$report['id']?>" />
 				<input type="hidden" name="submit" value="delete-report" />
 				<input type="button" id="delete-btn" class="delete-btn" value="Delete Report" />
 				<div class="overlay" id="delete-btn-overlay" style="display:none;">

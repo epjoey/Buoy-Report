@@ -42,6 +42,7 @@ class EditPostPage extends GeneralPage {
 
 	public function renderBodyContent() {
 		EditReportForm::renderEditReportForm($this->report, $this->submitError, $this->isMobile);
+		EditReportForm::renderDeleteReportForm($this->report);
 	}	
 
 	public function renderFooterJs() {
