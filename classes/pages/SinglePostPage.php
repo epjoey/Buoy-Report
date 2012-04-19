@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
 class SinglePostPage extends GeneralPage {
 
@@ -13,12 +13,7 @@ class SinglePostPage extends GeneralPage {
 			header('HTTP/1.1 301 Moved Permanently');			
 			header('Location:'.Path::to404());
 			exit();	
-		}		
-		$this->locationInfo = Persistence::getLocationInfoById($this->report['locationid']);
-		$this->showDetails = TRUE;
-		
-		$this->reportView = new SingleReport;
-		$this->reportView->loadData($this->report, $this->locationInfo, $this->showDetails);
+		}	
 	}
 
 	public function getBodyClassName() {
@@ -26,7 +21,7 @@ class SinglePostPage extends GeneralPage {
 	}	
 
 	public function renderBodyContent() {
-		$this->reportView->renderSingleReport();
+		SingleReport::renderSingleReport($this->report, array('showDetails'=>true));
 		if ($this->report['reporterid'] == $this->user->id) {
 			?>	
 				<p class="button-container edit-report">

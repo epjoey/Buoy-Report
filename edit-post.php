@@ -14,8 +14,5 @@ if(isset($_REQUEST['id']) && $_REQUEST['id']) {
 $post = new EditPostPage;
 	
 $post->loadData($id);
-if (isset($_POST['submit'])) {
-	$post->afterSubmit();
-}
 $post->renderPage();
 ?>

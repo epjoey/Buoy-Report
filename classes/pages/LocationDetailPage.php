@@ -6,6 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/location/LocationReportFeed.php';
 
 
 class LocationDetailPage extends GeneralPage {
@@ -273,21 +274,11 @@ class LocationDetailPage extends GeneralPage {
 	}	
 	
 	public function renderLeft() {
-		?>
-		<div class="filter">
-			<div class="filter-inner-container">
-				<h3>Filter</h2>
-				<? 
-				$filterform = new FilterForm;
-				if (!empty($this->locInfo['sublocations'])) {
-					$options['sublocations'] = $this->locInfo['sublocations'];
-				}
-				$options['location-page'] = $this->locationId;
-				$filterform->renderFilterForm($options);
-				?>
-			</div>
-		</div>
-		<?
+		if (!empty($this->locInfo['sublocations'])) {
+			$options['sublocations'] = $this->locInfo['sublocations'];
+		}
+		$options['location-page'] = $this->locationId;
+		FilterForm::renderFilterModule($options);
 	}
 	
 	public function renderMain() {
@@ -376,7 +367,6 @@ class LocationDetailPage extends GeneralPage {
 			$options['on-page'] = 'location-page';			
 			$reports = new ReportFeed;
 			$reports->loadData($options);	
-			$reports->renderFilterIcon();	
 			?>
 			<div id="report-feed-container" onPage="location-page">		
 				<? $reports->renderReportFeed(); ?>

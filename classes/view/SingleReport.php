@@ -9,79 +9,50 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Mobile_Detect.php';
 
 
 class SingleReport {
-	private $report;
-	private $locationInfo;
-	private $showDetails = FALSE;
-	private	$locationHasBuoys = FALSE;
-	private	$locationHasTide = FALSE;
-	private	$tideStation = NULL;	
-	private	$imagePath = '';
-	private	$className = 'report';		
 
-	public function loadData($report, $locationInfo = NULL, $showDetails = FALSE) {
+
+	public static function renderSingleReport($report, $options = array()) {
+
+		$defaultOptions = array(
+			'showDetails' => false,
+			'locationHasBuoys' => false
+		);
+		$options = array_merge($defaultOptions, $options);
+
+		//pass this in
+		if (isset($report['buoy1']) || isset($report['buoy2']) || isset($report['buoy3'])) {
+			$options['locationHasBuoys'] = true;
+		}
 		
-		$this->report = $report;
-		$this->showDetails = $showDetails;
-
-		if (!isset($locationInfo)) {
-			$this->locationInfo = Persistence::getLocationInfoById($report['locationid']);			
+		if (isset($report['timezone'])) {
+			$reportTime = getLocalTimeFromGMT($report['reportdate'], $report['timezone']);
+			$obsTime = getLocalTimeFromGMT($report['obsdate'], $report['timezone']);
+			$tzAbbrev = getTzAbbrev($report['timezone']);
 		} else {
-			$this->locationInfo = $locationInfo;
+			$reportTime = gmstrftime("%m/%d/%Y %l:%M %p", $report['reportdate']);
+			$obsTime = gmstrftime("%m/%d/%Y %l:%M %p", $report['obsdate']);
+			$tzAbbrev = "GMT";						
 		}
-
-
-		if (isset($this->locationInfo['timezone'])) {
-			$this->reportTime = getLocalTimeFromGMT($this->report['reportdate'], $this->locationInfo['timezone']);
-			$this->obsTime = getLocalTimeFromGMT($this->report['obsdate'], $this->locationInfo['timezone']);
-			$this->tzAbbrev = getTzAbbrev($this->locationInfo['timezone']);
-		} else {
-			$this->reportTime = gmstrftime("%m/%d/%Y %l:%M %p", $this->report['reportdate']);
-			$this->obsTime = gmstrftime("%m/%d/%Y %l:%M %p", $this->report['obsdate']);
-			$this->tzAbbrev = "GMT";						
-		}
-
-
-		if (isset($this->locationInfo['buoy1']) || isset($this->locationInfo['buoy2']) || isset($this->locationInfo['buoy3'])) {
-			$this->locationHasBuoys = TRUE;
-		}
-
-		if (isset($this->locationInfo['tidestation'])) {
-			$this->locationHasTide = TRUE;
-			$this->tideStation = $locationInfo['tidestation'];
-		}
-
-		if (isset($this->report['imagepath'])) {
-			$this->imagePath = $this->report['imagepath'];
-		}
-
-		if ($this->showDetails) {
-			$this->className .= ' expanded';
-		} else {
-			$this->className .= ' collapsed';
-		}
-	}
-
-	public function renderSingleReport() {
 		?>
-		<li class="<?=$this->className?>" reportid="<?= $this->report['id'] ?>" hasbuoys=<?= $this->locationHasBuoys ? "TRUE" : "FALSE" ; ?> hastide=<?= $this->locationHasTide ? "$this->tideStation" : "FALSE" ; ?> tz="<?=$this->locationInfo['timezone']?>" reporttime="<?=$this->reportTime?>" reporterid="<?=$this->report['reporterid']?>" imagepath="<?= $this->imagePath ?>">
+		<li class="report <?= $options['showDetails'] ? 'expanded' : 'collapsed' ?>" reportid="<?= $report['id'] ?>" hasbuoys=<?= $options['locationHasBuoys'] ? "TRUE" : "FALSE" ; ?> hastide="<?= isset($report['tidestation']) ? $report['tidestation'] : 'FALSE' ; ?>" tz="<?=$report['timezone']?>" reporttime="<?=$reportTime?>" reporterid="<?=$report['reporterid']?>" imagepath="<? if(isset($report['imagepath'])) print $report['imagepath'] ?>">
 			<ul>
 				<li class="report-head">
-					<a class="loc-name" href="<?=Path::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a>
+					<a class="loc-name" href="<?=Path::toLocation($report['locationid']);?>"><?= html($report['locname'])?></a>
 					<?
-					if (isset($this->report['sl_name'])) {
+					if (isset($report['sl_name'])) {
 						?>
-						<span class="tz"><?= html($this->report['sl_name']) ?></span>
+						<span class="tz"><?= html($report['sl_name']) ?></span>
 						<?
 					}
 					?>
-					<span class="obs-time"><?=$this->obsTime?> <span class="tz"><?=$this->tzAbbrev?></span></span>
+					<span class="obs-time"><?=$obsTime?> <span class="tz"><?=$tzAbbrev?></span></span>
 				</li>
 				<? 
-				if (isset($this->report['quality'])) {
+				if (isset($report['quality'])) {
 					$qualities = ReportOptions::quality();
-					$text = $qualities[$this->report['quality']];
+					$text = $qualities[$report['quality']];
 					?>
-					<li class="quality rating<?= $this->report['quality'] ?>">
+					<li class="quality rating<?= $report['quality'] ?>">
 						<ul class="ratings">
 							<li title="<?= $qualities[1]; ?>" class="level one"></li>
 							<li title="<?= $qualities[2]; ?>" class="level two"></li>
@@ -95,21 +66,21 @@ class SingleReport {
 				}
 
 				//render a thumbnail image on page load.
-				if(isset($this->report['imagepath'])) { 
-					$this->renderImage($this->report['imagepath'], $thumb = TRUE);
+				if(isset($report['imagepath'])) { 
+					self::renderImage($report['imagepath'], $thumb = TRUE);
 				}
 								
-				if(isset($this->report['waveheight'])) { 
+				if(isset($report['waveheight'])) { 
 					$heights = ReportOptions::getWaveHeights();
-					$height = $this->report['waveheight'];
+					$height = $report['waveheight'];
 					?>
 					<li class="waveheight"><?= $heights[$height][0] . '-' . $heights[$height][1] . '&rdquo;' ?></li>
 					<? 
 				} 	
 
-				if(isset($this->report['text'])) { 
+				if(isset($report['text'])) { 
 					?>
-					<li class="text-report"><?= bbcode2html($this->report['text']) ?></li>
+					<li class="text-report"><?= bbcode2html($report['text']) ?></li>
 					<? 
 				} 				
 
@@ -118,28 +89,28 @@ class SingleReport {
 				<li class="detail-section">
 					<?
 					/* rendered if on single page or new-report ajax */
-					if ($this->showDetails) { 
+					if ($options['showDetails']) { 
 
-						if(isset($this->report['imagepath'])) { 
-							$this->renderImage($this->report['imagepath']);
+						if(isset($report['imagepath'])) { 
+							self::renderImage($report['imagepath']);
 						}					
-						if ($this->locationHasBuoys) {
-							$this->renderBuoyDetails($this->report['id'], $this->locationInfo['timezone']);
+						if ($options['locationHasBuoys']) {
+							self::renderBuoyDetails($report['id'], $report['timezone']);
 						}	
-						if ($this->locationHasTide) {
-							$this->renderTideDetails($this->report['id'], $this->tideStation, $this->locationInfo['timezone']);
+						if (isset($report['tidestation'])) {
+							self::renderTideDetails($report['id'], $report['tidestation'], $report['timezone']);
 						}					
-						$this->renderReporterDetails($this->report['id'], $this->report['reporterid'], $this->reportTime, $this->locationInfo['timezone']);
+						self::renderReporterDetails($report['id'], $report['reporterid'], $reportTime, $report['timezone']);
 					}
 					?>
 				</li>
 			</ul>
 			<span class="notification-icons">
-				<? if ($this->locationHasBuoys) { ?>
-					<span class="buoy-icon icon" title="<?=$this->locationInfo['locname']?> has buoy stations">B</span>
+				<? if ($options['locationHasBuoys']) { ?>
+					<span class="buoy-icon icon" title="<?=$report['locname']?> has buoy stations">B</span>
 				<? } ?>
-				<? if ($this->locationHasTide) { ?>
-					<span class="tide-icon icon" title="<?=$this->locationInfo['locname']?> has a tide station">T</span>
+				<? if (isset($report['tidestation'])) { ?>
+					<span class="tide-icon icon" title="<?=$report['locname']?> has a tide station">T</span>
 				<? } ?>		
 			</span>	
 			<div class="click-to-expand">
@@ -150,7 +121,7 @@ class SingleReport {
 		<?		
 	}	
 
-	public function renderImage($imagePath, $thumbnail=FALSE) {
+	public static function renderImage($imagepath, $thumbnail=FALSE) {
 		$detect = new Mobile_Detect();
 		if ($thumbnail) {
 			$detect->isSmallDevice() ? $dims = array(50,50) : $dims = array(80,80);	
@@ -158,7 +129,7 @@ class SingleReport {
 		else if (!$thumbnail) {
 			$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(508,400);	
 		}
-		$image = getImageInfo($imagePath, $dims[0], $dims[1]);
+		$image = getImageInfo($imagepath, $dims[0], $dims[1]);
 		if (!empty($image)) {
 			
 			if ($thumbnail) {
@@ -179,13 +150,13 @@ class SingleReport {
 		}			
 	}
 
-	public function renderBuoyDetails($reportid, $tz) {
+	public static function renderBuoyDetails($reportid, $tz) {
 		$buoyDataRows = Persistence::getBuoyData($reportid);
 		if (isset($buoyDataRows)) {
 			?>
 			<ul class="buoy-data">
 				<? foreach ($buoyDataRows as $buoyDataRow) { 
-					$buoyInfo = Persistence::getBuoyInfo($buoyDataRow['buoy']);
+					$buoyInfo = Persistence::getBuoyInfo($buoyDataRow['buoy']); //inner join this
 					$localBuoyTime = getLocalTimeFromGMT($buoyDataRow['gmttime'], $tz);
 					$tzAbbrev = getTzAbbrev($tz);
 					?>

@@ -75,8 +75,10 @@ class Persistence {
 	public static function getReports($filters = array(), $limit = 6, $offset = 0) {
 	
 		//the basic SELECT statement
-		$select = 'SELECT * ';
-		$from = ' FROM report a LEFT JOIN sublocation b ON a.sublocationid = b.sl_id ';
+		$select = 'SELECT a.id as r_id, b.id as l_id, a.*, b.*, c.* ';
+		$from = ' FROM report a 
+					INNER JOIN location b ON a.locationid = b.id 
+					LEFT JOIN sublocation c ON a.sublocationid = c.sl_id ';
 		$where = " WHERE TRUE";
 		$orderby = ' ORDER BY obsdate DESC';
 		$limit = ' LIMIT ' . $offset . ',' . $limit;
@@ -155,11 +157,10 @@ class Persistence {
 			die("Error fetching reports" . mysqli_error(Persistence::dbConnect()));
 		}
 		
-		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {	
+		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+			$row['id'] = $row['r_id']; //'id' was overwritted by table location table in join	
 			$reports[] = $row;
 		}
-
-		//var_dump($reports);
 
 		if(!empty($reports)) return $reports;
 		else return NULL;
@@ -167,43 +168,52 @@ class Persistence {
 
 	public static function getReportbyId($reportId) {
 		$reportId = intval($reportId);
-		$sql = "SELECT * FROM report WHERE id = '$reportId'";
+		$sql = "SELECT a.id as r_id, b.id as l_id, a.*, b.*, c.* 
+				FROM report a 
+				INNER JOIN location b ON a.locationid = b.id
+				LEFT JOIN sublocation c ON a.sublocationid = c.sl_id 
+				WHERE a.id = '$reportId'";
 		$result = mysqli_query(Persistence::dbConnect(), $sql);
 		if (!$result) {
 			die("Error fetching buoys by location" . mysqli_error($link));
 		}
 		$row = mysqli_fetch_array($result, MYSQL_ASSOC);
 		if (!empty($row)) {
+			$row['id'] = $row['r_id'];
 			return $row;
 		} else return NULL;				
 		
 	}
 
-	public static function updateReport($reportInfo = array()) {
+	public static function updateReport($report = array()) {
 		$link = Persistence::dbConnect();
-		$reportId = intval($reportInfo['id']);
+		$reportId = intval($report['id']);
 		
-		$quality = mysqli_real_escape_string($link, $reportInfo['quality']);
+		$quality = mysqli_real_escape_string($link, $report['quality']);
 		$fields = " quality = '" . $quality . "'";
 
-		if (!empty($reportInfo['text'])) {
-			$text = mysqli_real_escape_string($link, $reportInfo['text']);
+		if (!empty($report['text'])) {
+			$text = mysqli_real_escape_string($link, $report['text']);
 			$fields .= ", text = '" . $text . "'";			
 		} else $fields .= ", text = NULL";
 
-		if (isset($reportInfo['imagepath'])) {
+		if (isset($report['imagepath'])) {
 
-			if ($reportInfo['imagepath'] != '') {
-				$imagepath = mysqli_real_escape_string($link, $reportInfo['imagepath']);
+			if ($report['imagepath'] != '') {
+				$imagepath = mysqli_real_escape_string($link, $report['imagepath']);
 				$fields .= ", imagepath = '" . $imagepath . "'";					
 			} else {
 				$fields .= ", imagepath = NULL";
 			}
 		}
-		if (isset($reportInfo['waveheight'])) {
-			$waveheight = floatval($reportInfo['waveheight']);
+		if (isset($report['waveheight'])) {
+			$waveheight = floatval($report['waveheight']);
 			$fields .= ", waveheight = '" . $waveheight . "'";			
-		}		
+		}
+		if (isset($report['sublocation'])) {
+			$sublocation = intval($report['sublocation']);
+			$fields .= ", sublocationid = '" . $sublocation . "'";			
+		}				
 		$sql = "UPDATE report SET $fields WHERE id = '$reportId'";	
 		$result = mysqli_query($link, $sql);
 		if (!$result) {

@@ -22,18 +22,7 @@ class HomePage extends GeneralPage {
 	}	
 
 	public function renderLeft() {
-		?>
-		<div class="filter">
-			<div class="filter-inner-container">
-				<h3>Filter</h2>
-				<? 
-				$filterform = new FilterForm;
-				$options['showlocations'] = FALSE;
-				$filterform->renderFilterForm($options);
-				?>
-			</div>
-		</div>
-		<?
+		FilterForm::renderFilterModule();
 	}
 
 	public function renderMain() {
@@ -45,7 +34,6 @@ class HomePage extends GeneralPage {
 			$options['on-page'] = 'homepage';			
 			$reports = new ReportFeed;
 			$reports->loadData($options);
-			$reports->renderFilterIcon();
 			?>
 			<div id="report-feed-container" onPage="homepage">
 				<?

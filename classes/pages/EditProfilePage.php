@@ -107,21 +107,11 @@ class EditProfilePage extends GeneralPage {
 	}	
 
 	public function renderLeft() {
-		?>
-		<div class="filter">
-			<div class="filter-inner-container">
-				<h3>Filter</h2>
-				<? 
-				$filterform = new FilterForm;
-				$options['showlocations'] = TRUE;
-				$options['locations'] = $this->user->locations;					
-				$filterform->renderFilterForm($options);
-	
-				?>
-			</div>
-		</div>			
-		<?
+		$options['showlocations'] = TRUE;
+		$options['locations'] = $this->user->locations;			
+		FilterForm::renderFilterModule($options);
 	}
+	
 	public function renderMain() {
 		?>
 		<h1>My account</h1>
@@ -141,7 +131,6 @@ class EditProfilePage extends GeneralPage {
 			$options['on-page'] = 'edit-profile-page';	
 			$reports = new ReportFeed;
 			$reports->loadData($options);
-			$reports->renderFilterIcon();							
 			?>
 			<div id="report-feed-container" onPage="edit-profile-page">		
 				<? $reports->renderReportFeed(); ?>

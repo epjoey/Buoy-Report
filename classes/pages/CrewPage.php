@@ -46,17 +46,7 @@ class CrewPage extends GeneralPage {
 	}
 
 	public function renderLeft() {
-		?>
-		<div class="filter">
-			<div class="filter-inner-container">
-				<h3>Filter</h2>
-				<? 
-				$filterform = new FilterForm;
-				$filterform->renderFilterForm();
-				?>
-			</div>
-		</div>
-		<?
+		FilterForm::renderFilterModule();
 	}
 	
 	public function renderMain() {

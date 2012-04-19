@@ -7,15 +7,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
 if (!isset($_SESSION)) session_start();
 
-$report = $_SESSION['new-report'];
-$report['id'] = Report::submitReport($report);
+$id = Report::submitReport($_SESSION['new-report']);
 
-$loadDetails = TRUE; //preloads the details -- instead of through ajax
-$reportLocation = Persistence::getLocationInfoById($report['locationid']); //doing it here instead of inside the class
+$report = Persistence::getReportbyId($id);
 
-$rep = new SingleReport;
-$rep->loadData($report, $reportLocation, $loadDetails);
-$rep->renderSingleReport();
+SingleReport::renderSingleReport($report, array('showDetails'=>true));
 
 unset($_SESSION['new-report']);
 ?>

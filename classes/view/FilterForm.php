@@ -3,12 +3,23 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 
 class FilterForm {
 
-	public function renderFilterForm($options = array()) {
-		
+	public static function renderFilterModule($options = array()) {
 		?>
-		<form method="get" action="" id="filter-form">
-			<span class="cancel filter-trigger">[ close ]</span>
+		<div class="filter">
+			<div class="filter-inner-container">
+				<h3>Filter</h2>
+				<? 
+				self::renderFilterForm($options);
+				?>
+			</div>
+		</div>		
+		<?		
+	}
 
+	public static function renderFilterForm($options = array()) {		
+		?>	
+		<form method="get" action="" id="filter-form">
+			<span class="cancel filter-trigger" onclick="$(this).parents('#outer-container').toggleClass('filter-expanded');">[ close ]</span>
 			<?
 
 			//if on profile page, reports automatically filtered by reporter (need this here because query string gets overwritten when filtering)
@@ -109,9 +120,18 @@ class FilterForm {
 			    // 	return false;
 			    // });			
 			</script>
-		</form>
+		</form>		
 		<?
 	}
+
+	public static function renderOpenFilterTrigger(){
+		?>
+		<span class="filter-trigger mobile-only" id="filter-trigger" onclick="$(this).parents('#outer-container').toggleClass('filter-expanded');">
+			<span class='filter-label'>FILTER</span>
+			<img src="<?=Path::toImages()?>/filter-icon.png" width="20" height="27" id="filter-icon" title="Filter Reports"/>
+		</span>	
+		<?
+	}	
 }
 
 ?>

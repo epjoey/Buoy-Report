@@ -88,12 +88,23 @@ class Path {
 		return '/form-handlers/report-form-handler.php';
 	}
 
+	public static function toHandleEditReportSubmission() {
+		return '/form-handlers/edit-report-form-handler.php';
+	}
+
 	public static function toSinglePost($reportId) {
 		return '/post.php?id='.$reportId;
 	}
 
-	public static function toEditPost($reportId) {
-		return '/edit-post.php?id='.$reportId;
+	public static function toEditPost($reportId, $submitError = NULL) {
+		if (!isset($reportId)) {
+			return self::to404();
+		}
+		$url = '/edit-post.php?id='.$reportId;
+		if (isset($submitError)) {
+			$url .= '&error='.$submitError;
+		}
+		return $url;		
 	}	
 
 	public static function toProfile($reporterId, $status = NULL) {

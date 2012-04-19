@@ -2,6 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 
 class ReportFeed {
 
@@ -109,48 +110,42 @@ class ReportFeed {
 
  	public function renderReportList() {
 
+ 		FilterForm::renderOpenFilterTrigger();
+
 		if (!isset($this->reports) && !isset($_SESSION['new-report'])) {
 			?>
 				<div class="no-data">No Public Reports</div>
 			<?
 		} else {
-			?>
-				<ul class="reports">
-					<?
+			?>			
+			<ul class="reports">
+				<?
 
-					//render empty element to fill with new report that will be loaded via ajax
-					if (isset($_SESSION['new-report']) && $_SESSION['new-report']) {
-						?>
-						<script type="text/javascript">
-							$(document).ready(function(){
-								loadNewReport();
-							});	
-						</script>
-						<?						
-					}
-
-					//render Feed loop
-					if (isset($this->reports)) {
-						foreach ($this->reports as $report) {
-							$singleReport = new SingleReport;
-
-							if (!empty($this->locations)) {
-								$locInfo = $this->locations[$report['locationid']];
-							} else {
-								$locInfo = NULL;
-							}
-							$singleReport->loadData($report, $locInfo);
-							$singleReport->renderSingleReport();
-						}
-					}
+				//render empty element to fill with new report that will be loaded via ajax
+				if (isset($_SESSION['new-report']) && $_SESSION['new-report']) {
 					?>
-				</ul>
-				<script type="text/javascript">
-					//Load report details
-					$('.reports .report').on('click', function(){
-						loadReportDetails($(this));
-					});
-				</script>				
+					<script type="text/javascript">
+						$(document).ready(function(){
+							loadNewReport();
+						});	
+					</script>
+					<?						
+				}
+
+				//render Feed loop
+				if (isset($this->reports)) {
+					foreach ($this->reports as $report) {
+						SingleReport::renderSingleReport($report);
+					}
+				}
+				?>
+			</ul>
+			<script type="text/javascript">
+				//Load report details
+				$('.reports .report').on('click', function(){
+					loadReportDetails($(this));
+				});
+			</script>				
 	
 			<?
 		}
@@ -165,7 +160,6 @@ class ReportFeed {
 
 				    $('#more-reports').click(function() {
 				    	var onPage = $(this).parents('#report-feed-container').attr('onPage');
-				    	console.log(onPage);
 				    	if (!$('#more-reports').hasClass('disabled')) {
 				    		loadMoreReports(onPage);
 				    	}
@@ -175,6 +169,7 @@ class ReportFeed {
 		<?
 	}
 
+	//move this to its own class
 	private function renderFilterNote() {	
 		?>
 		<div class="filter-explain">
@@ -220,15 +215,6 @@ class ReportFeed {
 			?>
 		</div>					
 		<?		
-	}
-
-	public function renderFilterIcon() {
-		?>
-		<span class="filter-trigger mobile-only" id="filter-trigger">
-			<span class='filter-label'>FILTER</span>
-			<img src="<?=Path::toImages()?>/filter-icon.png" width="20" height="27" id="filter-icon" title="Filter Reports"/>
-		</span>			
-		<?
 	}	
 
 	public function renderReportFeedJS() {
@@ -242,8 +228,6 @@ class ReportFeed {
 			    	return false;
 			    });
 			    	
-			    				
-				bindEventHandlers(onPage);
 
 				//load the thumnails
 				loadThumbnails();	

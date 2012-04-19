@@ -185,10 +185,6 @@ class GeneralPage {
 				$('.toggle-btn').click(function(){
 					$(this).next('.toggle-area').toggle();
 				})
-				//Filter trigger toggle
-				$('.filter-trigger').click(function(){
-					$('#outer-container').toggleClass('filter-expanded');
-				});
 			})(jQuery);					
 		</script>
 		<?

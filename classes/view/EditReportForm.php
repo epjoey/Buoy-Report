@@ -9,44 +9,34 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/form/ReportFormFi
 
 
 class EditReportForm {
-	private $report;
-	private $locationInfo;
 
-	public function loadData($report, $locationInfo = NULL) {
-		
-		$this->report = $report;
+	public static function renderEditReportForm($report, $submitError = NULL, $isMobile = FALSE) {	
 
-		if (!isset($locationInfo)) {
-			$this->locationInfo = Persistence::getLocationInfoById($report['locationid']);			
+		//remove when I make this joined with report query
+		$locationInfo = $report['locationInfo'];
+
+		if (isset($locationInfo['timezone'])) {
+			$reportTime = getLocalTimeFromGMT($report['reportdate'], $locationInfo['timezone']);
+			$obsTime = getLocalTimeFromGMT($report['obsdate'], $locationInfo['timezone']);
+			$tzAbbrev = getTzAbbrev($locationInfo['timezone']);
 		} else {
-			$this->locationInfo = $locationInfo;
-		}
-
-		if (isset($this->locationInfo['timezone'])) {
-			$this->reportTime = getLocalTimeFromGMT($report['reportdate'], $locationInfo['timezone']);
-			$this->obsTime = getLocalTimeFromGMT($report['obsdate'], $locationInfo['timezone']);
-			$this->tzAbbrev = getTzAbbrev($locationInfo['timezone']);
-		} else {
-			$this->reportTime = gmstrftime("%m/%d/%Y %l:%M %p", $report['reportdate']);
-			$this->obsTime = gmstrftime("%m/%d/%Y %l:%M %p", $report['obsdate']);
-			$this->tzAbbrev = "GMT";						
+			$reportTime = gmstrftime("%m/%d/%Y %l:%M %p", $report['reportdate']);
+			$obsTime = gmstrftime("%m/%d/%Y %l:%M %p", $report['obsdate']);
+			$tzAbbrev = "GMT";						
 		}
 
 		if (isset($_GET['error']) && $_GET['error']) {
-			$this->submitError = $_GET['error'];
-		}		
+			$submitError = $_GET['error'];
+		}
 
-	}
-
-	public function renderEditReportForm($submitError = NULL, $isMobile) {	
 		?>
-		<h1 class="form-head">Edit Report <?= $this->report['id'] ?></h1>
+		<h1 class="form-head">Edit Report <?= $report['id'] ?></h1>
 		<h4>
-			<a class="loc-name" href="<?=Path::toLocation($this->report['locationid']);?>"><?= html($this->locationInfo['locname'])?></a> - 
-			<span class="obs-time"><?=$this->obsTime?> <span class="tz">(<?=$this->tzAbbrev?>)</span></span>
+			<a class="loc-name" href="<?=Path::toLocation($report['locationid']);?>"><?= html($locationInfo['locname'])?></a> - 
+			<span class="obs-time"><?=$obsTime?> <span class="tz">(<?=$tzAbbrev?>)</span></span>
 		</h4>
 		<div class="form-container">
-			<form action="" method="POST" enctype="multipart/form-data" id="edit-report-form">
+			<form action="<?=Path::toHandleEditReportSubmission();?>" method="POST" enctype="multipart/form-data" id="edit-report-form">
 				
 				<? if (isset($submitError)) {
 					if ($submitError == 'upload-file') {
@@ -62,13 +52,20 @@ class EditReportForm {
 					}
 					?>
 					<span class="submission-error"><?= $errorText ?></span>
-				<? } ?>	
+				<? 
+				}
+
+				if (!empty($locationInfo['sublocations'])) {
+					ReportFormFields::renderSubLocationSelect($locationInfo['sublocations'], $report['sublocationid']);	
+				}
+				?>
+
 				
 				<div class="field quality radio-menu first">
 					<label for="quality">Session was:</label>
 					<?
 					foreach (ReportOptions::quality() as $key=>$value) {
-						if ($this->report['quality'] == $key) {
+						if ($report['quality'] == $key) {
 							$selected = "checked = 'true'";
 						} else {
 							$selected = '';
@@ -83,16 +80,16 @@ class EditReportForm {
 					?>
 				</div>
 
-				<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights(), $this->report['waveheight']);?>
+				<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights(), $report['waveheight']);?>
 
 				<div class="field text">
 					<label for="text">Report:</label>
-					<textarea name="text" class="text-input" id="text"><?=$this->report['text']?></textarea>
+					<textarea name="text" class="text-input" id="text"><?=$report['text']?></textarea>
 				</div>	
 
 				<?
-				if (isset($this->report['imagepath'])) {
-					$image = getImageInfo($this->report['imagepath'], 200, 200);
+				if (isset($report['imagepath'])) {
+					$image = getImageInfo($report['imagepath'], 200, 200);
 					if (!empty($image)) {
 						?>
 						<div class="field image-container">
@@ -106,7 +103,7 @@ class EditReportForm {
 				?>				
 				
 				<div class="field image last">
-					<label for="upload">Upload <?=isset($this->report['imagepath']) ? 'new' : '';?> image:</label> 
+					<label for="upload">Upload <?=isset($report['imagepath']) ? 'new' : '';?> image:</label> 
 					<input type="file" name="upload" id="upload" capture="camera">
 					<span id="mobile-image-name" class="mobile-note">
 						<?
@@ -119,6 +116,7 @@ class EditReportForm {
 					</span>
 				</div>
 
+				<input type="hidden" name="id" id="id" value="<?=$report['id']?>" />
 				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
 				<input type="hidden" name="submit" value="update-report" />				
 				<input type="submit" name="update_report" value="Update Report" />							

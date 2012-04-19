@@ -4,7 +4,13 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FormHandlers.php';
 
-/* --------------- HANDLE REPORT FORM SUBMISSION --------------- */
+/* --------------- HANDLE EDIT REPORT FORM SUBMISSION --------------- */
+
+if ($_POST['submit'] == 'delete-report') {
+	Persistence::deleteReport($_POST['id']);
+	header('Location:'.Path::toUserHome());
+	exit();	
+}
 
 
 try {
@@ -13,16 +19,12 @@ try {
 
 } catch(Exception $e) {
 	//print $e->getMessage();
-	header('Location:'.Path::toPostReport($_POST['locationid'], $e->getMessage()));
+	header('Location:'.Path::toEditPost($_POST['id'], $e->getMessage()));
 	exit;
 
 }
 
 
-/* Storing report in session */			
-if (!isset($_SESSION)) session_start();
-$_SESSION['new-report'] = $post; 
-
-/* redirect to user home page where page will look for session[new-report] and load via ajax. */
-header('Location:'.Path::toUserHome());
+Persistence::updateReport($post);
+header('Location:'.Path::toSinglePost($post['id']));
 ?>
