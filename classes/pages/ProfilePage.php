@@ -3,7 +3,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
-
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
 
 
 
@@ -13,10 +14,9 @@ class ProfilePage extends GeneralPage {
 
 	public function loadData(){
 		parent::loadData();
-		$this->pageOwnerId = $_GET['reporter'];
+		$this->pageOwnerId = intval($_GET['reporter']);
 		$this->pageOwnerInfo = Persistence::getUserInfoById($this->pageOwnerId);
-		if (!isset($this->pageOwnerInfo)) {
-			header('HTTP/1.1 301 Moved Permanently');			
+		if (!$this->pageOwnerInfo) {
 			header('Location:'.Path::to404());
 			exit();
 		}
@@ -27,6 +27,12 @@ class ProfilePage extends GeneralPage {
 		if (!empty($this->pageOwnerLocations)) {
 			$this->pageOwnerHasLocations = TRUE;		
 		}	
+		/* load Report Filters */
+		$this->reportFilters = FilterService::getReportFilterRequests();
+		$this->reportFilters['reporterId'] = $this->pageOwnerId; //disregard filter request and use user's locations
+
+		/* load Reports */
+		$this->reports = Persistence::getReports($this->reportFilters);		
 	}
 
 	public function getBodyClassName() {
@@ -34,10 +40,13 @@ class ProfilePage extends GeneralPage {
 	}		
 
 	public function renderLeft() {
-		$options['showlocations'] = TRUE;
-		$options['locations'] = $this->pageOwnerLocations;
-
-		FilterForm::renderFilterModule($options);		
+		$filterOptions = array(
+			'locationObjects' => $this->pageOwnerLocations
+		);
+		$autoFilters = array(
+			'reporterId' => $this->pageOwnerId
+		);		
+		FilterForm::renderFilterModule($filterOptions, $autoFilters);	
 	}
 	
 	public function renderMain() {	
@@ -54,19 +63,23 @@ class ProfilePage extends GeneralPage {
 		</div>	
 		<div class="reports-container">
 			<h2><span class="name"><?=$this->pageOwnerName;?></span>&apos;s Reports</h2>
-			<?			
-			$options['locations'] = $this->pageOwnerLocations;
-			$options['reporters'] = array($this->pageOwnerInfo);
-			$options['on-page'] = 'profile-page';			
-			$reports = new ReportFeed;
-			$reports->loadData($options);
-			?>
-			<div id="report-feed-container" onPage="profile-page">		
-				<? $reports->renderReportFeed(); ?>
-			</div>
-			<?
-			$reports->renderReportFeedJS();
-			?>							
+
+			<? FilterForm::renderOpenFilterTrigger(); ?>
+			<div id="report-feed-container">
+				<?
+				$filterResults = array_merge(
+					$this->reportFilters, array(
+						'location' => $this->pageOwnerName . "'s locations"
+					)
+				);
+				FilterNote::renderFilterNote($filterResults);
+				?>
+				<div id="report-feed">
+					<?
+					ReportFeed::renderFeed($this->reports); 
+					?>
+				</div>
+			</div>						
 		</div>	
 		<?
 	}			

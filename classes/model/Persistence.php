@@ -83,7 +83,12 @@ class Persistence {
 		$orderby = ' ORDER BY obsdate DESC';
 		$limit = ' LIMIT ' . $offset . ',' . $limit;
 
-		if (!empty($filters['reporters'])) {
+		//use either specific id or list of ids for reporter clause
+		if (isset($filters['reporterId'])) {
+			$reporterId = intval($filters['reporterId']);
+			$where .= " AND reporterid = '$reporterId' ";			
+		}
+		else if (!empty($filters['reporters'])) {
 			$where .= " AND (";
 			foreach ($filters['reporters'] as $key=>$reporter) {
 				$where .= " reporterid = '$reporter'";
@@ -94,7 +99,12 @@ class Persistence {
 			$where .= ") "; 			
 		}
 
-		if (!empty($filters['locations'])) {
+		//use either specific id or list of ids for location clause
+		if (isset($filters['locationId'])) {
+			$locationId = intval($filters['locationId']);
+			$where .= " AND locationid = '$locationId' ";			
+		}
+		else if (!empty($filters['locations'])) {
 			$where .= " AND (";
 			foreach ($filters['locations'] as $key=>$location) {
 				$where .= " locationid = '$location'";
@@ -103,11 +113,11 @@ class Persistence {
 				}
 			}
 			$where .= ") "; 			
-		}	
+		}			
 
 		if (!empty($filters['sublocation'])) {
-			$sublocation = $filters['sublocation'];
-			$where .= " AND (sublocationid = '$sublocation') ";			
+			$sublocation = intval($filters['sublocation']);
+			$where .= " AND sublocationid = '$sublocation' ";			
 		}
 
 		if (isset($filters['quality'])) {

@@ -1,6 +1,10 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditAccountForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
+
+
 
 
 
@@ -26,6 +30,12 @@ class EditProfilePage extends GeneralPage {
 			}
 			$this->editAccountStatus = $e;
 		}	
+
+		$this->reportFilters = FilterService::getReportFilterRequests(); //this wont really be used on first page load. filtering is done via ajax
+		$this->reportFilters['reporterId'] = $this->user->id; //disregard filter request and use user's locations
+
+		/* load Reports */
+		$this->reports = Persistence::getReports($this->reportFilters);				
 	}
 
 	public function getBodyClassName() {
@@ -107,9 +117,13 @@ class EditProfilePage extends GeneralPage {
 	}	
 
 	public function renderLeft() {
-		$options['showlocations'] = TRUE;
-		$options['locations'] = $this->user->locations;			
-		FilterForm::renderFilterModule($options);
+		$filterOptions = array(
+			'locationObjects' => $this->user->locations
+		);
+		$autoFilters = array(
+			'reporterId' => $this->user->id
+		);		
+		FilterForm::renderFilterModule($filterOptions, $autoFilters);	
 	}
 	
 	public function renderMain() {
@@ -125,19 +139,22 @@ class EditProfilePage extends GeneralPage {
 		?>
 		<div class="reports-container">
 			<h3>My Reports</h3>
-			<?
-			$options['locations'] = $this->user->locations;
-			$options['limit'] = 3;	
-			$options['on-page'] = 'edit-profile-page';	
-			$reports = new ReportFeed;
-			$reports->loadData($options);
-			?>
-			<div id="report-feed-container" onPage="edit-profile-page">		
-				<? $reports->renderReportFeed(); ?>
-			</div>	
-			<?
-			$reports->renderReportFeedJS();
-			?>							
+			<? FilterForm::renderOpenFilterTrigger(); ?>
+			<div id="report-feed-container">
+				<?
+				$filterResults = array_merge(
+					$this->reportFilters, array(
+						'location' => 'my locations'
+					)
+				);
+				FilterNote::renderFilterNote($filterResults);
+				?>
+				<div id="report-feed">
+					<?
+					ReportFeed::renderFeed($this->reports); 
+					?>
+				</div>
+			</div>							
 		</div>
 		<?
 	}	

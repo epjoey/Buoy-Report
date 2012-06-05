@@ -2,7 +2,10 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
 
 
 
@@ -15,6 +18,16 @@ class HomePage extends GeneralPage {
 	public function loadData(){
 		parent::loadData();
 		$this->pageTitle = $this->siteTitle . ' Home';
+
+		/* load Report Filters from URL */
+		$this->reportFilters = FilterService::getReportFilterRequests(); 
+
+		/* load Reports from DB */
+		$this->reports = array();
+		if ($this->user->locationIds) {
+			$this->reportFilters['locations'] = $this->user->locationIds; //disregard filter request and use user's locations
+			$this->reports = Persistence::getReports($this->reportFilters);
+		}
 	}
 
 	public function getBodyClassName() {
@@ -22,27 +35,33 @@ class HomePage extends GeneralPage {
 	}	
 
 	public function renderLeft() {
-		FilterForm::renderFilterModule();
+		$filterOptions = array();
+		$autoFilters = array(
+			'locationIds' => $this->user->locationIds
+		);		
+		FilterForm::renderFilterModule($filterOptions, $autoFilters);
 	}
 
 	public function renderMain() {
 		?>
 		<div class="reports-container">
 			<h2>Recent Reports</h2>		
-			<?
-			$options['locations'] = $this->user->locations;
-			$options['on-page'] = 'homepage';			
-			$reports = new ReportFeed;
-			$reports->loadData($options);
-			?>
-			<div id="report-feed-container" onPage="homepage">
+			<? FilterForm::renderOpenFilterTrigger(); ?>
+			<div id="report-feed-container">
 				<?
-				$reports->renderReportFeed();
+				$filterResults = array_merge(
+					$this->reportFilters, array(
+						'location' => 'my locations'
+					)
+				);
+				FilterNote::renderFilterNote($filterResults);
 				?>
+				<div id="report-feed">
+					<?
+					ReportFeed::renderFeed($this->reports); 
+					?>
+				</div>
 			</div>
-			<?
-			$reports->renderReportFeedJS();
-			?>
 		</div>
 		<?		
 	}

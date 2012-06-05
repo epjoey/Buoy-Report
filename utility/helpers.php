@@ -11,6 +11,13 @@ if ($_SERVER["REMOTE_ADDR"] == '::1' ||
 }
 $timer = array();
 
+function returnRequest($str) {
+	if (isset($_REQUEST[$str]) && $_REQUEST[$str]) {
+		return $_REQUEST[$str];
+	}
+	return null;
+}
+
 function timer($where){
 	global $timer;
 	$time = microtime();

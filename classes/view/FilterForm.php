@@ -3,48 +3,56 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 
 class FilterForm {
 
-	public static function renderFilterModule($options = array()) {
+	public static function renderFilterModule($filterOptions = array(), $autoFilters = array()) {
 		?>
 		<div class="filter">
 			<div class="filter-inner-container">
 				<h3>Filter</h2>
 				<? 
-				self::renderFilterForm($options);
+				self::renderFilterForm($filterOptions, $autoFilters);
 				?>
 			</div>
 		</div>		
 		<?		
 	}
 
-	public static function renderFilterForm($options = array()) {		
+	public static function renderFilterForm($filterOptions = array(), $autoFilters = array()) {	
 		?>	
 		<form method="get" action="" id="filter-form">
 			<span class="cancel filter-trigger" onclick="$(this).parents('#outer-container').toggleClass('filter-expanded');">[ close ]</span>
-			<?
-
-			//if on profile page, reports automatically filtered by reporter (need this here because query string gets overwritten when filtering)
-			if (isset($_GET['reporter']) && $_GET['reporter']) {
+			<?					
+			if (isset($autoFilters['reporterId'])) {
 				?>
-				<input type="hidden" name="reporter" value="<?=$_GET['reporter']?>" />
+				<input type="hidden" name="reporter" value="<?=$autoFilters['reporterId']?>" />
+				<?	
+			}				
+			if (!empty($autoFilters['reporterIds'])) {
+				?>
+				<input type="hidden" name="reporters" value="<?=implode(',', $autoFilters['reporterIds'])?>" />
 				<?	
 			}
-			// Locations not passed in on location page
-			if (isset($options['location-page'])) {
+			if (isset($autoFilters['locationId'])) {
 				?>	
-				<input type="hidden" name="location" value="<?=$options['location-page']?>"/>
+				<input type="hidden" name="location" value="<?= $autoFilters['locationId']?>"/>
 				<?
-			}			
+			}				
+			if (!empty($autoFilters['locationIds'])) {
+				?>	
+				<input type="hidden" name="locations" value="<?= implode(',', $autoFilters['locationIds'])?>"/>
+				<?
+			}					
 
-			if(isset($options['locations']) && $options['showlocations']) {
+			if(!empty($filterOptions['locationObjects'])) {
 				?>
 				<div class="field location">
+					<label for="date">By Location:</label>
 					<select name="location" id="location">
-						<option value="0">Any Location</option>
+						<option value="0">-- Choose --</option>
 						<? 
-						foreach ($options['locations'] as $location) { 
+						foreach ($filterOptions['locationObjects'] as $location) { 
 							?>
 							<option value="<?= $location['id'] ?>" <?= 
-								isset($_GET['location']) && $_GET['location'] == $location['id'] ? "selected='selected'" :'';
+								returnRequest('location') == $location['id'] ? "selected='selected'" :'';
 								?>><?= $location['locname'] ?></option>
 							<? 
 						} 
@@ -54,16 +62,17 @@ class FilterForm {
 				<?	
 			}
 
-			if(isset($options['sublocations'])) {
+			if(!empty($filterOptions['sublocationObjects'])) {
 				?>
 				<div class="field location">
+					<label for="date">By SubLocation:</label>
 					<select name="sublocation" id="sublocation">
-						<option value="0">Any Sub-Spot</option>
+						<option value="0">-- Choose --</option>
 						<? 
-						foreach ($options['sublocations'] as $sublocation) { 
+						foreach ($filterOptions['sublocationObjects'] as $sublocation) { 
 							?>
 							<option value="<?= $sublocation->sl_id ?>" <?= 
-								isset($_GET['sublocation']) && $_GET['sublocation'] == $sublocation->sl_id ? "selected='selected'" :'';
+								returnRequest('sublocation') == $sublocation->sl_id ? "selected='selected'" :'';
 								?>><?= $sublocation->sl_name ?></option>
 							<? 
 						} 
@@ -73,54 +82,61 @@ class FilterForm {
 				<?	
 			}			
 			?>
+
 			<div class="field quality">			
+				<label for="date">By Session Quality:</label>
 				<select name="quality" id="quality">
-					<option value="0">Any Quality</option>
+					<option value="0">-- Choose --</option>
 					<? foreach (ReportOptions::quality() as $key=>$value): ?>
 						<option value="<?= $key ?>" <?=
-							isset($_GET['quality']) && $_GET['quality'] == $key ? "selected='selected'" :'';
+							returnRequest('quality') == $key ? "selected='selected'" :'';
 						?>><?= $value ?></option>
 					<? endforeach; ?>
 				</select>
 			</div>
+
 			<div class="field image">
+				<label for="date">With/Without Image:</label>
 				<select name="image" id="image">
+					<option value="0">-- Choose --</option>
 					<? foreach (ReportOptions::hasImage() as $key=>$value): ?>
 						<option value="<?= $key ?>" <?= 
-							isset($_GET['image']) && $_GET['image'] == $key ? "selected='selected'" :'';
+							returnRequest('image') == $key ? "selected='selected'" :'';
 						?>><?= $value ?></option>
 					<? endforeach; ?>
 				</select>
 			</div>
+
 			<div class="field text-search">
-				<input type="text" name="text" id="text-search" class="text-input"  placeholder="Containing text..." />
+				<label for="date">Containing Text:</label>			
+				<input type="text" name="text" id="text-search" class="text-input"  placeholder="Enter text..." />
 			</div>
+
 			<div class="field date">
 				<label for="date">On/Before Date:</label>
 				<input type="text" name="date" id="date" class="text-input"  placeholder="mm/dd/yyyy" />
 			</div>
-				
+			
 			<input type="submit" id="filter-submit" value="Filter" />
 			<p class="reset">
 				<? 
 					$url = $_SERVER['PHP_SELF'];
-					if (isset($_GET['reporter'])) {
-						$url .= '?reporter=' . $_GET['reporter'];
-					} else if (isset($_GET['location'])) {
-						$url .= '?location=' . $_GET['location'];
+					if (returnRequest('reporter')) {
+						$url .= '?reporter=' . returnRequest('reporter');
+					} else if (returnRequest('location')) {
+						$url .= '?location=' . returnRequest('location');
 					}
 
 				?>
 				<a href="<?=$url?>">Reset</a>
 			</p>
-			<script type="text/javascript">
-			    //Filter ajax
-			    // $('#filter-submit').click(function() {  
-			    // 	filterReports(onPage);
-			    // 	return false;
-			    // });			
-			</script>
-		</form>		
+		</form>	
+		<script type="text/javascript">
+		    // $('#filter-submit').click(function() {  
+		    // 	filterReports($(this).parents('#filter-form'));
+		    // 	return false;
+		    // });			
+		</script>
 		<?
 	}
 

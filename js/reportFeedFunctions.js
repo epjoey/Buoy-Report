@@ -1,51 +1,13 @@
-function getFilterValues() {
+//this function is not being used 6.4.12
+function filterReports(form) {    
+
+    feed = $(document).find('#report-feed');
+    data = form.serialize();
 	
-	var filterValues = {
-		
-		//Set the current filter form values
-        'quality' : $('select[name=quality]').val(),
-        'image' : $('select[name=image]').val(),
-        'text' : $('input[name=text]').val(),
-        'date' : $('input[name=date]').val()
-	}
-
-	//On some pages, a locationid is pre-selected using a hidden input
-    if ($('input[name=location]').length>0) {
-    	filterValues['location'] = $('input[name=location]').val();
-    }
-
-    //On other pages, the user can choose a location
-    if ($('select[name=location]').length>0) {
-    	filterValues['location'] = $('select[name=location]').val();
-    }
-
-    //On locationdetail pages with sublocations, the user can choose a sublocation
-    if ($('select[name=sublocation]').length>0) {
-    	filterValues['sublocation'] = $('select[name=sublocation]').val();
-    }		        
-    	
-    //On some pages, a reporterid is pre-selected	        
-    if ($('input[name=reporter]').length>0) {
-    	filterValues['reporter'] = $('input[name=reporter]').val();
-    }
-    				
-	return filterValues;		    	
-}
-
-function filterReports(onPage) {    
-
-    feed = $('#report-feed-container');
-	params = getFilterValues();   
-	params['on-page'] = onPage;
-
-    var data = '';
-    for(var index in params) {
-	  data += index + "=" + params[index] + "&";
-	} 
-
-	console.log(data);
+    //console.log(data);
 
     //show the loading sign
+    feed.children().fadeOut(60);
     feed.addClass('loading');
      
     //start the ajax
@@ -65,24 +27,22 @@ function filterReports(onPage) {
         //success
         success: function(reports) {   
         	$('#outer-container').removeClass('filter-expanded');  
+            feed.hide();
             feed.html(reports); 
             feed.removeClass('loading');
+            feed.fadeIn(60);
             loadThumbnails();
-			updateNumReports();
-            }       
+			updateFilterNote();
+        }       
     });
 }; 	
 
-function loadMoreReports(onPage) {
+function loadMoreReports(form) {
     feed = $('#report-feed-container');
-	params = getFilterValues(); 
-	params['on-page'] = onPage;
-	params['num-reports'] = feed.find('.report').length;
-
-	var data = '';
-    for(var index in params) {
-	  	data += index + "=" + params[index] + "&";
-	} 
+	data = $(form).serialize(); 
+	numReports = feed.find('.report').length;
+    data = data + "&offset=" + numReports;
+    //console.log(data);
 
 	//find the last list of reports (only one until "See more reports" is clicked)
     reportsList = feed.find('ul.reports').last();
@@ -116,13 +76,12 @@ function loadMoreReports(onPage) {
 			//disable button if no more reports
 			//console.log(reports.match('<li'));
 			if (reports.match('<li') == null)
-				disableMoreReportsButton();
+				$('#more-reports').addClass('disabled');
             }       
     });				 
 }		
 
 function loadReportDetails(report) {
-	//alert('ok');
 	var detailSection = report.find('.detail-section'),
 		reportId = report.attr('reportid'),
 		obuoys = report.attr('hasbuoys'),
@@ -131,11 +90,11 @@ function loadReportDetails(report) {
 		oreportTime = report.attr('reporttime'),
 		oreporterId = report.attr('reporterid'),
 		oimagePath = report.attr('imagepath');
+
+    console.log(reportId);
 		
 	if (report.hasClass('collapsed')) {
-		//console.log(report);
-		report.removeClass('collapsed').addClass('expanded');	
-		
+		report.removeClass('collapsed').addClass('expanded');
 		if (detailSection.hasClass('loaded')) {
 			return;
 		}
@@ -194,12 +153,12 @@ function loadThumbnails(){
 	});				
 }
 
-function updateNumReports(){
-	numReportsElem = $('#report-feed-container').find('#numReports').first();
-	numReports = $('#report-feed-container').find('.report').length;
-	numReportsElem.text(numReports);
+function updateFilterNote(){
+	updateNumReports();
 }
 
-function disableMoreReportsButton(){
-	$('#more-reports').addClass('disabled');
+function updateNumReports(){
+    numReports = $('#report-feed-container .report').length;
+    $('#numReports').text(numReports);
 }
+

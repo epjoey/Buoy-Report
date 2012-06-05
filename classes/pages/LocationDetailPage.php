@@ -7,6 +7,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/location/LocationReportFeed.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
+
 
 
 class LocationDetailPage extends GeneralPage {
@@ -73,13 +76,55 @@ class LocationDetailPage extends GeneralPage {
 		}
 		if (isset($_GET['entered']) && $_GET['entered'] == 'tide') {
 			$this->enteredTide = TRUE;
-		}				
+		}	
+		
+		/* load Report Filters */
+		$this->reportFilters = FilterService::getReportFilterRequests();
+
+		/* load Reports */
+		$this->reports = Persistence::getReports($this->reportFilters);					
 							
 	}
 
 	public function getBodyClassName() {
 		return 'location-detail-page';
-	}		
+	}	
+	
+
+	private function renderLocReports() {
+		?>
+		<div class="reports-container">
+			<h2>Recent Reports</h2>		
+			<? FilterForm::renderOpenFilterTrigger(); ?>
+			<div id="report-feed-container">
+				<? 
+				$filterResults = array_merge(
+					$this->reportFilters, array(
+						'location'=> $this->locInfo['locname'],
+					)
+				);				
+				FilterNote::renderFilterNote($filterResults);
+				?>
+				<div id="report-feed">
+					<?
+					ReportFeed::renderFeed($this->reports); 
+					?>
+				</div>
+			</div>
+		</div>		
+		<?
+	} 
+	
+	public function renderLeft() {
+		$filterOptions = array(
+			'sublocationObjects' => $this->locInfo['sublocations']
+		);
+		$autoFilters = array(
+			'locationId' => $this->locationId
+		);
+		FilterForm::renderFilterModule($filterOptions, $autoFilters);
+	}
+				
 
 	public function renderJs() {
 		parent::renderJs();
@@ -273,14 +318,6 @@ class LocationDetailPage extends GeneralPage {
 		return TRUE;
 	}	
 	
-	public function renderLeft() {
-		if (!empty($this->locInfo['sublocations'])) {
-			$options['sublocations'] = $this->locInfo['sublocations'];
-		}
-		$options['location-page'] = $this->locationId;
-		FilterForm::renderFilterModule($options);
-	}
-	
 	public function renderMain() {
 		$this->renderLocDetails();		
 		$this->renderLocReports();	
@@ -357,26 +394,6 @@ class LocationDetailPage extends GeneralPage {
 		</div>
 		<?
 	}
-
-	private function renderLocReports() {
-		?>
-		<div class="reports-container">
-			<h3>Reports</h3>
-			<?
-			$options['locations'] = array($this->locInfo);
-			$options['on-page'] = 'location-page';			
-			$reports = new ReportFeed;
-			$reports->loadData($options);	
-			?>
-			<div id="report-feed-container" onPage="location-page">		
-				<? $reports->renderReportFeed(); ?>
-			</div>
-			<?
-			$reports->renderReportFeedJS();
-			?>			
-		</div>
-		<?
-	} 
 
 	public function renderRight() {
 

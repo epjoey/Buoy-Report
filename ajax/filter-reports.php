@@ -1,27 +1,17 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
 
 
-if (!isset($_SESSION)) session_start();
+//this end point is not currently being used (6.4.12)
+$reportFilters = FilterService::getReportFilterRequests();
 
-$options['on-page'] = $_GET['on-page'];
-if ($options['on-page'] == 'homepage') {
-	$options['locations'] = Persistence::getUserLocations($_SESSION['userid']);
-}
-if ($options['on-page'] == 'location-page') {
-	$options['locations'] = array(Persistence::getLocationInfoById($_GET['location']));
-}
-if ($options['on-page'] == 'profile-page' || $options['on-page'] == 'edit-profile-page') {
-	$options['locations'] = Persistence::getUserLocations($_GET['reporter']);
-}
+/* load Reports */
+$reports = Persistence::getReports($reportFilters);
 
-if (isset($_GET['sublocation'])) {
-	$options['sublocation'] = $_GET['sublocation'];
-	$options['sublocationInfo'] = Persistence::getSubLocationInfoById($_GET['sublocation']);
-}
+$filterResults = $reportFilters;
+$filterResults['location'] = '';
 
-$reports = new ReportFeed;
-$reports->loadData($options);
-$reports->renderReportFeed();
+ReportFeed::renderFeed($reports);
 ?>

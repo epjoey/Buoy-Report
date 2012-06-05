@@ -31,7 +31,7 @@ class ReportOptions {
 	}
 
 	public static function hasImage() {
-		return array(0=>'Image?', 1=>'With Image', 2=>'Without Image');
+		return array( 1=>'With Image', 2=>'Without Image');
 	}
 
 	public static function sunOptions() {
