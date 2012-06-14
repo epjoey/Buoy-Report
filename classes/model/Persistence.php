@@ -6,7 +6,7 @@ class Persistence {
 		$host = 'localhost';
 		$db = 'br';
 		$un = 'root';
-		$pw = 'ivytila';
+		$pw = '';
 					
 		$link = mysqli_connect($host, $un, $pw);
 
