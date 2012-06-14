@@ -60,7 +60,7 @@ class User {
 
 		/*--- HASH KEY TO MATCH STORED KEY -----*/
 		$userId = $cookie_array[0];
-		$curCookieKey = md5($cookie_array[1] . 'makawao');
+		$curCookieKey = md5($cookie_array[1] . '');
 
 		/*--- IF KEY EXISTS IN DB LOG USER IN WITH PARAMS TO SET NEW COOKIE -----*/
 		if (!Persistence::userCookieExists($userId, $curCookieKey)) {
@@ -90,7 +90,7 @@ class User {
 		/*--------------- REPLACING AND RESETING EXISTING COOKIE ----------------*/
 		if (isset($curCookieKey) && $newCookie) {
 			$newKey = str_shuffle('1234567890abcdefghijklmnop' . $userId);
-			Persistence::replaceUserCookie($userId, md5($newKey . 'makawao'), $curCookieKey); 
+			Persistence::replaceUserCookie($userId, md5($newKey . ''), $curCookieKey); 
 			eatCookie('surf-session');	
 			dropCookie('surf-session', $userId . '%' . $newKey, time()+60*60*24*7);
 		}
@@ -98,7 +98,7 @@ class User {
 		/*------------------- SAVING AND SETTING NEW COOKIE --------------------*/
 		else if ($newCookie) {
 			$newKey = str_shuffle('1234567890abcdefghijklmnop' . $userId); 	
-			Persistence::insertUserCookie($userId, md5($newKey . 'makawao'));
+			Persistence::insertUserCookie($userId, md5($newKey . ''));
 			dropCookie('surf-session', $userId . '%' . $newKey, time()+60*60*24*7);
 		}
 	}
