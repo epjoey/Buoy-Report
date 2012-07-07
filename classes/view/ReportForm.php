@@ -48,7 +48,7 @@ class ReportForm {
 				?>
 			
 			
-				<div class="field time select-field">
+				<div class="field time select-field required">
 					<label for="time_offset">Time:</label>
 					<select name="time_offset" id="time-offset">
 						<option value="0">Now</option>
@@ -61,8 +61,8 @@ class ReportForm {
 						?>
 					</select>
 				</div>
-				<div class="field quality radio-menu">
-					<label for="quality">Session was*:</label>
+				<div class="field quality radio-menu required">
+					<label for="quality">Quality of Rides*:</label>
 					<?
 					foreach (ReportOptions::quality() as $key=>$value) {
 						?>

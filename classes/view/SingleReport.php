@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Persistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
@@ -33,7 +33,11 @@ class SingleReport {
 			$obsTime = gmstrftime("%m/%d/%Y %l:%M %p", $report['obsdate']);
 			$tzAbbrev = "GMT";						
 		}
+		$report['reportTime'] = $reportTime;
+		$report['obsTime'] = $obsTime;
+		$report['tzAbbrev'] = $tzAbbrev;
 		?>
+
 		<li class="report <?= $options['showDetails'] ? 'expanded' : 'collapsed' ?>" reportid="<?= $report['id'] ?>" hasbuoys=<?= $options['locationHasBuoys'] ? "TRUE" : "FALSE" ; ?> hastide="<?= isset($report['tidestation']) ? $report['tidestation'] : 'FALSE' ; ?>" tz="<?=$report['timezone']?>" reporttime="<?=$reportTime?>" reporterid="<?=$report['reporterid']?>" imagepath="<? if(isset($report['imagepath'])) print $report['imagepath'] ?>">
 			<ul>
 				<li class="report-head">
@@ -90,17 +94,7 @@ class SingleReport {
 					<?
 					/* rendered if on single page or new-report ajax */
 					if ($options['showDetails']) { 
-
-						if(isset($report['imagepath'])) { 
-							self::renderImage($report['imagepath']);
-						}					
-						if ($options['locationHasBuoys']) {
-							self::renderBuoyDetails($report['id'], $report['timezone']);
-						}	
-						if (isset($report['tidestation'])) {
-							self::renderTideDetails($report['id'], $report['tidestation'], $report['timezone']);
-						}					
-						self::renderReporterDetails($report['id'], $report['reporterid'], $reportTime, $report['timezone']);
+						self::renderReportDetails($report, $options);
 					}
 					?>
 				</li>
@@ -120,6 +114,19 @@ class SingleReport {
 		</li>
 		<?		
 	}	
+
+	static function renderReportDetails($report, $options = array()) {
+		if(isset($report['imagepath'])) { 
+			self::renderImage($report['imagepath']);
+		}					
+		if ($options['locationHasBuoys']) {
+			self::renderBuoyDetails($report['id'], $report['timezone']);
+		}	
+		if (isset($report['tidestation'])) {
+			self::renderTideDetails($report['id'], $report['tidestation'], $report['timezone']);
+		}					
+		self::renderReporterDetails($report['id'], $report['reporterid'], $report['reportTime'], $report['timezone']);
+	}
 
 	public static function renderImage($imagepath, $thumbnail=FALSE) {
 		$detect = new Mobile_Detect();
@@ -247,6 +254,13 @@ class SingleReport {
 			<a href="<?=Path::toSinglePost($reportId)?>">report #<?=$reportId?></a> by <a href="<?=Path::toProfile($reporterid);?>"><?= html($reporterInfo['name']); ?></a> on <?= $reportTime ?> <span class="tz">(<?=$tzAbbrev?>)</span>
 		</div>
 		<?
+	}
+
+	public static function renderComments($comments) {
+		
+		foreach ($comments as $comment) {
+			print $comment;
+		}
 	}
 
 

@@ -125,13 +125,14 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 
 
 /* REPORT FEED */	
-.reports-container {position:relative; }
-.reports-container h2 .name {.text-overflow(); max-width:240px; display:inline-block;}
-.filter-explain {color:@grey; .sans-serif(15px); margin-bottom:6px;
-	.filter-error { color:#cc0000;}
-	span {border-left:1px dotted @grey; margin-left:6px; padding-left:6px;}
+.reports-container {position:relative;
+	h2 .name {.text-overflow(); max-width:240px; display:inline-block;}
+	.filter-explain {color:@grey; .sans-serif(15px); margin-bottom:6px;
+		.filter-error { color:#cc0000;}
+		span {border-left:1px dotted @grey; margin-left:6px; padding-left:6px;}
+	}
 }
-.report { background:lighten(@grey,12%); cursor:pointer; padding:8px 6px; .sans-serif(18px, 1.3em); color:@dark-blue; position:relative; -webkit-font-smoothing: subpixel-antialiased; margin-bottom:6px; overflow:hidden;
+.report { background:lighten(@grey,12%); cursor:pointer; padding:10px 12px 16px; .sans-serif(18px, 1.3em); color:@dark-blue; position:relative; -webkit-font-smoothing: subpixel-antialiased; margin-bottom:6px; overflow:hidden; border-top:1px solid lighten(@grey,30%);
 	a {font-weight:bold; color:@dark-blue; text-decoration:underline;}
 	.loc-name {.text-overflow(); max-width:160px; display:inline-block;}
 	.obs-time {margin-left:4px; font:15px georgia;}
@@ -179,7 +180,12 @@ ul.items { clear:both; margin-top:10px; overflow:hidden;
 		.detail-section {display:none;}
 	}
 	&.expanded {
+		padding-bottom:10px;
 		.detail-section {display:block; margin-bottom:0;}
+	}
+	&.collapsed:first-child {
+		background:lighten(@grey, 20%);
+		.click-to-expand { display:block; } 
 	}
 }
 .report:hover {background:lighten(@grey, 20%);}

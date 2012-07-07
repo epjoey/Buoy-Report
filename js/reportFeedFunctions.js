@@ -91,7 +91,7 @@ function loadReportDetails(report) {
 		oreporterId = report.attr('reporterid'),
 		oimagePath = report.attr('imagepath');
 
-    console.log(reportId);
+    //console.log(reportId);
 		
 	if (report.hasClass('collapsed')) {
 		report.removeClass('collapsed').addClass('expanded');
