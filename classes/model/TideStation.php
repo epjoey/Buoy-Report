@@ -13,14 +13,19 @@ class TideStation {
 	public function isValid() {
 		$html = file_get_html('http://tidesonline.noaa.gov/data_read.shtml?station_info=' . $this->stationId);
 		//$doc->load('/tides.php');
-
+		if (!$html) {
+			return false;
+		}	
 		$data = $html->find('pre pre font', 0)->innertext;
+		if (!$data) {
+			return false;
+		}	
 		$this->data = preg_split('/$\R?^/m', $data);
  
 		if(!isset($this->data[2]))
-			return FALSE;
+			return false;
 		
-		return TRUE;
+		return true;
 	}
 
 

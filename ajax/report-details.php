@@ -16,6 +16,9 @@ if ($_POST['tideStation'] != 'FALSE') {
 SingleReport::renderReporterDetails($reportId, $_POST['reporterId'], $_POST['reportTime'], $_POST['timezone']);
 
 
+// $comments = ReportCommentPersistence::getCommentsForReport($reportId);
+
+//SingleReport::renderComments($comments);
 
 
 ?>

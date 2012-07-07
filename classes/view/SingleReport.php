@@ -78,7 +78,7 @@ class SingleReport {
 					$heights = ReportOptions::getWaveHeights();
 					$height = $report['waveheight'];
 					?>
-					<li class="waveheight"><?= $heights[$height][0] . '-' . $heights[$height][1] . '&rdquo;' ?></li>
+					<li class="waveheight"><?= $heights[$height][0] . '-' . $heights[$height][1] . '&rsquo;' ?></li>
 					<? 
 				} 	
 
