@@ -22,19 +22,23 @@ class User {
 
 	public function __construct(){
 
-		if ($this->userIsLoggedIn()) {
-			$this->isLoggedIn = true;				
-			$this->email = $_SESSION['email'];
-			$this->id = $_SESSION['userid'];
-			$this->name = $_SESSION['name'];
-			$this->joinDate = $_SESSION['joindate'];
-			$this->isNew = $_SESSION['justRegistered'];
-			$this->privacySetting = $_SESSION['privacySetting'];
-			if (isset($_SESSION['new-report'])) {
-				$this->newReport = $_SESSION['new-report'];
-				$this->hasNewReport = TRUE;
-			}			
+		//this function does alot. sorry.
+		$this->isLoggedIn = $this->userIsLoggedIn();
+
+		if (!$this->isLoggedIn) {
+			return;
 		}
+	
+		$this->email = $_SESSION['email'];
+		$this->id = $_SESSION['userid'];
+		$this->name = $_SESSION['name'];
+		$this->joinDate = $_SESSION['joindate'];
+		$this->isNew = $_SESSION['justRegistered'];
+		$this->privacySetting = $_SESSION['privacySetting'];
+		if (isset($_SESSION['new-report'])) {
+			$this->newReport = $_SESSION['new-report'];
+			$this->hasNewReport = TRUE;
+		}			
 	}
 
 
@@ -48,12 +52,12 @@ class User {
 
 		/* ----------------- CHECK IF USER HAS COOKIE ----------------- */
 		if (isset($_COOKIE['surf-session'])) {
-			return $this->handleCookie();
+			return $this->isCookieValid();
 		}
 		return FALSE;
 	}
 
-	public function handleCookie() {
+	public function isCookieValid() {
 
 		/*--- SPLIT COOKIE INTO userid, key -----*/
 		$cookie_array = explode('%', $_COOKIE['surf-session']);
