@@ -546,13 +546,13 @@ class Persistence {
 		} else return NULL;				
 	}
 
-	public static function insertUser($name = null, /* $email = null,*/ $password = null, $privacy = null) {
+	public static function insertUser($name = null, $email = null, $password = null, $privacy = null) {
 		$link = Persistence::dbConnect();
 		$nameStr = isset($name) ? "name = '" . mysqli_real_escape_string($link, $name) . "'" : '';
-		//$emailStr = isset($email) ? ", email = '" . mysqli_real_escape_string($link, $email) . "'" : '';
+		$emailStr = isset($email) ? ", email = '" . mysqli_real_escape_string($link, $email) . "'" : '';
 		$passwordStr = isset($password) ? ", password = '" . mysqli_real_escape_string($link, $password) . "'" : '';
 		$privacyStr = isset($privacy) ? ", public = '" . intval($privacy) . "'" : '';
-		$sql = "INSERT INTO reporter SET " . $nameStr . /* $emailStr .*/ $passwordStr . $privacyStr;
+		$sql = "INSERT INTO reporter SET " . $nameStr . $emailStr . $passwordStr . $privacyStr;
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
 			die("Error inserting reporter into DB" . mysqli_error($link));

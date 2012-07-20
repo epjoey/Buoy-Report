@@ -15,8 +15,8 @@ if (isset($_POST['bot-check']) && $_POST['bot-check'] != '') {
 if (
 	!isset($_POST['reg-name']) 
 	|| $_POST['reg-name'] == '' 
-	//|| !isset($_POST['reg-email']) 
-	//|| $_POST['reg-email'] == ''
+	|| !isset($_POST['reg-email']) 
+	|| $_POST['reg-email'] == ''
 	|| !isset($_POST['reg-password']) 
 	|| $_POST['reg-password'] == '') 
 {
@@ -24,25 +24,25 @@ if (
 	header('Location:'.Path::toRegister($error));
 	exit();	
 }
-/*
+
 if (filter_var($_POST['reg-email'], FILTER_VALIDATE_EMAIL) != TRUE) {
 	$error = 2;
 	header('Location:'.Path::toRegister($error));
 	exit();	
 }
-*/
+
 if (strlen($_POST['reg-password']) < 5) {
 	$error = 5;
 	header('Location:'.Path::toRegister($error));
 	exit();	
 }
-/*	
+
 if (Persistence::databaseContainsEmail($_POST['reg-email'])) {
 	$error = 3;
 	header('Location:'.Path::toRegister($error));
 	exit();	
 }
-*/
+
 if (Persistence::databaseContainsName($_POST['reg-name'])) {
 	$error = 4;
 	header('Location:'.Path::toRegister($error));
@@ -52,7 +52,7 @@ if (Persistence::databaseContainsName($_POST['reg-name'])) {
 			
 $reporterId = Persistence::insertUser(
 	$_POST['reg-name'], 
-	//$_POST['reg-email'], 
+	$_POST['reg-email'], 
 	md5($_POST['reg-password'] . 'reportdb'), 
 	$_POST['report-status']
 );

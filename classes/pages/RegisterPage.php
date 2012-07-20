@@ -39,7 +39,11 @@ class RegisterPage extends GeneralPage {
 					    "reg-password": {
 					        required: true,
 					        minlength: 5
-					    }
+					    },
+					    "reg-email": {
+					        required: true,
+					        email: true
+					    }					    
 					}
 				});
 			});
