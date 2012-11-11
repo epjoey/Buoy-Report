@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
@@ -8,7 +8,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.p
 
 
 
-class ProfilePage extends GeneralPage {
+class ProfilePage extends Page {
 
 	protected $pageOwnerHasLocations = FALSE;
 

@@ -1,9 +1,9 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 
-class AddLocationPage extends GeneralPage {
+class AddLocationPage extends Page {
 
 	private $addLocationError = NULL;
 

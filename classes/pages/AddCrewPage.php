@@ -1,9 +1,9 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 //include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/CrewList.php';
 
 
-class AddCrewPage extends GeneralPage {
+class AddCrewPage extends Page {
 
 	private $addCrewError = NULL;
 

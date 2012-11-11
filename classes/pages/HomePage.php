@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
@@ -9,14 +9,14 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.p
 
 
 
-class HomePage extends GeneralPage {
+class HomePage extends Page {
 
 	public $newPost = null;
 	public $newReport = null;
 
-
 	public function loadData(){
 		parent::loadData();
+		
 		$this->pageTitle = $this->siteTitle . ' Home';
 
 		/* load Report Filters from URL */
@@ -71,7 +71,7 @@ class HomePage extends GeneralPage {
 		<div class="location-list">
 			<h3>My Locations</h3>
 			<?
-			if ($this->user->hasLocations) {
+			if (!empty($this->user->locations)) {
 				$options['locations'] = $this->user->locations;
 			}
 			$options['showAddLocation'] = TRUE;

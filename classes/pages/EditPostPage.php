@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Report.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditReportForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
@@ -8,7 +8,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
 
 
-class EditPostPage extends GeneralPage {
+class EditPostPage extends Page {
 
 	public $submitError = NULL;
 

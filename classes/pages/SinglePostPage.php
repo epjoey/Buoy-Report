@@ -1,8 +1,8 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
 
-class SinglePostPage extends GeneralPage {
+class SinglePostPage extends Page {
 
 	public function loadData($id) {
 		parent::loadData();

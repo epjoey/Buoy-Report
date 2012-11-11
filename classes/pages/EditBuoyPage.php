@@ -1,11 +1,11 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Buoy.php';
 
 
 
-class EditBuoyPage extends GeneralPage {
+class EditBuoyPage extends Page {
 
 	private $editBuoyError = NULL;
 	private $buoyInfo = array();

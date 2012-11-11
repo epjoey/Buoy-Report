@@ -1,7 +1,7 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 
-class ErrorPage extends GeneralPage {
+class ErrorPage extends Page {
 
 	public function loadData() {
 		parent::loadData();

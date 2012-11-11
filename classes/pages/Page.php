@@ -2,23 +2,24 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/Header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Mobile_Detect.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/service/LocationService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/ObjectUtility.php';
 
-class GeneralPage {
+class Page {
 	
 
 	public function loadData() {
 
 		$this->user = new User;
 
-		if ($this->user->isLoggedIn)
-			$this->user->getUserLocations($this->user->id);
+		$this->user->locations = LocationService::getUserLocations($this->user);
+		$this->user->locationIds = ObjectUtility::pluck($this->user->locations, 'id');
 
 		$this->detect = new Mobile_Detect();
 		$this->isMobile = $this->detect->isMobile();
 
 		$this->siteTitle = 'Buoy Report';
 		$this->pageTitle = $this->siteTitle;
-		$this->header = new Header;
 				
 	}
 
@@ -136,7 +137,7 @@ class GeneralPage {
 
 	public function renderHeader() {
 
-		$this->header->renderHeader($this->user);
+		Header::renderHeader($this->user);
 	}
 
 	public function getBodyClassName() {}

@@ -1,8 +1,8 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LoginForm.php';
 
-class LoginPage extends GeneralPage {
+class LoginPage extends Page {
 
 	private $loginError = NULL;
 	private $loginRel = NULL;

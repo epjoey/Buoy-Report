@@ -1,10 +1,10 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/RegisterForm.php';
 
 
 
-class RegisterPage extends GeneralPage {
+class RegisterPage extends Page {
 
 	private $registerError = NULL;
 

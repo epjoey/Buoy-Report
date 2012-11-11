@@ -4,21 +4,20 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 class Header {
 
-	public function renderHeader($user) {
+	static function renderHeader($user) {
 		?>
 		<div id="header" class="header"> 
 			<div class="container">
 				<span class="header-left">
 					<a href="<?= $user->isLoggedIn ? Path::toUserHome() : Path::toIntro();?>" class="br-icon"><img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="46" height="46"/></a>
-					<a class="home left-link" href="<?=$user->isLoggedIn ? Path::toUserHome() : Path::toIntro();?>">Home</a>
-					<a class="location left-link" href="<?=Path::toLocations();?>">Locations</a>
+					<a class="locations left-link" href="<?=Path::toLocations();?>">Locations</a>
 				</span>
 				<div class="header-right">
 
 				<? if ($user->isLoggedIn) { ?>
 
 					<div class="user-menu" id="user-menu">
-						<? if (!$user->hasLocations) { ?>
+						<? if (!$user->locations) { ?>
 							<a class="block-link post-report" href="<?=Path::toLocations($reporter = null,$toPost = true)?>">Report</a>
 						<? 
 						} else { 

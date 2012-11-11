@@ -1,9 +1,9 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
 
-class MobileImageProcessPage extends GeneralPage {
+class MobileImageProcessPage extends Page {
 
 	public $callbackUrl = NULL;
 

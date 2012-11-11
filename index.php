@@ -8,8 +8,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/HomePage.php';
 $user = new User;
 
 //intro page has no form handling. login form sent to login.php
-if (!$user->isLoggedIn) {
+//if (/*!$user->isLoggedIn*/ isset($_REQUEST['intro']) && $_REQUEST['intro']) {
 
+if (!$user->isLoggedIn) {
 	$intro = new IntroPage;
 	$intro->loadData();
 	$intro->renderPage();

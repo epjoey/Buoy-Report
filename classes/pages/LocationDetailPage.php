@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Buoy.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/TideStation.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBuoyForm.php';
@@ -12,7 +12,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.p
 
 
 
-class LocationDetailPage extends GeneralPage {
+class LocationDetailPage extends Page {
 
 	protected $addBuoyError = NULL;
 	protected $addStationError = NULL;

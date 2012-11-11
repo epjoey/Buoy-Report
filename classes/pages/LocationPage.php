@@ -1,11 +1,11 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/modules/SearchModule.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 
 
 
-class LocationPage extends GeneralPage {
+class LocationPage extends Page {
 
 	//whether the locations link straight to the report form
 	private $isToPost = FALSE;

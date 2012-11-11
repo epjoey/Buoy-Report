@@ -1,10 +1,10 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
 
-class ReportFormPage extends GeneralPage {
+class ReportFormPage extends Page {
 
 	public $submitError = NULL;
 	public $needPicup = FALSE;

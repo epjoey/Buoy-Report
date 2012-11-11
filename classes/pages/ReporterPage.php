@@ -1,11 +1,11 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/modules/SearchModule.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ItemList.php';
 
 
 
-class ReporterPage extends GeneralPage {
+class ReporterPage extends Page {
 
 	public $reporters = NULL;
 	public $isLocationReporters = FALSE;

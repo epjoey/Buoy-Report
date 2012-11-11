@@ -1,9 +1,9 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LoginForm.php';
 
 
-class IntroPage extends GeneralPage {
+class IntroPage extends Page {
 
 	public function loadData(){
 		parent::loadData();

@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/GeneralPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditAccountForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
@@ -8,7 +8,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
 
 
 
-class EditProfilePage extends GeneralPage {
+class EditProfilePage extends Page {
 
 	private $editAccountStatus = NULL;
 	protected $statusSuccess = FALSE;
@@ -178,7 +178,7 @@ class EditProfilePage extends GeneralPage {
 	}
 	
 	public function renderMyLocations() {
-		if ($this->user->hasLocations) {
+		if (!empty($this->user->locations)) {
 			$options['locations'] = $this->user->locations;
 		}
 		$options['showAddLocation'] = TRUE;
