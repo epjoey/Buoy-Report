@@ -1,6 +1,6 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/persistence/LocationPersistence.php';
+//include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/persistence/LocationPersistence.php';
 
 class LocationService {
 

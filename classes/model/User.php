@@ -4,8 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
 
 class User {
 
-	public $id = NULL;
-	public $name = NULL;
+	public $id = 0;
+	public $name = 'babaganoosh';
 	public $email = NULL;
 	public $password = NULL;
 	public $isLoggedIn = FALSE;
@@ -14,8 +14,7 @@ class User {
 	public $privacySetting = NULL;
 	public $isNew = FALSE;
 	public $joinDate = NULL;
-	public $locations = NULL;	
-	public $hasLocations = FALSE;	
+	public $locations = array();	
 	public $loginError = NULL;
 	public $registerError = NULL;
 
@@ -139,37 +138,6 @@ class User {
 		unset ($_SESSION['new-report']);
 	}
 
-	/* this should go in a UserLocation class */
-	public function getUserLocations($userId){
-		$this->locations = Persistence::getUserLocations($userId);
-		if (!empty($this->locations)) {
-			$this->hasLocations = TRUE;		
-		}		
 
-		/* 
-		 * Squish the new report info into 
-		 * the locations array before new 
-		 * report is submitted into DB.
-		 * 
-		 */
-		if ($this->hasNewReport) {
-
-			if ($this->newReport['reporterHasLocation'] == '0') {
-				array_unshift(
-					$this->locations, 
-					array(
-						'id'=>$this->newReport['locationid'], 
-						'locname'=>$this->newReport['locationname']
-					)
-				);
-			}
-		}	
-		if ($this->hasLocations) {
-			foreach($this->locations as $location) {
-				$this->locationIds[] = $location['id'];
-			}		
-		}
-		
-	}	
 }
 ?>

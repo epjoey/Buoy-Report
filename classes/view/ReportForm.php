@@ -41,28 +41,11 @@ class ReportForm {
 				<? 
 				} 
 
-
-				if (!empty($locInfo['sublocations'])) {
-					ReportFormFields::renderSubLocationSelect($locInfo['sublocations']);
-				}
+				ReportFormFields::renderTimeSelect();
 				?>
 			
-			
-				<div class="field time select-field required">
-					<label for="time_offset">Time:</label>
-					<select name="time_offset" id="time-offset">
-						<option value="0">Now</option>
-						<?
-						for ($i=1; $i <= 48; $i++) { 
-							?>
-							<option value="-<?=$i?>"><?= $i . " hours ago" ?></option>
-							<?
-						}
-						?>
-					</select>
-				</div>
 				<div class="field quality radio-menu required">
-					<label for="quality">Quality of Rides*:</label>
+					<label for="quality">Quality of Rides:</label>
 					<?
 					foreach (ReportOptions::quality() as $key=>$value) {
 						?>
@@ -73,67 +56,75 @@ class ReportForm {
 					}
 					?>
 				</div>
-
-				<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights());?>
+				<div class="optional-fields">
+					<h5 class="form-heading">Optional Fields</h5>
+				<? 
 				
-				<div class="field text">
-					<label for="text">Report:</label>
-					<textarea name="text" id="text" class="text-input" placeholder="how was it?" ></textarea>
-<!-- 					<button class="url-how-to">URL</button>
- -->					
-				</div>
-				<div class="field radio-menu include">	
-					<label>Include:</label>
-					<?
-					/* use js to get values of attributes on location selector */
-					if (isset($locInfo['buoy1'])) {
-						?>
-						<span class="radio-field">
-							<input type="checkbox" name="buoy1" id="buoy1" value="<?=$locInfo['buoy1']?>" checked='checked' /><label for="buoy1"> Buoy <?=$locInfo['buoy1']?></label>
-						</span>	
+					if (!empty($locInfo['sublocations'])) {
+						ReportFormFields::renderSubLocationSelect($locInfo['sublocations']);
+					}
+
+					ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights());?>
+					
+					<div class="field text">
+						<label for="text">Report:</label>
+						<textarea name="text" id="text" class="text-input" placeholder="how was it?" ></textarea>
+	<!-- 					<button class="url-how-to">URL</button>
+	 -->					
+					</div>
+					<div class="field radio-menu include">	
+						<label>Include:</label>
 						<?
-					}
-					if (isset($locInfo['buoy2'])) {
-						?>
-						<span class="radio-field">
-							<input type="checkbox" name="buoy2" id="buoy2" value="<?=$locInfo['buoy2']?>" checked='checked' /><label for="buoy2"> Buoy <?=$locInfo['buoy2']?></label>
-						</span>	
-						<?						
-					}
-					if (isset($locInfo['buoy3'])) {
-						?>
-						<span class="radio-field">
-							<input type="checkbox" name="buoy3" id="buoy3" value="<?=$locInfo['buoy3']?>" checked='checked' /><label for="buoy3"> Buoy <?=$locInfo['buoy3']?></label>
-						</span>	
-						<?						
-					}					
-					if (isset($locInfo['tidestation'])) {
-						?>
-						<span class="radio-field">
-							<input type="checkbox" name="tidestation" id="tidestation" value="<?=$locInfo['tidestation']?>" checked='checked' /><label for="tidestation"> Tidestation <?=$locInfo['tidestation']?></label>
-						</span>	
-						<?						
-					}
-					if (!isset($locInfo['tidestation']) && !isset($locInfo['buoy1']) && !isset($locInfo['buoy2']) && !isset($locInfo['buoy3'])) {
-						?>
-						<span>No buoys or tidestations to include. <a href="<?=Path::toLocation($locInfo['id']);?>">Add one</a></span> 
-						<?
-					}
-					?>				
-				</div>		
-				<div class="field image last">
-					<label for="upload">Upload an image:</label> 
-					<input type="file" name="upload" id="upload" capture="camera">
-					<span id="mobile-image-name" class="mobile-note">
-						<?
-						if($needPicup) {
+						/* use js to get values of attributes on location selector */
+						if (isset($locInfo['buoy1'])) {
 							?>
-							You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
+							<span class="radio-field">
+								<input type="checkbox" name="buoy1" id="buoy1" value="<?=$locInfo['buoy1']?>" checked='checked' /><label for="buoy1"> Buoy <?=$locInfo['buoy1']?></label>
+							</span>	
 							<?
 						}
-						?>
-					</span>
-				</div>
+						if (isset($locInfo['buoy2'])) {
+							?>
+							<span class="radio-field">
+								<input type="checkbox" name="buoy2" id="buoy2" value="<?=$locInfo['buoy2']?>" checked='checked' /><label for="buoy2"> Buoy <?=$locInfo['buoy2']?></label>
+							</span>	
+							<?						
+						}
+						if (isset($locInfo['buoy3'])) {
+							?>
+							<span class="radio-field">
+								<input type="checkbox" name="buoy3" id="buoy3" value="<?=$locInfo['buoy3']?>" checked='checked' /><label for="buoy3"> Buoy <?=$locInfo['buoy3']?></label>
+							</span>	
+							<?						
+						}					
+						if (isset($locInfo['tidestation'])) {
+							?>
+							<span class="radio-field">
+								<input type="checkbox" name="tidestation" id="tidestation" value="<?=$locInfo['tidestation']?>" checked='checked' /><label for="tidestation"> Tidestation <?=$locInfo['tidestation']?></label>
+							</span>	
+							<?						
+						}
+						if (!isset($locInfo['tidestation']) && !isset($locInfo['buoy1']) && !isset($locInfo['buoy2']) && !isset($locInfo['buoy3'])) {
+							?>
+							<span>No buoys or tidestations to include. <a href="<?=Path::toLocation($locInfo['id']);?>">Add one</a></span> 
+							<?
+						}
+						?>				
+					</div>		
+					<div class="field image last">
+						<label for="upload">Upload an image:</label> 
+						<input type="file" name="upload" id="upload" capture="camera">
+						<span id="mobile-image-name" class="mobile-note">
+							<?
+							if($needPicup) {
+								?>
+								You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
+								<?
+							}
+							?>
+						</span>
+					</div>
+				</div><!--end optional fields-->
 				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
 				<input type="hidden" name="reporterid" value="<?=$user->id?>" />
 				<input type="hidden" name="public" value="<?=$user->privacySetting?>" />

@@ -2,12 +2,6 @@
 class FormHandlers {
 	public static function handleReportForm($post = array(), $files = array()) {
 		
-		/* Start off by validating required form fields */
-
-		if (!isset($post['quality']) || $post['quality'] === '') {
-			throw new Exception('no-quality');
-		}
-
 		//unset empty inputs
 		foreach($post as $key => $value) {
 			if ($value == '') {
@@ -16,12 +10,34 @@ class FormHandlers {
 		}
 
 
+		/* Start off by validating required form fields */
+
+		if (!isset($post['quality'])) {
+			throw new Exception('no-quality');
+		}
+
+		if (!isset($post['time_offset']) && !isset($post['arbitrary_date'])) {
+			throw new Exception('no-time');
+		}	
+
+		if (isset($post['arbitrary_date'])) {
+		
+			$date = $post['arbitrary_date'];
+			//if ($date not in format) { throw new ... }
+			$post['obsdate'] = intval(gmdate("U", time(strtotime($date))));
+		
+		} else {
+
+			/* calculates date of observation if in the past */	
+			$offset = abs(intval($post['time_offset'])) * 60 * 60;
+			$post['obsdate'] = intval(gmdate("U", time()-$offset));			
+
+		}
+
 		/* the current date to be stored */
 		$post['reportdate'] = intval(gmdate("U")); 
 
-		/* calculates date of observation if in the past */	
-		$offset = abs(intval($post['time_offset'])) * 60 * 60;
-		$post['obsdate'] = intval(gmdate("U", time()-$offset));
+
 			
 
 		/* in case image was deleted on edit report form */
