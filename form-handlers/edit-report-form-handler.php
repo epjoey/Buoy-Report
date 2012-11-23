@@ -15,7 +15,7 @@ if ($_POST['submit'] == 'delete-report') {
 
 try {
 	
-	$post = FormHandlers::handleReportForm($_POST, $_FILES);
+	$post = FormHandlers::handleEditReportForm($_POST, $_FILES);
 
 } catch(Exception $e) {
 	//print $e->getMessage();

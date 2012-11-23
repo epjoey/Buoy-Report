@@ -4,7 +4,7 @@ class FormHandlers {
 		
 		//unset empty inputs
 		foreach($post as $key => $value) {
-			if ($value == '') {
+			if ($value === '' || $value === false) {
 				$post[$key] = null;
 			}
 		}
@@ -37,38 +37,63 @@ class FormHandlers {
 		/* the current date to be stored */
 		$post['reportdate'] = intval(gmdate("U")); 
 
+				
+		if (isset($files['upload']['tmp_name']) && $files['upload']['tmp_name'] !='') {
+			$post['imagepath'] = self::uploadFile($files, $post);
+		}
+		/* in case they used picup, its a remote url */	
+		else if (isset($post['remoteImageURL']) && $post['remoteImageURL'] !='') {
+			$post['imagepath'] = rawurldecode($post['remoteImageURL']);
+		}
+		
+		return $post;
 
-			
+
+	}
+
+	/* image handling. also, if new image was uploaded on edit report form */
+	function uploadFile($files, $post) {
+
+		/* handleFileUpload either saves photo and returns path, or returns an error */	
+		$uploadStatus = handleFileUpload($files['upload'], $post['reporterid']);
+
+		/* redirect back to form if handleFileUpload returns error */
+		if (isset($uploadStatus['error'])) {
+			throw new Exception($uploadStatus['error']);	
+		}
+
+		/* store image path in post if saved succesfully */
+		return $uploadStatus['imagepath'];
+	}
+
+	function handleEditReportForm($post = array(), $files = array()) {
+		
+		//unset empty inputs
+		foreach($post as $key => $value) {
+			if ($value === '' || $value === false) {
+				$post[$key] = null;
+			}
+		}
+
+		if (!isset($post['quality'])) {
+			throw new Exception('no-quality');
+		}
 
 		/* in case image was deleted on edit report form */
 		if (isset($post['delete-image']) && $post['delete-image'] == 'true') {
 			$post['imagepath'] = '';
-		}			
-
-		/* image handling. also, if new image was uploaded on edit report form */
+		}
+		
+		/* handleFileUpload either saves photo and returns path, or returns an error */	
 		if (isset($files['upload']['tmp_name']) && $files['upload']['tmp_name'] !='') {
-
-			/* handleFileUpload either saves photo and returns path, or returns an error */	
-			$uploadStatus = handleFileUpload($files['upload'], $post['reporterid']);
-
-			/* redirect back to form if handleFileUpload returns error */
-			if (isset($uploadStatus['error'])) {
-				throw new Exception($uploadStatus['error']);	
-			}
-
-			/* store image path in post if saved succesfully */
-			if (isset($uploadStatus['imagepath'])) {
-				$post['imagepath'] = $uploadStatus['imagepath'];
-			}
-
+			$post['imagepath'] = self::uploadFile($files, $post);
+		}
 		/* in case they used picup, its a remote url */	
-		} else if (isset($post['remoteImageURL']) && $post['remoteImageURL'] !='') {
+		else if (isset($post['remoteImageURL']) && $post['remoteImageURL'] !='') {
 			$post['imagepath'] = rawurldecode($post['remoteImageURL']);
 		}
 
-		return $post;
-
-
+		return $post;		
 	}
 
 }
