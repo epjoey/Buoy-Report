@@ -15,6 +15,5 @@ $crewPage->loadData();
 if (isset($_REQUEST['submit'])) {
 	$crewPage->afterSubmit();
 }
-
 $crewPage->renderPage();
 ?>
