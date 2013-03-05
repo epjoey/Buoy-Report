@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
@@ -12,13 +12,16 @@ class ReportFormPage extends Page {
 	public function loadData() {
 		parent::loadData();
 		$this->locationId = $_GET['location'];
-		$this->locInfo = Persistence::getLocationInfoById($this->locationId);
-		if (!isset($this->locInfo)) {
+		$this->location = LocationService::getLocation($this->locationId, array(
+			'includeSublocations' => true,
+			'includeBuoys' => true,
+			'includeTideStations' => true
+		));
+		if (!isset($this->location)) {
 			header('Location:'.Path::to404());
 			exit();	
 		}	
-		$this->locInfo['sublocations'] = Persistence::getSubLocationsByLocation($this->locationId);
-		$this->pageTitle = $this->locInfo['locname'] . ' Report';
+		$this->pageTitle = $this->location->locname . ' Report';
 		if (isset($_GET['error']) && $_GET['error']) {
 			$this->submitError = $_GET['error'];
 		}
@@ -44,19 +47,18 @@ class ReportFormPage extends Page {
 	}		
 
 	public function getBodyClassName() {
-		return 'report-form-page report-' . $this->locInfo['id'];
+		return 'report-form-page report-' . $this->location->id;
 	}		
 
 	public function renderBodyContent() {
-		$form = new ReportForm;
-		$form->renderReportForm($this->locInfo, $this->user, $this->submitError, $this->needPicup);	
+		ReportForm::renderReportForm($this->location, $this->user, $this->submitError, $this->needPicup);	
 	}
 
 	public function renderFooterJs() {
 
 		parent::renderFooterJs();
 
-		if($this->detect->isIphone() || $this->detect->isIpad()) {
+		if($this->needPicup) {
 			?>
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
 			<script type="text/javascript" src="<?=Path::toJs()?>picup.js"></script>

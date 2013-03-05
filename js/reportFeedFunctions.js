@@ -119,32 +119,6 @@ function loadReportDetails(report) {
 	}
 }
 
-function loadNewReport() {
-
-	$('ul.reports').prepend("<li class=\"report loading\" id=\"new-report\"></li>");
-
-    $.ajax({
-        //this is the php file that processes the data
-        url: "/ajax/new-report.php", 
-         
-        //GET method is used
-        type: "GET",
-
-        //Do not cache the page
-        cache: false,
-         
-        //success
-        success: function(newReport) {   
-        	$('#new-report').replaceWith(newReport); 
-        	$('.reports .report').first().click(function(){
-        		$(this).toggleClass('expanded').toggleClass('collapsed');
-        	}); 	
-			loadThumbnails();	
-			updateNumReports();	            		               
-            }       
-    });		 		
-};			
-
 function loadThumbnails(){
 	$('.image-container.thumbnail-image img').each(function(elem){
 		src = $(this).attr('realUrl');

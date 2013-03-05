@@ -92,11 +92,11 @@ class Path {
 		return '/form-handlers/edit-report-form-handler.php';
 	}
 
-	public static function toSinglePost($reportId) {
+	public static function toSingleReport($reportId) {
 		return '/post.php?id='.$reportId;
 	}
 
-	public static function toEditPost($reportId, $submitError = NULL) {
+	public static function toEditReport($reportId, $submitError = NULL) {
 		if (!isset($reportId)) {
 			return self::to404();
 		}
@@ -224,6 +224,13 @@ class Path {
 	public static function toAbout() {
 		return '/about.php';
 	}	
+
+	public static function toNOAABuoy($buoyId) {
+		return 'http://www.ndbc.noaa.gov/station_page.php?station=' . $buoyId;
+	}
+	public static function toNOAATideStation($stationId) {
+		return 'http://tidesonline.noaa.gov/plotcomp.shtml?station_info=' . $stationId;
+	}	
 		
 //-------------------------------------------------------------------------------//
 //-------------------------- CODE DIRECTORIES/FILES -----------------------------//
@@ -264,5 +271,11 @@ class Path {
 
 	}
 
+	public static function toLocationAddBuoy() {
+		return self::toAjax() . 'buoy/location-add-buoy.php';
+	}
+	public static function toLocationRemoveBuoy() {
+		return self::toAjax() . 'buoy/location-remove-buoy.php';
+	}
 }
 ?>

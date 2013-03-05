@@ -1,7 +1,14 @@
 <?php
 
+class PersistenceException extends Exception {}
+
 class Persistence {
-	public static function dbConnect() {
+	static $dbLink = null;
+	static function dbConnect() {
+
+		if (isset(self::$dbLink)) {
+			return self::$dbLink;
+		}
 
 		$host = 'localhost';
 		$db = 'br';
@@ -21,57 +28,26 @@ class Persistence {
 		if (!mysqli_select_db($link, $db)) {		
 			die("Unable to locate the reporter database" . mysqli_error());		
 		}
-
+		self::$dbLink = $link;
 		return $link;				
+	}
+	static function escape($str) {
+		return addslashes($str);
+	}	
+	static function run($sql, $options = array()) {
+		$link = self::dbConnect();
+		$result = mysqli_query($link, $sql);
+		$errorMsg = isset($options['errorMsg']) ? $options['errorMsg'] : mysqli_error($link);
+		if (!$result) {
+			error_log($errorMsg . " sql:" . $sql);
+			throw new PersistenceException($errorMsg);
+		}
+		return $result;
 	}
 
 /*==================================================== General Reports ====================================================*/
 /*=========================================================================================================================*/
  
-	public static function insertReport($report = array()) {
-		//to do:create $fields
-		$link = Persistence::dbConnect();
-
-		$public = intval($report['public']);
-		$locationid = intval($report['locationid']);
-		$reporterid = intval($report['reporterid']);
-		$obsdate = intval($report['obsdate']);
-		$reportdate = intval($report['reportdate']);
-		$fields = "locationid = '$locationid', reporterid = '$reporterid', public = '$public', obsdate = '$obsdate', reportdate = '$reportdate'";
-		if (isset($report['quality'])) {
-			$quality = mysqli_real_escape_string($link, $report['quality']);
-			$fields .= ", quality = '" . $quality . "'";
-		}
-		if (isset($report['text'])) {
-			$text = mysqli_real_escape_string($link, $report['text']);
-			$fields .= ", text = '" . $text . "'";			
-		}
-		if (isset($report['imagepath'])) {
-			$imagepath = mysqli_real_escape_string($link, $report['imagepath']);
-			$fields .= ", imagepath = '" . $imagepath . "'";			
-		}
-		if (isset($report['waveheight'])) {
-			$waveheight = floatval($report['waveheight']);
-			$fields .= ", waveheight = '" . $waveheight . "'";			
-		}	
-		if (isset($report['sublocation'])) {
-			$sublocationId = intval($report['sublocation']);
-			$fields .= ", sublocationid = '" . $sublocationId . "'";			
-		}				
-		$sql = "INSERT INTO report SET $fields";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error inserting report into DB" . mysqli_error($link));
-		}
-		$reportid = mysqli_insert_id($link);
-
-		if (!$report['reporterHasLocation']) {
-			Persistence::insertUserLocation($reporterid, $locationid);		
-		}
-
-		return $reportid;
-	}	
-
 	public static function getReports($filters = array(), $limit = 6, $offset = 0) {
 	
 		//the basic SELECT statement
@@ -195,61 +171,6 @@ class Persistence {
 		
 	}
 
-	public static function updateReport($report = array()) {
-		$link = Persistence::dbConnect();
-		$reportId = intval($report['id']);
-		
-		$quality = mysqli_real_escape_string($link, $report['quality']);
-		$fields = " quality = '" . $quality . "'";
-
-		if (!empty($report['text'])) {
-			$text = mysqli_real_escape_string($link, $report['text']);
-			$fields .= ", text = '" . $text . "'";			
-		} else $fields .= ", text = NULL";
-
-		if (isset($report['imagepath'])) {
-
-			if ($report['imagepath'] != '') {
-				$imagepath = mysqli_real_escape_string($link, $report['imagepath']);
-				$fields .= ", imagepath = '" . $imagepath . "'";					
-			} else {
-				$fields .= ", imagepath = NULL";
-			}
-		}
-		if (isset($report['waveheight'])) {
-			$waveheight = floatval($report['waveheight']);
-			$fields .= ", waveheight = '" . $waveheight . "'";			
-		}
-		if (isset($report['sublocation'])) {
-			$sublocation = intval($report['sublocation']);
-			$fields .= ", sublocationid = '" . $sublocation . "'";			
-		}				
-		$sql = "UPDATE report SET $fields WHERE id = '$reportId'";	
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error updating report" . mysqli_error($link));
-		}		
-		
-	}
-
-	public static function deleteReport($reportId) {
-		$reportId = intval($reportId);
-		$sql = "DELETE FROM report WHERE id = '$reportId'";
-		$result = mysqli_query(Persistence::dbConnect(), $sql);
-		if (!$result) {
-			die("Error deleting report" . mysqli_error($link));
-		}
-		$sql = "DELETE FROM buoydata WHERE reportid = '$reportId'";
-		$result = mysqli_query(Persistence::dbConnect(), $sql);
-		if (!$result) {
-			die("Error deleting report from buoy data table" . mysqli_error($link));
-		}	
-		$sql = "DELETE FROM tidedata WHERE reportid = '$reportId'";
-		$result = mysqli_query(Persistence::dbConnect(), $sql);
-		if (!$result) {
-			die("Error deleting report from tide data table" . mysqli_error($link));
-		}				
-	}
 
 /*==================================================== Locations ====================================================*/
 /*===================================================================================================================*/
@@ -812,23 +733,6 @@ class Persistence {
 		}
 	}
 
-	public static function insertBuoyData($reportid, $fields = array()) {
-		$link = Persistence::dbConnect();
-		$reportid = intval($reportid);
-		$set = "reportid = '$reportid'";
-		foreach ($fields as $fieldk => $fieldv ) {
-			if ($fieldv != "" && $fieldv != "MM") {
-				$fieldv = mysqli_real_escape_string($link, $fieldv);
-				$set .= ", " . $fieldk . " = '" . $fieldv . "'";		
-			}
-		} 
-
-		$sql = "INSERT INTO buoydata SET $set";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error inserting buoydata into DB" . mysqli_error($link));
-		}		
-	}
 	
 	public static function getBuoyData($reportid) {
 		$reportid = intval($reportid);
@@ -987,17 +891,6 @@ class Persistence {
 		}
 	}
 
-	public static function insertTideData($reportid, $tide, $res, $date) {
-		$link = Persistence::dbConnect();
-		$reportid = intval($reportid);
-		$date = intval($date);
-		$sql = "INSERT INTO tidedata SET reportid = '$reportid', tide = '$tide', tideres = '$res', tidedate = '$date'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error inserting tidedata into DB" . mysqli_error($link));
-		}		
-	}
-
 	public static function getTideData($reportid) {
 		$reportid = intval($reportid);
 		$sql = "SELECT tide, tidedate, tideres FROM tidedata WHERE reportid = '$reportid'";
@@ -1047,94 +940,6 @@ class Persistence {
 			return FALSE;
 		}
 	}
-
-/*======================================================== CREWS ========================================================*/
-/*========================================================================================================================*/	
-
-	public static function insertCrew($crew = array()) {
-		
-		if (empty($crew)) return;
-
-		$link = Persistence::dbConnect();
-
-		$creator = intval($crew['creator']); //needs to be passed in!
-
-		$nameStr = '';
-		if (isset($crew['name'])) {
-			$name = mysqli_real_escape_string($link, $crew['name']);
-			$nameStr = ", name = '$name'";
-		}
-
-		$descriptionStr = '';
-		if (isset($crew['description'])) {
-			$description = mysqli_real_escape_string($link, $crew['description']);
-			$descriptionStr = ", description = '$description'";
-		}		
-
-		$sql = "INSERT INTO crew SET creator = '$creator'" . $nameStr . $descriptionStr;
-		//var_dump($sql); exit;
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("error creating crew");
-		}
-		return mysqli_insert_id($link);
-
-	}
-
-	public static function getCrewById($crewId) {
-		$link = Persistence::dbConnect();
-		$crewId = intval($crewId);
-		$sql = "SELECT * FROM crew WHERE id = '$crewId'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("error fetching crew by id");
-		}
-		return mysqli_fetch_array($result, MYSQL_ASSOC);	
-	}
-
-	public static function getCrewByName($crewName) {
-		$link = Persistence::dbConnect();
-		$crewName = mysqli_real_escape_string($link, $crewName);
-		$sql = "SELECT * FROM crew WHERE name = '$crewName'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("error fetching crew by name");
-		}
-		return mysqli_fetch_array($result, MYSQL_ASSOC);	
-	}	
-
-	public static function getUsersByCrew($crewId) {
-		$link = Persistence::dbConnect();
-		$crewId = intval($crewId);
-		$sql = "SELECT * FROM reporter a INNER JOIN reportercrew b ON a.id = b.reporter WHERE b.crew = '$crewId'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("error fetching crew members by crewid");
-		}
-		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {	
-			$reporters[] = $row;
-		}
-		return $reporters;	
-	}		
-
-
-	public static function insertUserIntoCrew($reporterId, $crewId) {
-		$link = Persistence::dbConnect();
-		$reporterId = intval($reporterId);
-		$crewId = intval($crewId);
-		$sql = "INSERT INTO reportercrew SET reporter = '$reporterId', crew = '$crewId'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("error inserting user into crew");
-		}
-	}
-
-	public static function removeUserFromCrew($user, $crew) {}
-
-	public static function deleteCrew($crew) {}
-
-	public static function updateCrew($crew) {}
-
 
 
 }

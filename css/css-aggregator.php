@@ -42,6 +42,8 @@ if(file_exists($cache)) {
     $recache = true;
 }
 
+//$recache = false; //REMOVE
+
 if(!$recache && isset($_SERVER['If-Modified-Since']) && strtotime($_SERVER['If-Modified-Since']) >= $time){
     header("HTTP/1.0 304 Not Modified");
 } else {

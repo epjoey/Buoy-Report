@@ -103,16 +103,10 @@ class Page {
 		global $local_dev;
 
 		if ($local_dev) {
-			?><script type="text/javascript" src="<?=Path::toJs()?>jquery-1.7.1.min.js"></script><?
+			?><script type="text/javascript" src="<?=Path::toJs()?>js-aggregator.php"></script><?
 		} else {
-			?><script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script><?
-		}
-
-		?>
-		<script type="text/javascript" src="<?=Path::toJs()?>jquery.validate.min.js"></script>	
-		<script type="text/javascript" src="<?=Path::toJs()?>overlay.js"></script>	
-		<script type="text/javascript" src="<?=Path::toJs()?>reportFeedFunctions.js"></script>	
-		<? 		
+			?><script type="text/javascript" src="<?=Path::toJs()?>cache.js"></script><?
+		}		
 	}
 
 	public function renderGoogleAnalytics() {

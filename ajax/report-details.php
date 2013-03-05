@@ -1,6 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SingleReport.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/report/ReportCommentPersistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/SingleReport.php';
 
 $reportId = $_REQUEST['id'];
 

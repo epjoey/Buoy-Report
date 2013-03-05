@@ -2,10 +2,9 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterNote.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
 
 
 
@@ -55,12 +54,8 @@ class HomePage extends Page {
 					)
 				);
 				FilterNote::renderFilterNote($filterResults);
+				ReportFeed::renderFeed($this->reports);
 				?>
-				<div id="report-feed">
-					<?
-					ReportFeed::renderFeed($this->reports); 
-					?>
-				</div>
 			</div>
 		</div>
 		<?		
