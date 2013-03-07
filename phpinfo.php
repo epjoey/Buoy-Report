@@ -1,6 +1,4 @@
 <?php
-
-  phpinfo();
-
-  print 'done';
+phpinfo();
+print 'done';
 ?>
