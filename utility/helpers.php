@@ -67,8 +67,10 @@ function htmlout($text) {
 	echo html($text);
 }
 
-function getLocalTimeFromGMT($gmtTime, $timezone) {
-	
+function getLocalTimeFromGMT($gmtTime, $timezone = null) {
+	// if (!$timezone) {
+	// 	$timezone = "GMT";
+	// }
 	$localTimezone = new DateTimeZone($timezone);
 	$offset = $localTimezone->getOffset(new DateTime('now', new DateTimeZone('GMT')));
 	if ( gmstrftime("%m/%d/%y", time()+$offset) == gmstrftime("%m/%d/%y", $gmtTime+$offset)) { //if the same day

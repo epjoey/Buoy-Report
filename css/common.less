@@ -201,10 +201,10 @@ ul.items { margin-top:10px; overflow:hidden;
 /* Station list */
 .station-list {
 	color:@dark-blue; font-size:16px; margin-bottom:20px; border:1px dotted darken(@grey,20%); border-width:1px 0; overflow:hidden; display:block; padding-top:6px; max-height:800px; overflow-y:auto;
-	h4 {margin-bottom:12px; color:@dark-blue;}
-	a {float:left; width:240px; cursor:pointer; display:block;}
-	a:hover {.museo(500);}
-	.station-name {margin-left:10px; display:inline-block; .text-overflow(); max-width:160px;}
+	h4 { color:@dark-blue;}
+	.item {float:left; width:240px; cursor:pointer; display:block;}
+	.item:hover {.museo(500);}
+	.name {margin-left:10px; display:inline-block; .text-overflow(); max-width:160px;}
 }
 
 /* Sidebar Section */
@@ -245,6 +245,7 @@ ul.items { margin-top:10px; overflow:hidden;
 .no-data {color:@grey; .sans-serif(); line-height: 1.2em; margin-bottom:4px; }
 .submission-error {color:@red; font-size:16px; line-height: 1.2em; margin-bottom:8px; display: block;}
 .form-container label.error {color:@red; clear:both; .sans-serif(); display:block; float:right; }
+.status { color:@red; }
 pre {color:black;}
 iframe {overflow:auto;}
 

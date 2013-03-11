@@ -1,7 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/user/model/User.php';
 
 /* --------------- HANDLE LOGIN FORM SUBMISSION --------------- */
 

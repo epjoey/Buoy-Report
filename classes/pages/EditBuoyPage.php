@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBuoyForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Buoy.php';
 
 
@@ -87,9 +87,10 @@ class EditBuoyPage extends Page {
 		?>
 		<h1 class="form-head">Edit Buoy</h1>
 		<?
-		$showByDefult = true;
-		$form = new AddBuoyForm;
-		$form->renderAddBuoyForm($this->editBuoyError, $showByDefult, $this->buoyInfo);
+		AddBuoyForm::render(array(
+			'status' => $this->editBuoyError, 
+			'defaultBuoy' => $this->buoyInfo
+		));
 		?>
 		<form action="" method="post" class="delete-form" id="delete-buoy-form">
 			<input type="hidden" name="submit" value="delete-buoy" />

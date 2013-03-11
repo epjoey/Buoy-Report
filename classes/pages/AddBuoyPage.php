@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBuoyForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Buoy.php';
 
 
@@ -72,9 +72,7 @@ class AddBuoyPage extends Page {
 		?>
 		<h1 class="form-head">Submit Buoy</h1>
 		<?
-		$showByDefult = true;
-		$form = new AddBuoyForm;
-		$form->renderAddBuoyForm($this->addBuoyError, $showByDefult);
+		AddBuoyForm::render(array('status'=>$this->addBuoyError));
 	}
 
 }

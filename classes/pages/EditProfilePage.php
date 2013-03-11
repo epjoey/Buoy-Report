@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditAccountForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterNote.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
 
 
@@ -148,12 +148,8 @@ class EditProfilePage extends Page {
 					)
 				);
 				FilterNote::renderFilterNote($filterResults);
+				ReportFeed::renderFeed($this->reports);
 				?>
-				<div id="report-feed">
-					<?
-					ReportFeed::renderFeed($this->reports); 
-					?>
-				</div>
 			</div>							
 		</div>
 		<?

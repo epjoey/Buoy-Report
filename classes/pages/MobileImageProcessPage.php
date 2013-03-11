@@ -16,7 +16,7 @@ class MobileImageProcessPage extends Page {
 			$this->callbackUrl = Path::toPostReport($sessionInfo['id']);
 		} 
 		if ($sessionInfo['form'] == 'edit-report-form') {
-			$this->callbackUrl = Path::toEditPost($sessionInfo['id']);
+			$this->callbackUrl = Path::toEditReport($sessionInfo['id']);
 		}
 	}
 

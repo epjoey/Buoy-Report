@@ -1,8 +1,8 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/User.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/SinglePostPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/user/model/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/SingleReportPage.php';
 
 if(isset($_REQUEST['id']) && $_REQUEST['id']) {
 	$id = $_REQUEST['id'];
@@ -12,7 +12,7 @@ if(isset($_REQUEST['id']) && $_REQUEST['id']) {
 	exit();	
 }
 
-$post = new SinglePostPage;
+$post = new SingleReportPage;
 	
 $post->loadData($id);
 $post->renderPage();

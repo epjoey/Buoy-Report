@@ -1,14 +1,11 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Buoy.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/TideStation.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddBuoyForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/location/LocationReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/report/feed/FilterNote.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterNote.php';
 
 
 
@@ -25,35 +22,27 @@ class LocationDetailPage extends Page {
 	public function loadData() {
 		parent::loadData();
 		$this->locationId = $_GET['location'];
-		$this->locInfo = Persistence::getLocationInfoById($this->locationId);
-		if (!isset($this->locInfo)) {
+		$this->location = LocationService::getLocation($this->locationId, array(
+			'includeSublocations' => true,
+			'includeBuoys' => true,
+			'includeTideStations' => true
+		));
+		if (!isset($this->location)) {
 			header('Location:'.Path::to404());
-			exit();
-		}			
+			exit();	
+		}
 
-		$this->locInfo['sublocations'] = Persistence::getSubLocationsByLocation($this->locationId);
+		$this->location->sublocations = Persistence::getSubLocationsByLocation($this->locationId);
 		
 		//ajax this
-		$this->creator = Persistence::getUserInfoById($this->locInfo['creator']);
+		$this->creator = Persistence::getUserInfoById($this->location->creator);
 		
-		if (isset($this->locInfo['buoy1'])) {
-			$this->buoys['buoy1'] = $this->locInfo['buoy1'];
-			$this->buoyCount = 1;
-		}	
-		if (isset($this->locInfo['buoy2'])) {
-			$this->buoys['buoy2'] = $this->locInfo['buoy2'];
-			$this->buoyCount = 2;
-		}
-		if (isset($this->locInfo['buoy3'])) {
-			$this->buoys['buoy3'] = $this->locInfo['buoy3'];
-			$this->buoyCount = 3;
-		}	
 
 		if ($this->user->isLoggedIn && Persistence::userHasLocation($this->user->id, $this->locationId)) {
 			$this->userHasLocation = TRUE;
 		} else $this->userHasLocation = FALSE;		
 
-		$this->pageTitle = $this->locInfo['locname'];
+		$this->pageTitle = $this->location->locname;
 
 
 		if (isset($_GET['error']) && $_GET['error']) {
@@ -100,16 +89,12 @@ class LocationDetailPage extends Page {
 				<? 
 				$filterResults = array_merge(
 					$this->reportFilters, array(
-						'location'=> $this->locInfo['locname'],
+						'location'=> $this->location->locname,
 					)
 				);				
 				FilterNote::renderFilterNote($filterResults);
+				ReportFeed::renderFeed($this->reports);
 				?>
-				<div id="report-feed">
-					<?
-					ReportFeed::renderFeed($this->reports); 
-					?>
-				</div>
 			</div>
 		</div>		
 		<?
@@ -117,7 +102,7 @@ class LocationDetailPage extends Page {
 	
 	public function renderLeft() {
 		$filterOptions = array(
-			'sublocationObjects' => $this->locInfo['sublocations']
+			'sublocationObjects' => $this->location->sublocations
 		);
 		$autoFilters = array(
 			'locationId' => $this->locationId
@@ -185,8 +170,6 @@ class LocationDetailPage extends Page {
 	}	
 
 	public function afterSubmit() {
-
-		$this->handleStationSubmission('toLocation');
 
 		if ($_REQUEST['submit'] == 'bookmark') {
 			Persistence::insertUserLocation($this->user->id, $this->locationId);
@@ -327,17 +310,19 @@ class LocationDetailPage extends Page {
 	public function renderLocDetails() {
 		?>
 		<div class="loc-details">
-			<h1><?= html($this->locInfo['locname'])?></h1>
-			
-			<a class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->locationId);?>">Post Report</a><?
-
-			if ($this->buoyCount < 3 && $this->user->isLoggedIn) {
-				?><span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">+ Buoy</span><?
+			<h1><?= html($this->location->locname)?></h1>
+			<?
+			if (count($this->location->buoys) < 3 && $this->user->isLoggedIn) {
+				?><span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Edit Buoys</span><?
 			}
 
-			if (!isset($this->locInfo['tidestation']) && $this->user->isLoggedIn) {
-				?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">+ Tide Station</span><?
+			if (count($this->location->tideStations) < 2 && $this->user->isLoggedIn) {
+				?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">Add Tide Station</span><?
 			}
+			?>
+			<a class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->locationId);?>">Post Report</a>
+			<?
+
 
 			$this->renderAddStationContainers();
 
@@ -350,14 +335,13 @@ class LocationDetailPage extends Page {
 		?>
 		<div class="add-station-container">
 			<?
-			if ($this->buoyCount < 3 && $this->user->isLoggedIn) {
-				$bform = new AddBuoyForm;
-				$bform -> renderAddBuoyForm($this->addBuoyError);
-			}
-			if (!isset($this->locInfo['tidestation']) && $this->user->isLoggedIn) {
-				$tform = new AddTideStationForm;
-				$tform -> renderAddTideStationForm($this->addStationError);
-			}
+			AddBuoyForm::render(array(
+				'status'=>$this->addBuoyError,
+				'location'=>$this->location
+			));
+
+			$tform = new AddTideStationForm;
+			$tform -> renderAddTideStationForm($this->addStationError);
 			?>
 			<script type="text/javascript"> 
 				(function(){
@@ -372,14 +356,6 @@ class LocationDetailPage extends Page {
 						$('#add-tide-station-div').toggle();
 						$('#add-buoy-btn').removeClass('active');
 						$('#add-tide-station-btn').toggleClass('active');
-					});
-					$('#add-existing-buoy').click(function(event){
-						$('#existing-buoys-container').toggle().addClass('loading');
-						$('#existing-buoys-container').load('<?=Path::toAjax()?>existing-stations.php?stationType=buoy&locationid=<?=$this->locationId?>&to=<?=$to?>',
-							function(){
-								$('#existing-buoys-container').removeClass('loading');
-							}
-						);
 					});
 					$('#add-existing-tidestation').click(function(event){
 						$('#existing-tidestation-container').toggle().addClass('loading');
@@ -417,7 +393,7 @@ class LocationDetailPage extends Page {
 						</div>
 					<? } 
 
-					if ($this->user->isLoggedIn && $this->locInfo['creator'] == $this->user->id) { ?>
+					if ($this->SingleReportPage == $this->user->id) { ?>
 						<div class="edit-link-btns">
 							<span class="edit-link-btn" id="delete-link-btn">Delete links</span>	
 							<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>
@@ -445,73 +421,34 @@ class LocationDetailPage extends Page {
 
 				</script>
 			</div>
-			<div class="tidestation-data sb-section">	
-				<h5 class="toggle-btn">Tide Station <?= isset($this->locInfo['tidestation']) ? '&darr;' : '';?></h5>
-				
-				<?
-				if (isset($this->locInfo['tidestation'])) {
-					$stationInfo = Persistence::getTideStationInfo($this->locInfo['tidestation']);
-					?>
-					<div class="toggle-area" style="<?=$this->enteredTide ? 'display:block' : '';?>">
-						<a target="_blank" href="http://tidesonline.noaa.gov/plotcomp.shtml?station_info=<?=$this->locInfo['tidestation']?>"><?=$this->locInfo['tidestation']?></a>
-						<? 
-						if(isset($stationInfo['stationname'])) { 
-							?>
-							<span> (<?= $stationInfo['stationname'] ?>)</span>
-							<? 
-						}	
+			<div class="tidestation-data sb-section">
+				<h5 class="toggle-btn">Tide Stations &darr;</h5>
+				<div class="toggle-area" style="<?=$this->enteredTide ? 'display:block' : '';?>">
+					<?
+					foreach($this->location->tideStations as $tideStation) {
 						?>
-					</div>
-					<?
-				} else {
-					?> 
-					<span class="no-data">No tide station</span>
-					<?
-				}
-				?>
+						<p><a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a> (<?= $tideStation->stationname ?>)</p>
+						<?
+					}
+					?>
+				</div>
 			</div>
 			<div class="buoy-current-data sb-section">	
-				<h5 class="toggle-btn">Buoy Stations <?=$this->buoyCount > 0 ? '&darr;' : '';?></h5>
-				<?			
-				if ($this->buoyCount > 0) {
-					?>
-					<ul class="toggle-area" style="<?=$this->enteredBuoy ? 'display:block' : '';?>">
+				<h5 class="toggle-btn">Buoy Stations &darr;</h5>
+				<div class="toggle-area" style="<?=$this->enteredBuoy ? 'display:block' : '';?>">
 					<?
-					foreach($this->buoys as $buoy){
-						$buoyInfo = Persistence::getBuoyInfo($buoy);
+					foreach($this->location->buoys as $buoy){
 						?>
-						<li>
-							<a class="buoy-iframe-link" target="_blank" href="http://www.ndbc.noaa.gov/station_page.php?station=<?=html($buoy)?>"><? 
-							if (isset($buoyInfo['name'])) { 
-								?>
-								<span><?= html($buoyInfo['name'])?></span>
-								<? 
-							} else {
-								?>
-								<span><?= html($buoy) ?></span>
-								<?
-							}														
+						<div>
+							<a class="buoy-iframe-link" target="_blank" href="<?=Path::toNOAABuoy($buoy->buoyid)?>"><?
+								print isset($buoy->name) ? html($buoy->name) : html($buoy->buoyid) 													
 							?></a>
-							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=html($buoy)?>" style="width:100%; min-height: 300px"></iframe>
-						</li>								
+							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=$buoy->buoyid?>" style="width:100%; min-height: 300px"></iframe>
+						</div>								
 						<?
-						}
-
+					}
 					?>
-					</ul>
-					<?
-				} else {
-					?> 
-					<span class="no-data">None
-						<?
-						if (!$this->user->isLoggedIn) {
-							?><span class="must-log-in">- Log in to add buoys or stations</span><?
-						}
-						?>
-					</span>
-					<?
-				}
-				?>
+				</div>
 			</div>
 		</div>
 		<?
@@ -522,7 +459,7 @@ class LocationDetailPage extends Page {
 		<div class="loc-meta">
 			<h3>Location Info</h3>
 			<div class="reporters">
-				<p class="creator sb-section">Set up by <a href="<?=Path::toProfile($this->locInfo['creator']);?>"><?=html($this->creator['name'])?></a></p>
+				<p class="creator sb-section">Set up by <a href="<?=Path::toProfile($this->location->creator);?>"><?=html($this->creator['name'])?></a></p>
 				<p class="sb-section"><a href="<?=Path::toReporters($this->locationId);?>">See Reporters</a></p>
 				<p class="sb-section"><a class="edit-location" href="<?=Path::toEditLocation($this->locationId);?>">Edit Location</a></p>
 

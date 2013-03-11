@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/modules/SearchModule.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SearchModule.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ItemList.php';
 

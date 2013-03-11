@@ -1,30 +1,50 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/model/Report.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FormHandlers.php';
 
 /* --------------- HANDLE EDIT REPORT FORM SUBMISSION --------------- */
 
+$report = new Report($_POST);
+
 if ($_POST['submit'] == 'delete-report') {
-	Persistence::deleteReport($_POST['id']);
+	ReportService::deleteReport($report->id);
 	header('Location:'.Path::toUserHome());
 	exit();	
 }
 
-
 try {
+
+	/* in case image was deleted on edit report form */
+	if (isset($_POST['delete-image']) && $_POST['delete-image'] == 'true') {
+		$report->imagepath = '';
+	}
 	
-	$post = FormHandlers::handleEditReportForm($_POST, $_FILES);
+	/* handleFileUpload either saves photo and returns path, or returns an error */	
+	if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
+		/* handleFileUpload either saves photo and returns path, or returns an error */	
+		$uploadStatus = handleFileUpload($_FILES['upload'], $report->reporterid);
+
+		/* redirect back to form if handleFileUpload returns error */
+		if (isset($uploadStatus['error'])) {
+			throw new Exception($uploadStatus['error']);	
+		}
+
+		/* store image path in post if saved succesfully */
+		$report->imagepath = $uploadStatus['imagepath'];
+	}
+	/* in case they used picup, its a remote url */	
+	else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
+		$report->imagepath = rawurldecode($_POST['remoteImageURL']);
+	}
 
 } catch(Exception $e) {
-	//print $e->getMessage();
-	header('Location:'.Path::toEditPost($_POST['id'], $e->getMessage()));
+	header('Location:'.Path::toEditReport($report->id, $e->getMessage()));
 	exit;
 
 }
 
-
-Persistence::updateReport($post);
-header('Location:'.Path::toSinglePost($post['id']));
+ReportService::updateReport($report);
+header('Location:'.Path::toSingleReport($report->id));
 ?>

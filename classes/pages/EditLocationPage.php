@@ -8,7 +8,7 @@ class EditLocationPage extends LocationDetailPage {
 	public function loadData() {
 		parent::loadData();
 
-		$this->pageTitle = 'Edit: ' . $this->locInfo['locname'];
+		$this->pageTitle = 'Edit: ' . $this->location->locname;
 		
 		if (isset($_GET['error']) && $_GET['error']) {
 			switch($_GET['error']) {
@@ -40,7 +40,7 @@ class EditLocationPage extends LocationDetailPage {
 		$this->handleStationSubmission('toEditLocation');
 
 		if ($_POST['submit'] == 'update-name') {
-			if (empty($_POST['locname']) || $_POST['locname'] == $this->locInfo['locname']) {
+			if (empty($_POST['locname']) || $_POST['locname'] == $this->location->locname) {
 				$error = 3;
 				header('Location:'.Path::toEditLocation($this->locationId, $error));
 				exit();				
@@ -56,7 +56,7 @@ class EditLocationPage extends LocationDetailPage {
 		}
 
 		if ($_POST['submit'] == 'select-timezone') {
-			if (empty($_POST['timezone']) || $_POST['timezone'] == $this->locInfo['timezone']) {
+			if (empty($_POST['timezone']) || $_POST['timezone'] == $this->location->timezone) {
 				$error = 3;
 				header('Location:'.Path::toEditLocation($this->locationId, $error));
 				exit();				
@@ -75,8 +75,7 @@ class EditLocationPage extends LocationDetailPage {
 	}
 
 	public function renderBodyContent() {
-
-		if ($this->locInfo['creator'] != $this->user->id) {
+		if ($this->location->creator != $this->user->id) {
 			$this->renderForbiddenMessage();
 		}
 		else {
@@ -88,7 +87,7 @@ class EditLocationPage extends LocationDetailPage {
 	public function renderForm() {
 		?>
 			<h2>
-				<a href="<?=Path::toLocation($this->locationId)?>"><?= html($this->locInfo['locname'])?></a> > Edit
+				<a href="<?=Path::toLocation($this->locationId)?>"><?= html($this->location->locname)?></a> > Edit
 			</h2>
 			<div class="form-container">
 				<?
@@ -100,7 +99,7 @@ class EditLocationPage extends LocationDetailPage {
 				?>						
 				<form method="post" action="" id="edit-location-name-form">
 					<div class="field">
-						<input type="text" name="locname" class="text-input required" value="<?=html($this->locInfo['locname'])?>" />
+						<input type="text" name="locname" class="text-input required" value="<?=html($this->location->locname)?>" />
 						<input type="hidden" name="submit" value="update-name" />
 						<input type="submit" name="update-name" value="Update Name" />
 					</div>
@@ -110,9 +109,9 @@ class EditLocationPage extends LocationDetailPage {
 					<div class="field">
 						<select name="timezone">
 						<?
-							if (isset($this->locInfo['timezone'])) {
+							if (isset($this->location->timezone)) {
 								?>
-									<option value="<?= $this->locInfo['timezone'] ?>" selected="selected"><?= $this->locInfo['timezone'] ?> (<?= getOffset($this->locInfo['timezone'])/3600; ?>)</option>
+									<option value="<?= $this->location->timezone ?>" selected="selected"><?= $this->location->timezone ?> (<?= getOffset($this->location->timezone)/3600; ?>)</option>
 								<?
 							}	
 							foreach ($zones as $tz) {
@@ -129,44 +128,39 @@ class EditLocationPage extends LocationDetailPage {
 				</form>
 				<ul class="buoys">
 				<? 
-				if ($this->buoyCount > 0) {
 
-					foreach($this->buoys as $key=>$buoy){
-						
-						$buoyInfo = Persistence::getBuoyInfo($buoy);
-						?>
-						<li class="field buoy">
-							<label>Buoy: </label>
-							<a target="_blank" href="http://www.ndbc.noaa.gov/station_page.php?station=<?=html($buoy)?>"><?= html($buoy) ?></a>
-							<? 
-							if (isset($buoyInfo['name'])) { 
-								?>
-								<span>(<?= html($buoyInfo['name'])?>)</span>
-								<? 
-							} 											
+				foreach($this->location->buoys as $buoy){
+					?>
+					<li class="field buoy">
+						<label>Buoy: </label>
+						<a target="_blank" href="<?=Path::toNOAABuoy($buoy->buoyid)?>"><?= html($buoy->buoyid) ?></a>
+						<? 
+						if (isset($buoy->name)) { 
 							?>
-							<form action="" method="post" class="remove-buoy">
-								<input type="hidden" name="submit" value="remove-buoy" />
-								<input type="hidden" name="key" value="<?=$key?>"/>
-								<input type="submit" name="remove-buoy" value="Remove" />
-							</form>					
-						</li>								
-					<?
-					}
+							<span>(<?= html($buoy->name)?>)</span>
+							<? 
+						} 											
+						?>
+						<form action="<?=Path::toLocationRemoveBuoy()?>" method="post" class="remove-buoy">
+							<input type="hidden" name="locationid" value="<?=$this->location->id?>"/>
+							<input type="hidden" name="buoyid" value="<?=$buoy->id?>"/>
+							<input type="submit" name="remove-buoy" value="Remove" />
+						</form>					
+					</li>								
+				<?
 				}
-				if (isset($this->locInfo['tidestation'])) {
-					$stationInfo = Persistence::getTideStationInfo($this->locInfo['tidestation']);
+				foreach($this->location->tideStations as $tideStation){
 					?>
 					<li class="field buoy">
 						<label>Tide Station: </label>
-						<a target="_blank" href="http://tidesonline.noaa.gov/plotcomp.shtml?station_info=<?=$this->locInfo['tidestation']?>"><?=$this->locInfo['tidestation']?></a>
-						<? if(isset($stationInfo['stationname'])) { ?>
-							<span> (<?= $stationInfo['stationname'] ?>)</span>
+						<a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a>
+						<? if(isset($tideStation->stationname)) { ?>
+							<span> (<?= $tideStation->stationname ?>)</span>
 						<? } ?>
 					
 						<form action="" method="post" class="remove-buoy">
-							<input type="hidden" name="submit" value="remove-tide-station" />
-							<input type="hidden" name="tidestation" value="<?=$this->locInfo['tidestation']?>"/>
+							<input type="hidden" name="locationid" value="<?=$this->location->id?>"/>
+							<input type="hidden" name="stationid" value="<?=$tideStation->stationid?>"/>							
 							<input type="submit" name="remove-tide-station" value="Remove" />
 						</form>
 					</li>
@@ -176,13 +170,13 @@ class EditLocationPage extends LocationDetailPage {
 				</ul>
 				<div class="add-station-section">
 					<?
-					if ($this->buoyCount < 3) {
+					if (count($this->location->buoys) < 3) {
 						?>
 						<p id="add-buoy-btn" class="edit-loc-link block-link">Add Buoy</p>
 						<?
 					}
 
-					if (!isset($this->locInfo['tidestation'])) {
+					if (count($this->location->tideStations) < 3) {
 						?>
 						<p id="add-tide-station-btn" class="edit-loc-link block-link">Add Tide Station</p>
 						<?					

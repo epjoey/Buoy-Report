@@ -1,8 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Report.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditReportForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/report/view/EditReportForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
 
