@@ -36,10 +36,12 @@ class BuoyDataService {
 		$data = array();
 		foreach($buoyIds as $buoyId) {
 			$noaaData = NOAABuoyService::getBuoyDataFromBuoyAtTime($buoyId, $report->obsdate);
-			$data[] = new BuoyData(array_merge($noaaData, array(
-				'buoy' => $buoyId,
-				'reportid' => $report->id
-			)));
+			if ($noaaData) {
+				$data[] = new BuoyData(array_merge($noaaData, array(
+					'buoy' => $buoyId,
+					'reportid' => $report->id
+				)));
+			}
 		}
 		return $data;
 	}

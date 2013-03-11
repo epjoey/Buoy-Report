@@ -76,12 +76,12 @@ class NOAATidePersistence {
 			$tideRise = $predictedTide > $pastDataRow[3] ? 1 : -1;
 		}
 
-		var_dump(array(
+		return array(
 			'predictedTide' => $predictedTide,
 			'tide' => $observedTide,
 			'tidedate' => $mostApproximateRow['date'],
 			'tideRise' => $tideRise //-1 or 1
-		));
+		);
 	}
 }
 ?>
