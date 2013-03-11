@@ -28,10 +28,14 @@ function loginOverlay(error,rel) {
 			overlay = "<div id='overlay-container'><div class='overlay'>" + form + "</div></div>";
 			insertOverlay(overlay);
 			$('input.required').first().focus();
-
-
 	    }       
 	});
-
-
 }
+
+var Overlay = Backbone.View.extend({
+	initialize: function() {
+	},
+	show: function() {
+		this.$el.insertAfter('#wrapper');
+	}
+});
