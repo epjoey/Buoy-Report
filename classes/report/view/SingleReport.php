@@ -66,8 +66,8 @@ class SingleReport {
 				if(isset($report->imagepath)) { 
 					self::renderReportImage($report->imagepath, $thumb = TRUE);
 				}
-								
-				if(isset($report->waveheight)) { 
+				
+				if($report->waveheight) { 
 					$heightOptions = ReportUtils::getWaveHeightsOptions();
 					$height = $report->waveheight;
 					?>
@@ -75,7 +75,7 @@ class SingleReport {
 					<? 
 				} 	
 
-				if(isset($report->text)) { 
+				if($report->text) { 
 					?>
 					<li class="text-report"><?= bbcode2html($report->text) ?></li>
 					<? 
