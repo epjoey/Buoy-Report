@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/SingleReport.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterForm.php';
 
 
 class ReportFeed {
@@ -13,13 +13,9 @@ class ReportFeed {
 		<div id="report-feed">
 			<?
 			self::renderReports($reports);
-
-	 		if (count($reports) >= ReportService::$numReportsToShowInFeed) {
-	 			?>
-	 			<p class="button-container see-more"><button id="more-reports">See More Reports</button></p>
-				<?
-	 		}
-
+			?>
+ 			<p class="button-container see-more"><button id="more-reports">See More Reports</button></p>
+			<?
 	 		self::renderFeedJS();
 	 		?>
 	 	</div>
@@ -38,8 +34,10 @@ class ReportFeed {
 				return;
 			}
 			//render Feed loop
+			$expanded = true;
 			foreach ($reports as $report) {
-				SingleReport::renderSingleReport($report);
+				SingleReport::renderSingleReport($report, array('expanded'=>$expanded));
+				$expanded = false;
 			}
 			?>
 		</ul>
@@ -52,7 +50,8 @@ class ReportFeed {
 			//Load report details
 
 			$('.report').off('click').on('click', function(){
-				loadReportDetails($(this));
+				$(this).toggleClass('expanded');
+				//loadReportDetails($(this));
 			});
 			updateNumReports();
 			loadThumbnails();

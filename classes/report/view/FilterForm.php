@@ -3,42 +3,27 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
 
 class FilterForm {
 
-	public static function renderFilterModule($filterOptions = array(), $autoFilters = array()) {
+	public static function renderFilterModule($filterOptions = array(), $prefilters = array()) {
 		?>
 		<div class="filter">
 			<div class="filter-inner-container">
 				<h3>Filter</h2>
 				<? 
-				self::renderFilterForm($filterOptions, $autoFilters);
+				self::renderFilterForm($filterOptions, $prefilters);
 				?>
 			</div>
 		</div>		
 		<?		
 	}
 
-	public static function renderFilterForm($filterOptions = array(), $autoFilters = array()) {	
+	public static function renderFilterForm($filterOptions = array(), $prefilters = array()) {	
 		?>	
 		<form method="get" action="" id="filter-form">
 			<span class="cancel filter-trigger" onclick="$(this).parents('#outer-container').toggleClass('filter-expanded');">[ close ]</span>
-			<?					
-			if (isset($autoFilters['reporterId'])) {
+			<?		
+			foreach ($prefilters as $key=>$val) {
 				?>
-				<input type="hidden" name="reporter" value="<?=$autoFilters['reporterId']?>" />
-				<?	
-			}				
-			if (!empty($autoFilters['reporterIds'])) {
-				?>
-				<input type="hidden" name="reporters" value="<?=implode(',', $autoFilters['reporterIds'])?>" />
-				<?	
-			}
-			if (isset($autoFilters['locationId'])) {
-				?>	
-				<input type="hidden" name="location" value="<?= $autoFilters['locationId']?>"/>
-				<?
-			}				
-			if (!empty($autoFilters['locationIds'])) {
-				?>	
-				<input type="hidden" name="locations" value="<?= implode(',', $autoFilters['locationIds'])?>"/>
+				<input type="hidden" name="<?= $key ?>" value="<?= $val ?>" />
 				<?
 			}					
 
@@ -46,13 +31,13 @@ class FilterForm {
 				?>
 				<div class="field location">
 					<label for="date">By Location:</label>
-					<select name="location" id="location">
+					<select name="locationid" id="location">
 						<option value="0">-- Choose --</option>
 						<? 
 						foreach ($filterOptions['locationObjects'] as $location) { 
 							?>
 							<option value="<?= $location['id'] ?>" <?= 
-								returnRequest('location') == $location['id'] ? "selected='selected'" :'';
+								$_REQUEST['location'] == $location['id'] ? "selected='selected'" :'';
 								?>><?= $location['locname'] ?></option>
 							<? 
 						} 
@@ -66,13 +51,13 @@ class FilterForm {
 				?>
 				<div class="field location">
 					<label for="date">By SubLocation:</label>
-					<select name="sublocation" id="sublocation">
+					<select name="sublocationid" id="sublocation">
 						<option value="0">-- Choose --</option>
 						<? 
 						foreach ($filterOptions['sublocationObjects'] as $sublocation) { 
 							?>
 							<option value="<?= $sublocation->sl_id ?>" <?= 
-								returnRequest('sublocation') == $sublocation->sl_id ? "selected='selected'" :'';
+								$_REQUEST['sublocation'] == $sublocation->sl_id ? "selected='selected'" :'';
 								?>><?= $sublocation->sl_name ?></option>
 							<? 
 						} 
@@ -89,7 +74,7 @@ class FilterForm {
 					<option value="0">-- Choose --</option>
 					<? foreach (ReportOptions::quality() as $key=>$value): ?>
 						<option value="<?= $key ?>" <?=
-							returnRequest('quality') == $key ? "selected='selected'" :'';
+							$_REQUEST['quality'] == $key ? "selected='selected'" :'';
 						?>><?= $value ?></option>
 					<? endforeach; ?>
 				</select>
@@ -99,11 +84,13 @@ class FilterForm {
 				<label for="date">With/Without Image:</label>
 				<select name="image" id="image">
 					<option value="0">-- Choose --</option>
-					<? foreach (ReportOptions::hasImage() as $key=>$value): ?>
-						<option value="<?= $key ?>" <?= 
-							returnRequest('image') == $key ? "selected='selected'" :'';
-						?>><?= $value ?></option>
-					<? endforeach; ?>
+					<? 
+					foreach (ReportOptions::hasImage() as $key=>$val) { 
+						?>
+						<option value="<?= $key ?>" <?= $_REQUEST['image'] == $key ? "selected='selected'" :'';?>><?= $val ?></option>
+						<?
+					}
+					?>
 				</select>
 			</div>
 
@@ -114,17 +101,17 @@ class FilterForm {
 
 			<div class="field date">
 				<label for="date">On/Before Date:</label>
-				<input type="text" name="date" id="date" class="text-input"  placeholder="mm/dd/yyyy" />
+				<input type="text" name="obsdate" id="date" class="text-input"  placeholder="mm/dd/yyyy" />
 			</div>
 			
 			<input type="submit" id="filter-submit" value="Filter" />
 			<p class="reset">
 				<? 
 					$url = $_SERVER['PHP_SELF'];
-					if (returnRequest('reporter')) {
-						$url .= '?reporter=' . returnRequest('reporter');
-					} else if (returnRequest('location')) {
-						$url .= '?location=' . returnRequest('location');
+					if ($_REQUEST['reporter']) {
+						$url .= '?reporter=' . $_REQUEST['reporter'];
+					} else if ($_REQUEST['location']) {
+						$url .= '?location=' . $_REQUEST['location'];
 					}
 
 				?>
