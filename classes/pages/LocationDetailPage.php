@@ -18,6 +18,7 @@ class LocationDetailPage extends Page {
 	protected $forecastLinks = array();
 	protected $enteredBuoy = FALSE;
 	protected $enteredTide = FALSE;
+	protected $userHasLocation = FALSE;
 
 	public function loadData() {
 		parent::loadData();
@@ -40,7 +41,7 @@ class LocationDetailPage extends Page {
 
 		if ($this->user->isLoggedIn && Persistence::userHasLocation($this->user->id, $this->locationId)) {
 			$this->userHasLocation = TRUE;
-		} else $this->userHasLocation = FALSE;		
+		}
 
 		$this->pageTitle = $this->location->locname;
 
@@ -72,13 +73,12 @@ class LocationDetailPage extends Page {
 		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
 		$this->reportFilters['image']   	  = $_REQUEST['image'];
 		$this->reportFilters['text']    	  = $_REQUEST['text'];
-		$this->reportFilters['date']    	  = $_REQUEST['date'];
+		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
 		$this->reportFilters['subLocationId'] = $_REQUEST['subLocationId'];
-		$this->reportFilters['location'] 	  = $this->location->id;
+		$this->reportFilters['locationId'] 	  = $this->location->id;
 
 		/* load Reports */
-		//$this->reports = Persistence::getReports($this->reportFilters);					
-		$this->reports = ReportService::getReportsForFilters($this->reportFilters);
+		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters);
 							
 	}
 

@@ -10,23 +10,22 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
 
 class HomePage extends Page {
 
-	public $newPost = null;
-	public $newReport = null;
-
 	public function loadData(){
 		parent::loadData();
 		
-		$this->pageTitle = $this->siteTitle . ' Home';
+		$this->pageTitle = "Home";
 
-		/* load Report Filters from URL */
-		$this->reportFilters = FilterService::getReportFilterRequests(); 
+		/* load Report Filters */
+		$this->reportFilters = array();
+		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
+		$this->reportFilters['image']   	  = $_REQUEST['image'];
+		$this->reportFilters['text']    	  = $_REQUEST['text'];
+		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
+		$this->reportFilters['locationIds']	  = $this->user->locationIds;
 
-		/* load Reports from DB */
-		$this->reports = array();
-		if ($this->user->locationIds) {
-			$this->reportFilters['locations'] = $this->user->locationIds; //disregard filter request and use user's locations
-			$this->reports = Persistence::getReports($this->reportFilters);
-		}
+		/* load Reports */
+		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters);
+
 	}
 
 	public function getBodyClassName() {
@@ -34,11 +33,7 @@ class HomePage extends Page {
 	}	
 
 	public function renderLeft() {
-		$filterOptions = array();
-		$autoFilters = array(
-			'locationIds' => $this->user->locationIds
-		);		
-		FilterForm::renderFilterModule($filterOptions, $autoFilters);
+		FilterForm::renderFilterModule();
 	}
 
 	public function renderMain() {
@@ -48,12 +43,9 @@ class HomePage extends Page {
 			<? FilterForm::renderOpenFilterTrigger(); ?>
 			<div id="report-feed-container">
 				<?
-				$filterResults = array_merge(
-					$this->reportFilters, array(
-						'location' => 'my locations'
-					)
-				);
-				FilterNote::renderFilterNote($filterResults);
+				FilterNote::renderFilterNote(array_merge($this->reportFilters, array(
+					'location' => 'my locations'
+				)));
 				ReportFeed::renderFeed($this->reports);
 				?>
 			</div>
@@ -66,12 +58,11 @@ class HomePage extends Page {
 		<div class="location-list">
 			<h3>My Locations</h3>
 			<?
-			if (!empty($this->user->locations)) {
-				$options['locations'] = $this->user->locations;
-			}
-			$options['showAddLocation'] = TRUE;
-			$options['showSeeAll'] = TRUE;
-			$list = new LocationList($options);
+			$list = new LocationList(array(
+				'locations' => $this->user->locations,
+				'showAddLocation' => TRUE,
+				'showSeeAll' => TRUE
+			));
 			$list->renderLocations();
 			?>
 		</div>

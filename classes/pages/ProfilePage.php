@@ -10,7 +10,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterNote.php';
 
 class ProfilePage extends Page {
 
-	protected $pageOwnerHasLocations = FALSE;
 
 	public function loadData(){
 		parent::loadData();
@@ -24,15 +23,18 @@ class ProfilePage extends Page {
 		$this->pageOwnerEmail = $this->pageOwnerInfo['email'];
 		$this->pageTitle = $this->pageOwnerName . '\'s Reporter Profile';
 		$this->pageOwnerLocations = Persistence::getUserLocations($this->pageOwnerId);
-		if (!empty($this->pageOwnerLocations)) {
-			$this->pageOwnerHasLocations = TRUE;		
-		}	
+
 		/* load Report Filters */
-		$this->reportFilters = FilterService::getReportFilterRequests();
-		$this->reportFilters['reporterId'] = $this->pageOwnerId; //disregard filter request and use user's locations
+		$this->reportFilters = array();
+		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
+		$this->reportFilters['image']   	  = $_REQUEST['image'];
+		$this->reportFilters['text']    	  = $_REQUEST['text'];
+		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
+		$this->reportFilters['locationId'] 	  = $_REQUEST['location'];
+		$this->reportFilters['reporterId']	  = $this->pageOwnerId;
 
 		/* load Reports */
-		$this->reports = Persistence::getReports($this->reportFilters);		
+		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters);		
 	}
 
 	public function getBodyClassName() {
@@ -44,7 +46,7 @@ class ProfilePage extends Page {
 			'locationObjects' => $this->pageOwnerLocations
 		);
 		$autoFilters = array(
-			'reporterId' => $this->pageOwnerId
+			'reporter' => $this->pageOwnerId
 		);		
 		FilterForm::renderFilterModule($filterOptions, $autoFilters);	
 	}
@@ -89,15 +91,13 @@ class ProfilePage extends Page {
 	}
 
 	public function renderLocations() {
-		
-		if ($this->pageOwnerHasLocations) {
-			$options['locations'] = $this->pageOwnerLocations;
-		}
-		$options['showAddLocation'] = FALSE;
-		$options['showSeeAll'] = TRUE;
-		$list = new LocationList($options);
-		$list->renderLocations();		
-		
+		$list = new LocationList(array(
+			'locations' => $this->pageOwnerLocations,
+			'showAddLocation' => FALSE,
+			'showSeeAll' => TRUE
+		));
+		$list->renderLocations();
+	
 	}
 }
 

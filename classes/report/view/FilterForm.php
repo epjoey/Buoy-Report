@@ -31,7 +31,7 @@ class FilterForm {
 				?>
 				<div class="field location">
 					<label for="date">By Location:</label>
-					<select name="locationid" id="location">
+					<select name="location" id="location">
 						<option value="0">-- Choose --</option>
 						<? 
 						foreach ($filterOptions['locationObjects'] as $location) { 
@@ -96,12 +96,12 @@ class FilterForm {
 
 			<div class="field text-search">
 				<label for="date">Containing Text:</label>			
-				<input type="text" name="text" id="text-search" class="text-input"  placeholder="Enter text..." />
+				<input type="text" name="text" id="text-search" class="text-input"  placeholder="Enter text..." value="<?= $_REQUEST['text'] ?>" />
 			</div>
 
 			<div class="field date">
 				<label for="date">On/Before Date:</label>
-				<input type="text" name="obsdate" id="date" class="text-input"  placeholder="mm/dd/yyyy" />
+				<input type="text" name="obsdate" id="date" class="text-input"  placeholder="mm/dd/yyyy" value="<?= $_REQUEST['obsdate'] ?>" />
 			</div>
 			
 			<input type="submit" id="filter-submit" value="Filter" />

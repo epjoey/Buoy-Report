@@ -31,11 +31,16 @@ class EditProfilePage extends Page {
 			$this->editAccountStatus = $e;
 		}	
 
-		$this->reportFilters = FilterService::getReportFilterRequests(); //this wont really be used on first page load. filtering is done via ajax
-		$this->reportFilters['reporterId'] = $this->user->id; //disregard filter request and use user's locations
+		$this->reportFilters = array();
+		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
+		$this->reportFilters['image']   	  = $_REQUEST['image'];
+		$this->reportFilters['text']    	  = $_REQUEST['text'];
+		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
+		$this->reportFilters['locationId'] 	  = $_REQUEST['location'];
+		$this->reportFilters['reporterId']	  = $this->user->id;
 
 		/* load Reports */
-		$this->reports = Persistence::getReports($this->reportFilters);				
+		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters);			
 	}
 
 	public function getBodyClassName() {
@@ -121,7 +126,7 @@ class EditProfilePage extends Page {
 			'locationObjects' => $this->user->locations
 		);
 		$autoFilters = array(
-			'reporterId' => $this->user->id
+			'reporter' => $this->user->id
 		);		
 		FilterForm::renderFilterModule($filterOptions, $autoFilters);	
 	}

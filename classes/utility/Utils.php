@@ -1,5 +1,5 @@
 <?
-class ObjectUtility {
+class Utils {
 	static function pluck($objects = array(), $prop) {
 		$props = array();
 		foreach($objects as $obj) {

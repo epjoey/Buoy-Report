@@ -100,7 +100,7 @@ class ReportPersistence {
 		}
 	}
 
-	static function getReportIdsForFilters($filters, $options = array()) {
+	static function getReportIdsForUserWithFilters($user, $filters, $options = array()) {
 		$defaultOptions = array(
 			"start" => 0,
 			"limit" => 6,
@@ -111,14 +111,15 @@ class ReportPersistence {
 		$limit = intval($options["limit"]);
 		$order = Persistence::escape($options["order"]);
 
-		$where = array("TRUE");
-
+		$userId = intval($user->id);
+		$where = array("(public = '1' OR reporterid = '$userId')");
+		//var_dump($filters);
 		foreach($filters as $key => $val) {
 			if (!$val) {
 				continue;
 			}
 			switch ($key) {
-				case 'location': 
+				case 'locationId': 
 					$where[] = "locationid = " . intval($val);
 					break;
 				case 'quality':
@@ -132,15 +133,23 @@ class ReportPersistence {
 					}
 					break;
 				case 'text':
-					$where[] = "text LIKE '%" . Persistence::escape($text) . "%'";	
+					$where[] = "text LIKE '%" . Persistence::escape($val) . "%'";	
 					break;
-				case 'date':
-					$where[] = "date <= " . strtotime($date) + 59*60*24; //adding just under 24 hours to catch that day's reports
+				case 'obsdate':
+					$where[] = "obsdate <= " . strval(strtotime($val) + 59*60*24); //adding just under 24 hours to catch that day's reports
 					break;
+				case 'locationIds':
+					$where[] = "locationid in (" . implode(',', array_map('intval',$val)) .")";
+					break;	
+				case 'reporterId':
+					$where[] = "reporterid = " . intval($val);
+					break;					
 			}
 		}
+		//var_dump($where);
 		$whereClause = implode(" AND ", $where);
 		$sql = "SELECT id FROM report WHERE $whereClause ORDER BY $order LIMIT $start,$limit";
+		//var_dump($sql);
 		$ids = Persistence::getArray($sql);
 		return $ids;
 	}

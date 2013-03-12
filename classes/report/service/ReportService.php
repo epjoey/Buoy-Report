@@ -61,8 +61,8 @@ class ReportService {
 		return $reportId;
 	}
 
-	static function getReportsForFilters($filters, $options = array()) {
-		$ids = ReportPersistence::getReportIdsForFilters($filters, $options);
+	static function getReportsForUserWithFilters($user, $filters, $options = array()) {
+		$ids = ReportPersistence::getReportIdsForUserWithFilters($user, $filters, $options);
 		
 		//temporary inefficient loop
 		$reports = array();

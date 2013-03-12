@@ -3,7 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/Header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Mobile_Detect.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/service/LocationService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/ObjectUtility.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Utils.php';
 
 class Page {
 	
@@ -13,13 +13,12 @@ class Page {
 		$this->user = new User;
 
 		$this->user->locations = LocationService::getUserLocations($this->user);
-		$this->user->locationIds = ObjectUtility::pluck($this->user->locations, 'id');
+		$this->user->locationIds = Utils::pluck($this->user->locations, 'id');
 
 		$this->detect = new Mobile_Detect();
 		$this->isMobile = $this->detect->isMobile();
 
 		$this->siteTitle = 'Buoy Report';
-		$this->pageTitle = $this->siteTitle;
 				
 	}
 
@@ -63,7 +62,7 @@ class Page {
 			<!-- Basic Page Needs
 		  ================================================== -->
 			<meta charset="utf-8">
-			<title><?=$this->pageTitle?></title>
+			<title><?=$this->pageTitle . " - " . $this->siteTitle?></title>
 			<meta name="description" content="Buoy Report allows surfers, fisherman, or anyone who interacts with the ocean to save buoy measurements from a time in the past for their own records.">
 			<meta name="author" content="hodara">
 			<!--[if lt IE 9]>
