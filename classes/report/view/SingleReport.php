@@ -7,7 +7,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Mobile_Detect.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/utility/ReportUtils.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoydata/view/BuoyDataView.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidedata/view/tideDataView.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidedata/view/TideDataView.php';
 
 
 
