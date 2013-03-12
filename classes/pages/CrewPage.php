@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFeed.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterForm.php';
 
 
 class CrewPage extends Page {

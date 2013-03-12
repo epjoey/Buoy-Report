@@ -15,9 +15,8 @@ class SingleReport {
 
 
 	public static function renderSingleReport($report, $options = array()) {
-		//var_dump($report);
 		$defaultOptions = array(
-			'showDetails' => false
+			'expanded' => true
 		);
 		$options = array_merge($defaultOptions, $options);
 
@@ -31,7 +30,7 @@ class SingleReport {
 		}
 		?>
 
-		<li class="report <?= $options['showDetails'] ? 'expanded' : 'collapsed' ?>" reportid="<?= $report->id ?>" reporterid="<?=$report->reporterid?>">
+		<li class="report <?= $options['expanded'] ? 'expanded' : '' ?>" reportid="<?= $report->id ?>" reporterid="<?=$report->reporterid?>">
 			<ul>
 				<li class="report-head">
 					<a class="loc-name" href="<?=Path::toLocation($report->locationid);?>"><?= html($report->location->locname)?></a>
@@ -64,7 +63,7 @@ class SingleReport {
 
 				//render a thumbnail image on page load.
 				if(isset($report->imagepath)) { 
-					self::renderReportImage($report->imagepath, $thumb = TRUE);
+					self::renderReportImage($report, $thumb = TRUE);
 				}
 				
 				if($report->waveheight) { 
@@ -86,9 +85,11 @@ class SingleReport {
 				<li class="detail-section">
 					<?
 					/* rendered if on single page or new-report ajax */
-					if ($options['showDetails']) { 
-						self::renderReportDetails($report, $options);
-					}
+					
+					self::renderReportImage($report, false);
+					self::renderBuoyDetails($report);
+					self::renderTideDetails($report);
+					self::renderReporterDetails($report);
 					?>
 				</li>
 			</ul>
@@ -107,13 +108,6 @@ class SingleReport {
 		</li>
 		<?		
 	}	
-
-	static function renderReportDetails($report) {
-		self::renderReportImage($report);
-		self::renderBuoyDetails($report);
-		self::renderTideDetails($report);
-		self::renderReporterDetails($report);
-	}
 
 	public static function renderReportImage($report, $thumbnail=FALSE) {
 		$imagepath = $report->imagepath;

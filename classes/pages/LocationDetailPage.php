@@ -1,11 +1,11 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ReportFeed.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFeed.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterNote.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterNote.php';
 
 
 
@@ -68,10 +68,17 @@ class LocationDetailPage extends Page {
 		}	
 		
 		/* load Report Filters */
-		$this->reportFilters = FilterService::getReportFilterRequests();
+		$this->reportFilters = array();
+		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
+		$this->reportFilters['image']   	  = $_REQUEST['image'];
+		$this->reportFilters['text']    	  = $_REQUEST['text'];
+		$this->reportFilters['date']    	  = $_REQUEST['date'];
+		$this->reportFilters['subLocationId'] = $_REQUEST['subLocationId'];
+		$this->reportFilters['location'] 	  = $this->location->id;
 
 		/* load Reports */
-		$this->reports = Persistence::getReports($this->reportFilters);					
+		//$this->reports = Persistence::getReports($this->reportFilters);					
+		$this->reports = ReportService::getReportsForFilters($this->reportFilters);
 							
 	}
 
@@ -87,12 +94,9 @@ class LocationDetailPage extends Page {
 			<? FilterForm::renderOpenFilterTrigger(); ?>
 			<div id="report-feed-container">
 				<? 
-				$filterResults = array_merge(
-					$this->reportFilters, array(
-						'location'=> $this->location->locname,
-					)
-				);				
-				FilterNote::renderFilterNote($filterResults);
+				FilterNote::renderFilterNote(array_merge($this->reportFilters, array(
+					'location'=> $this->location->locname
+				)));
 				ReportFeed::renderFeed($this->reports);
 				?>
 			</div>
@@ -104,10 +108,7 @@ class LocationDetailPage extends Page {
 		$filterOptions = array(
 			'sublocationObjects' => $this->location->sublocations
 		);
-		$autoFilters = array(
-			'locationId' => $this->locationId
-		);
-		FilterForm::renderFilterModule($filterOptions, $autoFilters);
+		FilterForm::renderFilterModule($filterOptions, array('location'=>$this->location->id));
 	}
 				
 

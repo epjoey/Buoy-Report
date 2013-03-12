@@ -5,7 +5,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidedata/service/TideDataServ
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/reporter/service/ReporterService.php';
 
 class ReportService {
-	static $numReportsToShowInFeed = 6;
 
 	static function updateReport($newReport) {
 		ReportPersistence::updateReport($newReport);
@@ -46,7 +45,7 @@ class ReportService {
 	}	
 
 	static function getReports($ids) {
-
+		return ReportPersistence::getReports($ids);
 	}
 
 	static function saveReport($report) {
@@ -61,6 +60,26 @@ class ReportService {
 		$reportId = ReportPersistence::insertReport($report);	
 		return $reportId;
 	}
+
+	static function getReportsForFilters($filters, $options = array()) {
+		$ids = ReportPersistence::getReportIdsForFilters($filters, $options);
+		
+		//temporary inefficient loop
+		$reports = array();
+		foreach($ids as $id) {
+			$reports[] = self::getReport($id, array(
+				'includeBuoyData' => true,
+				'includeTideData' => true,
+				'includeLocation' => true,
+				'includeBuoyModel' => true,
+				'includeTideStationModel' => true,
+				'includeReporter' => true
+			));
+		}
+		//$reports = self::getReports($ids);
+		return $reports;
+	}
+
 	static function deleteReport($id) {
 		ReportPersistence::deleteReport($id);
 	}

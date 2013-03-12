@@ -83,15 +83,6 @@ class Path {
 		return $url;
 	}
 
-
-	public static function toHandleReportSubmission() {
-		return '/form-handlers/report-form-handler.php';
-	}
-
-	public static function toHandleEditReportSubmission() {
-		return '/form-handlers/edit-report-form-handler.php';
-	}
-
 	public static function toSingleReport($reportId) {
 		return '/post.php?id='.$reportId;
 	}
@@ -277,5 +268,11 @@ class Path {
 	public static function toLocationRemoveBuoy() {
 		return self::toAjax() . 'buoy/location-remove-buoy.php';
 	}
+	public static function toHandleReportSubmission() {
+		return '/form-handlers/report-form-handler.php';
+	}
+	public static function toHandleEditReportSubmission() {
+		return '/form-handlers/edit-report-form-handler.php';
+	}	
 }
 ?>

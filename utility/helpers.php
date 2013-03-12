@@ -9,20 +9,6 @@ if ($_SERVER["REMOTE_ADDR"] == '::1' ||
 {
 	$local_dev = TRUE;
 }
-$timer = array();
-
-function returnRequest($str) {
-	if (isset($_REQUEST[$str]) && $_REQUEST[$str]) {
-		return $_REQUEST[$str];
-	}
-	return null;
-}
-
-function timer($where){
-	global $timer;
-	$time = microtime();
-	$timer[$where] = $time;
-}
 
 function dropCookie($name, $value='', $expire = 0, $path = '/', $domain='', $secure=false, $httponly=false) {	
 	$_COOKIE[$name] = $value; 	

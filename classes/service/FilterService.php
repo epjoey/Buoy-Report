@@ -2,11 +2,11 @@
 class FilterService {
 	static function getReportFilterRequests(){
 		$filters = array();
-		$reporters = returnRequest('reporters');
-		$reporterId = returnRequest('reporter');
-		$locations = returnRequest('locations');
-		$locationId = returnRequest('location');
-		$date = returnRequest('date');
+		$reporters = $_REQUEST['reporters'];
+		$reporterId = $_REQUEST['reporter'];
+		$locations = $_REQUEST['locations'];
+		$locationId = $_REQUEST['location'];
+		$date = $_REQUEST['date'];
 		
 		if (isset($reporters)) {
 			$filters['reporters'] = explode(',', $reporters);
@@ -26,10 +26,10 @@ class FilterService {
 			else 
 				$filters['date'] = strtotime($date) + 59*60*24; //adding just under 24 hours to catch that day's reports
 		}
-		$filters['sublocation'] = returnRequest('sublocation');
-		$filters['text'] = returnRequest('text');
-		$filters['image'] = returnRequest('image');
-		$filters['quality'] = returnRequest('quality');
+		$filters['sublocation'] = $_REQUEST['sublocation'];
+		$filters['text'] = $_REQUEST['text'];
+		$filters['image'] = $_REQUEST['image'];
+		$filters['quality'] = $_REQUEST['quality'];
 		return $filters;		
 	}
 }

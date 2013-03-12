@@ -1,18 +1,20 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/SingleReport.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportService.php';
 
 $reportId = $_REQUEST['id'];
-
-if ($_POST['imagePath'] != '') {
-	SingleReport::renderImage($_POST['imagePath']);	
-} 
-if ($_POST['buoys'] != 'FALSE') {
-	SingleReport::renderBuoyDetails($reportId, $_POST['timezone']);	
-} 
-if ($_POST['tideStation'] != 'FALSE') {
-	SingleReport::renderTideDetails($reportId, $_POST['tideStation'], $_POST['timezone']);	
-}
-SingleReport::renderReporterDetails($reportId, $_POST['reporterId'], $_POST['reportTime'], $_POST['timezone']);
+$report = ReportService::getReport($reportId, array(
+	'includeBuoyData' => true,
+	'includeTideData' => true,
+	'includeLocation' => true,
+	'includeBuoyModel' => true,
+	'includeTideStationModel' => true,
+	'includeReporter' => true
+));
+SingleReport::renderImage($report);	
+SingleReport::renderBuoyDetails($report);	
+SingleReport::renderTideDetails($report);	
+SingleReport::renderReporterDetails($report);
 
 
 // $comments = ReportCommentPersistence::getCommentsForReport($reportId);

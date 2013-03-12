@@ -44,6 +44,37 @@ class Persistence {
 		}
 		return $result;
 	}
+	static function getModelsByProp($sql, $model, $prop, $options = array()) {
+		$result = self::run($sql, $options);
+		$objects = array();
+		while ($object = mysqli_fetch_object($result)) {
+			if (!isset($object->$prop)) {
+				throw new PersistenceException("$prop is not a property of $model");
+			}
+			$objects[$object->$prop] = new $model($object);
+		}	
+		return $objects;	
+	}
+	static function getArray($sql, $options = array()) {
+		$result = self::run($sql, $options);
+		$arr = array();
+		while ($row = mysqli_fetch_array($result)) {
+			$arr[] = $row[0];
+		}		
+		return $arr;
+	}
+	static function buildWhereClause($dict) {
+		$where = array();
+		foreach($dict as $key=>$val) {
+			if (is_array($val)) {
+				$where[] = "$key IN (" . implode(',' . self::escape($val)) . ")";
+			} else {
+				$where[] = "$key = " . self::escape($val);
+			}
+		}
+		$whereClause = implode(" AND ", $where);
+		return $whereClause;
+	}
 
 /*==================================================== General Reports ====================================================*/
 /*=========================================================================================================================*/

@@ -36,28 +36,19 @@ class ReportPersistence {
 		//return new Report($data);
 	}
 
-	static function getReports($ids, $options = array()) {
-		$defaultOptions = array(
-			'start' => 0,
-			'limit' => 150,
-			'order' => 'obsdate DESC'
-		);
-		$options = array_merge($defaultOptions, $options);
+	static function getReports($ids) {
+		if (!$ids) {
+			return array();
+		}
 		$ids = array_map('intval', $ids);
-		$ids = implode(',', $ids);
-		if ($ids) {
-			$where = " WHERE id in ($ids)";
+		$idStr = implode(',', $ids);
+		$sql = "SELECT * FROM report WHERE id in ($idStr)";
+		$reports = Persistence::getModelsByProp($sql, 'Report', 'id');
+		$orderedReports = array();
+		foreach($ids as $id) {
+			$orderedReports[$id] = $reports[$id];
 		}
-		$start = intval($options['start']);
-		$limit = intval($options['limit']);
-		$order = Persistence::escape($options['order']);
-		$sql = "SELECT * FROM report $where ORDER BY $order LIMIT $start,$limit";
-		$result = Persistence::run($sql);
-		$reports = array();
-		while ($row = mysqli_fetch_object($result)) {	
-			$reports[] = new Report($row);
-		}
-		return $reports;	
+		return $orderedReports;
 	}
 
 	static function insertReport($report) {
@@ -107,6 +98,51 @@ class ReportPersistence {
 		if (!$result) {
 			die("Error deleting report" . mysqli_error($link));
 		}
+	}
+
+	static function getReportIdsForFilters($filters, $options = array()) {
+		$defaultOptions = array(
+			"start" => 0,
+			"limit" => 6,
+			"order" => "obsdate DESC"
+		);
+		$options = array_merge($defaultOptions, $options);
+		$start = intval($options["start"]);
+		$limit = intval($options["limit"]);
+		$order = Persistence::escape($options["order"]);
+
+		$where = array("TRUE");
+
+		foreach($filters as $key => $val) {
+			if (!$val) {
+				continue;
+			}
+			switch ($key) {
+				case 'location': 
+					$where[] = "locationid = " . intval($val);
+					break;
+				case 'quality':
+					$where[] = "quality = " . intval($val);
+					break;
+				case 'image': 
+					if ($val == 1) { 
+						$where[] = "imagepath IS NOT NULL";
+					} else {
+						$where[] = "imagepath IS NULL";
+					}
+					break;
+				case 'text':
+					$where[] = "text LIKE '%" . Persistence::escape($text) . "%'";	
+					break;
+				case 'date':
+					$where[] = "date <= " . strtotime($date) + 59*60*24; //adding just under 24 hours to catch that day's reports
+					break;
+			}
+		}
+		$whereClause = implode(" AND ", $where);
+		$sql = "SELECT id FROM report WHERE $whereClause ORDER BY $order LIMIT $start,$limit";
+		$ids = Persistence::getArray($sql);
+		return $ids;
 	}
 
 }

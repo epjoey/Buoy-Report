@@ -181,19 +181,16 @@ ul.items { margin-top:10px; overflow:hidden;
 		span {font-size:9px; line-height:9px; text-transform:uppercase; letter-spacing:2px; color:darken(@grey,12%);}
 		div {font-size:11px; text-transform:uppercase; line-height:11px; letter-spacing:2px;}	
 	}
-	&.collapsed {
-		.detail-section {display:none;}
-	}
+	.detail-section {display:none;}
 	&.expanded {
 		padding-bottom:10px;
 		.detail-section {display:block; margin-bottom:0;}
-	}
-	&.collapsed:first-child {
-		.click-to-expand { display:block; } 
+		.click-to-expand { display:none; } 
 	}
 
-	&:hover {background-color:lighten(@grey, 20%);}
-	&.collapsed:hover .click-to-expand {display:block;}
+	&:hover { background-color:lighten(@grey, 20%);
+		.click-to-expand {display:block;}
+	}
 }
 #new-report {background-color:@grey; margin-bottom:6px;}
 

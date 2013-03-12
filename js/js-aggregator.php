@@ -40,7 +40,7 @@ if(file_exists($cache)) {
 } else {
     $recache = true;
 }
-error_log('recache:' . $recache);
+
 if(!$recache && isset($_SERVER['If-Modified-Since']) && strtotime($_SERVER['If-Modified-Since']) >= $time){
     header("HTTP/1.0 304 Not Modified");
 } else {

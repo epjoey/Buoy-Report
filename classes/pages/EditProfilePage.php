@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditAccountForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/FilterNote.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterNote.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
 
 
