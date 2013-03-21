@@ -192,10 +192,10 @@ class Path {
 
 	public static function toAddBuoy($error = NULL) {
 		$str = http_build_query(array('error'=>$error));
-		return '/add-buoy.php?' . $str;
+		return '/add-buoy.php' . ($str ? "?".$str: "");
 	}	
 
-	public static function toEditBuoy($id = NULL, $error = NULL) {
+	public static function toEditBuoyPage($id = NULL, $error = NULL) {
 		$str = http_build_query(array('id'=>$id, 'error'=>$error));
 
 		return '/edit-buoy.php?' . $str;
@@ -274,7 +274,19 @@ class Path {
 	public static function toLocationRemoveTidestation() {
 		return self::toAjax() . 'location/remove-tidestation.php';
 	}	
-	
+	public static function toDeleteBuoy() {
+		return self::toAjax() . 'buoy/delete-buoy.php';
+	}
+	public static function toEditBuoy() {
+		return self::toAjax() . 'buoy/edit-buoy.php';
+	}	
+	public static function toDeleteTidestation() {
+		return self::toAjax() . 'tide/delete-tidestation.php';
+	}
+	public static function toEditTidestation() {
+		return self::toAjax() . 'tide/edit-tidestation.php';
+	}	
+
 	public static function toHandleReportSubmission() {
 		return '/form-handlers/report-form-handler.php';
 	}

@@ -73,7 +73,7 @@ class BuoyPage extends Page {
 							</a>
 							<div class='iframe-container' style="display:none"></div>
 							<div class="edit-delete">
-								<a class="edit" href="<?=Path::toEditBuoy($buoy['buoyid'], null)?>">Edit</a>
+								<a class="edit" href="<?=Path::toEditBuoyPage($buoy['buoyid'], null)?>">Edit</a>
 								<?/*<span class="delete"></span>*/?>
 							</div>
 						</li>

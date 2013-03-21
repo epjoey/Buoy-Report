@@ -1,6 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/model/Buoy.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/persistence/BuoyPersistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/NOAA/persistence/NOAABuoyPersistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/exceptions/AddStationException.php';
 
 class BuoyService {
@@ -45,14 +46,29 @@ class BuoyService {
 		return count(self::getBuoys(array($buoyId))) > 0;
 	}
 
-	static function addBuoy($buoyId, $buoyName) {
-		if (!$buoyId) {
+	static function addBuoy($id, $name) {
+		if (!$id) {
 			throw new AddStationException("New buoy must have id");
 		}
-		if (!$buoyName) {
+		if (!$name) {
 			throw new AddStationException("New buoy must have a name");
-		}		
-		BuoyPersistence::addBuoy($buoyId, $buoyName);
+		}
+		if (!self::isValidBuoy($id)) {
+			throw new AddStationException("$id is not a valid NOAA buoy");
+		}
+		BuoyPersistence::addBuoy($id, $name);
+	}
+
+	static function isValidBuoy($id) {
+		return count(NOAABuoyPersistence::getLastBuoyReportFromBuoy($id) > 0);
+	}
+
+	static function editBuoy($id, $name) {
+		return BuoyPersistence::updateBuoy($id, $name);
+	}
+
+	static function deleteBuoy($id) {
+		return BuoyPersistence::deleteBuoy($id);
 	}
 }
 ?>

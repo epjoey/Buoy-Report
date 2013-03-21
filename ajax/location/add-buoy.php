@@ -3,7 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/service/BuoyService.php'
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 
 header('Content-Type: application/json');
-//todo: check if buoy is legit, check max buoys per location
+
 $return = array();
 $return['success'] = false;
 $return['status'] = '';
@@ -11,27 +11,28 @@ $return['status'] = '';
 $locationId = $_POST['locationid'];
 $buoyId = $_POST['buoyid'];
 $buoyName = $_POST['buoyname'];
-if (!$locationId) {		
-	$return['status'] = 'no location';
-	//print json_encode($return);
-	header("Location:".Path::toLocation($locationId));
-	exit;
-}
+
 if (!$buoyId) {		
 	$return['status'] = 'no buoy';
-	//print json_encode($return);
-	header("Location:".Path::toLocation($locationId));
+	print json_encode($return);
 	exit;
 }
 
 
+//do this even if no locationid, so that we can use this endpoint for simply adding buoys to db
 if (!BuoyService::buoyExists($buoyId)) {
 	try {
 		BuoyService::addBuoy($buoyId, $buoyName);
 	} catch (AddStationException $e) {
 		$return['status'] = $e->getMessage();
-		header("Location:".Path::toLocation($locationId));
+		print json_encode($return);
+		exit;
 	}
+}
+
+if (!$locationId) {		
+	header("Location:".Path::toBuoys());
+	exit;
 }
 
 try {

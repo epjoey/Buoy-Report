@@ -53,5 +53,28 @@ class BuoyPersistence {
 		Persistence::run($sql);
 		return true;
 	}
+
+	static function updateBuoy($id, $name) {
+		if (!$id || !$name) {
+			throw new PersistenceException('updateBuoy needs $id, $name');
+		}
+		$id = Persistence::escape($id);
+		$name = Persistence::escape($name);
+		$sql = "UPDATE buoy SET name = '$name' WHERE buoyid = '$id'";
+		Persistence::run($sql);
+		return true;				
+	}
+
+
+	static function deleteBuoy($id) {
+		if (!$id) {
+			throw new PersistenceException('no id');
+		}
+		$id = Persistence::escape($id);
+		$sql = "DELETE FROM buoy WHERE buoyid = '$id'";
+		Persistence::run("DELETE FROM buoy WHERE buoyid = '$id'");
+		Persistence::run("DELETE FROM buoy_location WHERE buoyid = '$id'");
+		return true;				
+	}	
 }
 ?>

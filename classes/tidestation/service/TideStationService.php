@@ -3,6 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/model/TideStation.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/persistence/TideStationPersistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/exceptions/AddStationException.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/NOAA/persistence/NOAATidePersistence.php';
 
 class TideStationService {
 
@@ -47,14 +48,22 @@ class TideStationService {
 
 	}	
 
-	static function addStation($stationId, $stationName) {
-		if (!$stationId) {
+	static function addStation($id, $name) {
+		if (!$id) {
 			throw new AddStationException("New station must have id");
 		}
-		if (!$stationName) {
+		if (!$name) {
 			throw new AddStationException("New station must have a name");
 		}		
-		TideStationPersistence::addStation($stationId, $stationName);
+		if (!self::isValidStation($id)) {
+			throw new AddStationException("$id is not a valid NOAA station");
+		}
+
+		TideStationPersistence::addStation($id, $name);
 	}
+
+	static function isValidStation($id) {
+		return count(NOAATidePersistence::getLastTideReportFromStation($id) > 0);
+	}	
 }
 ?>
