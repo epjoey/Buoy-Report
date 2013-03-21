@@ -18,7 +18,6 @@ class TideStationPersistence {
 		$start = intval($options['start']);
 		$limit = intval($options['limit']);
 		$sql = "SELECT * FROM tidestation $where LIMIT $start,$limit";
-		
 		$result = Persistence::run($sql);
 		$tideStations = array();
 		while ($row = mysqli_fetch_object($result)) {	
@@ -40,6 +39,9 @@ class TideStationPersistence {
 	}
 
 	static function addStation($id, $name) {
+		if (!$id || !$name) {
+			throw new PersistenceException('addStation needs $id, $name');
+		}
 		$id = Persistence::escape($id);
 		$name = Persistence::escape($name);
 		$sql = "INSERT INTO tidestation SET stationid = '$id', stationname = '$name'";

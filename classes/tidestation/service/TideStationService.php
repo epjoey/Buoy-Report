@@ -47,14 +47,14 @@ class TideStationService {
 
 	}	
 
-	static function addTidestation($stationId, $stationName) {
+	static function addStation($stationId, $stationName) {
 		if (!$stationId) {
 			throw new AddStationException("New station must have id");
 		}
 		if (!$stationName) {
 			throw new AddStationException("New station must have a name");
 		}		
-		TideStationPersistence::addStation($buoyId, $buoyName);
+		TideStationPersistence::addStation($stationId, $stationName);
 	}
 }
 ?>

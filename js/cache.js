@@ -139,13 +139,13 @@ var BR = window.BR = {};
 			});
 		},
 		selectExistingBuoy: function(event) {
-			var parents = $(event.target).parent('.item'),
-				stationId = $(parents[0]).attr('stationid');
-			if (stationId) {
-				this.$el.find("input.station-id").val(stationId);
-				//console.log(this.$el);
-				this.$el.submit();
-			}
+			var id   = $(event.target).parent('.item').find('.id').html(),
+				name = $(event.target).parent('.item').find('.name').html();
+			
+			this.$el.find("input.station-id").val(id);
+			this.$el.find("input.station-name").val(name);
+
+			//this.$el.submit();
 		},
 		onSubmit: function(event) {
 			//this.$el.serialize();

@@ -34,8 +34,8 @@ class AddBuoyForm {
 					<input type="text" class="text-input required station-id" name="buoyid" placeholder='Enter Buoy Number' value="<?= isset($defaultBuoy) ? $defaultBuoy->buoyid : ''?>" />
 				</div>
 				<div class="field">	
-					<label for="buoy-name">Buoy Detail (optional)</label>
-					<input type="text" class="text-input" placeholder='location, coords, moored...' name="buoyname" value="<?= isset($defaultBuoy->name) ? $defaultBuoy->name : '' ?>"/>
+					<label for="buoy-name">Buoy Detail</label>
+					<input type="text" class="text-input required station-name" placeholder='location, coords, moored...' name="buoyname" value="<?= isset($defaultBuoy->name) ? $defaultBuoy->name : '' ?>"/>
 				</div>
 				<div class="field">	
 					<input type="submit" name="enterbuoy" value="Enter Buoy" />

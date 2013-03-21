@@ -43,10 +43,13 @@ class BuoyPersistence {
 		return Persistence::getArray($sql);		
 	}	
 
-	static function addBuoy($buoyId, $buoyName) {
-		$buoyId = Persistence::escape($buoyId);
-		$buoyName = Persistence::escape($buoyName);
-		$sql = "INSERT INTO buoy SET buoyid = '$buoyId', name = '$buoyName'";
+	static function addBuoy($id, $name) {
+		if (!$id || !$name) {
+			throw new PersistenceException('addBuoy needs $id, $name');
+		}		
+		$id = Persistence::escape($id);
+		$name = Persistence::escape($name);
+		$sql = "INSERT INTO buoy SET buoyid = '$id', name = '$name'";
 		Persistence::run($sql);
 		return true;
 	}

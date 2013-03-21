@@ -31,11 +31,11 @@ class AddTideStationForm {
 				
 				<div class="field">
 					<label for="stationid">Station Number</label>
-					<input type="text" class="text-input required station-id" name="stationid" />
+					<input type="text" class="text-input required station-id" name="stationid" placeholder='Enter Station Number' value="<?= isset($defaultStation) ? $defaultStation->stationid : ''?>" />
 				</div>
 				<div class="field">
-					<label for="stationname">Station Detail (optional)</label>	
-					<input type="text" class="text-input" name="stationname" />
+					<label for="stationname">Station Detail</label>	
+					<input type="text" class="text-input required station-name" name="stationname" placeholder='location, coords...' value="<?= isset($defaultStation) ? $defaultStation->stationname : ''?>"/>
 				</div>
 				<div class="field">			
 					<input type="submit" name="enter-tide-station" value="Enter Tide Station" />
