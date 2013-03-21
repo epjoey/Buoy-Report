@@ -1,5 +1,6 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/service/BuoyService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 
 header('Content-Type: application/json');
 //todo: check if buoy is legit, check max buoys per location
@@ -10,23 +11,20 @@ $return['status'] = '';
 $locationId = $_POST['locationid'];
 $buoyId = $_POST['buoyid'];
 if (!$locationId) {		
+	$return['status'] = 'need location';
 	print json_encode($return);
 	exit;
 }
 if (!$buoyId) {		
+	$return['status'] = 'need buoy';
 	print json_encode($return);
 	exit;
 }
-try {
 
-	BuoyService::addBuoyToLocation($buoyId, $locationId);
-	$return['success'] = true;
-	print json_encode($return);
+BuoyService::removeBuoyFromLocation($buoyId, $locationId);
 
-} catch (PersistenceException $e) {
-	if (stristr($e->getMessage(), 'duplicate')) {
-		$return['status'] = 'duplicate';
-	}
-	print json_encode($return);
-}	
+$return['success'] = true;
+//print json_encode($return);
+
+header("Location:".Path::toLocation($locationId));
 ?>

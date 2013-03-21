@@ -41,10 +41,6 @@ class Page {
 					$this->renderFooter(); 
 					?>	
 				</div>	
-				<div class="overlay" id="construction-overlay" style="display:block; top:50px; width:70%; left:10%;">
-					<p>Buoy Report is currently under construction. Please feel free to click around, but any reports submitted will not be saved. Plus, many things are broken and being fixed. Follow me (jhodara) on instagram or fb to find out when the site is working again. Aloha!</p>
-				  	<input type="button" class="cancel" id="" value="OK" onclick="javascript:$('#construction-overlay').hide();"/>
-     			</div>
 				<? $this->renderFooterJs() ?>
 			</body>
 		</html>

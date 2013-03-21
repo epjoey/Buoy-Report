@@ -126,66 +126,6 @@ class EditLocationPage extends LocationDetailPage {
 						<input type="submit" name="select-timezone" value="Update Timezone" />
 					</div>
 				</form>
-				<ul class="buoys">
-				<? 
-
-				foreach($this->location->buoys as $buoy){
-					?>
-					<li class="field buoy">
-						<label>Buoy: </label>
-						<a target="_blank" href="<?=Path::toNOAABuoy($buoy->buoyid)?>"><?= html($buoy->buoyid) ?></a>
-						<? 
-						if (isset($buoy->name)) { 
-							?>
-							<span>(<?= html($buoy->name)?>)</span>
-							<? 
-						} 											
-						?>
-						<form action="<?=Path::toLocationRemoveBuoy()?>" method="post" class="remove-buoy">
-							<input type="hidden" name="locationid" value="<?=$this->location->id?>"/>
-							<input type="hidden" name="buoyid" value="<?=$buoy->id?>"/>
-							<input type="submit" name="remove-buoy" value="Remove" />
-						</form>					
-					</li>								
-				<?
-				}
-				foreach($this->location->tideStations as $tideStation){
-					?>
-					<li class="field buoy">
-						<label>Tide Station: </label>
-						<a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a>
-						<? if(isset($tideStation->stationname)) { ?>
-							<span> (<?= $tideStation->stationname ?>)</span>
-						<? } ?>
-					
-						<form action="" method="post" class="remove-buoy">
-							<input type="hidden" name="locationid" value="<?=$this->location->id?>"/>
-							<input type="hidden" name="stationid" value="<?=$tideStation->stationid?>"/>							
-							<input type="submit" name="remove-tide-station" value="Remove" />
-						</form>
-					</li>
-					<?
-				} 						
-				?>	
-				</ul>
-				<div class="add-station-section">
-					<?
-					if (count($this->location->buoys) < 3) {
-						?>
-						<p id="add-buoy-btn" class="edit-loc-link block-link">Add Buoy</p>
-						<?
-					}
-
-					if (count($this->location->tideStations) < 3) {
-						?>
-						<p id="add-tide-station-btn" class="edit-loc-link block-link">Add Tide Station</p>
-						<?					
-					}
-
-					$this->renderAddStationContainers('toEditLocation');
-
-				?>
-				</div>			
 				<form action="" method="post" class="delete-form" id="delete-location-form">
 					<input type="hidden" name="submit" value="delete-location" />
 					<input type="button" id="delete-location-btn" class="delete-btn" value="Delete Location" />

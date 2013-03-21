@@ -60,10 +60,8 @@ class ReportFormFields {
 			<input id="report-form-arbitrary-date-field" style="display:none" type="text" value="" name="arbitrary_date" />
 			<script type="text/javascript">
 				(function(){
-					$('select#time-offset').change(function(){
-						if ($(this).find("option:selected").attr("id") == 'arbitrary-date-trigger') {
-							$('#report-form-arbitrary-date-field').show();	
-						}
+					$('#arbitrary-date-trigger').click(function(){
+						$('#report-form-arbitrary-date-field').show();	
 					});
 				})();
 			</script>

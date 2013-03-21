@@ -51,7 +51,6 @@ class ReportFeed {
 
 			$('.report').off('click').on('click', function(){
 				$(this).toggleClass('expanded');
-				//loadReportDetails($(this));
 			});
 			updateNumReports();
 			loadThumbnails();

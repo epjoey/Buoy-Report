@@ -26,5 +26,25 @@ class TideStationPersistence {
 		}
 		return $tideStations;	
 	}	
+
+	static function getAllTideStationIds($options = array()) {
+		$defaultOptions = array(
+			'start' => 0,
+			'limit' => 1000
+		);
+		$options = array_merge($defaultOptions, $options);		
+		$start = intval($options['start']);
+		$limit = intval($options['limit']);
+		$sql = "SELECT stationid FROM tidestation LIMIT $start,$limit";
+		return Persistence::getArray($sql);
+	}
+
+	static function addStation($id, $name) {
+		$id = Persistence::escape($id);
+		$name = Persistence::escape($name);
+		$sql = "INSERT INTO tidestation SET stationid = '$id', stationname = '$name'";
+		Persistence::run($sql);
+		return true;		
+	}
 }
 ?>

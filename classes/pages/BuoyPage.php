@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SearchModule.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/ItemList.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/Buoy.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/model/Buoy.php';
 
 
 

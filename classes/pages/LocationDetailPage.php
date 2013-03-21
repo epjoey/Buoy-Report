@@ -3,6 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/view/AddBuoyForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/view/LocationRemoveBuoysForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterNote.php';
@@ -45,28 +46,6 @@ class LocationDetailPage extends Page {
 
 		$this->pageTitle = $this->location->locname;
 
-
-		if (isset($_GET['error']) && $_GET['error']) {
-			switch($_GET['error']) {
-				case 1: $this->addBuoyError = "Please fill in buoy number"; break;
-				case 2: $this->addStationError = "Please fill in station number"; break;
-			}
-		}
-		if (isset($_GET['be1']) && $_GET['be1']) {
-			$this->addBuoyError = "Buoy " . html($_GET['be1']) . " is already set up for this location";
-		}
-		if (isset($_GET['be2']) && $_GET['be2']) {
-			$this->addBuoyError = "Buoy " . html($_GET['be2']) . " cannot be reached";
-		}
-		if (isset($_GET['te']) && $_GET['te']) {
-			$this->addStationError = "Station " . html($_GET['te']) . " cannot be reached";	
-		}
-		if (isset($_GET['entered']) && $_GET['entered'] == 'buoy') {
-			$this->enteredBuoy = TRUE;
-		}
-		if (isset($_GET['entered']) && $_GET['entered'] == 'tide') {
-			$this->enteredTide = TRUE;
-		}	
 		
 		/* load Report Filters */
 		$this->reportFilters = array();
@@ -312,21 +291,12 @@ class LocationDetailPage extends Page {
 		?>
 		<div class="loc-details">
 			<h1><?= html($this->location->locname)?></h1>
+			<span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Buoys</span><?
+			?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">Tide Stations</span><?
+			?><a class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->locationId);?>">Post Report</a>
+
 			<?
-			if (count($this->location->buoys) < 3 && $this->user->isLoggedIn) {
-				?><span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Edit Buoys</span><?
-			}
-
-			if (count($this->location->tideStations) < 2 && $this->user->isLoggedIn) {
-				?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">Add Tide Station</span><?
-			}
-			?>
-			<a class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->locationId);?>">Post Report</a>
-			<?
-
-
 			$this->renderAddStationContainers();
-
 			?>
 		</div>
 		<?
@@ -340,9 +310,10 @@ class LocationDetailPage extends Page {
 				'status'=>$this->addBuoyError,
 				'location'=>$this->location
 			));
-
-			$tform = new AddTideStationForm;
-			$tform -> renderAddTideStationForm($this->addStationError);
+			AddTideStationForm::render(array(
+				'status'=>$this->addStationError,
+				'location'=>$this->location
+			));
 			?>
 			<script type="text/javascript"> 
 				(function(){
@@ -357,15 +328,7 @@ class LocationDetailPage extends Page {
 						$('#add-tide-station-div').toggle();
 						$('#add-buoy-btn').removeClass('active');
 						$('#add-tide-station-btn').toggleClass('active');
-					});
-					$('#add-existing-tidestation').click(function(event){
-						$('#existing-tidestation-container').toggle().addClass('loading');
-						$('#existing-tidestation-container').load('<?=Path::toAjax()?>existing-stations.php?stationType=tide&locationid=<?=$this->locationId?>&to=<?=$to?>',
-							function(){
-								$('#existing-tidestation-container').removeClass('loading');
-							}
-						);
-					});						
+					});					
 				})()
 			</script>				
 		</div>
@@ -428,7 +391,14 @@ class LocationDetailPage extends Page {
 					<?
 					foreach($this->location->tideStations as $tideStation) {
 						?>
-						<p><a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a> (<?= $tideStation->stationname ?>)</p>
+						<p>
+							<a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a> (<?= $tideStation->stationname ?>)
+							<form action="<?=Path::toLocationRemoveTidestation()?>" method="post">
+								<input type="hidden" name="stationid" value="<?=$tideStation->stationid?>"/>
+								<input type="hidden" name="locationid" value="<?=$this->location->id?>"/>
+								<input type="submit" name="remove-station" value="X"/>
+							</form>
+						</p>
 						<?
 					}
 					?>
@@ -441,9 +411,16 @@ class LocationDetailPage extends Page {
 					foreach($this->location->buoys as $buoy){
 						?>
 						<div>
-							<a class="buoy-iframe-link" target="_blank" href="<?=Path::toNOAABuoy($buoy->buoyid)?>"><?
-								print isset($buoy->name) ? html($buoy->name) : html($buoy->buoyid) 													
-							?></a>
+							<div class="buoy-heading">
+								<a class="buoy-iframe-link" target="_blank" href="<?=Path::toNOAABuoy($buoy->buoyid)?>"><?
+									print isset($buoy->name) ? html($buoy->name) : html($buoy->buoyid) 													
+								?></a>
+								<form action="<?=Path::toLocationRemoveBuoy()?>" method="post">
+									<input type="hidden" name="buoyid" value="<?=$buoy->buoyid?>"/>
+									<input type="hidden" name="locationid" value="<?=$this->location->id?>"/>
+									<input type="submit" name="remove-buoy" value="X"/>
+								</form>
+							</div>
 							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=$buoy->buoyid?>" style="width:100%; min-height: 300px"></iframe>
 						</div>								
 						<?

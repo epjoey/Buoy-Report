@@ -118,12 +118,6 @@ class FilterForm {
 				<a href="<?=$url?>">Reset</a>
 			</p>
 		</form>	
-		<script type="text/javascript">
-		    // $('#filter-submit').click(function() {  
-		    // 	filterReports($(this).parents('#filter-form'));
-		    // 	return false;
-		    // });			
-		</script>
 		<?
 	}
 

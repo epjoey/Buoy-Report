@@ -263,11 +263,18 @@ class Path {
 	}
 
 	public static function toLocationAddBuoy() {
-		return self::toAjax() . 'buoy/location-add-buoy.php';
+		return self::toAjax() . 'location/add-buoy.php';
 	}
 	public static function toLocationRemoveBuoy() {
-		return self::toAjax() . 'buoy/location-remove-buoy.php';
+		return self::toAjax() . 'location/remove-buoy.php';
 	}
+	public static function toLocationAddTidestation() {
+		return self::toAjax() . 'location/add-tidestation.php';
+	}
+	public static function toLocationRemoveTidestation() {
+		return self::toAjax() . 'location/remove-tidestation.php';
+	}	
+	
 	public static function toHandleReportSubmission() {
 		return '/form-handlers/report-form-handler.php';
 	}

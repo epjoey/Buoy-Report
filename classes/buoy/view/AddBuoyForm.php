@@ -16,42 +16,42 @@ class AddBuoyForm {
 		$status = $options['status'];
 		$location = $options['location'];
 		?>
-		<div id="add-buoy-div" class="form-container add-station-div" style="<?= isset($status) ? 'has-status' : '' ?> margin-top:12px">
+
+		<div id="add-buoy-div" class="form-container add-station-div <?= isset($status) ? 'has-status' : '' ?>">
 			<form id="add-buoy-form" action="<?= Path::toLocationAddBuoy()?>" method="post">
+				
+				<span class="submission-error"><?= isset($status) ? $status : '';?></span>
+				
 				<p>Find nearby buoys 
 					<a target="_blank" href="http://www.ndbc.noaa.gov/rmd.shtml">here</a> 
 					or 
-					<a href="javascript:" id="add-existing-buoy">add existing buoy.</a>
+					<a href="javascript:" class="add-existing">add existing buoy.</a>
 				</p>
-				<div id="existing-buoys-container" style="display:none" class="station-list ajax-load"></div>			
+				<div class="station-list ajax-load"></div>			
 			
-				<span class="submission-error"><?= isset($status) ? $status : '';?></span>
 				<div class="field">	
-					<label for="buoy-id">Buoy Number </label>
-					<input type="text" class="text-input required" id="buoy-id" name="buoy-id" placeholder='Enter Buoy Number' value="<?= isset($defaultBuoy) ? $defaultBuoy->buoyid : ''?>" />
+					<label for="stationid">Buoy Number </label>
+					<input type="text" class="text-input required station-id" name="buoyid" placeholder='Enter Buoy Number' value="<?= isset($defaultBuoy) ? $defaultBuoy->buoyid : ''?>" />
 				</div>
 				<div class="field">	
 					<label for="buoy-name">Buoy Detail (optional)</label>
-					<input type="text" class="text-input" id="buoy-name" placeholder='location, coords, moored...' name="buoy-name" value="<?= isset($defaultBuoy->name) ? $defaultBuoy->name : '' ?>"/>
+					<input type="text" class="text-input" placeholder='location, coords, moored...' name="buoyname" value="<?= isset($defaultBuoy->name) ? $defaultBuoy->name : '' ?>"/>
 				</div>
 				<div class="field">	
-					<input type="submit" name="enter-buoy" id="enter-buoy" value="Enter Buoy" />
+					<input type="submit" name="enterbuoy" value="Enter Buoy" />
+					<input type="hidden" name="locationid" value="<?=$location->id?>" />
 				</div>
-				<input type="hidden" name="location-id" value="<?=$location->id?>" />
 			</form>
+			<script type="text/javascript"> 
+				(function(){
+					new BR.LocationAddBuoyForm({
+						el: '#add-buoy-form',
+						existingStationsUrl: "<?=Path::toAjax()?>buoy/buoy-selector.php",
+						locationId: "<?=$location->id?>"
+					});				
+				})()
+			</script>	
 		</div>	
-		<script type="text/javascript"> 
-			(function(){
-				new BR.AddBuoyToLocationForm({
-					el: '#add-buoy-div'
-					// trigger: '#add-existing-buoy',
-					// container: '#existing-buoys-container',
-					// selectorUrl: "<?=Path::toAjax()?>buoy/buoy-selector.php?locationid=<?=$location->id?>",
-					// addBuoyUrl: "<?=Path::toLocationAddBuoy()?>",
-					// locationId: "<?=$location->id?>"
-				});					
-			})()
-		</script>		
 		<?
 	}
 }

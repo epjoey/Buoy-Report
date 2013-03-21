@@ -116,16 +116,98 @@ b,d){return this.bind(b,function(e){var f=c(e.target);if(f.is(a))return d.apply(
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 (function(a,b,c){function d(a){return a.placeholder===""&&a.placeholder!==c}var e={input:d(b.createElement("input")),textarea:d(b.createElement("textarea"))};a.fn.placeHoldize=function(){function c(b){var c=b.closest("form");c.submit(function(){var b=a(this);b.data("placeHoldize.submitHandlerCalled")||b.find(".placeholder-visible").val("").data("placeHoldize.submitHandlerCalled",!0)});return!0}function b(b){var c=a(this),d=this.nodeName.toLowerCase();if(!!b||!e[d]&&!!c.attr("placeholder")){var f=c.attr("placeholder");c.val().length<=0||c.val()==f?(c.val(""),c.removeAttr("placeholder").addClass("placeholder-visible"),c.val(f)):c.removeClass("placeholder-visible").addClass("placeholder-hidden"),c.addClass("placeholdized"),c.focus(function(){c.val()===f&&(c.val(""),c.removeClass("placeholder-visible").addClass("placeholder-hidden"))}),c.blur(function(){c.val()===""?(c.val(f),c.removeClass("placeholder-hidden").addClass("placeholder-visible")):c.removeClass("placeholder-visible").addClass("placeholder-hidden")})}}return function(a){this.each(function(){b.call(this,a)}),c(this);return this}}()})(jQuery,document);
-function insertOverlay(content){$(content).insertAfter('#wrapper');$('input.required').first().focus();$(content).find('form').first().validate();}
-function loginOverlay(error,rel){data={error:error,rel:rel}
-$.ajax({url:"/ajax/login-form.php",type:"GET",data:data,cache:false,success:function(form){overlay="<div id='overlay-container'><div class='overlay'>"+form+"</div></div>";insertOverlay(overlay);$('input.required').first().focus();}});}
-var Overlay=Backbone.View.extend({initialize:function(){},show:function(){this.$el.insertAfter('#wrapper');}});var BR=window.BR={};(function(){BR.BuoySelector=Backbone.View.extend({initialize:function(){this.trigger=$(options.trigger);this.container=$(options.container);this.trigger.click(function(event){this.container.toggle().addClass('loading').load(options.selectorUrl,function(response,status,xhr){this.container.removeClass('loading');}.bind(this));}.bind(this));this.container.click(function(event){var clicked=$(event.target);var buoyEl=null;if(clicked.parent('.item').length){buoyEl=$(clicked.parent('.item')[0]);}else if(clicked.hasClass('item')){buoyEl=clicked;}else{return;}
-buoyId=buoyEl.attr('buoyid');buoyEl.addClass('loading');var statusEl=this.container.find('.status');$.ajax({data:{buoyid:buoyId,locationid:options.locationId},url:options.addBuoyUrl,type:'POST',success:function(data,status,jqXHR){if(data.success){location.reload(true);}
-if(data.status=='duplicate'){statusEl.text("Buoy "+buoyId+" is already set for this location.");}
-buoyEl.removeClass('loading');}});}.bind(this));}});BR.LocationAddBuoy=Backbone.View.extend({initialize:function(){new BR.BuoySelector({el:this.$el});new buoy.LocationAddBuoyForm({el:this.$el.find('#add-buoy-form')});},events:{'#enter-buoy':'onSubmit'},onSubmit:function(){}});})();function filterReports(form){feed=$(document).find('#report-feed');data=form.serialize();feed.children().fadeOut(60);feed.addClass('loading');$.ajax({url:"/ajax/filter-reports.php",type:"GET",data:data,cache:false,success:function(reports){$('#outer-container').removeClass('filter-expanded');feed.hide();feed.html(reports);feed.removeClass('loading');feed.fadeIn(60);loadThumbnails();updateFilterNote();}});};function loadMoreReports(form){feed=$('#report-feed-container');data=$(form).serialize();numReports=feed.find('.report').length;data=data+"&offset="+numReports;reportsList=feed.find('ul.reports').last();reportsList.after("<div id='temp-loading' class='loading'></div>");$.ajax({url:"/ajax/load-more-reports.php",type:"GET",data:data,cache:false,success:function(reports){$('#temp-loading').remove();reportsList.after(reports);loadThumbnails();updateNumReports();if(reports.match('<li')==null)
-$('#more-reports').addClass('disabled');}});}
-function loadReportDetails(report){var detailSection=report.find('.detail-section'),reportId=report.attr('reportid'),obuoys=report.attr('hasbuoys'),otideStation=report.attr('hastide'),otimezone=report.attr('tz'),oreportTime=report.attr('reporttime'),oreporterId=report.attr('reporterid'),oimagePath=report.attr('imagepath');if(report.hasClass('collapsed')){report.removeClass('collapsed').addClass('expanded');if(detailSection.hasClass('loaded')){return;}
-detailSection.addClass('loading');detailSection.load('/ajax/report-details.php?id='+reportId,{buoys:obuoys,tideStation:otideStation,timezone:otimezone,reportTime:oreportTime,reporterId:oreporterId,imagePath:oimagePath},function(){detailSection.removeClass('loading');detailSection.addClass('loaded');})}else{report.removeClass('expanded').addClass('collapsed');}}
-function loadThumbnails(){$('.image-container.thumbnail-image img').each(function(elem){src=$(this).attr('realUrl');$(this).attr('src',src);$(this).parent('.thumbnail-image').removeClass('loading').addClass('loaded');});}
-function updateFilterNote(){updateNumReports();}
-function updateNumReports(){numReports=$('#report-feed-container .report').length;$('#numReports').text(numReports);}
+var BR = window.BR = {};
+
+(function(){
+
+	//todo: max buoys per location, check if buoy is online.
+	BR.LocationAddBuoyForm = Backbone.View.extend({
+		initialize: function() {
+		},
+		events: {
+			"click .add-existing" : "showExistingBuoys",
+			"click .station-list" : "selectExistingBuoy",
+			"submit" : "onSubmit"
+		},
+		showExistingBuoys: function(event) {
+			var container = this.$el.find(".station-list");
+			container.addClass('loading');
+			$.ajax(this.options.existingStationsUrl, {
+				success: function(html) {
+					container.html(html).removeClass('loading');
+				}
+			});
+		},
+		selectExistingBuoy: function(event) {
+			var parents = $(event.target).parent('.item'),
+				stationId = $(parents[0]).attr('stationid');
+			if (stationId) {
+				this.$el.find("input.station-id").val(stationId);
+				//console.log(this.$el);
+				this.$el.submit();
+			}
+		},
+		onSubmit: function(event) {
+			//this.$el.serialize();
+		}
+	});
+
+	BR.LocationRemoveBuoysForm = Backbone.View.extend({
+		initialize: function() {
+		},
+		events: {
+			'submit':'onSubmit'
+		},
+		onSubmit: function(event) {
+		}
+	});	
+})();function loadMoreReports(form) {
+    feed = $('#report-feed-container');
+	data = $(form).serialize(); 
+	numReports = feed.find('.report').length;
+    data = data + "&offset=" + numReports;
+    
+	//find the last list of reports (only one until "See more reports" is clicked)
+    reportsList = feed.find('ul.reports').last();
+
+    //insert temporary loading sign after current list
+    reportsList.after("<div id='temp-loading' class='loading'></div>");
+
+    //start the ajax
+    $.ajax({
+        url: "/ajax/load-more-reports.php", 
+        type: "GET",
+        data: data,
+        cache: false,
+        success: function(reports) { 
+        	$('#temp-loading').remove();  
+            reportsList.after(reports); 
+            loadThumbnails();		               
+			
+			//rewrite feed count at top
+			updateNumReports();
+
+			//disable button if no more reports
+			if (reports.match('<li') == null)
+				$('#more-reports').addClass('disabled');
+            }       
+    });				 
+}		
+
+function loadThumbnails(){
+	$('.image-container.thumbnail-image img').each(function(elem){
+		src = $(this).attr('realUrl');
+		$(this).attr('src', src);
+		$(this).parent('.thumbnail-image').removeClass('loading').addClass('loaded');
+	});				
+}
+
+function updateFilterNote(){
+	updateNumReports();
+}
+
+function updateNumReports(){
+    numReports = $('#report-feed-container .report').length;
+    $('#numReports').text(numReports);
+}
+

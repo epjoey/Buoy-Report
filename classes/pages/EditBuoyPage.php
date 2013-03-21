@@ -24,7 +24,7 @@ class EditBuoyPage extends Page {
 			$this->editBuoyError = $e;
 		}		
 
-		$this->buoyInfo = Persistence::getBuoyInfo($this->buoyId);
+		$this->buoyInfo = BuoyService::getBuoy($this->buoyId);
 		
 	}
 

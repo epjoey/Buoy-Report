@@ -2,13 +2,14 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 
-/* GLOBALS */
+//remove
 $local_dev = FALSE;
 if ($_SERVER["REMOTE_ADDR"] == '::1' || 
 	$_SERVER["REMOTE_ADDR"] == "127.0.0.1" ) 
 {
 	$local_dev = TRUE;
 }
+
 
 function dropCookie($name, $value='', $expire = 0, $path = '/', $domain='', $secure=false, $httponly=false) {	
 	$_COOKIE[$name] = $value; 	

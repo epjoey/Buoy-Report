@@ -28,9 +28,6 @@ if ($_REQUEST['info'] == 'forecast') {
 		<span class="no-data">None</span>
 		<?
 	}
-	?>
-
-	<?	
 }
 
 if ($_REQUEST['info'] == 'deletelinks') {
