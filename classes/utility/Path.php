@@ -52,10 +52,6 @@ class Path {
 		return $url;
 	}	
 
-	public static function toHandleLogin() {
-		return '/form-handlers/login-form-handler.php';
-	}	
-
 	public static function toLogout() {
 		return '/logout.php';
 	}	
@@ -66,10 +62,6 @@ class Path {
 			$url .= '?error=' . $error;
 		} 
 		return $url;
-	}
-
-	public static function toHandleRegistration() {
-		return '/form-handlers/register-form-handler.php';
 	}
 
 	public static function toPostReport($locationid = NULL, $submitError = NULL) {
@@ -244,7 +236,6 @@ class Path {
 
 	public static function absoluteToImages() {
 		global $local_dev;
-
 		if ($local_dev) {
 			$url = Path::LOCALURL;
 		} 
@@ -257,11 +248,11 @@ class Path {
 
 	public static function toMobileImageProcess() {
 		global $local_dev;
-
 		return Path::toUrl() . '/mobile-image-process.php';
-
 	}
 
+
+	//form handlers
 	public static function toLocationAddBuoy() {
 		return self::toAjax() . 'location/add-buoy.php';
 	}
@@ -286,12 +277,18 @@ class Path {
 	public static function toEditTidestation() {
 		return self::toAjax() . 'tide/edit-tidestation.php';
 	}	
-
 	public static function toHandleReportSubmission() {
-		return '/form-handlers/report-form-handler.php';
+		return self::toAjax() . 'report/report-form-handler.php';
 	}
 	public static function toHandleEditReportSubmission() {
-		return '/form-handlers/edit-report-form-handler.php';
+		return self::toAjax() . 'report/edit-report-form-handler.php';
 	}	
+	public static function toHandleLogin() {
+		return self::toAjax() . 'user/login-form-handler.php';
+	}
+	public static function toHandleRegistration() {
+		return self::toAjax() . 'user/register-form-handler.php';
+	}	
+
 }
 ?>

@@ -53,20 +53,18 @@ class ReportFormFields {
 
 				?>
 				
-				<? //<option value="" id="arbitrary-date-trigger">Enter Arbitrary Date</option> ?>
+				<option value="older-date">Older...</option>
 			</select>
-			<?
-			/*
-			<input id="report-form-arbitrary-date-field" style="display:none" type="text" value="" name="arbitrary_date" />
+			<input id="report-form-older-date" style="display:none" placeholder="mm/dd/yyyy hh:mm:ss" type="text" value="" name="arbitrary_date" />
 			<script type="text/javascript">
 				(function(){
-					$('#arbitrary-date-trigger').click(function(){
-						$('#report-form-arbitrary-date-field').show();	
+					$('select#time-offset').change(function(event){
+						if ($(this).find(":selected").val() == 'older-date') {
+							$('#report-form-older-date').show();	
+						}
 					});
 				})();
 			</script>
-			*/
-			?>
 		</div>
 		<?
 	}	

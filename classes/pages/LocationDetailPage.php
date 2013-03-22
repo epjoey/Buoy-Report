@@ -4,7 +4,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/view/LocationRemoveBuoysForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/AddTideStationForm.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/view/AddTideStationForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterNote.php';
 
@@ -54,7 +54,7 @@ class LocationDetailPage extends Page {
 		$this->reportFilters['text']    	  = $_REQUEST['text'];
 		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
 		$this->reportFilters['subLocationId'] = $_REQUEST['subLocationId'];
-		$this->reportFilters['locationId'] 	  = $this->location->id;
+		$this->reportFilters['locationIds']   = array($this->location->id);
 
 		/* load Reports */
 		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters);
@@ -110,7 +110,7 @@ class LocationDetailPage extends Page {
 				}
 				if (linkContainer.hasClass('loaded') && newUrl == '') return;
 				linkContainer.addClass('loading');
-				linkContainer.load('<?=Path::toAjax()?>location-info.php?info=forecast&locationid=<?=$this->locationId?>', 
+				linkContainer.load('<?=Path::toAjax()?>/location/forecast-links.php?info=forecast&locationid=<?=$this->locationId?>', 
 					
 					data,			
 					function(){
@@ -135,7 +135,7 @@ class LocationDetailPage extends Page {
 				});
 
 				$.ajax({
-					url: "<?=Path::toAjax()?>location-info.php?info=deletelinks&locationid=<?=$this->locationId?>",
+					url: "<?=Path::toAjax()?>/location/forecast-links.php?info=deletelinks&locationid=<?=$this->locationId?>",
 					type: "GET",
 					data: { links : links },
 					cache: false,

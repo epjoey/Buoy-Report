@@ -1,0 +1,5 @@
+<?
+class BuoyLocation implements Persistence {
+
+}
+?>

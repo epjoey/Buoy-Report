@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/SingleReport.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterForm.php';
@@ -61,6 +61,6 @@ class ReportFeed {
 		    });				
 		</script> 			
 		<?
-	} 	
+	}
 }
 ?>

@@ -11,27 +11,25 @@ if (!isset($_GET['reporter'])) {
 	exit();	
 }
 
-$profile = new ProfilePage;
-$profile->loadData();
+$user = new User;
 
-
-if ($profile->user->isLoggedIn && $_GET['reporter'] == $profile->user->id) {
+if ($user->isLoggedIn && $_GET['reporter'] == $user->id) {
+	
 	$editprofile = new EditProfilePage;
 	$editprofile->loadData();
-
 	if (isset($_POST['submit'])) {
 		$editprofile->afterSubmit();
 		exit();
 	}	
-
 	$editprofile->renderPage();
-	exit();
+
+} else {
+	
+	$profile = new ProfilePage;
+	$profile->loadData();
+	$profile->renderPage(); 
 }
 
-if (isset($_POST['submit'])) {
-	$profile->afterSubmit();
-	exit(); 		
-}
 
-$profile->renderPage(); 
+
 ?>

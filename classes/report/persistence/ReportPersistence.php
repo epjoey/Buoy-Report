@@ -119,18 +119,11 @@ class ReportPersistence {
 				continue;
 			}
 			switch ($key) {
-				case 'locationId': 
-					$where[] = "locationid = " . intval($val);
-					break;
 				case 'quality':
 					$where[] = "quality = " . intval($val);
 					break;
 				case 'image': 
-					if ($val == 1) { 
-						$where[] = "imagepath IS NOT NULL";
-					} else {
-						$where[] = "imagepath IS NULL";
-					}
+					$where[] = $val == 1 ? "imagepath IS NOT NULL" : "imagepath IS NULL";
 					break;
 				case 'text':
 					$where[] = "text LIKE '%" . Persistence::escape($val) . "%'";	

@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportOptions.php';
 
 class FilterForm {
 
@@ -50,7 +50,7 @@ class FilterForm {
 			if(!empty($filterOptions['sublocationObjects'])) {
 				?>
 				<div class="field location">
-					<label for="date">By SubLocation:</label>
+					<label for="date">By Sublocation:</label>
 					<select name="sublocationid" id="sublocation">
 						<option value="0">-- Choose --</option>
 						<? 

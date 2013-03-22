@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/model/ReportOptions.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportOptions.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFormFields.php';

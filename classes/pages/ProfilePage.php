@@ -30,7 +30,7 @@ class ProfilePage extends Page {
 		$this->reportFilters['image']   	  = $_REQUEST['image'];
 		$this->reportFilters['text']    	  = $_REQUEST['text'];
 		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
-		$this->reportFilters['locationId'] 	  = $_REQUEST['location'];
+		$this->reportFilters['locationIds']   = $_REQUEST['location'] ? array($_REQUEST['location']) : array();
 		$this->reportFilters['reporterId']	  = $this->pageOwnerId;
 
 		/* load Reports */

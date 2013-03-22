@@ -114,7 +114,7 @@ class BuoyPage extends Page {
 
 		        $.ajax({
 		            //this is the php file that processes the data
-		            url: "<?=Path::toAjax()?>buoy-iframe.php?id=" + id,
+		            url: "<?=Path::toAjax()?>/buoy/iframe.php?id=" + id,
 		             
 		            //GET method is used
 		            type: "GET",

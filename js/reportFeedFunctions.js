@@ -12,7 +12,7 @@ function loadMoreReports(form) {
 
     //start the ajax
     $.ajax({
-        url: "/ajax/load-more-reports.php", 
+        url: "/ajax/report/load-more.php", 
         type: "GET",
         data: data,
         cache: false,
