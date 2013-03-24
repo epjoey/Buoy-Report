@@ -37,8 +37,6 @@ class EditLocationPage extends LocationDetailPage {
 
 	public function afterSubmit() {
 
-		$this->handleStationSubmission('toEditLocation');
-
 		if ($_POST['submit'] == 'update-name') {
 			if (empty($_POST['locname']) || $_POST['locname'] == $this->location->locname) {
 				$error = 3;

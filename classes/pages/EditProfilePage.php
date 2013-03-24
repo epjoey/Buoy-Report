@@ -31,8 +31,6 @@ class EditProfilePage extends Page {
 			$this->editAccountStatus = $e;
 		}	
 
-		$this->myLocations = LocationService::getReporterLocations($this->user);
-
 		$this->reportFilters = array();
 		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
 		$this->reportFilters['image']   	  = $_REQUEST['image'];
@@ -125,7 +123,7 @@ class EditProfilePage extends Page {
 
 	public function renderLeft() {
 		$filterOptions = array(
-			'locationObjects' => $this->myLocations
+			'locationObjects' => $this->user->locations
 		);
 		$autoFilters = array(
 			'reporter' => $this->user->id
@@ -181,9 +179,7 @@ class EditProfilePage extends Page {
 	}
 	
 	public function renderMyLocations() {
-		if (!empty($this->myLocations)) {
-			$options['locations'] = $this->myLocations;
-		}
+		$options['locations'] = $this->user->locations;
 		$options['showAddLocation'] = TRUE;
 		$options['showSeeAll'] = TRUE;
 		$list = new LocationList($options);

@@ -38,7 +38,7 @@ class LocationPage extends Page {
 		}
 
 		if ($this->isCurrentUserLocations) {
-			$this->locations = LocationService::getReporterLocations($this->user);
+			$this->locations = $this->user->locations;
 
 		} elseif ($this->isReporterLocations) {
 

@@ -22,6 +22,8 @@ class ProfilePage extends Page {
 		$this->pageOwnerEmail = $this->pageOwnerInfo['email'];
 		$this->pageTitle = $this->pageOwnerName . '\'s Reporter Profile';
 		$this->pageOwnerLocations = Persistence::getUserLocations($this->pageOwnerId);
+		//$this->pageOwnerLocations = LocationService::getReporterLocations($this->pageOwnerId);
+		
 
 		/* load Report Filters */
 		$this->reportFilters = array();

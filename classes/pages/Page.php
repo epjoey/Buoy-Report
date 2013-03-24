@@ -11,6 +11,7 @@ class Page {
 	public function loadData() {
 
 		$this->user = new User;
+		$this->user->locations = LocationService::getReporterLocations($this->user);
 
 		$this->detect = new Mobile_Detect();
 		$this->isMobile = $this->detect->isMobile();

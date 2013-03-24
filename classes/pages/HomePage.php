@@ -15,7 +15,6 @@ class HomePage extends Page {
 		
 		$this->pageTitle = "Home";
 
-		$this->userLocations = LocationService::getReporterLocations($this->user);
 		
 		/* load Report Filters */
 		$this->reportFilters = array();
@@ -23,7 +22,7 @@ class HomePage extends Page {
 		$this->reportFilters['image']   	  = $_REQUEST['image'];
 		$this->reportFilters['text']    	  = $_REQUEST['text'];
 		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
-		$this->reportFilters['locationIds']	  = Utils::pluck($this->userLocations, 'id');
+		$this->reportFilters['locationIds']	  = Utils::pluck($this->user->locations, 'id');
 
 		/* load Reports */
 		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters);
@@ -61,7 +60,7 @@ class HomePage extends Page {
 			<h3>My Locations</h3>
 			<?
 			$list = new LocationList(array(
-				'locations' => $this->userLocations,
+				'locations' => $this->user->locations,
 				'showAddLocation' => TRUE,
 				'showSeeAll' => TRUE
 			));

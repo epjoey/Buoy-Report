@@ -261,7 +261,6 @@ class Persistence {
 		$link = Persistence::dbConnect();
 		$reporterid = intval($reporterid);
 		$sql = "SELECT locationid FROM reporterlocation WHERE reporterid = '$reporterid'";
-		var_dump($sql);
 		$result = mysqli_query($link, $sql) or die('error fetching locations of user');
 		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
 			$locations[] = $row;
