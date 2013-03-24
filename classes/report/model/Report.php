@@ -1,7 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/models/BaseModel.php';
-
-class Report extends BaseModel {
+class Report {
 	public $id;
 	public $text;
 	public $locationid;

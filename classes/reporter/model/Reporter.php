@@ -1,7 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/models/BaseModel.php';
-
-class Reporter extends BaseModel {
+class Reporter {
 	public $id;
 	public $name;
 	public $email;
