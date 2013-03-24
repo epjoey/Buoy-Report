@@ -261,6 +261,7 @@ class Persistence {
 		$link = Persistence::dbConnect();
 		$reporterid = intval($reporterid);
 		$sql = "SELECT locationid FROM reporterlocation WHERE reporterid = '$reporterid'";
+		var_dump($sql);
 		$result = mysqli_query($link, $sql) or die('error fetching locations of user');
 		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
 			$locations[] = $row;
@@ -283,6 +284,7 @@ class Persistence {
 		}	
 		
 		$sql = "SELECT * FROM location" . $where;
+		var_dump($sql);
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
 			die("Error getting user locations" . mysqli_error($link));
@@ -291,20 +293,6 @@ class Persistence {
 			$locationInfo[] = $row;	
 		}
 		return $locationInfo;
-	}
-
-	public static function userHasLocation($reporterid, $locationid) {
-		$link = Persistence::dbConnect();
-		$reporterid = intval($reporterid);
-		$locationid = intval($locationid);
-		$sql = "SELECT COUNT(*) FROM reporterlocation WHERE reporterid = '$reporterid' AND locationid = '$locationid'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error searching for user-location bookmark" . mysqli_error($link));
-		}		
-		$row = mysqli_fetch_array($result);	
-		if ($row[0] > 0) return TRUE;
-		else return FALSE;
 	}
 
 	public static function userCreatedLocation($reporterid, $locationid) {
@@ -523,16 +511,6 @@ class Persistence {
 		$result = mysqli_query($link, $sql) or die("Error deleting reporter report associations");
 	}
 
-	public static function insertUserLocation($reporterid, $locationid) {
-		$link = Persistence::dbConnect();
-		$reporterid = intval($reporterid);
-		$locationid = intval($locationid);
-		$sql = "INSERT INTO reporterlocation SET reporterid = '$reporterid', locationid = '$locationid'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error inserting location bookmark into DB" . mysqli_error($link));
-		}		
-	}
 
 	public static function getUserInfoById($id) {
 		$id = intval($id);

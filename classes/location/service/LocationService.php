@@ -3,6 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/persistence/LocationPersistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/service/TideStationService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/service/BuoyService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/reporter/service/ReporterService.php';
 
 class LocationService {
 	static function getLocation($id, $options = array()) {
@@ -16,7 +17,7 @@ class LocationService {
 		);
 		$options = array_merge($defaultOptions, $options);
 		$id = intval($id);
-		$locations = LocationPersistence::getLocations(array($id));
+		$locations = self::getLocations(array($id));
 		$location = reset($locations);
 
 		if ($options['includeSublocations']) {
@@ -35,16 +36,12 @@ class LocationService {
 		return LocationPersistence::getLocations($ids);
 	}
 
-	public static function getUserLocations($user){
-		//logged out user -- return all locations (TODO:return only recently active locations)
-		if (!$user->isLoggedIn) {
-			return array(); //LocationPersistence::getLocations();
-		}
-		$locations = Persistence::getUserLocations($user->id);
-		if (!$locations) {
+	public static function getReporterLocations($reporter){
+		if (!$reporter) {
 			return array();
 		}
-		return $locations;
+		$lids = ReporterService::getReporterLocationIds($reporter);
+		return self::getLocations($lids);
 	}		
 
 	public static function getSublocationsForLocation($location) {

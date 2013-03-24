@@ -11,11 +11,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFormFields.
 class ReportForm {
 
 	static function renderReportForm($location, $user, $submitError = NULL, $needPicup) {
-		if (!in_array($location->id, $user->locationIds)) {
-			$reporterHasLocation = 0;
-		} else {
-			$reporterHasLocation = 1;
-		}
 		?>
 		<h1 class="form-head">Post Report For <a href="<?=Path::toLocation($location->id);?>" id="location"><?= $location->locname ?></a>
 		</h1>		
@@ -32,8 +27,6 @@ class ReportForm {
 						$submitError = 'Error Saving File';
 					} else if ($submitError == 'no-quality') {
 						$submitError = 'You must choose a quality.';					
-					} else {
-						$submitError = 'Error submitting report';
 					}
 					?>
 					<span class="submission-error"><?= $submitError ?></span>
@@ -116,7 +109,6 @@ class ReportForm {
 				<input type="hidden" name="public" value="<?=$user->privacySetting?>" />
 				<input type="hidden" name="locationid" value="<?=$location->id?>" />
 				<input type="hidden" name="locationname" value="<?=$location->locname?>" /> 
-				<input type="hidden" name="reporterHasLocation" value="<?=$reporterHasLocation?>" />
 				<input type="hidden" name="submit" value="submit-report" />				
 				<input type="submit" name="submit_report" value="Submit Report" />
 			</form>

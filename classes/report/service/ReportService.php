@@ -3,6 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/persistence/ReportPers
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoydata/service/BuoyDataService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidedata/service/TideDataService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/reporter/service/ReporterService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/service/LocationService.php';
 
 class ReportService {
 
@@ -21,6 +22,10 @@ class ReportService {
 		$options = array_merge($defaultOptions, $options);
 		$reports = ReportPersistence::getReports(array($id));		
 		$report = reset($reports);
+
+		if (!$report) {
+			return null;
+		}
 
 		if ($options['includeBuoyData']) {
 			$report->buoyData = BuoyDataService::getSavedBuoyDataForReport($report, array(
@@ -48,7 +53,9 @@ class ReportService {
 		return ReportPersistence::getReports($ids);
 	}
 
-	static function saveReport($report) {
+
+	/* big one */
+	static function saveReport($report, $options = array()) {
 		if (!$report->quality) {
 			throw new Exception('no-quality');
 		}
@@ -56,10 +63,22 @@ class ReportService {
 			throw new Exception('no-time');
 		}			
 		$report->reportdate = intval(gmdate("U")); //time of report (now)
+		
+		$report->id = ReportPersistence::insertReport($report);	
 
-		$reportId = ReportPersistence::insertReport($report);	
-		return $reportId;
+		if ($options['tidestationIds']) {
+			TideDataService::getAndSaveTideDataForReport($report, $options['tidestationIds']);
+		}
+
+		if ($options['buoyIds']) {
+			BuoyDataService::getAndSaveBuoyDataForReport($report, $options['buoyIds']);
+		}
+
+		ReporterService::reporterAddLocation($report->reporterid, $report->locationid);
+
+		return $report;
 	}
+
 
 	static function getReportsForUserWithFilters($user, $filters, $options = array()) {
 		$ids = ReportPersistence::getReportIdsForUserWithFilters($user, $filters, $options);

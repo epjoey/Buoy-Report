@@ -127,42 +127,6 @@ class SearchModule {
 			});	
 		</script>
 	<?
-	}	
-
-	public function renderAutoCompleteJs() {	
-		?>
-		<script type="text/javascript">
-			
-			var options, a;
-			$(function(){
-			  	options = { 
-				  	serviceUrl:'<?= Path::toAjax(); ?>locationAutoComplete.php', 
-				    minChars:2, 
-				    delimiter: /(,|;)\s*/, // regex or character
-				    maxHeight:400,
-				    width:280,
-				    zIndex: 1,
-				    deferRequestBy: 0, //miliseconds
-				    //params: { country:'Yes' }, //aditional parameters
-				    noCache: false, //default is false, set to true to disable caching
-				    // callback function:
-				    onSelect: function(value, data){ alert('You selected: ' + value + ', ' + data); },
-				    // local autosuggest options:
-				    lookup: [<? 
-				    ob_start();
-				    foreach ($this->locations as $loc) {
-				    	echo $loc['locname'].',';
-				    }
-				    $output = ob_get_clean();
-				    echo rtrim($output, ',');
-				    ?>]
-				};
-			 	
-			 	a = $('#query').autocomplete(options);
-			});
-		</script>
-		<?
-	
-	}	
+	}		
 
 }

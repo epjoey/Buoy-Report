@@ -1,0 +1,3 @@
+<?
+class InvalidSubmissionException extends Exception {}
+?>

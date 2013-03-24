@@ -42,18 +42,15 @@ class LocationList {
 			<ul class="locations items">
 				<?
 				foreach ($this->locations as $location):
+					$location = (object)$location; //temporory small hack until we refactor getLocations
 					?>
-					<li class="location block-list-item <?=isset($this->selectedLocation) && $this->selectedLocation == $location['id'] ? "selected" : "" ?>">
-						<a class="location-inner" href="<?= $this->toPost ? Path::toPostReport($location['id']) : Path::toLocation($location['id'])?>">
-							<span class="name"><?= html($location['locname']) ?></span>
+					<li class="location block-list-item <?=isset($this->selectedLocation) && $this->selectedLocation == $location->id ? "selected" : "" ?>">
+						<a class="location-inner" href="<?= $this->toPost ? Path::toPostReport($location->id) : Path::toLocation($location->id)?>">
+							<span class="name"><?= html($location->locname) ?></span>
 						</a>
 						<span class="notification-icons">
-							<? if (isset($location['buoy1'])) { ?>
-								<span class="buoy-icon icon" title="<?=html($location['locname'])?> has buoy stations"></span>
-							<? } ?>
-							<? if (isset($location['tidestation'])) { ?>
-								<span class="tide-icon icon" title="<?=html($location['locname'])?> has a tide station"></span>
-							<? } ?>	
+							<span class="buoy-icon icon" title="<?=html($location->locname)?> has buoy stations"></span>
+							<span class="tide-icon icon" title="<?=html($location->locname)?> has a tide station"></span>
 						</span>							
 					</li>
 				<? 

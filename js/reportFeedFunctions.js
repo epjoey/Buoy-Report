@@ -1,8 +1,6 @@
-function loadMoreReports(form) {
+function loadMoreReports(params, onSuccess) {
     feed = $('#report-feed-container');
-	data = $(form).serialize(); 
 	numReports = feed.find('.report').length;
-    data = data + "&offset=" + numReports;
     
 	//find the last list of reports (only one until "See more reports" is clicked)
     reportsList = feed.find('ul.reports').last();
@@ -12,9 +10,9 @@ function loadMoreReports(form) {
 
     //start the ajax
     $.ajax({
-        url: "/ajax/report/load-more.php", 
+        url: "/ajax/report/load-more.php" + params.queryStr, 
         type: "GET",
-        data: data,
+        data: params,
         cache: false,
         success: function(reports) { 
         	$('#temp-loading').remove();  
@@ -24,10 +22,14 @@ function loadMoreReports(form) {
 			//rewrite feed count at top
 			updateNumReports();
 
+            if (onSuccess) {
+                onSuccess();
+            }
 			//disable button if no more reports
-			if (reports.match('<li') == null)
+			if (reports.match('<li') == null) {
 				$('#more-reports').addClass('disabled');
-            }       
+            }
+        }       
     });				 
 }		
 

@@ -48,17 +48,31 @@ class ReportFeed {
 		?>
 		<script type="text/javascript">
 			//Load report details
-
-			$('.report').off('click').on('click', function(){
+			$('.report').off('click').on('click', function(event){
+				// if ($(event.target).parents('.buoy-data').length) {
+				// 	event.stopPropagation();
+				// }
 				$(this).toggleClass('expanded');
 			});
 			updateNumReports();
 			loadThumbnails();
-		    $('#more-reports').click(function() {
-		    	if (!$('#more-reports').hasClass('disabled')) {
-		    		loadMoreReports('#filter-form');
-		    	}
-		    });				
+			(function(){
+				var limit  = 6;
+					offset = 6;
+			    $('#more-reports').click(function() {
+			    	if (!$('#more-reports').hasClass('disabled')) {
+			    		loadMoreReports(
+			    		{
+			    			start    : offset,
+			    			limit    : limit,
+			    			queryStr : window.location.search,
+			    			feed     : 'home'
+			    		}, function(){
+			    			offset = offset + limit;	
+			    		});
+			    	}
+			    });				
+			})();
 		</script> 			
 		<?
 	}

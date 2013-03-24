@@ -55,7 +55,7 @@ class ReportFormFields {
 				
 				<option value="older-date">Older...</option>
 			</select>
-			<input id="report-form-older-date" style="display:none" placeholder="mm/dd/yyyy hh:mm:ss" type="text" value="" name="arbitrary_date" />
+			<input id="report-form-older-date" style="display:none" placeholder="mm/dd/yyyy hh:mm:ss" type="text" value="" name="time" />
 			<script type="text/javascript">
 				(function(){
 					$('select#time-offset').change(function(event){

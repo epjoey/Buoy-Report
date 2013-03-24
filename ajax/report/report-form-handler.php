@@ -6,57 +6,55 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoydata/service/BuoyDataServ
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/model/Report.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/exceptions/InvalidSubmissionException.php';
 
 /* --------------- HANDLE REPORT FORM SUBMISSION --------------- */
 
+
+/* populate report model object with post data.
+ * $report will be entered into DB
+ */
 $report = new Report($_POST);
+
+
 try {
 	
-
-	//feature not yet live
-	if (isset($_POST['arbitrary_date'])) {
-		$date = $_POST['arbitrary_date'];
-		//if ($date not in format) { throw new ... }
-		$report->obsdate = intval(gmdate("U", time(strtotime($date))));
-	} else {
-		/* calculates date of observation if in the past */	
-		$offset = abs(intval($_POST['time_offset'])) * 60 * 60;
-		$report->obsdate = intval(gmdate("U", time()-$offset));			
-	}			
-			
-	if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-		
-		$uploadStatus = handleFileUpload($_FILES['upload'], $report->reporterid);
-
-		if (isset($uploadStatus['error'])) {
-			throw new Exception($uploadStatus['error']);	
+	/* either real date or date offset passed in from form */
+	if (isset($_POST['time']) && $_POST['time']) {
+		$reportDate = new DateTime($_POST['time']);
+		if (!$reportDate) {
+			throw new InvalidSubmissionException('date must be valid format');
 		}
-		$report->imagepath = $uploadStatus['imagepath'];
+		if ($reportDate->getTimestamp() > time()) {
+			throw new InvalidSubmissionException('date must be in the past');	
+		}
+		$report->obsdate = gmdate("U", $reportDate->getTimestamp());
+	} else {
+		$offset = abs(intval($_POST['time_offset'])) * 60 * 60; //offset is submitted in hours
+		$report->obsdate = gmdate("U", time()-$offset);			
+
 	}
 
+	if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
+		$uploadStatus = handleFileUpload($_FILES['upload'], $report->reporterid);
+		if (isset($uploadStatus['error'])) {
+			throw new InvalidSubmissionException($uploadStatus['error']);	
+		}
+		$report->imagepath = $uploadStatus['imagepath'];
+
+
 	/* in case they used picup, its a remote url */	
-	else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
+
+	} else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
 		$report->imagepath = rawurldecode($_POST['remoteImageURL']);
 	}	
 
-	$report->id = ReportService::saveReport($report);
+	$report->id = ReportService::saveReport($report, array(
+		'buoyIds' => $_POST['buoys'],
+		'tidestationIds' => $_POST['tidestations']
+	));
 
-	$tideStations = $_POST['tidestations'];
-	if ($tideStations) {
-		TideDataService::getAndSaveTideDataForReport($report, $tideStations);
-	}
-
-	$buoys = $_POST['buoys'];
-	if ($buoys) {
-		BuoyDataService::getAndSaveBuoyDataForReport($report, $buoys);
-	}	
-
-	//add location to user's locations	
-	if (!$_POST['reporterHasLocation']) {
-		Persistence::insertUserLocation($report->reporterid, $report->locationid);		
-	}
-
-} catch (Exception $e) {
+} catch (InvalidSubmissionException $e) {
 	header('Location:'.Path::toPostReport($report->locationid, $e->getMessage()));
 	exit;
 

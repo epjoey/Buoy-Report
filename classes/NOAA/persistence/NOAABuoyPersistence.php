@@ -1,4 +1,7 @@
 <?
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/exceptions/InternalException.php';
+
+class NOAABuoyException extends InternalException {}
 class NOAABuoyPersistence {
 
 	static $fileRowLimit = 1000; //number of rows to sift through before giving up
@@ -6,7 +9,7 @@ class NOAABuoyPersistence {
 	static function getBuoyDataFromBuoyAtTime($buoyId, $time) {
 		$lastReport = self::getLastBuoyReportFromBuoy($buoyId);
 		if (!$lastReport) {
-			return null; //throw new ...
+			throw new NOAABuoyException();
 		}
 		return self::getApproximateData($lastReport, $time);
 
@@ -18,6 +21,7 @@ class NOAABuoyPersistence {
 
 	//file is ordered from most recent readings down to earliest, so go through each row until the date
 	//difference starts going up
+	//todo - break this up into 2 - getting data row, then parsing that.
 	private static function getApproximateData($lastReport, $obsdate, $maxProximity = 28800) {
 		
 		$prevRow = null; //used to compare against current row in loop
@@ -41,7 +45,7 @@ class NOAABuoyPersistence {
 		
 		//if time difference bw most accurate row and observation date is more than $maxProximity, return null
 		if (!$prevRow || $prevRow['proximity'] > $maxProximity) {
-			return null; //throw new ...
+			throw new NOAABuoyException();
 		}
 
 		$closestDate = $prevRow['date'];

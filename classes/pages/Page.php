@@ -12,9 +12,6 @@ class Page {
 
 		$this->user = new User;
 
-		$this->user->locations = LocationService::getUserLocations($this->user);
-		$this->user->locationIds = Utils::pluck($this->user->locations, 'id');
-
 		$this->detect = new Mobile_Detect();
 		$this->isMobile = $this->detect->isMobile();
 

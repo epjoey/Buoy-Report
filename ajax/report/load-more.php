@@ -1,27 +1,31 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFeed.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/service/LocationService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/user/model/User.php';
 
+$reportFilters = array();
+$reportFilters['quality']       = $_REQUEST['quality'];
+$reportFilters['image']         = $_REQUEST['image'];
+$reportFilters['text']          = $_REQUEST['text'];
+$reportFilters['obsdate']       = $_REQUEST['obsdate'];
+$reportFilters['locationIds']   = $_REQUEST['location'] ? array($_REQUEST['location']) : array();
+$reportFilters['reporterId']    = $_REQUEST['reporterId'];
+/* load Reports */
 
 $user = new User;
 
-$reportFilters = array(); 
-$reportFilters['quality'] 	    = $_REQUEST['quality'];
-$reportFilters['image']   	    = $_REQUEST['image'];
-$reportFilters['text']    	    = $_REQUEST['text'];
-$reportFilters['obsdate']    	= $_REQUEST['obsdate'];
-$reportFilters['subLocationId'] = $_REQUEST['subLocationId'];
-$reportFilters['locationId'] 	= $_REQUEST['locationId'];
-$reportFilters['reporterId']	= $_REQUEST['reporterId'];
-$reportFilters['locationIds']   = $_REQUEST['locationIds'];
+if ($_REQUEST['feed'] == 'home') {
+	$reportFilters['locationIds'] = ReporterService::getReporterLocationIds($user);
+}
 
-/* load Reports */
-$reports = ReportService::getReportsForUserWithFilters($user, $reportFilters);
+$reports = ReportService::getReportsForUserWithFilters($user, $reportFilters, array(
+	'limit' => $_REQUEST['limit'],
+	'start' => $_REQUEST['start'],
+));
 ReportFeed::renderReports($reports);
 
-print 'broken';
 //$reportFilters = FilterService::getReportFilterRequests();
-//$reports = Persistence::getReports($reportFilters, 6, $_REQUEST['offset']);
+//$reports = Persistence::getReports($reportFilters, 6, $offset' =>);
 //ReportFeed::renderReports($reports);
 ?>

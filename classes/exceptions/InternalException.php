@@ -1,0 +1,3 @@
+<?
+class InternalException extends Exception {}
+?>

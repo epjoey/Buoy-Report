@@ -1,11 +1,11 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/reporter/persistence/ReporterPersistence.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/view/AddBuoyForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/view/LocationRemoveBuoysForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/view/AddTideStationForm.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterNote.php';
 
 
@@ -40,7 +40,7 @@ class LocationDetailPage extends Page {
 		$this->creator = Persistence::getUserInfoById($this->location->creator);
 		
 
-		if ($this->user->isLoggedIn && Persistence::userHasLocation($this->user->id, $this->locationId)) {
+		if ($this->user->isLoggedIn && ReporterPersistence::reporterHasLocation($this->user->id, $this->locationId)) {
 			$this->userHasLocation = TRUE;
 		}
 
@@ -152,7 +152,7 @@ class LocationDetailPage extends Page {
 	public function afterSubmit() {
 
 		if ($_REQUEST['submit'] == 'bookmark') {
-			Persistence::insertUserLocation($this->user->id, $this->locationId);
+			ReporterService::reporterAddLocation($this->user->id, $this->locationId);
 			header('Location:'.Path::toLocation($this->locationId));
 			exit();
 		}

@@ -2,6 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/NOAA/service/NOAATideService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidedata/model/TideData.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidedata/persistence/TideDataPersistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/service/TideStationService.php';
 
 class TideDataService {
 
@@ -37,7 +38,11 @@ class TideDataService {
 		$options = array_merge($defaultOptions, $options);
 		$data = array();
 		foreach($tideStationIds as $tideStationId) {
-			$noaaData = NOAATideService::getTideDataFromStationAtTime($tideStationId, $report->obsdate);
+			try {
+				$noaaData = NOAATideService::getTideDataFromStationAtTime($tideStationId, $report->obsdate);
+			} catch (NOAATideDataException $e) {
+				continue;
+			}
 			$data[] = new TideData(array_merge($noaaData, array(
 				'tidestation' => $tideStationId,
 				'reportid' => $report->id

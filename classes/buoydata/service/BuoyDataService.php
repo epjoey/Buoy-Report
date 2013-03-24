@@ -2,6 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/NOAA/service/NOAABuoyService.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoydata/model/BuoyData.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoydata/persistence/BuoyDataPersistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/service/BuoyService.php';
 
 class BuoyDataService {
 
@@ -35,7 +36,12 @@ class BuoyDataService {
 		$options = array_merge($defaultOptions, $options);
 		$data = array();
 		foreach($buoyIds as $buoyId) {
-			$noaaData = NOAABuoyService::getBuoyDataFromBuoyAtTime($buoyId, $report->obsdate);
+			try {
+				$noaaData = NOAABuoyService::getBuoyDataFromBuoyAtTime($buoyId, $report->obsdate);
+			} catch (NOAABuoyException $e) {
+				error_log("$buoyId error");
+				continue;
+			}
 			if ($noaaData) {
 				$data[] = new BuoyData(array_merge($noaaData, array(
 					'buoy' => $buoyId,

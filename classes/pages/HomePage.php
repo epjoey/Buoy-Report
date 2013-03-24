@@ -4,8 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFeed.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterNote.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
-
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Utils.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/service/LocationService.php';
 
 
 class HomePage extends Page {
@@ -15,13 +15,15 @@ class HomePage extends Page {
 		
 		$this->pageTitle = "Home";
 
+		$this->userLocations = LocationService::getReporterLocations($this->user);
+		
 		/* load Report Filters */
 		$this->reportFilters = array();
 		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
 		$this->reportFilters['image']   	  = $_REQUEST['image'];
 		$this->reportFilters['text']    	  = $_REQUEST['text'];
 		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
-		$this->reportFilters['locationIds']	  = $this->user->locationIds;
+		$this->reportFilters['locationIds']	  = Utils::pluck($this->userLocations, 'id');
 
 		/* load Reports */
 		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters);
@@ -59,7 +61,7 @@ class HomePage extends Page {
 			<h3>My Locations</h3>
 			<?
 			$list = new LocationList(array(
-				'locations' => $this->user->locations,
+				'locations' => $this->userLocations,
 				'showAddLocation' => TRUE,
 				'showSeeAll' => TRUE
 			));

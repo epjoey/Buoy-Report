@@ -8,29 +8,30 @@ class FilterNote {
 		?>
 		<div class="filter-explain">
 			<?		
-			if (isset($filters['error'])) {
+			if ($filters['error']) {
 				?>
 				<p class="filter-error error"><?=html($filters['error'])?></p>
 				<?			
 			}
 
-			if (isset($filters['quality'])) {
+			if ($filters['quality']) {
 				$qualities = ReportOptions::quality();
 				$text = $qualities[$filters['quality']];
 				$exp .= '<span>with ' . $text . ' sessions</span>';
 			}
-			if (isset($filters['text'])) {
+			if ($filters['text']) {
 				$exp .= "<span>with text '" . html($filters['text']) . "'</span>";
 			}
-			if (isset($filters['image'])) {
+			if ($filters['image']) {
 				$array = ReportOptions::hasImage();
 				$text = $array[$filters['image']];
 				$exp .= "<span>" . $text . "</span>";
 			}
-			if (isset($filters['date'])) { //how to get format in here?
-				$exp .= "<span>on or before " . strftime("%D",$this->filters['date']) . "</span>";
+			if ($filters['obsdate']) { //how to get format in here?
+				$d = new DateTime($filters['obsdate']);
+				$exp .= "<span>on or before " . $d->format('M d, Y') . "</span>";
 			}
-			if (isset($filters['location'])) { //how to get name in here?
+			if ($filters['location']) { //how to get name in here?
 				$exp .= "<span>from " . html($filters['location']) . "</span>";
 			}
 			

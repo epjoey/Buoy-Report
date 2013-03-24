@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/SearchModule.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/LocationList.php';
-
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/service/LocationService.php';
 
 
 class LocationPage extends Page {
@@ -38,7 +38,7 @@ class LocationPage extends Page {
 		}
 
 		if ($this->isCurrentUserLocations) {
-			$this->locations = $this->user->locations;
+			$this->locations = LocationService::getReporterLocations($this->user);
 
 		} elseif ($this->isReporterLocations) {
 
@@ -47,7 +47,7 @@ class LocationPage extends Page {
 				header('Location:'.Path::to404());
 				exit();
 			}			
-			$this->locations = Persistence::getUserLocations($this->reporterId);	
+			$this->locations = LocationService::getReporterLocations($this->reporterId);
 
 		} else {
 			$this->locations = Persistence::getLocations();

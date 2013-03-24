@@ -36,9 +36,9 @@ class FilterForm {
 						<? 
 						foreach ($filterOptions['locationObjects'] as $location) { 
 							?>
-							<option value="<?= $location['id'] ?>" <?= 
-								$_REQUEST['location'] == $location['id'] ? "selected='selected'" :'';
-								?>><?= $location['locname'] ?></option>
+							<option value="<?= $location->id ?>" <?= 
+								$_REQUEST['location'] == $location->id ? "selected='selected'" :'';
+								?>><?= $location->locname ?></option>
 							<? 
 						} 
 						?>

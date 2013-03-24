@@ -2,8 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/Page.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/view/EditAccountForm.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/FilterNote.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/service/FilterService.php';
-
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/service/LocationService.php';
 
 
 
@@ -31,6 +30,8 @@ class EditProfilePage extends Page {
 			}
 			$this->editAccountStatus = $e;
 		}	
+
+		$this->myLocations = LocationService::getReporterLocations($this->user);
 
 		$this->reportFilters = array();
 		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
@@ -124,7 +125,7 @@ class EditProfilePage extends Page {
 
 	public function renderLeft() {
 		$filterOptions = array(
-			'locationObjects' => $this->user->locations
+			'locationObjects' => $this->myLocations
 		);
 		$autoFilters = array(
 			'reporter' => $this->user->id
@@ -180,8 +181,8 @@ class EditProfilePage extends Page {
 	}
 	
 	public function renderMyLocations() {
-		if (!empty($this->user->locations)) {
-			$options['locations'] = $this->user->locations;
+		if (!empty($this->myLocations)) {
+			$options['locations'] = $this->myLocations;
 		}
 		$options['showAddLocation'] = TRUE;
 		$options['showSeeAll'] = TRUE;

@@ -1,7 +1,10 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidedata/model/TideData.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/exceptions/InternalException.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/simple_html_dom.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/NOAA/utility/NOAAUtils.php';
+
+class NOAATideDataException extends InternalException {}
 
 class NOAATidePersistence {
 	
@@ -12,7 +15,7 @@ class NOAATidePersistence {
 	static function getTideDataFromStationAtTime($stationId, $time) {
 		$lastTideReport = self::getLastTideReportFromStation($stationId);
 		if (!$lastTideReport) {
-			return null; //throw new ...
+			throw new NOAATideDataException();
 		}
 		return self::getApproximateData($lastTideReport, $time);
 	}	
@@ -57,7 +60,7 @@ class NOAATidePersistence {
 
 		//if time difference bw most accurate row and observation date is more than $maxProximity, return null
 		if (!$mostApproximateRow || $mostApproximateRow['proximity'] > $maxProximity) {
-			return null; //throw new ...
+			throw new NOAATideDataException();
 		}
 
 		$tideRise = null;
