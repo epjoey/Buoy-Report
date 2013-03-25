@@ -15,6 +15,7 @@ class LocationService {
 		);
 		$options = array_merge($defaultOptions, $options);	
 		$locations = LocationPersistence::getLocations($ids);
+		
 		foreach($locations as $location) {
 			if ($options['includeSublocations']) {
 				$location->sublocations = self::getSublocationsForLocation($location);

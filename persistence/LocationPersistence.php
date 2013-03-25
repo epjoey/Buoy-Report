@@ -7,14 +7,14 @@ class LocationPersistence extends BasePersistence {
 		if (!$ids) {
 			return array();
 		}
+		$ids = array_map('intval', $ids);
 		$locations = parent::getModelsFromCache('Location', $ids);
 		$uncachedIds = array_diff($ids, array_keys($locations));
 		if (!$uncachedIds) {
 			return $locations;
 		}		
-		$ids = array_map('intval', $ids);
-		$ids = implode(',', $ids);
-		$sql = "SELECT * FROM location $where WHERE id in ($ids)";
+		$idStr = implode(',', $uncachedIds);
+		$sql = "SELECT * FROM location $where WHERE id in ($idStr)";
 		$result = Persistence::run($sql);
 		while ($row = mysqli_fetch_object($result)) {	
 			$location = new Location($row);

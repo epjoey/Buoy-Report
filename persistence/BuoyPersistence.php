@@ -4,7 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 class BuoyPersistence extends BasePersistence {
 
 	static function getBuoys($ids) {
-		$ids = array_map('intval', $ids);
+		$ids = Utils::compact($ids);
+		$ids = array_map('Persistence::escape', $ids);
 		if (!$ids) {
 			return array();
 		}

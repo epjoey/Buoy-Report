@@ -18,7 +18,8 @@ class ReportService {
 			'includeLocation' => false,
 			'includeBuoyModel' => false,
 			'includeTideStationModel' => false,
-			'includeReporter' => false
+			'includeReporter' => false,
+			'includeSublocation' => false
 		);
 		$options = array_merge($defaultOptions, $options);		
 		$reports = ReportPersistence::getReports($ids);
@@ -82,7 +83,8 @@ class ReportService {
 			'includeLocation' => true,
 			'includeBuoyModel' => true,
 			'includeTideStationModel' => true,
-			'includeReporter' => true
+			'includeReporter' => true,
+			'includeSublocation' => true
 		));
 	}
 

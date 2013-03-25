@@ -1,30 +1,27 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
-/*
- *	takes array of reporter ids and returns those reporters
- */
-class ReporterPersistence {
-	public static function getReporters($ids, $options = array()) {
+
+class ReporterPersistence extends BasePersistence {
+	public static function getReporters($ids) {
 		if (!$ids) {
 			return array();
 		}
-		$defaultOptions = array(
-			'start' => 0,
-			'limit' => 150,
-			'order' => 'id DESC'
-		);
-		$options = array_merge($defaultOptions, $options);
 		$ids = array_map('intval', $ids);
-		$ids = implode(',', $ids);
-		$where = " WHERE id in ($ids)";
-		$start = intval($options['start']);
-		$limit = intval($options['limit']);
+		$reporters = parent::getModelsFromCache('Reporter', $ids);
+		$uncachedIds = array_diff($ids, array_keys($reporters));
+		if (!$uncachedIds) {
+			return $reporters;
+		}
+		$idStr = implode(',', $uncachedIds);
+		$where = " WHERE id in ($idStr)";
 		$order = Persistence::escape($options['order']);
-		$sql = "SELECT * FROM reporter $where ORDER BY $order LIMIT $start,$limit";
+		$sql = "SELECT * FROM reporter $where";
 		$result = Persistence::run($sql);
-		$reporters = array();
 		while ($row = mysqli_fetch_object($result)) {	
-			$reporters[] = new Reporter($row);
+			$reporter = new Reporter($row);
+			$reporters[$reporter->id] = $reporter;
+			error_log("Reporter " . $reporter->id . " used db");
+			parent::cacheModel('Reporter', $reporter->id, $reporter);			
 		}
 		return $reporters;
 	}

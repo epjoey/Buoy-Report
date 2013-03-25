@@ -51,7 +51,7 @@ class FilterForm {
 				?>
 				<div class="field location">
 					<label for="date">By Sublocation:</label>
-					<select name="sublocationid" id="sublocation">
+					<select name="sublocation" id="sublocation">
 						<option value="0">-- Choose --</option>
 						<? 
 						foreach ($filterOptions['sublocationObjects'] as $sublocation) { 

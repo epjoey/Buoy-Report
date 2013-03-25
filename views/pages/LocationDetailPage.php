@@ -45,7 +45,7 @@ class LocationDetailPage extends Page {
 		$this->reportFilters['image']   	  = $_REQUEST['image'];
 		$this->reportFilters['text']    	  = $_REQUEST['text'];
 		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
-		$this->reportFilters['subLocationId'] = $_REQUEST['subLocationId'];
+		$this->reportFilters['subLocationId'] = $_REQUEST['sublocation'];
 		$this->reportFilters['locationIds']   = array($this->location->id);
 
 		/* load Reports */

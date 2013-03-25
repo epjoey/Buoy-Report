@@ -1,26 +1,33 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class TideStationPersistence {
-	static function getTideStations($ids, $options = array()) {
-		$defaultOptions = array(
-			'start' => 0,
-			'limit' => 150
-		);
-		$options = array_merge($defaultOptions, $options);
-		$ids = array_map('Persistence::escape', $ids);
-		$ids = implode(',', $ids);
-		if (!$ids) {
+class TideStationPersistence extends BasePersistence {
+	static function getTideStations($ids) {
+		
+		$ids = Utils::compact($ids);
+		if (count($ids) <= 0) {
 			return array();
-		}		
-		$where = " WHERE stationid in ($ids)";
-		$start = intval($options['start']);
-		$limit = intval($options['limit']);
-		$sql = "SELECT * FROM tidestation $where LIMIT $start,$limit";
+		}
+
+		$ids = array_map('Persistence::escape', $ids);
+		
+		$tideStations = parent::getModelsFromCache('TideStation', $ids);
+		$uncachedIds = array_diff($ids, array_keys($tideStations));
+		
+		if (!$uncachedIds) {
+			return $tideStations;
+		}
+		$idStr = implode(',', $uncachedIds);
+		$where = " WHERE stationid in ($idStr)";
+		$sql = "SELECT * FROM tidestation $where";
 		$result = Persistence::run($sql);
-		$tideStations = array();
 		while ($row = mysqli_fetch_object($result)) {	
 			$tideStations[] = new TideStation($row);
+
+			$tideStation = new TideStation($row);
+			$tideStations[$tideStation->stationid] = $tideStation;
+			error_log("TideStation " . $tideStation->stationid . " used db");
+			parent::cacheModel('TideStation', $tideStation->stationid, $tideStation);			
 		}
 		return $tideStations;	
 	}	

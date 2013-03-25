@@ -136,6 +136,9 @@ class ReportPersistence {
 				case 'reporterId':
 					$where[] = "reporterid = " . intval($val);
 					break;					
+				case 'subLocationId':
+					$where[] = "sublocationid = " . intval($val);
+					break;
 			}
 		}
 		//var_dump($where);

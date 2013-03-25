@@ -10,6 +10,15 @@ class Utils {
 		}	
 		return $props;
 	}
+
+	static function compact($list) {
+		foreach($list as $key => $val) {
+			if ($val == null) {
+				unset($list[$key]);
+			}
+		}
+		return $list;
+	}
 }
 
 ?>
