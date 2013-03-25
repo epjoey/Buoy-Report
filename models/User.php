@@ -28,8 +28,9 @@ class User extends Reporter {
 
 
 		//todo: move into ReporterService::getLoggedInReporter or something
+
 		if (!isset($this->locations)) {
-			$this->locations = LocationService::getReporterLocations($user);	
+			$this->locations = LocationService::getReporterLocations($this);
 		}
 		
 	}
