@@ -69,7 +69,7 @@ class IntroPage extends Page {
 		?>
 		<script type="text/javascript">
 			
-			<? if ($this->detect->isMobile) { ?>
+			<? if ($this->detect->isMobile()) { ?>
 				var duration = 0;
 			<? } else { ?>
 				var duration = 250;

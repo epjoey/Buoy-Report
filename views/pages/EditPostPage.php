@@ -40,7 +40,7 @@ class EditPostPage extends Page {
 	}	
 
 	public function renderBodyContent() {
-		EditReportForm::renderEditReportForm($this->report, $this->submitError, $this->detect->isMobile);
+		EditReportForm::renderEditReportForm($this->report, $this->submitError, $this->detect->isMobile());
 	}	
 
 	public function renderFooterJs() {

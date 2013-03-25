@@ -64,7 +64,7 @@ class Classloader {
         "AddTideStationForm" =>         "/views/forms/AddTideStationForm.php",
         "BuoyDataView" =>               "/views/report/BuoyDataView.php",
         "DeleteBuoyForm" =>             "/views/forms/DeleteBuoyForm.php",
-        "EditAccountForm" =>            "/views/forms/EditAccoutForm.php",
+        "EditAccountForm" =>            "/views/forms/EditAccountForm.php",
         "EditBuoyForm" =>               "/views/forms/EditBuoyForm.php",
         "EditReportForm" =>             "/views/forms/EditReportForm.php",
         "FilterForm" =>                 "/views/forms/FilterForm.php",
