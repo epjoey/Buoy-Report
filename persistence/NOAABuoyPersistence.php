@@ -35,14 +35,20 @@ class NOAABuoyPersistence {
 			$buoyDataRow = preg_split("/[\s,]+/", $lastReport[$i]);
 
 			//convert row date/time into a timestamp
-			$buoyDataRowDate = strtotime($buoyDataRow[1] . '/' . $buoyDataRow[2] . '/' .  $buoyDataRow[0] . ' ' .  $buoyDataRow[3] . ':' .  $buoyDataRow[4] . 'GMT');				
+			$buoyDataRowDateStr = $buoyDataRow[0] . '-' . $buoyDataRow[1] . '-' .  $buoyDataRow[2] . ' ' .  $buoyDataRow[3] . ':' .  $buoyDataRow[4] . "GMT";
+			$buoyDataRowDateTime = DateTime::createFromFormat('Y-m-d H:i e', $buoyDataRowDateStr);
+			$buoyDataRowDate = $buoyDataRowDateTime->getTimestamp();
 
 			$proximity = abs($obsdate - $buoyDataRowDate); //calculate proximity of this row to the observation date
 
 			if (isset($prevRow) && $prevRow['proximity'] < $proximity) {
 				break; //$prevRow has the smallest (most accurate) proximity
 			} else {
-				$prevRow = array('data' => $buoyDataRow, 'date' => $buoyDataRowDate, 'proximity' => $proximity);
+				$prevRow = array(
+					'data' => $buoyDataRow, 
+					'date' => $buoyDataRowDate, 
+					'proximity' => $proximity
+				);
 			}
 		}	
 		
