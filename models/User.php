@@ -3,7 +3,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class User extends Reporter {
 
-	public $password = NULL;
 	public $isLoggedIn = FALSE;
 	public $privacySetting = NULL;
 	public $isNew = FALSE;
