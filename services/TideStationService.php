@@ -3,6 +3,10 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class TideStationService {
 
+	static function getTideStation($id) {
+		return reset(self::getTideStations(array($id)));
+	}
+
 	static function getTideStationsForLocation($location) {
 		$id = intval($location->id);
 		$sql = "SELECT a.* 

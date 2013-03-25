@@ -2,34 +2,31 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class LocationService {
+	
 	static function getLocation($id, $options = array()) {
-		if (!$id) {
-			return null;
-		}
+		return reset(self::getLocations(array($id), $options));
+	}
+
+	static function getLocations($ids, $options = array()) {
 		$defaultOptions = array(
 			'includeSublocations' => false,
 			'includeBuoys' => false,
 			'includeTideStations' => false
 		);
-		$options = array_merge($defaultOptions, $options);
-		$id = intval($id);
-		$locations = self::getLocations(array($id));
-		$location = reset($locations);
-
-		if ($options['includeSublocations']) {
-			$location->sublocations = self::getSublocationsForLocation($location);
+		$options = array_merge($defaultOptions, $options);	
+		$locations = LocationPersistence::getLocations($ids);
+		foreach($locations as $location) {
+			if ($options['includeSublocations']) {
+				$location->sublocations = self::getSublocationsForLocation($location);
+			}
+			if ($options['includeBuoys']) {
+				$location->buoys = BuoyService::getBuoysForLocation($location);
+			}
+			if ($options['includeTideStations']) {
+				$location->tideStations = TideStationService::getTideStationsForLocation($location);
+			}		
 		}
-		if ($options['includeBuoys']) {
-			$location->buoys = BuoyService::getBuoysForLocation($location);
-		}
-		if ($options['includeTideStations']) {
-			$location->tideStations = TideStationService::getTideStationsForLocation($location);
-		}
-		return $location;
-	}
-
-	static function getLocations($ids) {
-		return LocationPersistence::getLocations($ids);
+		return $locations;
 	}
 
 	public static function getReporterLocations($reporter){

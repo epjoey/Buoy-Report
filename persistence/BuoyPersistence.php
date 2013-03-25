@@ -1,18 +1,26 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class BuoyPersistence {
+class BuoyPersistence extends BasePersistence {
+
 	static function getBuoys($ids) {
 		$ids = array_map('intval', $ids);
 		if (!$ids) {
 			return array();
 		}
-		$idStr = implode(',', $ids);
+		$buoys = parent::getModelsFromCache('Buoy', $ids);
+		$uncachedIds = array_diff($ids, array_keys($buoys));
+		if (!$uncachedIds) {
+			return $buoys;
+		}
+		$idStr = implode(',', $uncachedIds);
 		$sql = "SELECT * FROM buoy WHERE buoyid in ($idStr)";
-		$result = Persistence::run($sql);
-		$buoys = array();
+		$result = Persistence::run($sql);		
 		while ($row = mysqli_fetch_object($result)) {	
-			$buoys[] = new Buoy($row);
+			$buoy = new Buoy($row);
+			$buoys[$buoy->buoyid] = $buoy;
+			error_log("Buoy " . $buoy->buoyid . " used db");
+			parent::cacheModel('Buoy', $buoy->buoyid, $buoy);
 		}
 		return $buoys;	
 	}

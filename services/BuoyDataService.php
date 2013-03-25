@@ -8,22 +8,13 @@ class BuoyDataService {
 			'includeBuoyModel' => false
 		);
 		$options = array_merge($defaultOptions, $options);
-		$buoyDataArray = BuoyDataPersistence::getSavedBuoyDataForReport($report);
+		$buoyDataModels = BuoyDataPersistence::getSavedBuoyDataForReport($report);
 		if ($options['includeBuoyModel']) {
-			$buoyIds = array();
-			foreach($buoyDataArray as $buoyData) {
-				$buoyIds[] = $buoyData->buoy;
-			}
-			$buoys = BuoyService::getBuoys($buoyIds);
-			foreach($buoyDataArray as $buoyData) {
-				foreach($buoys as $buoy) {
-					if ($buoy->buoyid == $buoyData->buoy) {
-						$buoyData->buoyModel = $buoy;
-					}
-				}
+			foreach($buoyDataModels as $buoyData) {
+				$buoyData->buoyModel = BuoyService::getBuoy($buoyData->buoy);
 			}
 		}
-		return $buoyDataArray;
+		return $buoyDataModels;
 	}
 
 	static function getBuoyDataFromBuoysForReport($buoyIds, $report, $options = array()) {

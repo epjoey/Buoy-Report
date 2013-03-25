@@ -6,7 +6,6 @@ class Page {
 	public function loadData() {
 
 		$this->user = new User;
-		$this->user->locations = LocationService::getReporterLocations($this->user);
 
 	}
 

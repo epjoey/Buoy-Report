@@ -7,6 +7,11 @@ class ReportService {
 		ReportPersistence::updateReport($newReport);
 	}	
 	static function getReport($id, $options = array()) {
+		$reports = self::getReports(array($id), $options);		
+		return reset($reports);
+	}	
+
+	static function getReports($ids, $options = array()) {
 		$defaultOptions = array(
 			'includeBuoyData' => false,
 			'includeTideData' => false,
@@ -15,38 +20,30 @@ class ReportService {
 			'includeTideStationModel' => false,
 			'includeReporter' => false
 		);
-		$options = array_merge($defaultOptions, $options);
-		$reports = ReportPersistence::getReports(array($id));		
-		$report = reset($reports);
-
-		if (!$report) {
-			return null;
-		}
-
-		if ($options['includeBuoyData']) {
-			$report->buoyData = BuoyDataService::getSavedBuoyDataForReport($report, array(
-				'includeBuoyModel' => $options['includeBuoyModel']
-			));
-		}
-		if ($options['includeTideData']) {
-			$report->tideData = TideDataService::getSavedTideDataForReport($report, array(
-				'includeTideStationModel' => $options['includeTideStationModel']
-			));
-		}
-		if ($options['includeLocation']) {
-			$report->location = LocationService::getLocation($report->locationid);
-		}
-		if ($options['includeSublocation']) {
-			$report->sublocation = LocationService::getSublocation($report->sublocationid);
+		$options = array_merge($defaultOptions, $options);		
+		$reports = ReportPersistence::getReports($ids);
+		foreach($reports as $report) {
+			if ($options['includeBuoyData']) {
+				$report->buoyData = BuoyDataService::getSavedBuoyDataForReport($report, array(
+					'includeBuoyModel' => $options['includeBuoyModel']
+				));
+			}
+			if ($options['includeTideData']) {
+				$report->tideData = TideDataService::getSavedTideDataForReport($report, array(
+					'includeTideStationModel' => $options['includeTideStationModel']
+				));
+			}
+			if ($options['includeLocation']) {
+				$report->location = LocationService::getLocation($report->locationid);
+			}
+			if ($options['includeSublocation']) {
+				$report->sublocation = LocationService::getSublocation($report->sublocationid);
+			}	
+			if ($options['includeReporter']) {
+				$report->reporter = ReporterService::getReporter($report->reporterid);
+			}
 		}	
-		if ($options['includeReporter']) {
-			$report->reporter = ReporterService::getReporter($report->reporterid);
-		}		
-		return $report;
-	}	
-
-	static function getReports($ids) {
-		return ReportPersistence::getReports($ids);
+		return $reports;		
 	}
 
 
@@ -79,19 +76,14 @@ class ReportService {
 	static function getReportsForUserWithFilters($user, $filters, $options = array()) {
 		$ids = ReportPersistence::getReportIdsForUserWithFilters($user, $filters, $options);
 		//temporary inefficient loop
-		$reports = array();
-		foreach($ids as $id) {
-			$reports[] = self::getReport($id, array(
-				'includeBuoyData' => true,
-				'includeTideData' => true,
-				'includeLocation' => true,
-				'includeBuoyModel' => true,
-				'includeTideStationModel' => true,
-				'includeReporter' => true
-			));
-		}
-		//$reports = self::getReports($ids);
-		return $reports;
+		return self::getReports($ids, array(
+			'includeBuoyData' => true,
+			'includeTideData' => true,
+			'includeLocation' => true,
+			'includeBuoyModel' => true,
+			'includeTideStationModel' => true,
+			'includeReporter' => true
+		));
 	}
 
 	static function deleteReport($id) {

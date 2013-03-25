@@ -8,24 +8,13 @@ class TideDataService {
 			'includeTideStationModel' => false
 		);
 		$options = array_merge($defaultOptions, $options);
-		$tideDataArr = TideDataPersistence::getSavedTideDataForReport($report);
+		$tideDataModels = TideDataPersistence::getSavedTideDataForReport($report);
 		if ($options['includeTideStationModel']) {
-			
-			//todo::helper function for this. way too much code
-			$stationIds = array();
-			foreach($tideDataArr as $tideData) {
-				$stationIds[] = $tideData->tidestation;
-			}
-			$tideStations = TideStationService::getTideStations($stationIds);
-			foreach($tideDataArr as $tideData) {
-				foreach($tideStations as $tideStation) {
-					if ($tideStation->stationid == $tideData->tidestation) {
-						$tideData->tideStationModel = $tideStation;
-					}
-				}
+			foreach($tideDataModels as $tideData) {
+				$tideData->tideStationModel = TideStationService::getTideStation($tideData->tidestation);
 			}
 		}
-		return $tideDataArr;
+		return $tideDataModels;
 	}
 
 	static function getTideDataFromStationsForReport($tideStationIds, $report, $options = array()) {

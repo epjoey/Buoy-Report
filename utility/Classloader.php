@@ -6,6 +6,7 @@ class Classloader {
     static protected $classloader_map = array(
 
         "BaseModel" =>                  "/models/BaseModel.php",
+        "BasePersistence" =>            "/persistence/BasePersistence.php",
         "Buoy" =>                       "/models/Buoy.php",
         "BuoyPersistence" =>            "/persistence/BuoyPersistence.php",
         "BuoyService" =>                "/services/BuoyService.php",
