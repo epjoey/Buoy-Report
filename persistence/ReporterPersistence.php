@@ -1,13 +1,13 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class ReporterPersistence extends BasePersistence {
+class ReporterPersistence {
 	public static function getReporters($ids) {
 		if (!$ids) {
 			return array();
 		}
 		$ids = array_map('intval', $ids);
-		$reporters = parent::getModelsFromCache('Reporter', $ids);
+		$reporters = ModelCache::get('Reporter', $ids);
 		$uncachedIds = array_diff($ids, array_keys($reporters));
 		if (!$uncachedIds) {
 			return $reporters;
@@ -21,7 +21,7 @@ class ReporterPersistence extends BasePersistence {
 			$reporter = new Reporter($row);
 			$reporters[$reporter->id] = $reporter;
 			error_log("Reporter " . $reporter->id . " used db");
-			parent::cacheModel('Reporter', $reporter->id, $reporter);			
+			ModelCache::set('Reporter', $reporter->id, $reporter);			
 		}
 		return $reporters;
 	}

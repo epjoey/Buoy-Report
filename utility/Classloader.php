@@ -6,7 +6,6 @@ class Classloader {
     static protected $classloader_map = array(
 
         "BaseModel" =>                  "/models/BaseModel.php",
-        "BasePersistence" =>            "/persistence/BasePersistence.php",
         "Buoy" =>                       "/models/Buoy.php",
         "BuoyPersistence" =>            "/persistence/BuoyPersistence.php",
         "BuoyService" =>                "/services/BuoyService.php",
@@ -18,6 +17,7 @@ class Classloader {
         "LocationService" =>            "/services/LocationService.php",
         "NOAABuoyPersistence" =>        "/persistence/NOAABuoyPersistence.php",
         "NOAATidePersistence" =>        "/persistence/NOAATidePersistence.php",
+        "ModelCache" =>                 "/persistence/ModelCache.php",
         "Persistence" =>                "/persistence/Persistence.php",
         "Report" =>                     "/models/Report.php",
         "ReportPersistence" =>          "/persistence/ReportPersistence.php",

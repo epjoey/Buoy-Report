@@ -1,14 +1,14 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class LocationPersistence extends BasePersistence {
+class LocationPersistence {
 
 	public static function getLocations($ids) {
 		if (!$ids) {
 			return array();
 		}
 		$ids = array_map('intval', $ids);
-		$locations = parent::getModelsFromCache('Location', $ids);
+		$locations = ModelCache::get('Location', $ids);
 		$uncachedIds = array_diff($ids, array_keys($locations));
 		if (!$uncachedIds) {
 			return $locations;
@@ -20,7 +20,7 @@ class LocationPersistence extends BasePersistence {
 			$location = new Location($row);
 			$locations[$location->id] = $location;
 			error_log("Location $location->id used db");
-			parent::cacheModel('Location', $location->id, $location);
+			ModelCache::set('Location', $location->id, $location);
 
 		}
 		return $locations;

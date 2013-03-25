@@ -1,7 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class TideStationPersistence extends BasePersistence {
+class TideStationPersistence {
 	static function getTideStations($ids) {
 		
 		$ids = Utils::compact($ids);
@@ -11,7 +11,7 @@ class TideStationPersistence extends BasePersistence {
 
 		$ids = array_map('Persistence::escape', $ids);
 		
-		$tideStations = parent::getModelsFromCache('TideStation', $ids);
+		$tideStations = ModelCache::get('TideStation', $ids);
 		$uncachedIds = array_diff($ids, array_keys($tideStations));
 		
 		if (!$uncachedIds) {
@@ -27,7 +27,7 @@ class TideStationPersistence extends BasePersistence {
 			$tideStation = new TideStation($row);
 			$tideStations[$tideStation->stationid] = $tideStation;
 			error_log("TideStation " . $tideStation->stationid . " used db");
-			parent::cacheModel('TideStation', $tideStation->stationid, $tideStation);			
+			ModelCache::set('TideStation', $tideStation->stationid, $tideStation);			
 		}
 		return $tideStations;	
 	}	

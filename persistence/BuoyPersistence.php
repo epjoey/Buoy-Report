@@ -1,7 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class BuoyPersistence extends BasePersistence {
+class BuoyPersistence {
 
 	static function getBuoys($ids) {
 		$ids = Utils::compact($ids);
@@ -9,7 +9,7 @@ class BuoyPersistence extends BasePersistence {
 		if (!$ids) {
 			return array();
 		}
-		$buoys = parent::getModelsFromCache('Buoy', $ids);
+		$buoys = ModelCache::get('Buoy', $ids);
 		$uncachedIds = array_diff($ids, array_keys($buoys));
 		if (!$uncachedIds) {
 			return $buoys;
@@ -21,7 +21,7 @@ class BuoyPersistence extends BasePersistence {
 			$buoy = new Buoy($row);
 			$buoys[$buoy->buoyid] = $buoy;
 			error_log("Buoy " . $buoy->buoyid . " used db");
-			parent::cacheModel('Buoy', $buoy->buoyid, $buoy);
+			ModelCache::set('Buoy', $buoy->buoyid, $buoy);
 		}
 		return $buoys;	
 	}
