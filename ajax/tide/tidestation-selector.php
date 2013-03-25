@@ -1,5 +1,6 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/service/TideStationService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
+
 $stations = TideStationService::getAllTideStations();
 ?>
 <div class="station-selector">

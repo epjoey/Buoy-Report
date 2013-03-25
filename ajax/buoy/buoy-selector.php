@@ -1,5 +1,6 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/service/BuoyService.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
+
 $buoys = BuoyService::getAllBuoys();
 ?>
 <div class="buoy-selector">

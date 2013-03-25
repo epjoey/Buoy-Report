@@ -1,3 +1,0 @@
-<?
-class AddStationException extends Exception {}
-?>

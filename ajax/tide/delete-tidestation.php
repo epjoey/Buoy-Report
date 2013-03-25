@@ -1,6 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/service/TideStationService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 $id = $_POST['stationid'];
 $delete = $_POST['delete'];

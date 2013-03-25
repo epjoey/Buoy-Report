@@ -1,6 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoy/service/BuoyService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 header('Content-Type: application/json');
 

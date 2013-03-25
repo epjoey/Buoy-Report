@@ -1,6 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidestation/service/TideStationService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 header('Content-Type: application/json');
 //todo: check if buoy is legit, check max buoys per location

@@ -1,10 +1,9 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/user/model/User.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/ErrorPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-$about = new ErrorPage();
-$about->loadData();
-$about->renderPage();
+$page = new ErrorPage();
+$page->renderPage(array(
+	'user' => new User(),
+	'pageTitle' => '404 Not Found',
+));
 ?>

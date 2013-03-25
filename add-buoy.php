@@ -1,12 +1,9 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/user/model/User.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/AddBuoyPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-$page = new AddBuoyPage;
-$page->loadData();
-$page->renderPage();
-
-
+$page = new AddBuoyPage();
+$page->renderPage(array(
+	'user' => new User(),
+	'pageTitle' => 'Submit Buoy',
+));
 ?>

@@ -1,6 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 $locationId = $_REQUEST['locationid'];
 

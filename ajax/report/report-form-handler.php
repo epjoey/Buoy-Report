@@ -1,12 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/tidedata/service/TideDataService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/buoydata/service/BuoyDataService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/model/Report.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/exceptions/InvalidSubmissionException.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 /* --------------- HANDLE REPORT FORM SUBMISSION --------------- */
 
@@ -61,5 +54,5 @@ try {
 }
 
 /* redirect to user home page where page will look for session[new-report] and load via ajax. */
-header('Location:'.Path::toUserHome());
+header('Location:'.Path::toLocation($report->locationid));
 ?>

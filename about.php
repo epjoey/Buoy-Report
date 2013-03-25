@@ -1,10 +1,9 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/user/model/User.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/AboutPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 $about = new AboutPage();
-$about->loadData();
-$about->renderPage();
+$about->renderPage(array(
+	'user' => new User(),
+	'pageTitle' => 'About Buoy Report',
+));
 ?>

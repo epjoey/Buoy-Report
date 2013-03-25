@@ -1,8 +1,5 @@
 <?php
-//TODO: make this file work for JS
-
-/* must hit this script on local before uploading cache.css */
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/JSMin.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler");
 else ob_start();

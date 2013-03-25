@@ -1,10 +1,10 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/user/model/User.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/pages/BuoyPage.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 $page = new BuoyPage();
-$page->loadData();
+
+$page->pageTitle = 'Buoys';
+$page->buoys = BuoyService::getAllBuoys();
+
 $page->renderPage();
 ?>

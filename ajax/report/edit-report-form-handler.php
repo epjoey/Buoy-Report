@@ -1,8 +1,5 @@
 <?
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/service/ReportService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/model/Report.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/helpers.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 /* --------------- HANDLE EDIT REPORT FORM SUBMISSION --------------- */
 

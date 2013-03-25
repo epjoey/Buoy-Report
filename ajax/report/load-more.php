@@ -1,8 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/persistence/Persistence.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/report/view/ReportFeed.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/location/service/LocationService.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/user/model/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 $reportFilters = array();
 $reportFilters['quality']       = $_REQUEST['quality'];
@@ -15,7 +12,7 @@ $reportFilters['reporterId']    = $_REQUEST['reporterId'];
 
 $user = new User;
 
-if ($_REQUEST['feed'] == 'home') {
+if ($_REQUEST['feed'] == 'homepage') {
 	$reportFilters['locationIds'] = ReporterService::getReporterLocationIds($user);
 }
 

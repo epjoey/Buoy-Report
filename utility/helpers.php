@@ -1,6 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/SimpleImage.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/classes/utility/Path.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 //remove
 $local_dev = FALSE;
