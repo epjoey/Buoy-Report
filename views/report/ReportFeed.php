@@ -18,11 +18,17 @@ class ReportFeed {
 			loadThumbnails();
 
 			(function(paginationParams){
-				var limit  = paginationParams.limit;
-					offset = paginationParams.limit;
+				var limit  = paginationParams.limit,
+					offset = paginationParams.limit,
+					feed   = $('#report-feed'),
+					button = feed.find('#more-reports').first();
 			    
-			    $('#more-reports').click(function() {
-			    	if (!$('#more-reports').hasClass('disabled')) {
+
+			    $(button).click(function() {
+			    	if (!button.hasClass('disabled')) {
+
+			    		//disable during ajax request
+			    		button.addClass('disabled');
 
 						feed = $('#report-feed-container');
     
@@ -47,8 +53,8 @@ class ReportFeed {
 
 
 							//disable button if no more reports
-							if (reports.match('<li') == null) {
-								$('#more-reports').addClass('disabled');
+							if (reports.match('<li')) {
+								button.removeClass('disabled');
 				            }			    			
 			    		});
 			    	}
