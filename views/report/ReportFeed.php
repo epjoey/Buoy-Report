@@ -10,40 +10,40 @@ class ReportFeed {
 			<?
 			self::renderReports($reports);
 			?>
- 			<p class="button-container see-more"><button id="more-reports">See More Reports</button></p>
-			<script type="text/javascript">
-				
-				updateNumReports();
-				loadThumbnails();
-
-				//Load report details
-				$('.report').off('click').on('click', function(event){
-					// if ($(event.target).parents('.buoy-data').length) {
-					// 	event.stopPropagation();
-					// }
-					$(this).toggleClass('expanded');
-				});
-				
-				(function(paginationParams){
-					var limit  = paginationParams.limit;
-						offset = paginationParams.limit;
-				    
-				    $('#more-reports').click(function() {
-				    	if (!$('#more-reports').hasClass('disabled')) {
-				    		loadMoreReports(
-				    		{
-				    			start    : offset,
-				    			limit    : limit,
-				    			queryStr : window.location.search,
-				    			feed     : paginationParams.feedLocation
-				    		}, function(){
-				    			offset = offset + limit;	
-				    		});
-				    	}
-				    });				
-				})(<?= json_encode($paginationParams) ?>);
-			</script> 				
+ 			<p class="button-container see-more"><button id="more-reports">See More Reports</button></p>			
 	 	</div>
+		<script type="text/javascript">
+			
+			updateNumReports();
+			loadThumbnails();
+
+			//Load report details
+			$('#report-feed').delegate('.report','click', function(event){
+				// if ($(event.target).parents('.buoy-data').length) {
+				// 	event.stopPropagation();
+				// }
+				$(this).toggleClass('expanded');
+			});
+			
+			(function(paginationParams){
+				var limit  = paginationParams.limit;
+					offset = paginationParams.limit;
+			    
+			    $('#more-reports').click(function() {
+			    	if (!$('#more-reports').hasClass('disabled')) {
+			    		loadMoreReports(
+			    		{
+			    			start    : offset,
+			    			limit    : limit,
+			    			queryStr : window.location.search,
+			    			feed     : paginationParams.feedLocation
+			    		}, function(){
+			    			offset = offset + limit;	
+			    		});
+			    	}
+			    });				
+			})(<?= json_encode($paginationParams) ?>);
+		</script> 		 	
 	 	<?
 
  	} 	
