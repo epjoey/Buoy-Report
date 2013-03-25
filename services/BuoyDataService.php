@@ -25,17 +25,16 @@ class BuoyDataService {
 		$data = array();
 		foreach($buoyIds as $buoyId) {
 			try {
-				$noaaData = NOAABuoyPersistence::getBuoyDataFromBuoyAtTime($buoyId, $report->obsdate);
+				$noaaBuoyData = NOAABuoyPersistence::getBuoyDataFromBuoyAtTime($buoyId, $report->obsdate);
 			} catch (NOAABuoyException $e) {
 				error_log("$buoyId error");
 				continue;
 			}
-			if ($noaaData) {
-				$data[] = new BuoyData(array_merge($noaaData, array(
-					'buoy' => $buoyId,
-					'reportid' => $report->id
-				)));
-			}
+			if ($noaaBuoyData instanceof BuoyData) {
+				$noaaBuoyData->buoy = $buoyId;
+				$noaaBuoyData->reportid = $report->id;
+				$data[] = $noaaBuoyData;
+			}			
 		}
 		return $data;
 	}

@@ -1,27 +1,73 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
-
+var_dump($_POST);
 $data = $_POST['data'];
 $reportId = $_POST['reportid'];
+$buoyId = $_POST['buoyid'];
 
-if (!$data && !$reportId) {
-	printForm("data($data) or report id($reportId) are invalid");
+
+if (!$data) {
+	var_dump(getData());
+	printForm($reportId, $buoyId, null, "enter data");
 	exit();
 }
 
+if (!$reportId) {
+	var_dump(getData($data));
+	printForm(null, $buoyId, $data, "Enter Data with reportId");
+	exit();
 
-print();
+}
+
+if (!$buoyId) {
+	var_dump(getData($data));
+	printForm($reportId, null, $data, "Enter Data with buoyId");
+	exit();
+
+}
+
+$d = getData($data, $reportId, $buoyId);
+var_dump($d);
+print "entering data <br>";
+BuoyDataService::saveBuoyDataForReport(array($d));
+print "entered data";
+printForm($reportId, $buoyId, $data);
 
 
-function printForm($error = "") {
+function getData($data = null, $reportId, $buoyId) {
+	$row = array();
+	if ($data) {
+		$row = NOAABuoyPersistence::parseRowIntoData($data);
+		$row['date'] = NOAABuoyPersistence::getTimestampOfRow($row);
+	}
+	return new BuoyData(array(
+		'reportid' => $reportId,
+		'buoy' => $buoyId,
+		'gmttime' => $row['date'],
+		'swellheight' => $row[8],
+		'swellperiod' => $row[9],
+		'swelldir' => $row[11],
+		'tide' => $row[18],
+		'winddir' => $row[5],
+		'windspeed' => $row[6],
+		'watertemp' => $row[14]
+	));
+}
+
+function printForm($reportId = null, $buoyId = null, $data = null, $error = "") {
 	print $error;
 	?>
-	<form type="post">
+	<form action="" method="post">
 		<label>Report Id</label>
-		<input type="text" name="reportid" />
+		<input type="text" name="reportid" value="<?= $reportId ?>" />
+		<br>
+		<label>Buoy Id</label>
+		<input type="text" name="buoyid" value="<?= $buoyId ?>" />		
 		<br>
 		<label>Buoy Data Row</label>
-		<input type="text" name="data" />
+		<input type="text" name="data" value="<?= $data ?>" style="width:500px"/>
+		<br>
+		<input type="submit" value="Submit">
 	</form>
 	<?
 }

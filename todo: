@@ -1,12 +1,8 @@
 todo:
-save water temp, swell period, etc
-convert ft to meters
 have filters on view for meters->feet, MM->null
-show details of first report
 order reports by id (obs date)
 ajax form
 editing buoys
-use buoy algo on tide
 subscribe to reporters - email on new reports
 comment of reports
 
@@ -16,3 +12,7 @@ comment of reports
 archived buoy data
 	saved archived file into own dir
 	oposite order as 
+
+remove click to expand
+style buoy data on reports to be subdued against heading, remove dotted line. use opacity
+report form on location page
