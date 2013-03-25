@@ -17,28 +17,39 @@ class ReportFeed {
 			updateNumReports();
 			loadThumbnails();
 
-			//Load report details
-			$('#report-feed').delegate('.report','click', function(event){
-				// if ($(event.target).parents('.buoy-data').length) {
-				// 	event.stopPropagation();
-				// }
-				$(this).toggleClass('expanded');
-			});
-			
 			(function(paginationParams){
 				var limit  = paginationParams.limit;
 					offset = paginationParams.limit;
 			    
 			    $('#more-reports').click(function() {
 			    	if (!$('#more-reports').hasClass('disabled')) {
-			    		loadMoreReports(
-			    		{
+
+						feed = $('#report-feed-container');
+    
+						//find the last list of reports (only one until "See more reports" is clicked)
+					    reportsList = feed.find('ul.reports').last();			    		
+						//insert temporary loading sign after current list
+						reportsList.after("<div id='temp-loading' class='loading'></div>");
+			    		
+			    		loadMoreReports({
 			    			start    : offset,
 			    			limit    : limit,
 			    			queryStr : window.location.search,
 			    			feed     : paginationParams.feedLocation
-			    		}, function(){
+			    		}, function(reports){
 			    			offset = offset + limit;	
+							
+			    			$('#temp-loading').remove();  
+							reportsList.after(reports);
+
+							loadThumbnails();		               
+							updateNumReports();							
+
+
+							//disable button if no more reports
+							if (reports.match('<li') == null) {
+								$('#more-reports').addClass('disabled');
+				            }			    			
 			    		});
 			    	}
 			    });				
