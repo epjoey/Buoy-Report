@@ -1,18 +1,12 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class User extends BaseModel {
+class User extends Reporter {
 
-	public $id = 0;
-	public $name = 'babaganoosh';
-	public $email = NULL;
 	public $password = NULL;
 	public $isLoggedIn = FALSE;
 	public $privacySetting = NULL;
 	public $isNew = FALSE;
-	public $joinDate = NULL;
-	public $loginError = NULL;
-	public $registerError = NULL;
 
 	public $locations = null; //array of Location models
 
