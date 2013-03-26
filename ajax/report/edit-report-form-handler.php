@@ -3,7 +3,10 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 /* --------------- HANDLE EDIT REPORT FORM SUBMISSION --------------- */
 
-$report = new Report($_POST);
+$report = ReportService::getReport($_POST['id']);
+$report->waveheight = $_POST['waveheight'];
+$report->quality = $_POST['quality'];
+$report->text = $_POST['text'];
 
 if ($_POST['submit'] == 'delete-report') {
 	ReportService::deleteReport($report->id);
