@@ -242,7 +242,7 @@ class LocationDetailPage extends Page {
 						</div>
 					<? } 
 
-					if ($this->SingleReportPage == $this->user->id) { ?>
+					if ($this->location->creator == $this->user->id) { ?>
 						<div class="edit-link-btns">
 							<span class="edit-link-btn" id="delete-link-btn">Delete links</span>	
 							<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>

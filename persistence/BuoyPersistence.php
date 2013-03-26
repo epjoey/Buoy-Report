@@ -20,7 +20,6 @@ class BuoyPersistence {
 		while ($row = mysqli_fetch_object($result)) {	
 			$buoy = new Buoy($row);
 			$buoys[$buoy->buoyid] = $buoy;
-			error_log("Buoy " . $buoy->buoyid . " used db");
 			ModelCache::set('Buoy', $buoy->buoyid, $buoy);
 		}
 		return $buoys;	

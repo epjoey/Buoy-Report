@@ -74,7 +74,7 @@ class FilterForm {
 					<option value="0">-- Choose --</option>
 					<? foreach (ReportOptions::quality() as $key=>$value): ?>
 						<option value="<?= $key ?>" <?=
-							$_REQUEST['quality'] == $key ? "selected='selected'" :'';
+							isset($_REQUEST['quality']) && $_REQUEST['quality'] == $key ? "selected='selected'" :'';
 						?>><?= $value ?></option>
 					<? endforeach; ?>
 				</select>

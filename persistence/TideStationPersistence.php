@@ -26,7 +26,7 @@ class TideStationPersistence {
 
 			$tideStation = new TideStation($row);
 			$tideStations[$tideStation->stationid] = $tideStation;
-			error_log("TideStation " . $tideStation->stationid . " used db");
+			//error_log("TideStation " . $tideStation->stationid . " used db");
 			ModelCache::set('TideStation', $tideStation->stationid, $tideStation);			
 		}
 		return $tideStations;	

@@ -9,7 +9,7 @@ class ModelCache {
 		$models = array();
 		foreach($ids as $id) {
 			if (isset(self::$CACHE[$modelName][$id])) {
-				error_log("$modelName $id used cache");
+				//error_log("$modelName $id used cache");
 				$models[$id] = self::$CACHE[$modelName][$id];
 			}
 		}

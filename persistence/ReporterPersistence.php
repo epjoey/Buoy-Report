@@ -20,7 +20,7 @@ class ReporterPersistence {
 		while ($row = mysqli_fetch_object($result)) {	
 			$reporter = new Reporter($row);
 			$reporters[$reporter->id] = $reporter;
-			error_log("Reporter " . $reporter->id . " used db");
+			//error_log("Reporter " . $reporter->id . " used db");
 			ModelCache::set('Reporter', $reporter->id, $reporter);			
 		}
 		return $reporters;

@@ -19,7 +19,7 @@ class LocationPersistence {
 		while ($row = mysqli_fetch_object($result)) {	
 			$location = new Location($row);
 			$locations[$location->id] = $location;
-			error_log("Location $location->id used db");
+			//error_log("Location $location->id used db");
 			ModelCache::set('Location', $location->id, $location);
 
 		}
