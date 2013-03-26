@@ -29,7 +29,7 @@ try {
 	}
 
 	if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-		$uploadStatus = handleFileUpload($_FILES['upload'], $report->reporterid);
+		$uploadStatus = handleFileUpload($_FILES['upload'], $_POST['reporterid']);
 		if (isset($uploadStatus['error'])) {
 			throw new InvalidSubmissionException($uploadStatus['error']);	
 		}

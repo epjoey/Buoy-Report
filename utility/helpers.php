@@ -197,12 +197,16 @@ function handleFileUpload($upload, $reporterId) {
 		return $uploadStatus;
 	}	
 	
+	var_dump($upload);
+	var_dump($reporterId);
 	//stored in DB. full path prepended
 	$uploadStatus['imagepath'] = date('Y') . '/' . date('m') . '/' . $reporterId . '.' . date('d.G.i.s') . $imageExt;
+	var_dump($uploadStatus['imagepath']);
+	var_dump($upload['tmp_name']);
+	exit;
 
 	if (!move_uploaded_file($upload['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $uploadStatus['imagepath'])) {
-		$uploadStatus['error'] = 'file-save';	
-		return $uploadStatus;;
+		$uploadStatus['error'] = 'file-save';
 	} 	
 	
 	//if we got here, image was copied and array contains image path
