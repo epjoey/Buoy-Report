@@ -25,8 +25,11 @@ class ReportFeed {
 					feed   = $('#report-feed'),
 					button = feed.find('#more-reports').first();
 			    
-			    feed.on("click", ".report", function(event, elem) {
-			    	element.addClassName("expanded");
+			    feed.delegate(".report", "click", function(event) {
+			    	if($(event.target).is('a')) {
+			    		return true;
+			    	}
+			    	$(this).toggleClass("expanded");
 			    });
 
 			    $(button).click(function() {
@@ -81,7 +84,7 @@ class ReportFeed {
 				return;
 			}
 			//render Feed loop
-			$expanded = true;
+			//$expanded = true;
 			foreach ($reports as $report) {
 				SingleReport::renderSingleReport($report, array('expanded'=>$expanded));
 				//$expanded = false;
