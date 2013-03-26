@@ -39,8 +39,9 @@ class LocationPage extends Page {
 		} elseif ($this->isReporterLocations) {
 
 			$this->reporterInfo = Persistence::getUserInfoById($this->reporterId);
-			if (!isset($this->reporterInfo)) {
-				header('Location:'.Path::to404());
+			if (!$this->reporterInfo) {
+				header("HTTP/1.0 404 Not Found");
+				include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 				exit();
 			}			
 			$this->locations = LocationService::getReporterLocations($this->reporterId);

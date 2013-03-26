@@ -12,7 +12,8 @@ class EditBuoyPage extends Page {
 		$this->buoyId = $buoyId;
 		$this->buoy = BuoyService::getBuoy($this->buoyId);
 		if (!$this->buoy) {
-			header('Location:'.Path::to404());
+			header("HTTP/1.0 404 Not Found");
+			include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 			exit();			
 		}
 		$this->pageTitle = 'Edit Buoy ' . $buoyId;

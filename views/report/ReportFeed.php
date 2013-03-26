@@ -14,15 +14,20 @@ class ReportFeed {
 	 	</div>
 		<script type="text/javascript">
 			
-			updateNumReports();
-			loadThumbnails();
 
 			(function(paginationParams){
+
+				updateNumReports();
+				loadThumbnails();
+
 				var limit  = paginationParams.limit,
 					offset = paginationParams.limit,
 					feed   = $('#report-feed'),
 					button = feed.find('#more-reports').first();
 			    
+			    feed.on("click", ".report", function(event, elem) {
+			    	element.addClassName("expanded");
+			    });
 
 			    $(button).click(function() {
 			    	if (!button.hasClass('disabled')) {

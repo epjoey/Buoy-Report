@@ -15,8 +15,9 @@ class ReportFormPage extends Page {
 			'includeBuoys' => true,
 			'includeTideStations' => true
 		));
-		if (!isset($this->location)) {
-			header('Location:'.Path::to404());
+		if (!$this->location) {
+			header("HTTP/1.0 404 Not Found");
+			include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 			exit();	
 		}	
 		$this->pageTitle = $this->location->locname . ' Report';

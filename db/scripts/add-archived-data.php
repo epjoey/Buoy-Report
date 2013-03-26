@@ -57,6 +57,7 @@ function getData($data = null, $reportId, $buoyId) {
 function printForm($reportId = null, $buoyId = null, $data = null, $error = "") {
 	print $error;
 	?>
+	<h3>Remember that NOAA dates are in GMT (7 hours ahead of PDT)</h3>
 	<form action="" method="post">
 		<label>Report Id</label>
 		<input type="text" name="reportid" value="<?= $reportId ?>" />

@@ -15,8 +15,9 @@ class EditPostPage extends Page {
 
 		$this->report = Persistence::getReportById($id);
 
-		if(($this->report['reporterid'] != $this->user->id) || !isset($this->report)) {
-			header('Location:'.Path::to404());
+		if(($this->report['reporterid'] != $this->user->id) || !$this->report) {
+			header("HTTP/1.0 404 Not Found");
+			include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 			exit();	
 		}		
 		

@@ -15,8 +15,9 @@ class ReporterPage extends Page {
 		if (isset($_GET['location']) && $_GET['location']) {
 			$this->locationId = $_GET['location'];	
 			$this->locInfo = Persistence::getLocationInfoById($this->locationId);
-			if (!isset($this->locInfo)) {
-				header('Location:'.Path::to404());
+			if (!$this->locInfo) {
+				header("HTTP/1.0 404 Not Found");
+				include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 				exit();
 			} 
 			$this->isLocationReporters = TRUE;		

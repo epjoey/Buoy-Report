@@ -13,6 +13,14 @@ archived buoy data
 	saved archived file into own dir
 	oposite order as 
 
-remove click to expand
+
 style buoy data on reports to be subdued against heading, remove dotted line. use opacity
 report form on location page
+
+remove click to expand from desktop
+only shrink reports on mobile - css
+no cursor pointer on single report page
+
+one shade of grey
+
+close picture upload page oncomplete

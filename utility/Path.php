@@ -200,10 +200,6 @@ class Path {
 		return $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $path;
 	}
 
-	public static function to404() {
-		return '/404.php';
-	}
-
 	public static function toAbout() {
 		return '/about.php';
 	}	
@@ -251,6 +247,9 @@ class Path {
 		return Path::toUrl() . '/mobile-image-process.php';
 	}
 
+	public static function to404() {
+		return '/404.php';
+	}
 
 	//form handlers
 	public static function toLocationAddBuoy() {

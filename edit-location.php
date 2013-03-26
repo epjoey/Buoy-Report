@@ -3,7 +3,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 
 if (!isset($_GET['location']) || !$_GET['location']) {
-	header('Location:'.Path::to404());
+	header("HTTP/1.0 404 Not Found");
+	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 	exit();
 }
 

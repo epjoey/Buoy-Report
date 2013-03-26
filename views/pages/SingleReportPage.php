@@ -16,9 +16,9 @@ class SingleReportPage extends Page {
 			'includeTideStationModel' => true,
 			'includeReporter' => true
 		));
-		if(!isset($this->report)) {
-			header('HTTP/1.1 301 Moved Permanently');			
-			header('Location:'.Path::to404());
+		if(!$this->report) {
+			header("HTTP/1.0 404 Not Found");			
+			include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 			exit();	
 		}	
 	}
