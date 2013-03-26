@@ -21,6 +21,14 @@ class NOAATidePersistence {
 		return self::getApproximateData($lastTideReport, $time);
 	}	
 
+	static function parseRowIntoData($row) {
+		return preg_split("/[\s,]+/", $row);
+	}
+
+	static function getTimestampOfRow($row) {
+		return strtotime($row[0] . ' ' . $row[1] . $row[2]);
+	}
+
 	static function getLastTideReportFromStation($stationId) {
 		$html = file_get_html(self::$tideDataRootUrl . $stationId);
 		if (!$html) {
@@ -43,10 +51,10 @@ class NOAATidePersistence {
 		for ($i=0; $i<=self::$fileRowLimit; $i++) {
 			
 			//break each line into array of measurements by spaces
-			$currentRow = preg_split("/[\s,]+/", $dataFile[$i]);
-			
+			$currentRow = self::parseRowIntoData($dataFile[$i]);
+
 			//convert row date/time into a timestamp
-			$currentRow['date'] = strtotime($currentRow[0] . ' ' . $currentRow[1] . $currentRow[2]);
+			$currentRow['date'] = self::getTimestampOfRow($currentRow);
 			$currentRow['proximity'] = abs($obsdate - $currentRow['date']); //calculate proximity of this row to the observation date
 			$currentRow['key'] = $i; //to go back into $dataFile after loop
 
