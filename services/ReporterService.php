@@ -6,9 +6,18 @@ class ReporterService {
 		if (!$id) {
 			return null;
 		}
-		$reporters = ReporterPersistence::getReporters(array($id), $options);
-		$reporter = reset($reporters);
-		return $reporter;
+		return reset(self::getReporters(array($id), $options));
+	}
+
+	static function getReporters($ids, $options = array()) {
+		$reporters = ReporterPersistence::getReporters($ids);
+		foreach($reporters as $reporter) {
+			if ($options['includeLocations']) {
+				$reporter->locations = LocationService::getReporterLocations($reporter);	
+			}
+		}
+		return $reporters;
+		
 	}
 
 	static function reporterAddLocation($rid, $lid) {
@@ -23,6 +32,5 @@ class ReporterService {
 	static function getReporterLocationIds($reporter) {
 		return ReporterPersistence::getReporterLocationIds($reporter);
 	}
-
 }
 ?>

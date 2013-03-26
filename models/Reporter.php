@@ -5,5 +5,7 @@ class Reporter extends BaseModel {
 	public $email;
 	public $joindate;
 	public $public;	
+
+	public $locations = null; //array of Location models
 }
 ?>
