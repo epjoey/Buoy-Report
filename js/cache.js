@@ -175,13 +175,6 @@ var BR = window.BR = {};
     });				 
 }		
 
-function loadThumbnails(){
-	$('.image-container.thumbnail-image img').each(function(elem){
-		src = $(this).attr('realUrl');
-		$(this).attr('src', src);
-		$(this).parent('.thumbnail-image').removeClass('loading').addClass('loaded');
-	});				
-}
 
 function updateFilterNote(){
 	updateNumReports();

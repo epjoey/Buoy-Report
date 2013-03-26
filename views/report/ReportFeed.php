@@ -18,7 +18,6 @@ class ReportFeed {
 			(function(paginationParams){
 
 				updateNumReports();
-				loadThumbnails();
 
 				var limit  = paginationParams.limit,
 					offset = paginationParams.limit,
@@ -56,7 +55,6 @@ class ReportFeed {
 			    			$('#temp-loading').remove();  
 							reportsList.after(reports);
 
-							loadThumbnails();		               
 							updateNumReports();							
 
 
