@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-$user = new User;
+$user = UserService::getUser();
 
 if (!$user->isLoggedIn) {
 	$intro = new IntroPage;

@@ -1,107 +1,100 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class User extends Reporter {
+class User extends BaseModel {
 
 	public $isLoggedIn = FALSE;
-	public $privacySetting = NULL;
-	public $isNew = FALSE;
-
-	public $locations = null; //array of Location models
+	public $reporter = NULL;
 
 
 	public function __construct(){
+		
+		$userId = self::getUserIdFromSession();
+		
 
-		//this function does alot. sorry.
-		$this->isLoggedIn = $this->userIsLoggedIn();
+		//anywhere you call new User() from, it will look for client's cookie. if found, validate it, and log them in
+		if (!$userId) {
+			$userId = self::logInUserWithValidCookie();
+		}
 
-		if (!$this->isLoggedIn) {
+		if (!$userId) {
 			return;
 		}
-	
-		$this->email = $_SESSION['email'];
-		$this->id = $_SESSION['userid'];
-		$this->name = $_SESSION['name'];
-		$this->joinDate = $_SESSION['joindate'];
-		$this->isNew = $_SESSION['justRegistered'];
-		$this->privacySetting = $_SESSION['privacySetting'];	
+		$this->isLoggedIn = TRUE;
+		$this->reporter = ReporterService::getReporter($userId, array('includeLocations'=>true));
+	}
 
-
-		//todo: move into ReporterService::getLoggedInReporter or something
-
-		if (!isset($this->locations)) {
-			$this->locations = LocationService::getReporterLocations($this);
+	private static function getUserIdFromSession() {
+		if (!isset($_SESSION)) {
+			session_start();
 		}
-		
+		return $_SESSION['userid'];
+	}
+
+	public function __get($prop) {
+		if ($prop != 'isLoggedIn') {
+			return $this->reporter->$prop;
+		}
 	}
 
 
-	//handles login/logouts and grants user with session access
-	public function userIsLoggedIn() {
-		/* ----------------- CHECK IF USER HAS SESSION ----------------- */
-		if (!isset($_SESSION)) session_start();
-		if (isset($_SESSION['userid']) && $_SESSION['userid'] != '') {
-			return TRUE;		
+	public function logInUserWithValidCookie() {
+		$c = $_COOKIE['surf-session'];
+		if (!$c) {
+			return false;
 		}
-
-		/* ----------------- CHECK IF USER HAS COOKIE ----------------- */
-		if (isset($_COOKIE['surf-session'])) {
-			return $this->isCookieValid();
-		}
-		return FALSE;
-	}
-
-	public function isCookieValid() {
 
 		/*--- SPLIT COOKIE INTO userid, key -----*/
-		$cookie_array = explode('%', $_COOKIE['surf-session']);
+		$cookie_array = explode('%', $c);
 
 		/*--- HASH KEY TO MATCH STORED KEY -----*/
 		$userId = $cookie_array[0];
-		$curCookieKey = md5($cookie_array[1] . 'makawao');
+		$curEncryptedKey = self::encryptCookieKeyForDB($cookie_array[1]);
 
 		/*--- IF KEY EXISTS IN DB LOG USER IN WITH PARAMS TO SET NEW COOKIE -----*/
-		if (!Persistence::userCookieExists($userId, $curCookieKey)) {
-			 return FALSE;
-		} else {
-			self::logInUser($userId, $curCookieKey, $newCookie = TRUE);
-			return TRUE;
-		}		
+		if (Persistence::userCookieExists($userId, $curEncryptedKey)) {
+			return self::logInUser($userId, curEncryptedKey);
+		}
+		return false;
 		
 	}
+
+	public static function generateCookieKey($userId) {
+		return str_shuffle('1234567890abcdefghijklmnop' . $userId);
+	}
 	
-	public static function logInUser($userId, $curCookieKey = NULL, $newCookie = TRUE, $fromRegistration = FALSE) {
+	public static function encryptCookieKeyForDB($key) {
+		return key($newKey . 'makawao');
+	}
 
-		$reporterInfo = Persistence::getUserInfoById($userId);
+	public static function logInUser($userId, $curEncryptedKey = NULL) {
 
-		if (!isset($_SESSION))	
+		if (!isset($_SESSION)) {
 			session_start();
+		}
 
-		$_SESSION['userid'] = $reporterInfo['id'];
-		$_SESSION['email'] = $reporterInfo['email'];
-		$_SESSION['name'] = $reporterInfo['name'];
-		$_SESSION['joindate'] = $reporterInfo['joindate'];
-		$_SESSION['justRegistered'] = $fromRegistration;
-		$_SESSION['privacySetting'] = $reporterInfo['public']; //should rename db table
+		$_SESSION['userid'] = $userId;
 
+		
+		$newKey = self::generateCookieKey($userId);
+		$encryptedKey = self::encryptCookieKeyForDB($newKey);
 		
 		/*--------------- REPLACING AND RESETING EXISTING COOKIE ----------------*/
-		if (isset($curCookieKey) && $newCookie) {
-			$newKey = str_shuffle('1234567890abcdefghijklmnop' . $userId);
-			Persistence::replaceUserCookie($userId, md5($newKey . 'makawao'), $curCookieKey); 
-			eatCookie('surf-session');	
-			dropCookie('surf-session', $userId . '%' . $newKey, time()+60*60*24*7);
-		}
-		
+		if ($curEncryptedKey) {
+			Persistence::replaceUserCookie($userId, $encryptedKey, $curEncryptedKey); 
+
 		/*------------------- SAVING AND SETTING NEW COOKIE --------------------*/
-		else if ($newCookie) {
-			$newKey = str_shuffle('1234567890abcdefghijklmnop' . $userId); 	
-			Persistence::insertUserCookie($userId, md5($newKey . 'makawao'));
-			dropCookie('surf-session', $userId . '%' . $newKey, time()+60*60*24*7);
+		} else {
+			Persistence::insertUserCookie($userId, $encryptedKey);
 		}
+
+		eatCookie('surf-session');	
+		dropCookie('surf-session', $userId . '%' . $newKey, time()+60*60*24*7);
+
+		return $userId;
 	}
 	
-	public function logOutUser() {
+	public function logOut() {
 		if (!isset($_SESSION)) session_start();
 		if (isset($_COOKIE['surf-session'])) {
 			Persistence::removeAllUserCookies($_SESSION['userid']);
@@ -111,24 +104,6 @@ class User extends Reporter {
 	    session_destroy();
 	}
 	
-
-	public function updateUserSession($options = array()) {
-		if (!isset($_SESSION)) session_start();
-
-		
-		if (isset($options['newEmail'])) {
-			$_SESSION['email'] = $options['newEmail'];
-		}
-		
-		if (isset($options['newName'])) {			
-			$_SESSION['name'] = $options['newName'];
-		}
-		if (isset($options['privacySetting'])) {			
-			$_SESSION['privacySetting'] = $options['privacySetting'];
-		}		
-	}
-
-	/* GLOBALS */
 	static function isDev() {
 		if ($_SERVER["REMOTE_ADDR"] == '::1' || $_SERVER["REMOTE_ADDR"] == "127.0.0.1" ) {
 			return TRUE;

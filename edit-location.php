@@ -8,7 +8,7 @@ if (!isset($_GET['location']) || !$_GET['location']) {
 	exit();
 }
 
-$user = new User;
+$user = UserService::getUser();
 
 if (!$user->isLoggedIn) {
 	header('Location:'.Path::toLogin(null, Path::toEditLocation($_GET['location'])));

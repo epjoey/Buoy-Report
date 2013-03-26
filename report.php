@@ -1,7 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-$user = new User;
+$user = UserService::getUser();
 
 if (!isset($_GET['location'])) {
 	header('Location:'.Path::toLocations($reporter = null, $toPost = TRUE));

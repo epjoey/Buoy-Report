@@ -100,7 +100,7 @@ class ReportForm {
 				</div><!--end optional fields-->
 				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
 				<input type="hidden" name="reporterid" value="<?=$user->id?>" />
-				<input type="hidden" name="public" value="<?=$user->privacySetting?>" />
+				<input type="hidden" name="public" value="<?=$user->public?>" />
 				<input type="hidden" name="locationid" value="<?=$location->id?>" />
 				<input type="hidden" name="locationname" value="<?=$location->locname?>" /> 
 				<input type="hidden" name="submit" value="submit-report" />				

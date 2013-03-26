@@ -116,7 +116,7 @@ class SingleReport {
 			
 			if ($thumbnail) {
 				?>
-				<li class="image-container thumbnail-image loading">
+				<li class="image-container thumbnail-image">
 					<img src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
 				</li>
 				<?

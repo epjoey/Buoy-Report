@@ -4,9 +4,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 class Page {
 
 	public function loadData() {
-
-		$this->user = new User;
-
+		$this->user = UserService::getUser();
 	}
 
 	public function renderPage($data = array()) {

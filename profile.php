@@ -7,7 +7,7 @@ if (!$_GET['reporter']) {
 	exit();	
 }
 
-$user = new User;
+$user = UserService::getUser();
 
 if ($user->isLoggedIn && $_GET['reporter'] == $user->id) {
 	

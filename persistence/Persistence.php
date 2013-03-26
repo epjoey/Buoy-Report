@@ -284,7 +284,7 @@ class Persistence {
 		}	
 		
 		$sql = "SELECT * FROM location" . $where;
-		var_dump($sql);
+		//var_dump($sql);
 		$result = mysqli_query($link, $sql);
 		if (!$result) {
 			die("Error getting user locations" . mysqli_error($link));

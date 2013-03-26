@@ -32,7 +32,8 @@ class Classloader {
         "TideStation" =>                "/models/TideStation.php",
         "TideStationPersistence" =>     "/persistence/TideStationPersistence.php",
         "TideStationService" =>         "/services/TideStationService.php",
-        "User" =>                       "/models/User.php", //remove
+        "User" =>                       "/models/User.php",
+        "UserService" =>                "/services/UserService.php",
 
 
         //PAGES

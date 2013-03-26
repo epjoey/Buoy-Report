@@ -87,7 +87,7 @@ class EditProfilePage extends Page {
 				$options['newPassword'] = md5($_POST['new-password'] . 'reportdb');
 			}
 
-			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->user->privacySetting) {
+			if (isset($_POST['report-status']) && $_POST['report-status'] != $this->user->public) {
 				//vardump($_POST['report-status']); exit();
 				if ($_POST['report-status'] == '0') {
 					Persistence::makeAllUserReportsPrivate($this->user->id);
@@ -106,7 +106,6 @@ class EditProfilePage extends Page {
 			}
 
 			Persistence::updateUserInfo($this->user->id, $options);
-			$this->user->updateUserSession($options);					
 			
 			header('Location:'.Path::toProfile($this->user->id, $status = 'success'));
 			exit();		

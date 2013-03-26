@@ -55,7 +55,7 @@ $reporterId = Persistence::insertUser(
 	$_POST['report-status']
 );
 
-User::logInUser($reporterId, NULL, $newCookie = TRUE, $fromRegistration = TRUE);
+User::logInUser($reporterId, NULL);
 header('Location:'.Path::toUserHome());
 exit();
 

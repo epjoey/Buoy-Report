@@ -10,7 +10,7 @@ $reportFilters['locationIds']   = $_REQUEST['location'] ? array($_REQUEST['locat
 $reportFilters['reporterId']    = $_REQUEST['reporterId'];
 /* load Reports */
 
-$user = new User;
+$user = UserService::getUser();
 
 if ($_REQUEST['feed'] == 'homepage') {
 	$reportFilters['locationIds'] = ReporterService::getReporterLocationIds($user);
