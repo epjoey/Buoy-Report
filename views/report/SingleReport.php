@@ -6,7 +6,7 @@ class SingleReport {
 
 	public static function renderSingleReport($report, $options = array()) {
 		$defaultOptions = array(
-			'expanded' => false
+			'expanded' => true
 		);
 		$options = array_merge($defaultOptions, $options);
 

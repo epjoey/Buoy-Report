@@ -84,7 +84,7 @@ class ReportFeed {
 			//render Feed loop
 			//$expanded = true;
 			foreach ($reports as $report) {
-				SingleReport::renderSingleReport($report);
+				SingleReport::renderSingleReport($report, array('expanded'=>false));
 				//$expanded = false;
 			}
 			?>
