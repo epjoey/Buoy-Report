@@ -14,7 +14,7 @@ class LocationPersistence {
 			return $locations;
 		}		
 		$idStr = implode(',', $uncachedIds);
-		$sql = "SELECT * FROM location $where WHERE id in ($idStr)";
+		$sql = "SELECT * FROM location WHERE id in ($idStr)";
 		$result = Persistence::run($sql);
 		while ($row = mysqli_fetch_object($result)) {	
 			$location = new Location($row);
