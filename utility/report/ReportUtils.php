@@ -19,6 +19,11 @@ class ReportUtils {
 			'25'=>array(20,30)
 		);		
 	}
+
+	static function getFiltersFromRequest($req) {
+
+	}
 }
+
 
 ?>

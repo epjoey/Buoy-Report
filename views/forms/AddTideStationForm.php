@@ -44,7 +44,7 @@ class AddTideStationForm {
 				(function(){
 					new BR.LocationAddBuoyForm({
 						el: '#add-tide-station-form',
-						existingStationsUrl: "<?= Path::toAjax()?>tide/tidestation-selector.php",
+						existingStationsUrl: "<?= Path::toControllers()?>tide/tidestation-selector.php",
 						locationId: "<?= $location->id ?>"
 					});				
 				})()

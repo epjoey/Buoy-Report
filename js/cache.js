@@ -163,7 +163,7 @@ var BR = window.BR = {};
 	});	
 })();function loadMoreReports(params, onSuccess) {
     $.ajax({
-        url: "/ajax/report/load-more.php" + params.queryStr, 
+        url: "/controllers/report/load-more.php" + params.queryStr, 
         type: "GET",
         data: params,
         cache: false,

@@ -44,7 +44,7 @@ class AddBuoyForm {
 				(function(){
 					new BR.LocationAddBuoyForm({
 						el: '#add-buoy-form',
-						existingStationsUrl: "<?=Path::toAjax()?>buoy/buoy-selector.php",
+						existingStationsUrl: "<?=Path::toControllers()?>buoy/buoy-selector.php",
 						locationId: "<?=$location->id?>"
 					});				
 				})()

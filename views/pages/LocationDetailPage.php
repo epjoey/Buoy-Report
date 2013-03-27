@@ -110,7 +110,7 @@ class LocationDetailPage extends Page {
 				}
 				if (linkContainer.hasClass('loaded') && newUrl == '') return;
 				linkContainer.addClass('loading');
-				linkContainer.load('<?=Path::toAjax()?>/location/forecast-links.php?info=forecast&locationid=<?=$this->locationId?>', 
+				linkContainer.load('<?=Path::toControllers()?>/location/forecast-links.php?info=forecast&locationid=<?=$this->locationId?>', 
 					
 					data,			
 					function(){
@@ -135,7 +135,7 @@ class LocationDetailPage extends Page {
 				});
 
 				$.ajax({
-					url: "<?=Path::toAjax()?>/location/forecast-links.php?info=deletelinks&locationid=<?=$this->locationId?>",
+					url: "<?=Path::toControllers()?>/location/forecast-links.php?info=deletelinks&locationid=<?=$this->locationId?>",
 					type: "GET",
 					data: { links : links },
 					cache: false,

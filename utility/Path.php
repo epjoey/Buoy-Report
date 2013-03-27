@@ -214,8 +214,8 @@ class Path {
 //-------------------------------------------------------------------------------//
 //-------------------------- CODE DIRECTORIES/FILES -----------------------------//
 	
-	public static function toAjax() {
-		return '/ajax/';
+	public static function toControllers() {
+		return '/controllers/';
 	}
 		
 	public static function toJs() {
@@ -244,49 +244,49 @@ class Path {
 
 	public static function toMobileImageProcess() {
 		global $local_dev;
-		return Path::toUrl() . '/mobile-image-process.php';
+		return Path::toUrl() . '/controllers/report/mobile-image-process.php';
 	}
 
 	public static function to404() {
-		return '/404.php';
+		return '/controllers/view/404.php';
 	}
 
 	//form handlers
 	public static function toLocationAddBuoy() {
-		return self::toAjax() . 'location/add-buoy.php';
+		return self::toControllers() . 'location/add-buoy.php';
 	}
 	public static function toLocationRemoveBuoy() {
-		return self::toAjax() . 'location/remove-buoy.php';
+		return self::toControllers() . 'location/remove-buoy.php';
 	}
 	public static function toLocationAddTidestation() {
-		return self::toAjax() . 'location/add-tidestation.php';
+		return self::toControllers() . 'location/add-tidestation.php';
 	}
 	public static function toLocationRemoveTidestation() {
-		return self::toAjax() . 'location/remove-tidestation.php';
+		return self::toControllers() . 'location/remove-tidestation.php';
 	}	
 	public static function toDeleteBuoy() {
-		return self::toAjax() . 'buoy/delete-buoy.php';
+		return self::toControllers() . 'buoy/delete-buoy.php';
 	}
 	public static function toEditBuoy() {
-		return self::toAjax() . 'buoy/edit-buoy.php';
+		return self::toControllers() . 'buoy/edit-buoy.php';
 	}	
 	public static function toDeleteTidestation() {
-		return self::toAjax() . 'tide/delete-tidestation.php';
+		return self::toControllers() . 'tide/delete-tidestation.php';
 	}
 	public static function toEditTidestation() {
-		return self::toAjax() . 'tide/edit-tidestation.php';
+		return self::toControllers() . 'tide/edit-tidestation.php';
 	}	
 	public static function toHandleReportSubmission() {
-		return self::toAjax() . 'report/report-form-handler.php';
+		return self::toControllers() . 'report/report-form-handler.php';
 	}
 	public static function toHandleEditReportSubmission() {
-		return self::toAjax() . 'report/edit-report-form-handler.php';
+		return self::toControllers() . 'report/edit-report-form-handler.php';
 	}	
 	public static function toHandleLogin() {
-		return self::toAjax() . 'user/login-form-handler.php';
+		return self::toControllers() . 'user/login-form-handler.php';
 	}
 	public static function toHandleRegistration() {
-		return self::toAjax() . 'user/register-form-handler.php';
+		return self::toControllers() . 'user/register-form-handler.php';
 	}	
 
 }
