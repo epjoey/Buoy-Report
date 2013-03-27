@@ -22,7 +22,7 @@ class ReporterService {
 
 	static function reporterAddLocation($rid, $lid) {
 		if (!$rid || !$lid) {
-			throw new InternalExcetion();
+			throw new InternalException();
 		}
 		if (!ReporterPersistence::reporterHasLocation($rid, $lid)) {
 			return ReporterPersistence::reporterAddLocation($rid, $lid);

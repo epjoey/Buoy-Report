@@ -7,8 +7,16 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 /* populate report model object with post data.
  * $report will be entered into DB
  */
-$report = new Report($_POST);
 
+$user = UserService::getUser();
+$report = new Report(array());
+$report->reporterid = $user->id;
+$report->public = $user->public;
+$report->text = $_POST['text'];
+$report->quality = $_POST['quality'];
+$report->waveheight = $_POST['waveheight'];
+$report->sublocationid = $_POST['sublocationid'];
+$report->locationid = $_POST['text'];
 
 try {
 	
@@ -29,7 +37,7 @@ try {
 	}
 
 	if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-		$uploadStatus = handleFileUpload($_FILES['upload'], $_POST['reporterid']);
+		$uploadStatus = handleFileUpload($_FILES['upload'], $user->id);
 		if (isset($uploadStatus['error'])) {
 			throw new InvalidSubmissionException($uploadStatus['error']);	
 		}
@@ -42,7 +50,7 @@ try {
 		$report->imagepath = rawurldecode($_POST['remoteImageURL']);
 	}	
 
-	$report->id = ReportService::saveReport($report, array(
+	$report = ReportService::saveReport($report, array(
 		'buoyIds' => $_POST['buoys'],
 		'tidestationIds' => $_POST['tidestations']
 	));

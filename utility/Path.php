@@ -68,10 +68,7 @@ class Path {
 		if (!isset($locationid)) {
 			return Path::toLocations(null, true);
 		}
-		$url = '/report.php?location='.$locationid;
-		if (isset($submitError)) {
-			$url .= '&error='.$submitError;
-		}
+		$url = '/location.php?location='.$locationid.'?report=1';
 		return $url;
 	}
 
@@ -80,9 +77,6 @@ class Path {
 	}
 
 	public static function toEditReport($reportId, $submitError = NULL) {
-		if (!isset($reportId)) {
-			return self::to404();
-		}
 		$url = '/edit-post.php?id='.$reportId;
 		if (isset($submitError)) {
 			$url .= '&error='.$submitError;
@@ -90,10 +84,7 @@ class Path {
 		return $url;		
 	}	
 
-	public static function toProfile($reporterId, $status = NULL) {
-		if (!isset($reporterId)) {
-			return Path::to404();
-		}		
+	public static function toProfile($reporterId, $status = NULL) {	
 		$url = '/profile.php?reporter='.$reporterId;
 		if (isset($status)) {
 			$url .= '&status='.$status;
@@ -135,9 +126,6 @@ class Path {
 	}
 
 	public static function toEditLocation($locationId, $error = NULL) {
-		if (!isset($locationId)) {
-			return Path::to404();
-		}		
 		$url = '/edit-location.php?location='.$locationId;
 		if (isset($error)) {
 			$url .= '&error='.$error;
@@ -219,15 +207,15 @@ class Path {
 	}
 		
 	public static function toJs() {
-		return '/js/';
+		return '/static/js/';
 	}
 
 	public static function toCss() {
-		return '/css/';
+		return '/static/css/';
 	}
 
 	public static function toImages() {
-		return '/images/';
+		return '/static/images/';
 	}
 
 	public static function absoluteToImages() {
@@ -238,7 +226,7 @@ class Path {
 		else {
 			$url = Path::URL;
 		}
-		$url .= '/images/';
+		$url .= '/static/images/';
 		return $url;
 	}	
 
@@ -288,6 +276,17 @@ class Path {
 	public static function toHandleRegistration() {
 		return self::toControllers() . 'user/register-form-handler.php';
 	}	
-
+	public static function toBookmarkLocation() {
+		return self::toControllers() . 'location/add-reporter.php';
+	}
+	public static function toSetLocationTimezone() {
+		return self::toControllers() . 'location/set-timezone.php';
+	}	
+	public static function toSetLocationName() {
+		return self::toControllers() . 'location/set-name.php';
+	}		
+	public static function toDeleteLocation() {
+		return self::toControllers() . 'location/delete-location.php';
+	}			
 }
 ?>

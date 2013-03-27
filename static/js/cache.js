@@ -160,8 +160,58 @@ var BR = window.BR = {};
 		},
 		onSubmit: function(event) {
 		}
-	});	
-})();function loadMoreReports(params, onSuccess) {
+	});
+})();
+
+(function(){
+
+	BR.locationForecastLinks = {
+		doFcLinkAjax: function(newUrl) {
+			linkContainer = $('#fc-link-container');
+			if (newUrl != '') {
+				data = {url:newUrl}
+			} else {
+				data = {}
+			}
+			if (linkContainer.hasClass('loaded') && newUrl == '') return;
+			linkContainer.addClass('loading');
+			linkContainer.load('/controllers/location/forecast-links.php?info=forecast&locationid=<?=$this->location->id?>', 
+				data,			
+				function(){
+					linkContainer.removeClass('loading').addClass('loaded');
+				}
+			);
+		},
+
+		cancelDeleteLinks: function() {
+			$('.delete-link-check').hide();
+			$('#delete-link-cancel').hide();
+			$('#add-fc-link-form').show();
+			$('#delete-link-btn').text('Delete links').removeClass('ready');
+		},
+
+		deleteCheckedLinks: function (links) {
+			elems = $('.delete-link-check:checked');
+			links = [];
+
+			elems.each(function(){
+				links.push($(this).val());
+			});
+
+			$.ajax({
+				url: "/controllers/location/forecast-links.php?info=deletelinks&locationid=<?=$this->location->id?>",
+				type: "GET",
+				data: { links : links },
+				cache: false,
+				success: function() {
+					elems.closest('.fc-link').remove();
+					BR.locationForecastLinks.cancelDeleteLinks();
+				} 
+			});
+		}
+	}
+})();
+function loadMoreReports(params, onSuccess) {
     $.ajax({
         url: "/controllers/report/load-more.php" + params.queryStr, 
         type: "GET",

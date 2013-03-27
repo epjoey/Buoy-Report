@@ -21,7 +21,13 @@ class ReportUtils {
 	}
 
 	static function getFiltersFromRequest($req) {
-
+		$filters = array();
+		$filters['quality'] 	  = $req['quality'];
+		$filters['image']   	  = $req['image'];
+		$filters['text']    	  = $req['text'];
+		$filters['obsdate']    	  = $req['obsdate'];
+		$filters['subLocationId'] = $req['sublocation'];
+		return $filters;
 	}
 }
 

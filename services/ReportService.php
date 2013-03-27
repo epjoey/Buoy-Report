@@ -58,8 +58,10 @@ class ReportService {
 		}			
 		$report->reportdate = intval(gmdate("U")); //time of report (now)
 		
-		$report->id = ReportPersistence::insertReport($report);	
+		$id = ReportPersistence::insertReport($report);	
 
+		$report = self::getReport($id);
+		
 		if ($options['tidestationIds']) {
 			TideDataService::getAndSaveTideDataForReport($report, $options['tidestationIds']);
 		}

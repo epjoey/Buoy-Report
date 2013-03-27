@@ -145,7 +145,7 @@ function usePicup(callbackUrl, windowName) {
     currentParams = {
         'callbackURL'       : callbackUrl,
         'referrername'      : escape('Buoy Report'),
-        'referrerfavicon'   : escape('http://buoy-report.com/images/favicon.ico'),
+        'referrerfavicon'   : escape('http://buoy-report.com/static/images/favicon.ico'),
         'purpose'           : escape('Select Photo'),
         'debug'             : 'false',
         'returnThumbnailDataURL': 'false'

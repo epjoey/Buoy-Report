@@ -4,32 +4,23 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class ReportForm {
 
-	static function renderReportForm($location, $user, $submitError = NULL, $needPicup) {
-		?>
-		<h1 class="form-head">Post Report For <a href="<?=Path::toLocation($location->id);?>" id="location"><?= $location->locname ?></a>
-		</h1>		
-		<div class="form-container">
+	static function renderReportForm($location, $options = array()) {
+		$defaultOptions = array(
+			'statusMsg' => '',
+			'needPicup' => false
+		);
+		$options = array_merge($defaultOptions, $options);
+		$statusMsg = $options['statusMsg'];
+		$needPicup = $options['needPicup'];
+		?>	
+		<div class="form-container report-form-container">
 			<form id="report-form" action="<?=Path::toHandleReportSubmission()?>" enctype="multipart/form-data" method="post" >	
-				
-				<? 
-				if (isset($submitError)) {
-					if ($submitError == 'upload-file') {
-						$submitError = 'Error uploading file';
-					} else if ($submitError == 'file-type') {
-						$submitError = 'You must upload a .gif, .jpeg, or .png';
-					} else if ($submitError == 'file-save') {
-						$submitError = 'Error Saving File';
-					} else if ($submitError == 'no-quality') {
-						$submitError = 'You must choose a quality.';					
-					}
-					?>
-					<span class="submission-error"><?= $submitError ?></span>
-				<? 
-				} 
-
+				<span class="submission-error"><?= $statusMsg ?></span>
+				<?
+		
 				ReportFormFields::renderTimeSelect();
-				?>
-			
+		
+				?>		
 				<div class="field quality radio-menu required">
 					<label for="quality">Quality of Rides:</label>
 					<?
@@ -43,7 +34,7 @@ class ReportForm {
 					?>
 				</div>
 				<div class="optional-fields <?= $location->sublocations ? 'includes-sublocations' : ''?> ">
-					<h5 class="form-heading">Optional Fields</h5>
+					<!--<h5 class="form-heading">Optional Fields</h5>-->
 					<div class="fields">
 						<? 
 						if ($location->sublocations) {
@@ -99,8 +90,6 @@ class ReportForm {
 					</div>
 				</div><!--end optional fields-->
 				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
-				<input type="hidden" name="reporterid" value="<?=$user->id?>" />
-				<input type="hidden" name="public" value="<?=$user->public?>" />
 				<input type="hidden" name="locationid" value="<?=$location->id?>" />
 				<input type="hidden" name="locationname" value="<?=$location->locname?>" /> 
 				<input type="hidden" name="submit" value="submit-report" />				

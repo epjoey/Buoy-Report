@@ -3,21 +3,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class EditLocationPage extends LocationDetailPage {
 
-	private $editLocationError = NULL;
-
-	public function loadData() {
-		parent::loadData();
-
-		$this->pageTitle = 'Edit: ' . $this->location->locname;
-		
-		if (isset($_GET['error']) && $_GET['error']) {
-			switch($_GET['error']) {
-				case 3: $e = "No Changes specified"; break;
-				case 4: $e = "Location name specified already exists"; break;
-			}
-			$this->editLocationError = $e;
-		}
-	}
 
 	public function getBodyClassName() {
 		return 'edit-location-page';
@@ -29,47 +14,10 @@ class EditLocationPage extends LocationDetailPage {
 
 	public function renderForbiddenMessage(){
 		?>
-			<p class="forbidden-message overlay">
-				You must be the creator of the location to edit the location. However, you can still add forecast links, bouys, and tidestation (if the creator hasn't done so yet). <a href="<?=Path::toLocation($this->locationId);?>">Return to Location</a>
-			</p>
+		<p class="forbidden-message overlay">
+			You must be the creator of the location to edit the location. However, you can still add forecast links, bouys, and tidestation (if the creator hasn't done so yet). <a href="<?=Path::toLocation($this->locationId);?>">Return to Location</a>
+		</p>
 		<?
-	}
-
-	public function afterSubmit() {
-
-		if ($_POST['submit'] == 'update-name') {
-			if (empty($_POST['locname']) || $_POST['locname'] == $this->location->locname) {
-				$error = 3;
-				header('Location:'.Path::toEditLocation($this->locationId, $error));
-				exit();				
-			}
-			if (Persistence::dbContainsLocation($_POST['locname'])) {
-				$error = 4;
-				header('Location:'.Path::toEditLocation($this->locationId, $error));
-				exit();		
-			}
-			Persistence::updateLocationName($this->locationId, $_POST['locname']);			
-			header('Location:'.Path::toEditLocation($this->locationId));
-			exit();	
-		}
-
-		if ($_POST['submit'] == 'select-timezone') {
-			if (empty($_POST['timezone']) || $_POST['timezone'] == $this->location->timezone) {
-				$error = 3;
-				header('Location:'.Path::toEditLocation($this->locationId, $error));
-				exit();				
-			}			
-			Persistence::updateLocationTimezone($this->locationId, $_POST['timezone']);	
-			header('Location:'.Path::toEditLocation($this->locationId));
-			exit();	
-		}			
-
-		if ($_POST['submit'] == 'delete-location') {
-			Persistence::deleteLocation($this->locationId);
-			header('Location:'.Path::toUserHome());
-			exit();	
-		}
-
 	}
 
 	public function renderBodyContent() {
@@ -95,14 +43,14 @@ class EditLocationPage extends LocationDetailPage {
 					<?
 				}
 				?>						
-				<form method="post" action="" id="edit-location-name-form">
+				<form method="post" action="<?=Path::toSetLocationName()?>" id="edit-location-name-form">
 					<div class="field">
 						<input type="text" name="locname" class="text-input required" value="<?=html($this->location->locname)?>" />
-						<input type="hidden" name="submit" value="update-name" />
+						<input type="hidden" name="locationId" value="<?= $this->locationId ?>" />
 						<input type="submit" name="update-name" value="Update Name" />
 					</div>
 				</form>
-				<form action="" method="post">
+				<form action="<?=Path::toSetLocationTimezone()?>" method="post">
 					<? $zones = timezone_identifiers_list(); ?>
 					<div class="field">
 						<select name="timezone">
@@ -120,12 +68,12 @@ class EditLocationPage extends LocationDetailPage {
 							}
 						?>
 						</select>
-						<input type="hidden" name="submit" value="select-timezone" />
+						<input type="hidden" name="locationId" value="<?= $this->locationId ?>" />
 						<input type="submit" name="select-timezone" value="Update Timezone" />
 					</div>
 				</form>
-				<form action="" method="post" class="delete-form" id="delete-location-form">
-					<input type="hidden" name="submit" value="delete-location" />
+				<form action="<?=Path::toDeleteLocation()?>" method="post" class="delete-form" id="delete-location-form">
+					<input type="hidden" name="locationId" value="<?= $this->locationId ?>" />
 					<input type="button" id="delete-location-btn" class="delete-btn" value="Delete Location" />
 					<div class="overlay" id="delete-btn-overlay" style="display:none;">
 						<p>Are you sure you want to delete this location? <strong>All reports will be deleted forever!</strong></p>
