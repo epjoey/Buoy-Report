@@ -68,7 +68,7 @@ class Path {
 		if (!isset($locationid)) {
 			return Path::toLocations(null, true);
 		}
-		$url = '/location.php?location='.$locationid.'?report=1';
+		$url = '/location.php?location='.$locationid.'&report=1';
 		return $url;
 	}
 
