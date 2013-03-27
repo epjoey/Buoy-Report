@@ -62,7 +62,7 @@ class ReportFormPage extends Page {
 		if($this->needPicup) {
 			?>
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
-			<script type="text/javascript" src="<?=Path::toJs()?>picup.js"></script>
+			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
 			<script type="text/javascript">
 				document.observe('dom:loaded', function(){
 					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');

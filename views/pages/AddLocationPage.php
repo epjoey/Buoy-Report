@@ -21,7 +21,7 @@ class AddLocationPage extends Page {
 	public function renderJs() {
 		parent::renderJs();
 		?>
-		<script type="text/javascript" src="<?=Path::toJs()?>timezone.js"></script>	
+		<script type="text/javascript" src="<?=Path::toJs()?>lib/timezone.js"></script>	
 		<script type="text/javascript">	
 			$(document).ready(function(){
 				$('#locationname').focus();
