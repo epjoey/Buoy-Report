@@ -68,7 +68,7 @@ class LocationDetailPage extends Page {
 			<h1><?= html($this->location->locname)?></h1>
 			<span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Buoys</span><?
 			?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">Tide Stations</span><?
-			?><a class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->location->id);?>">Post Report</a>
+			?><a id="post-report-link" class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->location->id);?>">Post Report</a>
 
 			<?
 			ReportForm::renderReportForm($this->location, array(
@@ -77,6 +77,34 @@ class LocationDetailPage extends Page {
 			));
 			$this->renderAddStationContainers();
 			?>
+			<script type="text/javascript"> 
+				(function(){
+					$('.report-form-container').hide();
+
+					$('#add-buoy-btn').click(function(event){
+						$('#add-tide-station-btn').removeClass('active');
+						$('#add-tide-station-div').hide();
+						$('#add-buoy-btn').toggleClass('active');
+						$('#add-buoy-div').toggle();
+						$('.report-form-container').hide();
+					});
+					$('#add-tide-station-btn').click(function(event){
+						$('#add-buoy-btn').removeClass('active');
+						$('#add-buoy-div').hide();
+						$('#add-tide-station-btn').toggleClass('active');
+						$('#add-tide-station-div').toggle();
+						$('.report-form-container').hide();
+					});					
+					$('#post-report-link').click(function(event){
+						event.preventDefault();
+						$('.report-form-container').toggle();
+						$('#add-buoy-btn').removeClass('active');
+						$('#add-buoy-div').hide();
+						$('#add-tide-station-btn').removeClass('active');
+						$('#add-tide-station-div').hide();
+					});
+				})();
+			</script>					
 		</div>
 		<?
 	}
@@ -93,25 +121,7 @@ class LocationDetailPage extends Page {
 				'status'=>null, //get from session
 				'location'=>$this->location
 			));
-			?>
-			<script type="text/javascript"> 
-				(function(){
-					$('#add-buoy-btn').click(function(event){
-						$('#add-tide-station-btn').removeClass('active');
-						$('#add-tide-station-div').hide();
-						$('#add-buoy-btn').toggleClass('active');
-						$('#add-buoy-div').toggle();
-					});
-					$('#add-tide-station-btn').click(function(event){
-						$('#add-buoy-btn').removeClass('active');
-						$('#add-buoy-div').hide();
-						$('#add-tide-station-btn').toggleClass('active');
-						$('#add-tide-station-div').toggle();
-						
-						
-					});					
-				})()
-			</script>				
+			?>		
 		</div>
 		<?
 	}
