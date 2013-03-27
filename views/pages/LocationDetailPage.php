@@ -11,6 +11,70 @@ class LocationDetailPage extends Page {
 		return $str;
 	}	
 	
+	
+	public function renderLeft() {
+		$filterOptions = array(
+			'sublocationObjects' => $this->location->sublocations
+		);
+		FilterForm::renderFilterModule($filterOptions, array('location'=>$this->location->id));
+	}
+	
+	public function renderMain() {
+		$this->renderLocDetails();		
+		$this->renderLocReports();	
+
+	}	
+
+	public function renderLocDetails() {
+		?>
+		<div class="loc-details">
+			<h1><?= html($this->location->locname)?></h1>
+			<div class="loc-report-section">
+				<div class="loc-controls">
+					<span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Buoys</span><?
+					?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">Tide Stations</span><?
+					?><a id="post-report-link" class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->location->id);?>">Post Report</a>
+				</div>
+				<?
+				ReportForm::renderReportForm($this->location, array(
+					'statusMsg' => null, //from session
+					'needPicup' => $this->needPicup
+				));
+				AddBuoyForm::render(array(
+					'status'=>null, //get from session
+					'location'=>$this->location
+				));
+				AddTideStationForm::render(array(
+					'status'=>null, //get from session
+					'location'=>$this->location
+				));
+				?>
+			</div>
+			<script type="text/javascript"> 
+				(function(){
+
+					$('#add-buoy-btn').click(function(event){
+						$(document.body).removeClass('show-report-form')
+										.removeClass('show-add-tide-form')
+										.toggleClass('show-add-buoy-form');
+					});
+					$('#add-tide-station-btn').click(function(event){
+						$(document.body).removeClass('show-report-form')
+										.removeClass('show-add-buoy-form')
+										.toggleClass('show-add-tide-form');
+					});					
+					$('#post-report-link').click(function(event){
+						event.preventDefault();
+						$(document.body).removeClass('show-add-tide-form')
+										.removeClass('show-add-buoy-form')
+										.toggleClass('show-report-form');
+					});
+				})();
+			</script>					
+		</div>
+		<?
+	}
+
 
 	private function renderLocReports() {
 		?>
@@ -31,100 +95,6 @@ class LocationDetailPage extends Page {
 		</div>		
 		<?
 	} 
-	
-	public function renderLeft() {
-		$filterOptions = array(
-			'sublocationObjects' => $this->location->sublocations
-		);
-		FilterForm::renderFilterModule($filterOptions, array('location'=>$this->location->id));
-	}
-				
-
-	public function renderJs() {
-		parent::renderJs();
-		?>
-		<script type="text/javascript">	
-			jQuery(document).ready(function(){
-				$("#add-buoy-form").validate();
-				$("#add-tide-station-form").validate();
-				BR.locationForecastLinks.doFcLinkAjax('');				
-				jQuery('.text #text').focus();
-				jQuery("#report-form").validate();
-			});						
-		</script>	
-		<?
-	}	
-
-	
-	public function renderMain() {
-		$this->renderLocDetails();		
-		$this->renderLocReports();	
-
-	}	
-
-	public function renderLocDetails() {
-		?>
-		<div class="loc-details">
-			<h1><?= html($this->location->locname)?></h1>
-			<span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Buoys</span><?
-			?><span id="add-tide-station-btn" class="edit-loc-link block-link <?=isset($this->addStationError) ? 'active' : ''?>">Tide Stations</span><?
-			?><a id="post-report-link" class="post-report edit-loc-link block-link" href="<?=Path::toPostReport($this->location->id);?>">Post Report</a>
-
-			<?
-			ReportForm::renderReportForm($this->location, array(
-				'statusMsg' => null, //from session
-				'needPicup' => $this->needPicup
-			));
-			$this->renderAddStationContainers();
-			?>
-			<script type="text/javascript"> 
-				(function(){
-					$('.report-form-container').hide();
-
-					$('#add-buoy-btn').click(function(event){
-						$('#add-tide-station-btn').removeClass('active');
-						$('#add-tide-station-div').hide();
-						$('#add-buoy-btn').toggleClass('active');
-						$('#add-buoy-div').toggle();
-						$('.report-form-container').hide();
-					});
-					$('#add-tide-station-btn').click(function(event){
-						$('#add-buoy-btn').removeClass('active');
-						$('#add-buoy-div').hide();
-						$('#add-tide-station-btn').toggleClass('active');
-						$('#add-tide-station-div').toggle();
-						$('.report-form-container').hide();
-					});					
-					$('#post-report-link').click(function(event){
-						event.preventDefault();
-						$('.report-form-container').toggle();
-						$('#add-buoy-btn').removeClass('active');
-						$('#add-buoy-div').hide();
-						$('#add-tide-station-btn').removeClass('active');
-						$('#add-tide-station-div').hide();
-					});
-				})();
-			</script>					
-		</div>
-		<?
-	}
-
-	protected function renderAddStationContainers($to = 'toLocation') {	
-		?>
-		<div class="add-station-container">
-			<?
-			AddBuoyForm::render(array(
-				'status'=>null, //get from session
-				'location'=>$this->location
-			));
-			AddTideStationForm::render(array(
-				'status'=>null, //get from session
-				'location'=>$this->location
-			));
-			?>		
-		</div>
-		<?
-	}
 
 	public function renderRight() {
 
@@ -145,41 +115,35 @@ class LocationDetailPage extends Page {
 						<input type="url" id="fc-url" class="text-input" placeholder="Add Link"/>
 						<input type="submit" name="add-forecast" id="submit-fc-btn" value="Add Link"/>
 					</div>
-					<?
-					if ($this->location->creator == $this->user->id) { 
-						?>
-						<div class="edit-link-btns">
-							<span class="edit-link-btn" id="delete-link-btn">Delete links</span>	
-							<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>
-						</div>		
-						<? 
-					} 
-					?>
+					<div class="edit-link-btns">
+						<span class="edit-link-btn" id="delete-link-btn">Delete links</span>	
+						<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>
+					</div>
 				</div>
 				<script type="text/javascript">					
-						$('#submit-fc-btn').click(function(){
-							BR.locationForecastLinks.doFcLinkAjax($('#fc-url').val());
+					$('#submit-fc-btn').click(function(){
+						BR.locationForecastLinks.doFcLinkAjax($('#fc-url').val());
+					});
+					$('#delete-link-btn').click(function(){
+
+						if ($(this).hasClass('ready')) {
+							BR.locationForecastLinks.deleteCheckedLinks();
+							return;
+						}
+
+						$('.delete-link-check').show();
+						$('#add-fc-link-form').hide();
+						$('#delete-link-cancel').show().bind('click', function(){
+							BR.locationForecastLinks.cancelDeleteLinks();
 						});
-						$('#delete-link-btn').click(function(){
-
-							if ($(this).hasClass('ready')) {
-								BR.locationForecastLinks.deleteCheckedLinks();
-								return;
-							}
-
-							$('.delete-link-check').show();
-							$('#add-fc-link-form').hide();
-							$('#delete-link-cancel').show().bind('click', function(){
-								BR.locationForecastLinks.cancelDeleteLinks();
-							});
-							$(this).text('Delete checked links').addClass('ready');
-						});	
+						$(this).text('Delete checked links').addClass('ready');
+					});	
 
 				</script>
 			</div>
 			<div class="tidestation-data sb-section">
 				<h5 class="toggle-btn">Tide Stations &darr;</h5>
-				<div class="toggle-area" style="<?=$this->enteredTide ? 'display:block' : '';?>">
+				<div class="toggle-area" style="<?=$this->enteredTide || $this->showReportForm ? 'display:block' : '';?>">
 					<?
 					foreach($this->location->tideStations as $tideStation) {
 						?>
@@ -198,7 +162,7 @@ class LocationDetailPage extends Page {
 			</div>
 			<div class="buoy-current-data sb-section">	
 				<h5 class="toggle-btn">Buoy Stations &darr;</h5>
-				<div class="toggle-area" style="<?=$this->enteredBuoy ? 'display:block' : '';?>">
+				<div class="toggle-area" style="<?=$this->enteredBuoy || $this->showReportForm ? 'display:block' : '';?>">
 					<?
 					foreach($this->location->buoys as $buoy){
 						?>
@@ -263,13 +227,28 @@ class LocationDetailPage extends Page {
 	public function renderFooterJs() {
 
 		parent::renderFooterJs();
+		?>
+		<script type="text/javascript">	
+			$(document).ready(function(){
+				$('.toggle-btn').click(function(){
+					$(this).next('.toggle-area').toggle();
+				})
 
+				$("#add-buoy-form").validate();
+				$("#add-tide-station-form").validate();
+				$('.text #text').focus();
+				$("#report-form").validate();
+
+				BR.locationForecastLinks.doFcLinkAjax('');
+
+			});						
+		</script>
+		<?
 		if($this->needPicup) {
 			?>
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
 			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
 			<script type="text/javascript">
-				document.observe('dom:loaded', function(){
+				$(document).ready(function(){
 					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
 				});
 			</script>	

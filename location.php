@@ -1,5 +1,6 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
 $locationId = $_GET['location'];
 if (!$locationId) {

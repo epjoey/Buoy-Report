@@ -76,8 +76,10 @@
 	.loc-details {margin:6px 0 20px;}
 	h1 {margin-bottom:8px;}
 	.edit-loc-link {font-size: 16px; margin-left:0;}
-	.add-station-div {font-size:18px; display:none; border-top:3px solid #cc09d6;}
-	.add-station-div.has-status { display:block;}
+	.add-station-div,
+	.report-form-container {font-size:18px; display:none; border-top:3px solid #cc09d6;}
+	.add-station-div.has-status,
+	.report-form-container .has-status { display:block;}
 	.current-data {margin-bottom:20px;}
 	//.fc-links .toggle-area {display:block;} //showing this one by default
 	.fc-links input[type=submit] {padding:0 12px; margin:0; line-height:18px;}
@@ -92,38 +94,50 @@
 	#delete-link-btn {color:#db5a5a;}	
 	.buoy-iframe-link {padding:4px 0; display:inline-block; }
 
+	&.show-add-buoy-form {
+		#add-buoy-div { display:block;}
+		#add-buoy-btn { background:#cc09d6; }
+	}
+	&.show-add-tide-form {
+		#add-tide-station-div { display:block;}
+		#add-tide-station-btn { background:#cc09d6; }
+	}
+	&.show-report-form {
+		.report-form-container { display:block; }
+		#post-report-link { background:#cc09d6; }
+	}
+
+	//report form
+	.report-form-container {	
+		.field {border-bottom:1px solid darken(@grey, 12%); border-top:1px dotted lighten(@grey, 15%); margin:0; padding:8px 0; }
+		.field.time, .field.wave-height {border-top:0 none;}
+		.field.last {border-bottom:0 none;}
+		.select-field select {margin:4px 0 0 0; width:208px;}
+		.select-field select, .text input, textarea {float:left; }
+		textarea { width:96%; max-width:460px;}
+		.field {
+			&> label {width:200px; .museo(300);  }
+			&.required > label { .museo(500); }
+		}
+		.optional-fields { border-top:1px dotted lighten(@grey, 15%);
+			h5 { font-size:11px; text-transform: uppercase; padding:16px 0 10px; color:desaturate(lighten(@dark-blue,8%),10%);}
+		}
+		.image input {margin-top:8px;}
+		.quality {position:relative;
+			&>label {width: 100%; }
+		}
+		.quality label.error {position:absolute; top:0; right:0;}
+		.field label.error {width:auto;}
+		.include {
+			.include-fields { float:left;}
+			.radio-field { display:block;
+				label { display:inline;}
+			}
+		}
+		.mobile-note {font-size:.8em;}
+		//.wave-height {display:none;}
+	}
 }
-
-/* =================== REPORT FORM PAGE =================== */
-
-.report-form-page, 
-.location-detail-page .report-form-container {
-	.container { max-width:820px; margin-bottom:24px;}
-	.field {border-bottom:1px solid darken(@grey, 12%); border-top:1px dotted lighten(@grey, 15%); margin:0; padding:8px 0; }
-	.field:first-child {border-top:0 none;}
-	.field.last {border-bottom:0 none;}
-	.select-field select {margin:4px 0 0 0; width:208px;}
-	.select-field select, .text input, textarea {float:left; }
-	textarea { width:96%; max-width:460px;}
-	.field {
-		&> label {width:200px; .museo(300);  }
-		&.required > label { .museo(500); }
-	}
-	.optional-fields { padding-left:18px; border-top:1px dotted lighten(@grey, 15%);
-		h5 { font-size:11px; text-transform: uppercase; padding:16px 0 10px; color:desaturate(lighten(@dark-blue,8%),10%);}
-	}
-	.image input {margin-top:8px;}
-	.quality {position:relative;}
-	.quality label.error {position:absolute; bottom:4px; right:4px;}
-	.field label.error {width:auto;}
-	.include {
-		.include-fields { float:left;}
-		.radio-field { display:block;}
-	}
-	.mobile-note {font-size:.8em;}
-	//.wave-height {display:none;}
-}
-
 
 /* =================== PROFILE PAGE =================== */
 .profile-page {

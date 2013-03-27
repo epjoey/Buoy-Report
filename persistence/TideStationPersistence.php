@@ -10,7 +10,6 @@ class TideStationPersistence {
 		}
 
 		$ids = array_map('Persistence::escape', $ids);
-		
 		$tideStations = ModelCache::get('TideStation', $ids);
 		$uncachedIds = array_diff($ids, array_keys($tideStations));
 		
@@ -22,8 +21,6 @@ class TideStationPersistence {
 		$sql = "SELECT * FROM tidestation $where";
 		$result = Persistence::run($sql);
 		while ($row = mysqli_fetch_object($result)) {	
-			$tideStations[] = new TideStation($row);
-
 			$tideStation = new TideStation($row);
 			$tideStations[$tideStation->stationid] = $tideStation;
 			//error_log("TideStation " . $tideStation->stationid . " used db");

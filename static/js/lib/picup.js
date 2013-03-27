@@ -136,7 +136,7 @@ var Picup = {
 function usePicup(callbackUrl, windowName) {
     var currentParams = {}
     window.name = windowName;
-    $(document.body).addClassName('iphone');
+    $(document.body).addClass('iphone');
     // We'll check the hash when the page loads in-case it was opened in a new page
     // due to memory constraints
     Picup.checkHash();  
@@ -155,7 +155,7 @@ function usePicup(callbackUrl, windowName) {
 
     Picup.callbackHandler = function(currentParams){
       for(var key in currentParams){
-        console.log(key+' == '+currentParams[key]);
+        //console.log(key+' == '+currentParams[key]);
       }
       $('remoteImageURL').value = currentParams['remoteImageURL'];
       $('mobile-image-name').update(currentParams['remoteImageURL'].slice(-6) + ' is ready');

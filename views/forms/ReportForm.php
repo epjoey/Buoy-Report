@@ -15,9 +15,12 @@ class ReportForm {
 		?>	
 		<div class="form-container report-form-container">
 			<form id="report-form" action="<?=Path::toHandleReportSubmission()?>" enctype="multipart/form-data" method="post" >	
-				<span class="submission-error"><?= $statusMsg ?></span>
 				<?
-		
+				if ($statusMsg) {
+					?>
+					<span class="submission-error"><?= $statusMsg ?></span>
+					<?
+				}
 				ReportFormFields::renderTimeSelect();
 		
 				?>		
