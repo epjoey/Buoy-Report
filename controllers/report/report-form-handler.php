@@ -16,7 +16,7 @@ $report->text = $_POST['text'];
 $report->quality = $_POST['quality'];
 $report->waveheight = $_POST['waveheight'];
 $report->sublocationid = $_POST['sublocationid'];
-$report->locationid = $_POST['text'];
+$report->locationid = $_POST['locationid'];
 
 try {
 	
