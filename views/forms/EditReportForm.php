@@ -114,7 +114,7 @@ class EditReportForm {
 			<? self::renderDeleteReportForm($report); ?>
 		</div>
 		<?	
-		if($needPicup || true) {
+		if($needPicup) {
 			?>
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
 			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
