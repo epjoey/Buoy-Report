@@ -244,16 +244,6 @@ class LocationDetailPage extends Page {
 			});						
 		</script>
 		<?
-		if($this->needPicup) {
-			?>
-			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
-			<script type="text/javascript">
-				$(document).ready(function(){
-					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
-				});
-			</script>	
-			<?	
-		}	
 	}	
 	
 

@@ -151,7 +151,7 @@ function usePicup(callbackUrl, windowName) {
         'returnThumbnailDataURL': 'false'
     };                  
         
-    Picup.convertFileInput( $('upload'), currentParams);
+    Picup.convertFileInput( $('#upload'), currentParams);
 
     Picup.callbackHandler = function(currentParams){
       for(var key in currentParams){
