@@ -180,11 +180,8 @@ function bbcodeout($text) {
 
 function handleFileUpload($upload, $reporterId) {
 
-	$uploadStatus = array();
-
 	if (!is_uploaded_file($upload['tmp_name'])) {
-		$uploadStatus['error'] = 'upload-file';
-		return $uploadStatus;
+		throw new InvalidSubmissionException('Error uploading file');
 	}
 	if (preg_match('/^image\/p?jpeg$/i', $upload['type'])) {
 		$imageExt = '.jpg';
@@ -193,19 +190,18 @@ function handleFileUpload($upload, $reporterId) {
 	} else if (preg_match('/^image\/(x-1)?png$/i', $upload['type'])) {
 		$imageExt = '.png';
 	} else {
-		$uploadStatus['error'] = 'file-type'; //unknown file type
-		return $uploadStatus;
+		throw new InvalidSubmissionException('You must upload a .gif, .jpeg, or .png');
 	}	
 	
 	//stored in DB. full path prepended
-	$uploadStatus['imagepath'] = date('Y') . '/' . date('m') . '/' . $reporterId . '.' . date('d.G.i.s') . $imageExt;
+	$imagepath = date('Y') . '/' . date('m') . '/' . $reporterId . '.' . date('d.G.i.s') . $imageExt;
 
-	if (!move_uploaded_file($upload['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $uploadStatus['imagepath'])) {
-		$uploadStatus['error'] = 'file-save';
+	if (!move_uploaded_file($upload['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $imagepath)) {
+		throw new InvalidSubmissionException('Error Saving File');
 	} 	
 	
 	//if we got here, image was copied and array contains image path
-	return $uploadStatus; 	
+	return $imagepath; 	
 }
 
 ?>

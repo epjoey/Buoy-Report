@@ -3,7 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class EditReportForm {
 
-	public static function renderEditReportForm($report, $submitError = NULL, $isMobile = FALSE) {	
+	public static function renderEditReportForm($report, $isMobile = FALSE) {	
 
 		//remove when I make this joined with report query
 		$locationInfo = $report['locationInfo'];
@@ -18,34 +18,23 @@ class EditReportForm {
 			$tzAbbrev = "GMT";						
 		}
 
-		if (isset($_GET['error']) && $_GET['error']) {
-			$submitError = $_GET['error'];
-		}
-
 		?>
 		<h1 class="form-head">Edit Report <?= $report['id'] ?></h1>
 		<h4>
 			<a class="loc-name" href="<?=Path::toLocation($report['locationid']);?>"><?= html($locationInfo['locname'])?></a> - 
 			<span class="obs-time"><?=$obsTime?> <span class="tz">(<?=$tzAbbrev?>)</span></span>
 		</h4>
-		<div class="form-container">
+		<div class="form-container report-form-container">
 			<form action="<?=Path::toHandleEditReportSubmission();?>" method="POST" enctype="multipart/form-data" id="edit-report-form">
 				
-				<? if (isset($submitError)) {
-					if ($submitError == 'upload-file') {
-						$errorText = 'Error uploading file';
-					} else if ($submitError == 'file-type') {
-						$errorText = 'You must upload a .gif, .jpeg, or .png';
-					} else if ($submitError == 'file-save') {
-						$errorText = 'Error Saving File';
-					} else if ($submitError == 'no-quality') {
-						$errorText = 'You must choose a quality.';					
-					} else {
-						$errorText = 'Error submitting report';
-					}
-					?>
-					<span class="submission-error"><?= $errorText ?></span>
 				<? 
+				$reportFormStatus = StatusMessageService::getStatusMsgForAction('edit-report-form');
+				StatusMessageService::clearStatusForAction('edit-report-form');
+
+				if (isset($reportFormStatus)) {
+					?>
+					<span class="submission-error"><?= $reportFormStatus ?></span>
+					<? 
 				}
 
 				if (!empty($locationInfo['sublocations'])) {
@@ -72,41 +61,42 @@ class EditReportForm {
 					}
 					?>
 				</div>
+				<div class="optional-fields <?= $location->sublocations ? 'includes-sublocations' : ''?> ">
+					<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights(), $report['waveheight']);?>
 
-				<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights(), $report['waveheight']);?>
+					<div class="field text">
+						<label for="text">Report:</label>
+						<textarea name="text" class="text-input" id="text"><?=$report['text']?></textarea>
+					</div>	
 
-				<div class="field text">
-					<label for="text">Report:</label>
-					<textarea name="text" class="text-input" id="text"><?=$report['text']?></textarea>
-				</div>	
-
-				<?
-				if (isset($report['imagepath'])) {
-					$image = getImageInfo($report['imagepath'], 200, 200);
-					if (!empty($image)) {
-						?>
-						<div class="field image-container">
-							<a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
-							</a>
-							<label><input type="checkbox" name="delete-image" id="" value="true" /> Delete Image</label>	
-						</div>
-						<? 						
-					}				
-				}
-				?>				
-				
-				<div class="field image last">
-					<label for="upload">Upload <?=isset($report['imagepath']) ? 'new' : '';?> image:</label> 
-					<input type="file" name="upload" id="upload" capture="camera">
-					<span id="mobile-image-name" class="mobile-note">
-						<?
-						if($isMobile) {
+					<?
+					if (isset($report['imagepath'])) {
+						$image = getImageInfo($report['imagepath'], 200, 200);
+						if (!empty($image)) {
 							?>
-							You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
+							<div class="field image-container">
+								<a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
+								</a>
+								<label><input type="checkbox" name="delete-image" id="" value="true" /> Delete Image</label>	
+							</div>
+							<? 						
+						}				
+					}
+					?>				
+					
+					<div class="field image last">
+						<label for="upload">Upload <?=isset($report['imagepath']) ? 'new' : '';?> image:</label> 
+						<input type="file" name="upload" id="upload" capture="camera">
+						<span id="mobile-image-name" class="mobile-note">
 							<?
-						}
-						?>
-					</span>
+							if($isMobile) {
+								?>
+								You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
+								<?
+							}
+							?>
+						</span>
+					</div>
 				</div>
 
 				<input type="hidden" name="id" id="id" value="<?=$report['id']?>" />

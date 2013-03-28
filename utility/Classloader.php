@@ -25,6 +25,7 @@ class Classloader {
         "Reporter" =>                   "/models/Reporter.php",
         "ReporterPersistence" =>        "/persistence/ReporterPersistence.php",
         "ReporterService" =>            "/services/ReporterService.php",
+        "StatusMessageService" =>       "/services/StatusMessageService.php",
         "Sublocation" =>                "/models/Sublocation.php", //remove
         "TideData" =>                   "/models/TideData.php",
         "TideDataPersistence" =>        "/persistence/TideDataPersistence.php",

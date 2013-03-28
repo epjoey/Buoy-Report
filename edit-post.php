@@ -8,7 +8,6 @@ if(isset($_REQUEST['id']) && $_REQUEST['id']) {
 	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 	exit();	
 }
-
 $post = new EditPostPage;
 	
 $post->loadData($id);

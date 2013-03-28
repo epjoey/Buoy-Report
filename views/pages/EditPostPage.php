@@ -21,10 +21,6 @@ class EditPostPage extends Page {
 			exit();	
 		}		
 		
-		if(isset($_GET['error']) && $_GET['error']) {
-			$this->submitError = $_GET['error'];
-		}
-		
 		$this->detect = new Mobile_Detect();
 		
 		//todo::make this left join
@@ -37,11 +33,11 @@ class EditPostPage extends Page {
 	}		
 
 	public function getBodyClassName() {
-		return 'report-form-page edit-report';
+		return 'report-form-page edit-report-page';
 	}	
 
 	public function renderBodyContent() {
-		EditReportForm::renderEditReportForm($this->report, $this->submitError, $this->detect->isMobile());
+		EditReportForm::renderEditReportForm($this->report, $this->detect->isMobile());
 	}	
 
 	public function renderFooterJs() {

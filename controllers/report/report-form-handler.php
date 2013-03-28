@@ -24,10 +24,10 @@ try {
 	if (isset($_POST['time']) && $_POST['time']) {
 		$reportDate = new DateTime($_POST['time']);
 		if (!$reportDate) {
-			throw new InvalidSubmissionException('date must be valid format');
+			throw new InvalidSubmissionException('Date must be valid format');
 		}
 		if ($reportDate->getTimestamp() > time()) {
-			throw new InvalidSubmissionException('date must be in the past');	
+			throw new InvalidSubmissionException('Date must be in the past');	
 		}
 		$report->obsdate = gmdate("U", $reportDate->getTimestamp());
 	} else {
@@ -37,12 +37,7 @@ try {
 	}
 
 	if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-		$uploadStatus = handleFileUpload($_FILES['upload'], $user->id);
-		if (isset($uploadStatus['error'])) {
-			throw new InvalidSubmissionException($uploadStatus['error']);	
-		}
-		$report->imagepath = $uploadStatus['imagepath'];
-
+		$report->imagepath = handleFileUpload($_FILES['upload'], $user->id);
 
 	/* in case they used picup, its a remote url */	
 
@@ -56,11 +51,11 @@ try {
 	));
 
 } catch (InvalidSubmissionException $e) {
-	header('Location:'.Path::toPostReport($report->locationid, $e->getMessage()));
+	StatusMessageService::setStatusMsgForAction($e->getMessage(), 'submit-report-form');
+	header('Location:'.Path::toPostReport($report->locationid));
 	exit;
 
 }
 
-/* redirect to user home page where page will look for session[new-report] and load via ajax. */
 header('Location:'.Path::toLocation($report->locationid));
 ?>

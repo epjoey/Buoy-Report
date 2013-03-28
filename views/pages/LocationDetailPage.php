@@ -37,7 +37,7 @@ class LocationDetailPage extends Page {
 				</div>
 				<?
 				ReportForm::renderReportForm($this->location, array(
-					'statusMsg' => null, //from session
+					'statusMsg' => $this->reportFormStatus, //from session
 					'needPicup' => $this->needPicup
 				));
 				AddBuoyForm::render(array(

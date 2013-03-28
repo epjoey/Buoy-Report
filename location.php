@@ -43,6 +43,9 @@ if ($needPicup) {
 	setPicupSessionId('report-form', $locationId);
 }
 
+$reportFormStatus = StatusMessageService::getStatusMsgForAction('submit-report-form');
+StatusMessageService::clearStatusForAction('submit-report-form');
+
 $page = new LocationDetailPage();
 $page->renderPage(array(
 	'pageTitle' => $location->locname,
@@ -54,7 +57,7 @@ $page->renderPage(array(
 	'reports' => $reports,
 	'device' => $device,
 	'needPicup' => $needPicup,
-	'showReportForm' => isset($_REQUEST['report']) && $_REQUEST['report']
-
+	'showReportForm' => isset($_REQUEST['report']) && $_REQUEST['report'],
+	'reportFormStatus' => $reportFormStatus
 ));
 ?>

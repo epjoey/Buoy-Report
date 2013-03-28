@@ -51,10 +51,10 @@ class ReportService {
 	/* big one */
 	static function saveReport($report, $options = array()) {
 		if (!$report->quality) {
-			throw new Exception('no-quality');
+			throw new InvalidSubmissionException('You must choose a quality.');
 		}
 		if (!$report->obsdate) {
-			throw new Exception('no-time');
+			throw new InvalidSubmissionException('No time entered');
 		}			
 		$report->reportdate = intval(gmdate("U")); //time of report (now)
 		
