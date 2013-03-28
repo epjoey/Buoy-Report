@@ -26,21 +26,22 @@ class ReportForm {
 				?>		
 
 
-				<div class="field radio-menu include">	
+				<div class="field radio-menu include required">	
+					<label for="include">Include:</label>
 					<div class="include-fields">
 						<?
 						/* use js to get values of attributes on location selector */
 						foreach ($location->buoys as $buoy) {
 							?>
 							<span class="radio-field">
-								<input type="checkbox" id="buoy-<?=$buoy->buoyid ?>" name="buoys[]" value="<?=$buoy->buoyid ?>" checked='checked' /><label for="buoy-<?=$buoy->buoyid ?>"><?=$buoy->buoyid ?></label>
+								<input type="checkbox" id="buoy-<?=$buoy->buoyid ?>" name="buoys[]" value="<?=$buoy->buoyid ?>" checked='checked' /><label for="buoy-<?=$buoy->buoyid ?>">Bouy <?=$buoy->buoyid ?></label>
 							</span>	
 							<?
 						}
 						foreach ($location->tideStations as $ts) {
 							?>
 							<span class="radio-field">
-								<input type="checkbox" id="ts-<?=$ts->stationid ?>" name="tidestations[]" value="<?=$ts->stationid ?>" checked='checked' /><label for="ts-<?=$ts->stationid ?>"><?=$ts->stationid ?></label>
+								<input type="checkbox" id="ts-<?=$ts->stationid ?>" name="tidestations[]" value="<?=$ts->stationid ?>" checked='checked' /><label for="ts-<?=$ts->stationid ?>">Tide Station <?=$ts->stationid ?></label>
 							</span>	
 							<?
 						}											
