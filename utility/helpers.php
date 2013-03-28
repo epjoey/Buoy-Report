@@ -23,9 +23,6 @@ function eatCookie($name) {
 } 
 
 function getImageInfo($imagePath, $width, $height) {
-	if (!file_exists($imagePath)) {
-		return null;
-	}
 	$imageInfo = array();
 
 	$image = new SimpleImage();
