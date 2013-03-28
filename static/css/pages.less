@@ -122,9 +122,12 @@
 		.optional-fields { border-top:1px dotted lighten(@grey, 15%);
 			h5 { font-size:11px; text-transform: uppercase; padding:16px 0 10px; color:desaturate(lighten(@dark-blue,8%),10%);}
 		}
-		.image input {margin-top:8px;}
+		.image {
+			label { width: 160px; }
+			input {margin-top:8px;}
+		}
 		.quality {position:relative;
-			&>label {width: 100%; }
+			.radio-fields { max-width: 300px; display: inline-block;}
 		}
 		.quality label.error {position:absolute; top:0; right:0;}
 		.field label.error {width:auto;}

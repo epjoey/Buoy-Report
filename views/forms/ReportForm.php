@@ -26,15 +26,17 @@ class ReportForm {
 				?>		
 				<div class="field quality radio-menu required">
 					<label for="quality">Quality of Rides:</label>
-					<?
-					foreach (ReportOptions::quality() as $key=>$value) {
-						?>
-						<span class="radio-field">
-							<input type="radio" class="required" name="quality" id="quality-<?=$key?>" value="<?=$key?>" /><label for="quality-<?=$key?>"> <?=$value?></label>
-						</span>
+					<div class="radio-fields">
 						<?
-					}
-					?>
+						foreach (ReportOptions::quality() as $key=>$value) {
+							?>
+							<span class="radio-field">
+								<input type="radio" class="required" name="quality" id="quality-<?=$key?>" value="<?=$key?>" /><label for="quality-<?=$key?>"> <?=$value?></label>
+							</span>
+							<?
+						}
+						?>
+					</div>
 				</div>
 				<div class="optional-fields <?= $location->sublocations ? 'includes-sublocations' : ''?> ">
 					<!--<h5 class="form-heading">Optional Fields</h5>-->
@@ -51,7 +53,6 @@ class ReportForm {
 							<textarea name="text" id="text" class="text-input" placeholder="how was it?" ></textarea>				
 						</div>
 						<div class="field radio-menu include">	
-							<label>Include:</label>
 							<div class="include-fields">
 								<?
 								/* use js to get values of attributes on location selector */
