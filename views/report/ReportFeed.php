@@ -17,12 +17,12 @@ class ReportFeed {
 
 			(function($, paginationParams){
 
-				BR.updateNumReports();
-
 				var limit  = paginationParams.limit,
 					offset = paginationParams.limit,
 					feed   = $('#report-feed'),
 					button = feed.find('#more-reports').first();
+
+					BR.reportFeed.onLoad(feed);
 			    
 			    feed.delegate(".report", "click", function(event) {
 			    	if($(event.target).is('a')) {
@@ -36,15 +36,13 @@ class ReportFeed {
 
 			    		//disable during ajax request
 			    		button.addClass('disabled');
-
-						feed = $('#report-feed-container');
     
 						//find the last list of reports (only one until "See more reports" is clicked)
 					    reportsList = feed.find('ul.reports').last();			    		
 						//insert temporary loading sign after current list
 						reportsList.after("<div id='temp-loading' class='loading'></div>");
 			    		
-			    		BR.loadMoreReports({
+			    		BR.reportFeed.paginate({
 			    			start    : offset,
 			    			limit    : limit,
 			    			queryStr : window.location.search,
@@ -55,7 +53,7 @@ class ReportFeed {
 			    			$('#temp-loading').remove();  
 							reportsList.after(reports);
 
-							BR.updateNumReports();							
+							BR.reportFeed.onLoad(feed);							
 
 
 							//disable button if no more reports

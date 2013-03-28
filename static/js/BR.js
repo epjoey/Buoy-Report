@@ -107,9 +107,35 @@ var BR = window.BR = {};
         });				 
     }		
 
-    BR.updateNumReports = function(){
-        numReports = $('#report-feed-container .report').length;
-        $('#numReports').text(numReports);
+    BR.reportFeed = {
+    	onLoad: function(feed) {
+    		this.updateNumReports(feed);
+    		this.loadImages(feed);
+    	},
+    	paginate: function(params, onSuccess) {
+	        $.ajax({
+	            url: "/controllers/report/load-more.php" + params.queryStr, 
+	            type: "GET",
+	            data: params,
+	            cache: false,
+	            success: function(reports) {
+	                if (onSuccess) {
+	                    onSuccess(reports);
+	                }
+	            }       
+	        });	    		
+    	},
+    	updateNumReports: function(feed) {
+	        numReports = feed.find('.report').length;
+	        $('#numReports').text(numReports);    		
+    	},
+    	loadImages: function(feed) {
+    		feed.select('.image-container').each(function(){
+    			var img = $(this).find('img');
+    			img.attr('src', img.attr('imgsrc'));
+    		});
+    	}
+
     }
 
 })(jQuery);

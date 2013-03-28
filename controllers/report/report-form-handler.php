@@ -57,5 +57,5 @@ try {
 
 }
 
-header('Location:'.Path::toLocation($report->locationid));
+header('Location:'.Path::toSingleReport($report->id));
 ?>

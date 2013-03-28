@@ -47,7 +47,7 @@ if(!$recache && isset($_SERVER['If-Modified-Since']) && strtotime($_SERVER['If-M
         foreach($files as $file){
             $contents = file_get_contents($file['name']);
             if (!$file['min']) {
-                $contents = JSMin::minify($contents);
+                //$contents = JSMin::minify($contents);
             }
             $js .= $contents;
         }

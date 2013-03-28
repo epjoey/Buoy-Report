@@ -118,14 +118,14 @@ class SingleReport {
 		if ($thumbnail) {
 			?>
 			<li class="image-container thumbnail-image">
-				<img src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
+				<img src="" imgsrc="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
 			</li>
 			<?
 		} else {
 			?>
 			<div class="image-container large-image">
 				<a href="<?=$image['src']?>" target="_blank">
-					<img src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
+					<img src="" imgsrc="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
 				</a>
 			</div>
 			<?	
