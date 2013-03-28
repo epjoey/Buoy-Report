@@ -19,7 +19,7 @@ class FilterForm {
 	public static function renderFilterForm($filterOptions = array(), $prefilters = array()) {	
 		?>	
 		<form method="get" action="" id="filter-form">
-			<span class="cancel filter-trigger" onclick="$(this).parents('#outer-container').toggleClass('filter-expanded');">[ close ]</span>
+			<span class="cancel filter-trigger" onclick="jQuery(this).parents('#outer-container').toggleClass('filter-expanded');">[ close ]</span>
 			<?		
 			foreach ($prefilters as $key=>$val) {
 				?>
@@ -123,7 +123,7 @@ class FilterForm {
 
 	public static function renderOpenFilterTrigger(){
 		?>
-		<span class="filter-trigger mobile-only" id="filter-trigger" onclick="$(this).parents('#outer-container').toggleClass('filter-expanded');">
+		<span class="filter-trigger mobile-only" id="filter-trigger" onclick="jQuery(this).parents('#outer-container').toggleClass('filter-expanded');">
 			<span class='filter-label'>FILTER</span>
 			<img src="<?=Path::toImages()?>/filter-icon.png" width="20" height="27" id="filter-icon" title="Filter Reports"/>
 		</span>	

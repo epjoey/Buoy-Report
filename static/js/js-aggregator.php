@@ -10,7 +10,6 @@ $files = array(
     array('name'=>'lib/backbone-0.9.10.min.js', 'min'=>true),
     array('name'=>'lib/jquery.validate.min.js', 'min'=>true),
     array('name'=>'BR.js', 'min'=>false),
-    array('name'=>'reportFeedFunctions.js', 'min'=>false)
 );
 
 $time = mktime(0,0,0,21,5,1980);
@@ -47,7 +46,7 @@ if(!$recache && isset($_SERVER['If-Modified-Since']) && strtotime($_SERVER['If-M
 
         foreach($files as $file){
             $contents = file_get_contents($file['name']);
-            if (!$file['min'] && !$local_dev) {
+            if (!$file['min']) {
                 $contents = JSMin::minify($contents);
             }
             $js .= $contents;

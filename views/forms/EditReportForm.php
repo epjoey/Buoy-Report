@@ -114,11 +114,13 @@ class EditReportForm {
 			<? self::renderDeleteReportForm($report); ?>
 		</div>
 		<?	
-		if($needPicup && false) {
+		if($needPicup || true) {
 			?>
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
 			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
 			<script type="text/javascript">
-				$(document).ready(function(){
+				document.observe('dom:loaded', function(){
+				//$(document).ready(function(){
 					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
 				});
 			</script>	

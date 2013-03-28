@@ -15,9 +15,9 @@ class ReportFeed {
 		<script type="text/javascript">
 			
 
-			(function(paginationParams){
+			(function($, paginationParams){
 
-				updateNumReports();
+				BR.updateNumReports();
 
 				var limit  = paginationParams.limit,
 					offset = paginationParams.limit,
@@ -44,7 +44,7 @@ class ReportFeed {
 						//insert temporary loading sign after current list
 						reportsList.after("<div id='temp-loading' class='loading'></div>");
 			    		
-			    		loadMoreReports({
+			    		BR.loadMoreReports({
 			    			start    : offset,
 			    			limit    : limit,
 			    			queryStr : window.location.search,
@@ -55,7 +55,7 @@ class ReportFeed {
 			    			$('#temp-loading').remove();  
 							reportsList.after(reports);
 
-							updateNumReports();							
+							BR.updateNumReports();							
 
 
 							//disable button if no more reports
@@ -65,7 +65,7 @@ class ReportFeed {
 			    		});
 			    	}
 			    });				
-			})(<?= json_encode($paginationParams) ?>);
+			})(jQuery, <?= json_encode($paginationParams) ?>);
 		</script> 		 	
 	 	<?
 

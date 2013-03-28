@@ -1,6 +1,6 @@
 var BR = window.BR = {};
 
-(function(){
+(function($){
 
 	//todo: max buoys per location, check if buoy is online.
 	BR.LocationAddBuoyForm = Backbone.View.extend({
@@ -43,9 +43,6 @@ var BR = window.BR = {};
 		onSubmit: function(event) {
 		}
 	});
-})();
-
-(function(){
 
 	BR.locationForecastLinks = {
 		doFcLinkAjax: function(newUrl) {
@@ -92,4 +89,25 @@ var BR = window.BR = {};
 			});
 		}
 	}
-})();
+
+    BR.loadMoreReports = function(params, onSuccess){
+        $.ajax({
+            url: "/controllers/report/load-more.php" + params.queryStr, 
+            type: "GET",
+            data: params,
+            cache: false,
+            success: function(reports) {
+                if (onSuccess) {
+                    onSuccess(reports);
+                }
+            }       
+        });				 
+    }		
+
+    BR.updateNumReports = function(){
+        numReports = $('#report-feed-container .report').length;
+        $('#numReports').text(numReports);
+    }
+
+})(jQuery);
+

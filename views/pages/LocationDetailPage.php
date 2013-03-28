@@ -60,7 +60,7 @@ class LocationDetailPage extends Page {
 				?>
 			</div>
 			<script type="text/javascript"> 
-				(function(){
+				(function($){
 
 					$('#add-buoy-btn').click(function(event){
 						$(document.body).removeClass('show-report-form')
@@ -78,7 +78,7 @@ class LocationDetailPage extends Page {
 										.removeClass('show-add-buoy-form')
 										.toggleClass('show-report-form');
 					});
-				})();
+				})(jQuery);
 			</script>					
 		</div>
 		<?
@@ -129,26 +129,28 @@ class LocationDetailPage extends Page {
 						<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>
 					</div>
 				</div>
-				<script type="text/javascript">		
-					BR.locationForecastLinks.doFcLinkAjax('');			
-					
-					$('#submit-fc-btn').click(function(){
-						BR.locationForecastLinks.doFcLinkAjax($('#fc-url').val());
-					});
-					
-					$('#delete-link-btn').click(function(){
-						if ($(this).hasClass('ready')) {
-							BR.locationForecastLinks.deleteCheckedLinks();
-							return;
-						}
-
-						$('.delete-link-check').show();
-						$('#add-fc-link-form').hide();
-						$('#delete-link-cancel').show().bind('click', function(){
-							BR.locationForecastLinks.cancelDeleteLinks();
+				<script type="text/javascript">
+					(function($){
+						BR.locationForecastLinks.doFcLinkAjax('');			
+						
+						$('#submit-fc-btn').click(function(){
+							BR.locationForecastLinks.doFcLinkAjax($('#fc-url').val());
 						});
-						$(this).text('Delete checked links').addClass('ready');
-					});	
+						
+						$('#delete-link-btn').click(function(){
+							if ($(this).hasClass('ready')) {
+								BR.locationForecastLinks.deleteCheckedLinks();
+								return;
+							}
+
+							$('.delete-link-check').show();
+							$('#add-fc-link-form').hide();
+							$('#delete-link-cancel').show().bind('click', function(){
+								BR.locationForecastLinks.cancelDeleteLinks();
+							});
+							$(this).text('Delete checked links').addClass('ready');
+						});	
+					})(jQuery);
 
 				</script>
 			</div>
@@ -240,20 +242,22 @@ class LocationDetailPage extends Page {
 		parent::renderFooterJs();
 		?>
 		<script type="text/javascript">	
-			$(document).ready(function(){
-				$('.toggle-btn').click(function(){
-					$(this).next('.toggle-area').toggle();
+			(function($){
+				$(document).ready(function(){
+					$('.toggle-btn').click(function(){
+						$(this).next('.toggle-area').toggle();
+					});
+
+					$("#add-buoy-form").validate();
+					$("#add-tide-station-form").validate();
+					$("#report-form").validate();
+
 				});
-
-				$("#add-buoy-form").validate();
-				$("#add-tide-station-form").validate();
-				$("#report-form").validate();
-
-			});				
+			})(jQuery);			
 		</script>
 
 		<?
-		if($this->needPicup && false) {
+		if($this->needPicup) {
 			?>
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
 			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
