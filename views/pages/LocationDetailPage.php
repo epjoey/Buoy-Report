@@ -29,6 +29,15 @@ class LocationDetailPage extends Page {
 		?>
 		<div class="loc-details">
 			<h1><?= html($this->location->locname)?></h1>
+			<?
+			if ($this->device->isSmallDevice()) {
+				?>
+				<div class="cover-photo">
+				</div>
+				<?
+			}
+
+			?>
 			<div class="loc-report-section">
 				<div class="loc-controls">
 					<span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Buoys</span><?

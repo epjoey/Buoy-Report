@@ -97,7 +97,7 @@ var Picup = {
     		}			
     	};
     	input.disabled = false;
-    	
+    	alert(input);
     	return false;
     },
     
