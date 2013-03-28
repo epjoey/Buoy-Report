@@ -3,7 +3,14 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class EditReportForm {
 
-	public static function renderEditReportForm($report, $isMobile = FALSE) {	
+	public static function renderEditReportForm($report, $options = array()) {
+		$defaultOptions = array(
+			'statusMsg' => '',
+			'needPicup' => false
+		);
+		$options = array_merge($defaultOptions, $options);
+		$statusMsg = $options['statusMsg'];
+		$needPicup = $options['needPicup'];
 
 		//remove when I make this joined with report query
 		$locationInfo = $report['locationInfo'];
@@ -28,12 +35,9 @@ class EditReportForm {
 			<form action="<?=Path::toHandleEditReportSubmission();?>" method="POST" enctype="multipart/form-data" id="edit-report-form">
 				
 				<? 
-				$reportFormStatus = StatusMessageService::getStatusMsgForAction('edit-report-form');
-				StatusMessageService::clearStatusForAction('edit-report-form');
-
-				if (isset($reportFormStatus)) {
+				if (isset($statusMsg)) {
 					?>
-					<span class="submission-error"><?= $reportFormStatus ?></span>
+					<span class="submission-error"><?= $statusMsg ?></span>
 					<? 
 				}
 
@@ -108,8 +112,18 @@ class EditReportForm {
 				
 			</form>	
 			<? self::renderDeleteReportForm($report); ?>
-		</div>			
-		<?
+		</div>
+		<?	
+		if($needPicup) {
+			?>
+			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
+			<script type="text/javascript">
+				$(document).ready(function(){
+					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
+				});
+			</script>	
+			<?	
+		}
 	}
 
 	public static function renderDeleteReportForm($report) {

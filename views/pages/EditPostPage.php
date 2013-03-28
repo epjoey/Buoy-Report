@@ -1,62 +1,16 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
-
-
-
-class EditPostPage extends Page {
-
-	public $submitError = NULL;
-
-	public function loadData($id) {
-		parent::loadData();
-		$this->pageTitle = 'Edit Report';
-
-		$this->report = Persistence::getReportById($id);
-
-		if(($this->report['reporterid'] != $this->user->id) || !$this->report) {
-			header("HTTP/1.0 404 Not Found");
-			include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
-			exit();	
-		}		
-		
-		$this->detect = new Mobile_Detect();
-		
-		//todo::make this left join
-		$this->report['locationInfo'] = Persistence::getLocationInfoById($this->report['locationid']);
-
-		$this->report['locationInfo']['sublocations'] = Persistence::getSubLocationsByLocation($this->report['locationid']);
-		
-		//for picup callback. - mobile app redirection based on session var
-		setPicupSessionId('edit-report-form', $id);
-	}		
+class EditPostPage extends Page {	
 
 	public function getBodyClassName() {
 		return 'report-form-page edit-report-page';
 	}	
 
 	public function renderBodyContent() {
-		EditReportForm::renderEditReportForm($this->report, $this->detect->isMobile());
-	}	
-
-	public function renderFooterJs() {
-
-		parent::renderFooterJs();
-
-		if($this->detect->isIphone() || $this->detect->isIpad()) {
-			?>
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
-			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
-			<script type="text/javascript">
-				document.observe('dom:loaded', function(){
-					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
-				});
-			</script>	
-			<?	
-		}	
-	}	
-
-	
-
+		EditReportForm::renderEditReportForm($this->report, array(
+			'statusMsg' => $this->reportFormStatus,
+			'needPicup' => $this->needPicup
+		));
+	}
 }
