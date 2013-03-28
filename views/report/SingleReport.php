@@ -112,24 +112,24 @@ class SingleReport {
 			$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(508,400);	
 		}
 		$image = getImageInfo($imagepath, $dims[0], $dims[1]);
-		if (!empty($image)) {
-			
-			if ($thumbnail) {
-				?>
-				<li class="image-container thumbnail-image">
+		if (!$image) {
+			return;
+		}
+		if ($thumbnail) {
+			?>
+			<li class="image-container thumbnail-image">
+				<img src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
+			</li>
+			<?
+		} else {
+			?>
+			<div class="image-container large-image">
+				<a href="<?=$image['src']?>" target="_blank">
 					<img src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
-				</li>
-				<?
-			} else {
-				?>
-				<div class="image-container large-image">
-					<a href="<?=$image['src']?>" target="_blank">
-						<img src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
-					</a>
-				</div>
-				<?	
-			}				
-		}			
+				</a>
+			</div>
+			<?	
+		}		
 	}
 
 	public static function renderBuoyDetails($report) {

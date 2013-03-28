@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class LoginForm {
-	public function renderForm($logInError = NULL, $rel = NULL) {
+	public static function renderForm($logInError = NULL, $rel = NULL) {
 		?>
 		<div class="form-container <?= isset($logInError) ? 'expanded' : '';?>" id="login-form-container">			
 			<form action="<?=Path::toHandleLogin()?>" method="post" id="login-form">

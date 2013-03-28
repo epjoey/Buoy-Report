@@ -3,29 +3,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class HomePage extends Page {
 
-	public function loadData(){
-		parent::loadData();
-		
-		$this->pageTitle = "Home";
-
-		
-		/* load Report Filters */
-		$this->reportFilters = array();
-		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
-		$this->reportFilters['image']   	  = $_REQUEST['image'];
-		$this->reportFilters['text']    	  = $_REQUEST['text'];
-		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
-		$this->reportFilters['locationIds']	  = Utils::pluck($this->user->locations, 'id');
-
-		/* load Reports */
-		$this->numReportsPerPage = 6;
-		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters, array(
-			'start' => 0,
-			'limit' => $this->numReportsPerPage
-		));
-
-	}
-
 	public function getBodyClassName() {
 		return 'user-home-page';
 	}	

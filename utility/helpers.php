@@ -23,6 +23,9 @@ function eatCookie($name) {
 } 
 
 function getImageInfo($imagePath, $width, $height) {
+	if (!file_exists($imagePath)) {
+		return null;
+	}
 	$imageInfo = array();
 
 	$image = new SimpleImage();
@@ -32,7 +35,7 @@ function getImageInfo($imagePath, $width, $height) {
 	} else {
 		$imageIsRemote = FALSE;
 	}
-
+	
 	$image->load(Path::toImageFile($imagePath, $imageIsRemote));
 	if (isset($image->image)) {
 		$image->fitDimensions($width,$height);

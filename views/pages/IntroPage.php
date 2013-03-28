@@ -3,13 +3,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class IntroPage extends Page {
 
-	public function loadData(){
-		parent::loadData();
-		$this->pageTitle = 'Welcome';
-		$this->login = new LoginForm;	
-		$this->detect = new Mobile_Detect();		
-	}
-
 	public function getBodyClassName() {
 		return 'intro-page';
 	}
@@ -31,7 +24,7 @@ class IntroPage extends Page {
 		<div class="header"> 
 			<div class="container">
 					<span class="header-right login-btn" id="login-trigger"><a class="block-link" href="javascript:">LOGIN</a></span>
-					<? $this->login->renderForm(); ?>
+					<? LoginForm::renderForm(); ?>
 					<div class="clear"></div>
 			</div>
 		</div>

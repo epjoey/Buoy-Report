@@ -41,8 +41,7 @@ class LoginPage extends Page {
 		?>
 		<h1 class="form-head">Log In</h1>
 		<?	
-		$login = new LoginForm;	
-		$login->renderForm($this->loginError, $this->loginRel);
+		LoginForm::renderForm($this->loginError, $this->loginRel);
 		?>
 			<p class="need-account">Need an account? <a href="<?=Path::toRegister();?>">Sign up!</a></p>
 		<?	

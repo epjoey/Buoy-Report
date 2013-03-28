@@ -64,7 +64,7 @@ class User extends BaseModel {
 	}
 	
 	public static function encryptCookieKeyForDB($key) {
-		return key($newKey . 'makawao');
+		return md5($key . 'makawao');
 	}
 
 	public static function logInUser($userId, $curEncryptedKey = NULL) {
