@@ -253,10 +253,8 @@ class LocationDetailPage extends Page {
 		</script>
 
 		<?
-		if($this->needPicup) {
+		if($this->needPicup && false) {
 			?>
-			<script type="text/javascript">
-			</script>
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
 			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
 			<script type="text/javascript">

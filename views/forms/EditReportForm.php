@@ -114,7 +114,7 @@ class EditReportForm {
 			<? self::renderDeleteReportForm($report); ?>
 		</div>
 		<?	
-		if($needPicup) {
+		if($needPicup && false) {
 			?>
 			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
 			<script type="text/javascript">
