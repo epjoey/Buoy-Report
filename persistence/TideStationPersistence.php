@@ -11,11 +11,14 @@ class TideStationPersistence {
 
 		$ids = array_map('Persistence::escape', $ids);
 		$tideStations = ModelCache::get('TideStation', $ids);
-		$uncachedIds = array_diff($ids, array_keys($tideStations));
-		
+		$uncachedIds = array_diff($ids, array_keys($tideStations));		
 		if (!$uncachedIds) {
 			return $tideStations;
 		}
+		//they could be alphanumerical
+		$uncachedIds = array_map(function($id) {
+			return "'" . $id . "'";
+		}, $uncachedIds);		
 		$idStr = implode(',', $uncachedIds);
 		$where = " WHERE stationid in ($idStr)";
 		$sql = "SELECT * FROM tidestation $where";

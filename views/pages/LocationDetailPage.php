@@ -162,11 +162,6 @@ class LocationDetailPage extends Page {
 						?>
 						<p>
 							<a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a> (<?= $tideStation->stationname ?>)
-							<form action="<?=Path::toLocationRemoveTidestation()?>" method="post">
-								<input type="hidden" name="stationid" value="<?=$tideStation->stationid?>"/>
-								<input type="hidden" name="locationid" value="<?=$this->location->id?>"/>
-								<input type="submit" name="remove-station" value="X"/>
-							</form>
 						</p>
 						<?
 					}
@@ -184,11 +179,6 @@ class LocationDetailPage extends Page {
 								<a class="buoy-iframe-link" target="_blank" href="<?=Path::toNOAABuoy($buoy->buoyid)?>"><?
 									print isset($buoy->name) ? html($buoy->name) : html($buoy->buoyid) 													
 								?></a>
-								<form action="<?=Path::toLocationRemoveBuoy()?>" method="post">
-									<input type="hidden" name="buoyid" value="<?=$buoy->buoyid?>"/>
-									<input type="hidden" name="locationid" value="<?=$this->location->id?>"/>
-									<input type="submit" name="remove-buoy" value="X"/>
-								</form>
 							</div>
 							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=$buoy->buoyid?>" style="width:100%; min-height: 300px"></iframe>
 						</div>								

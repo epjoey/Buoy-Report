@@ -24,6 +24,34 @@ class ReportForm {
 				ReportFormFields::renderTimeSelect();
 		
 				?>		
+
+
+				<div class="field radio-menu include">	
+					<div class="include-fields">
+						<?
+						/* use js to get values of attributes on location selector */
+						foreach ($location->buoys as $buoy) {
+							?>
+							<span class="radio-field">
+								<input type="checkbox" id="buoy-<?=$buoy->buoyid ?>" name="buoys[]" value="<?=$buoy->buoyid ?>" checked='checked' /><label for="buoy-<?=$buoy->buoyid ?>"><?=$buoy->buoyid ?></label>
+							</span>	
+							<?
+						}
+						foreach ($location->tideStations as $ts) {
+							?>
+							<span class="radio-field">
+								<input type="checkbox" id="ts-<?=$ts->stationid ?>" name="tidestations[]" value="<?=$ts->stationid ?>" checked='checked' /><label for="ts-<?=$ts->stationid ?>"><?=$ts->stationid ?></label>
+							</span>	
+							<?
+						}											
+						if (!$location->tideStations && !$location->buoys) {
+							?>
+							<span>No buoys or tidestations assigned to location yet.</span> 
+							<?
+						}
+						?>
+					</div>		
+				</div>				
 				<div class="field quality radio-menu required">
 					<label for="quality">Quality of Rides:</label>
 					<div class="radio-fields">
@@ -52,32 +80,7 @@ class ReportForm {
 							<label for="text">Report:</label>
 							<textarea name="text" id="text" class="text-input" placeholder="how was it?" ></textarea>				
 						</div>
-						<div class="field radio-menu include">	
-							<div class="include-fields">
-								<?
-								/* use js to get values of attributes on location selector */
-								foreach ($location->buoys as $buoy) {
-									?>
-									<span class="radio-field">
-										<input type="checkbox" id="buoy-<?=$buoy->buoyid ?>" name="buoys[]" value="<?=$buoy->buoyid ?>" checked='checked' /><label for="buoy-<?=$buoy->buoyid ?>"> Buoy <?=$buoy->buoyid ?> (<?=$buoy->name ?>)</label>
-									</span>	
-									<?
-								}
-								foreach ($location->tideStations as $ts) {
-									?>
-									<span class="radio-field">
-										<input type="checkbox" id="ts-<?=$ts->stationid ?>" name="tidestations[]" value="<?=$ts->stationid ?>" checked='checked' /><label for="ts-<?=$ts->stationid ?>"> Tide Station <?=$ts->stationid ?> (<?=$ts->stationname ?>)</label>
-									</span>	
-									<?
-								}											
-								if (!$location->tideStations && !$location->buoys) {
-									?>
-									<span>No buoys or tidestations to include. <a href="<?=Path::toLocation($location->id);?>">Add one</a></span> 
-									<?
-								}
-								?>
-							</div>		
-						</div>		
+		
 						<div class="field image last">
 							<label for="upload">Upload an image:</label> 
 							<input type="file" name="upload" id="upload" capture="camera">

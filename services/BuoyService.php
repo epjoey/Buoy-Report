@@ -57,7 +57,7 @@ class BuoyService {
 	}
 
 	static function isValidBuoy($id) {
-		return count(NOAABuoyPersistence::getLastBuoyReportFromBuoy($id) > 0);
+		return !!NOAABuoyPersistence::getLastBuoyReportFromBuoy($id);
 	}
 
 	static function editBuoy($id, $name) {

@@ -16,6 +16,23 @@ class AddTideStationForm {
 		?>		
 
 		<div id="add-tide-station-div" class="form-container add-station-div <?= isset($status) ? 'has-status' : '' ?>">
+
+			<form id="remove-tide-station-form" class="remove-station-form" action="<?= Path::toLocationRemoveTidestation() ?>" method="post">
+				<input type="hidden" name="locationid" value="<?=$location->id?>"/>
+				<?
+				foreach($location->tideStations as $tideStation) {
+					?>
+					<div class="input-field">
+						<a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a> <?= $tideStation->stationname ?>
+						<input type="checkbox" name="stationid" value="<?= $tideStation->stationid ?>"/>
+						<span class="button submit">X</span>
+					</div>
+					<?
+				}
+				?>
+				<input type="submit" name="remove-station" value="Remove Selected Stations"/>
+			</form>
+
 			<form id="add-tide-station-form" action="<?= Path::toLocationAddTidestation() ?>" method="post">
 				
 				<span class="submission-error"><?= isset($status) ? $status : '';?></span>
@@ -36,18 +53,22 @@ class AddTideStationForm {
 					<input type="text" class="text-input required station-name" name="stationname" placeholder='location, coords...' value="<?= isset($defaultStation) ? $defaultStation->stationname : ''?>"/>
 				</div>
 				<div class="field">			
-					<input type="submit" name="enter-tide-station" value="Enter Tide Station" />
+					<input type="submit" name="enter-tide-station" value="Add Tide Station" />
 					<input type="hidden" name="locationid" value="<?=$location->id?>" />
 				</div>
 			</form>	
 			<script type="text/javascript"> 
-				(function(){
-					new BR.LocationAddBuoyForm({
+				(function($){
+					new BR.LocationRemoveStationForm({
+						el: '#remove-tide-station-form',
+						locationId: "<?=$location->id?>"
+					});					
+					new BR.LocationAddStationForm({
 						el: '#add-tide-station-form',
 						existingStationsUrl: "<?= Path::toControllers()?>tide/tidestation-selector.php",
 						locationId: "<?= $location->id ?>"
 					});				
-				})()
+				})(jQuery)
 			</script>	
 		</div>
 		

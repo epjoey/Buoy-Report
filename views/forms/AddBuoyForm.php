@@ -16,10 +16,29 @@ class AddBuoyForm {
 		?>
 
 		<div id="add-buoy-div" class="form-container add-station-div <?= isset($status) ? 'has-status' : '' ?>">
+
+
+			<form id="remove-buoy-form" class="remove-station-form" action="<?= Path::toLocationRemoveBuoy() ?>" method="post">
+				<input type="hidden" name="locationid" value="<?=$location->id?>"/>
+				<?
+				foreach($location->buoys as $buoy) {
+					?>
+					<div class="input-field">
+						<a class="buoy-iframe-link" target="_blank" href="<?=Path::toNOAABuoy($buoy->buoyid)?>"><?= $buoy->buoyid ?></a> <?= $buoy->name ?>
+						<input type="checkbox" name="buoyid" value="<?= $buoy->buoyid ?>"/>
+						<span class="button submit">X</span>
+					</div>
+					<?
+				}
+				?>
+				<input type="submit" name="remove-station" value="Remove Selected Buoys"/>
+			</form>
+			
+
 			<form id="add-buoy-form" action="<?= Path::toLocationAddBuoy()?>" method="post">
 				
 				<span class="submission-error"><?= isset($status) ? $status : '';?></span>
-				
+
 				<p>Find nearby buoys 
 					<a target="_blank" href="http://www.ndbc.noaa.gov/rmd.shtml">here</a> 
 					or 
@@ -36,18 +55,22 @@ class AddBuoyForm {
 					<input type="text" class="text-input required station-name" placeholder='location, coords, moored...' name="buoyname" value="<?= isset($defaultBuoy->name) ? $defaultBuoy->name : '' ?>"/>
 				</div>
 				<div class="field">	
-					<input type="submit" name="enterbuoy" value="Enter Buoy" />
+					<input type="submit" name="enterbuoy" value="Add Buoy" />
 					<input type="hidden" name="locationid" value="<?=$location->id?>" />
 				</div>
 			</form>
 			<script type="text/javascript"> 
-				(function(){
-					new BR.LocationAddBuoyForm({
+				(function($){
+					new BR.LocationRemoveStationForm({
+						el: '#remove-buoy-form',
+						locationId: "<?=$location->id?>"
+					});
+					new BR.LocationAddStationForm({
 						el: '#add-buoy-form',
 						existingStationsUrl: "<?=Path::toControllers()?>buoy/buoy-selector.php",
 						locationId: "<?=$location->id?>"
 					});				
-				})()
+				})(jQuery)
 			</script>	
 		</div>	
 		<?

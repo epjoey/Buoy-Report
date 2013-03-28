@@ -14,8 +14,13 @@ class BuoyPersistence {
 		if (!$uncachedIds) {
 			return $buoys;
 		}
-		$idStr = implode(',', $uncachedIds);
+		//they could be alphanumerical
+		$uncachedIds = array_map(function($id) {
+			return "'" . $id . "'";
+		}, $uncachedIds);
+		$idStr = implode(",", $uncachedIds);
 		$sql = "SELECT * FROM buoy WHERE buoyid in ($idStr)";
+		error_log($sql);
 		$result = Persistence::run($sql);		
 		while ($row = mysqli_fetch_object($result)) {	
 			$buoy = new Buoy($row);

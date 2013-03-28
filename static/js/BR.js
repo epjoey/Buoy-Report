@@ -3,24 +3,22 @@ var BR = window.BR = {};
 (function($){
 
 	//todo: max buoys per location, check if buoy is online.
-	BR.LocationAddBuoyForm = Backbone.View.extend({
-		initialize: function() {
-		},
+	BR.LocationAddStationForm = Backbone.View.extend({
 		events: {
-			"click .add-existing" : "showExistingBuoys",
-			"click .station-list" : "selectExistingBuoy",
+			"click .add-existing" : "showExistingStations",
+			"click .station-list" : "selectExistingStation",
 			"submit" : "onSubmit"
 		},
-		showExistingBuoys: function(event) {
+		showExistingStations: function(event) {
 			var container = this.$el.find(".station-list");
 			container.addClass('loading');
 			$.ajax(this.options.existingStationsUrl, {
 				success: function(html) {
-					container.html(html).removeClass('loading');
+					container.html(html).removeClass('loading').addClass('visible');
 				}
 			});
 		},
-		selectExistingBuoy: function(event) {
+		selectExistingStation: function(event) {
 			var id   = $(event.target).parent('.item').find('.id').html(),
 				name = $(event.target).parent('.item').find('.name').html();
 			
@@ -34,13 +32,18 @@ var BR = window.BR = {};
 		}
 	});
 
-	BR.LocationRemoveBuoysForm = Backbone.View.extend({
+	BR.LocationRemoveStationForm = Backbone.View.extend({
 		initialize: function() {
+			this.$el.find("input[type=submit]").hide();
+			this.$el.find("input[type=checkbox]").hide();
+			this.$el.find("span.button").show();
 		},
 		events: {
-			'submit':'onSubmit'
+			'click span.submit':'onSpanSubmit'
 		},
-		onSubmit: function(event) {
+		onSpanSubmit: function(event) {
+			$(event.target).parent().find("input[type=checkbox]").attr('checked', true);
+			this.$el.submit();
 		}
 	});
 

@@ -79,6 +79,20 @@
 	.add-station-div,
 	.report-form-container {font-size:18px; display:none; border-top:3px solid #cc09d6;}
 	.add-station-div.has-status,
+	/* Station list */
+	.station-list {
+		display:none;
+		&.visible,
+		&.loading .station-list { display:block; }
+		color:@dark-blue; font-size:16px; margin-bottom:20px; overflow:hidden; padding-top:6px; max-height:800px; overflow-y:auto;
+		h4 { color:@dark-blue;}
+		.item {float:left; width:240px; cursor:pointer; display:block;}
+		.item:hover {.museo(500);}
+		.name {margin-left:10px; display:inline-block; .text-overflow(); max-width:160px;}
+	}
+	.remove-station-form {
+		span.button { display:none; }
+	}
 	.report-form-container .has-status { display:block;}
 	.current-data {margin-bottom:20px;}
 	//.fc-links .toggle-area {display:block;} //showing this one by default
