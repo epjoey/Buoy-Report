@@ -28,7 +28,7 @@ class LocationDetailPage extends Page {
 	public function renderLocDetails() {
 		?>
 		<div class="loc-details">
-			<h1><?= html($this->location->locname)?></h1>
+			<h1><a href="<?=Path::toLocation($this->location->id)?>"><?= html($this->location->locname)?></a></h1>
 			<?
 			if ($this->device->isSmallDevice()) {
 				?>
@@ -129,12 +129,14 @@ class LocationDetailPage extends Page {
 						<span class="edit-link-btn" id="delete-link-cancel" style="display:none">Cancel</span>
 					</div>
 				</div>
-				<script type="text/javascript">					
+				<script type="text/javascript">		
+					BR.locationForecastLinks.doFcLinkAjax('');			
+					
 					$('#submit-fc-btn').click(function(){
 						BR.locationForecastLinks.doFcLinkAjax($('#fc-url').val());
 					});
+					
 					$('#delete-link-btn').click(function(){
-
 						if ($(this).hasClass('ready')) {
 							BR.locationForecastLinks.deleteCheckedLinks();
 							return;
@@ -241,18 +243,30 @@ class LocationDetailPage extends Page {
 			$(document).ready(function(){
 				$('.toggle-btn').click(function(){
 					$(this).next('.toggle-area').toggle();
-				})
+				});
 
 				$("#add-buoy-form").validate();
 				$("#add-tide-station-form").validate();
-				$('.text #text').focus();
 				$("#report-form").validate();
 
-				BR.locationForecastLinks.doFcLinkAjax('');
-
-			});						
+			});				
 		</script>
+
 		<?
+		if($this->needPicup) {
+			?>
+			<script type="text/javascript">
+			</script>
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
+			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
+			<script type="text/javascript">
+				document.observe('dom:loaded', function(){
+				//$(document).ready(function(){
+					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
+				});
+			</script>	
+			<?	
+		}
 	}	
 	
 

@@ -97,7 +97,6 @@ var Picup = {
     		}			
     	};
     	input.disabled = false;
-    	alert(input);
     	return false;
     },
     
@@ -136,7 +135,7 @@ var Picup = {
 function usePicup(callbackUrl, windowName) {
     var currentParams = {}
     window.name = windowName;
-    $(document.body).addClass('iphone');
+    $(document.body).addClassName('iphone');
     // We'll check the hash when the page loads in-case it was opened in a new page
     // due to memory constraints
     Picup.checkHash();  
@@ -151,7 +150,7 @@ function usePicup(callbackUrl, windowName) {
         'returnThumbnailDataURL': 'false'
     };                  
         
-    Picup.convertFileInput( $('#upload'), currentParams);
+    Picup.convertFileInput( $('upload'), currentParams);
 
     Picup.callbackHandler = function(currentParams){
       for(var key in currentParams){
