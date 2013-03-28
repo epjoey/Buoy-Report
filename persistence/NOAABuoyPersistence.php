@@ -1,6 +1,9 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
+
+//todo: use instance of NoaaBuoy Model for single-buoy related operations
+
 class NOAABuoyException extends InternalException {}
 class NOAABuoyPersistence {
 
@@ -10,16 +13,29 @@ class NOAABuoyPersistence {
 		if (!$buoyId || !$time) {
 			throw new InternalException();
 		}				
+		if (!self::isBuoyOnline($buoyId)) {
+			throw new NOAABuoyException("Buoy " . $buoyId . " offline");
+		}
 		$lastReport = self::getLastBuoyReportFromBuoy($buoyId);
 		if (!$lastReport) {
-			throw new NOAABuoyException();
+			throw new NOAABuoyException("No recent report from " . $buoyId);
 		}
 		return self::getApproximateData($lastReport, $time);
 
 	}
 
+	static function getDataFileURLForBuoy($buoyId) {
+		return 'http://www.ndbc.noaa.gov/data/realtime2/' . trim($buoyId) . '.txt';
+	}
+
+	static function isBuoyOnline($buoyId) {
+		$headers = get_headers(self::getDataFileURLForBuoy($buoyId), true);
+		return !(!$headers || strpos($headers[0], '404'));
+	}
+
+
 	static function getLastBuoyReportFromBuoy($buoyId) {
-		return file('http://www.ndbc.noaa.gov/data/realtime2/' . $buoyId . '.txt');
+		return file(self::getDataFileURLForBuoy($buoyId));
 	}
 
 	static function parseRowIntoData($row) {

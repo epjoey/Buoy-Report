@@ -19,7 +19,6 @@ if (!$location) {
 	exit();	
 }
 
-
 $user = UserService::getUser();
 
 /* load Report Filters */
