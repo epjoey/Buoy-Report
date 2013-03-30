@@ -22,7 +22,7 @@ class ReportFeed {
 					feed   = $('#report-feed'),
 					button = feed.find('#more-reports').first();
 
-					BR.reportFeed.onLoad(feed);
+				BR.reportFeed.onLoad(feed);
 			    
 			    feed.delegate(".report", "click", function(event) {
 			    	if($(event.target).is('a')) {
@@ -32,36 +32,38 @@ class ReportFeed {
 			    });
 
 			    $(button).click(function() {
-			    	if (!button.hasClass('disabled')) {
-
-			    		//disable during ajax request
-			    		button.addClass('disabled');
-    
-						//find the last list of reports (only one until "See more reports" is clicked)
-					    reportsList = feed.find('ul.reports').last();			    		
-						//insert temporary loading sign after current list
-						reportsList.after("<div id='temp-loading' class='loading'></div>");
-			    		
-			    		BR.reportFeed.paginate({
-			    			start    : offset,
-			    			limit    : limit,
-			    			queryStr : window.location.search,
-			    			feed     : paginationParams.feedLocation
-			    		}, function(reports){
-			    			offset = offset + limit;	
-							
-			    			$('#temp-loading').remove();  
-							reportsList.after(reports);
-
-							BR.reportFeed.onLoad(feed);							
-
-
-							//disable button if no more reports
-							if (reports.match('<li')) {
-								button.removeClass('disabled');
-				            }			    			
-			    		});
+			    	if (button.hasClass('disabled')) {
+			    		return;
 			    	}
+
+		    		//disable during ajax request
+		    		button.addClass('disabled');
+				    
+		    		//last list of reports
+				   	lastReportsList = feed.find('ul.reports').last();
+
+					//insert temporary loading sign after current list
+					lastReportsList.after("<div id='temp-loading' class='loading'></div>");
+		    		
+		    		BR.reportFeed.paginate({
+		    			start    : offset,
+		    			limit    : limit,
+		    			queryStr : window.location.search,
+		    			feed     : paginationParams.feedLocation
+		    		}, function(reports){
+		    			offset = offset + limit;	
+						
+		    			$('#temp-loading').remove();  
+						lastReportsList.after(reports);
+
+						BR.reportFeed.onLoad(feed);							
+
+
+						//disable button if no more reports
+						if (reports.match('<li')) {
+							button.removeClass('disabled');
+			            }			    			
+		    		});
 			    });				
 			})(jQuery, <?= json_encode($paginationParams) ?>);
 		</script> 		 	

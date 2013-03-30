@@ -41,55 +41,42 @@ class EditReportForm {
 					<? 
 				}
 
+				ReportFormFields::renderQualitySelect($report['quality']);
+
 				if (!empty($locationInfo['sublocations'])) {
 					ReportFormFields::renderSubLocationSelect($locationInfo['sublocations'], $report['sublocationid']);	
 				}
-				?>
+				
 
 				
-				<div class="field quality radio-menu first">
-					<label for="quality">Session was:</label>
-					<?
-					foreach (ReportOptions::quality() as $key=>$value) {
-						if ($report['quality'] == $key) {
-							$selected = "checked = 'true'";
-						} else {
-							$selected = '';
-						}
 
-						?>
-						<span class="radio-field">
-							<input type="radio" class="required" name="quality" id="quality-<?=$key?>" value="<?=$key?>" <?=$selected?> /><label for="quality-<?=$key?>"> <?=$value?></label>
-						</span>
-						<?
-					}
-					?>
-				</div>
-				<div class="optional-fields <?= $location->sublocations ? 'includes-sublocations' : ''?> ">
+				?>
+
+				<div class="optional-fields">
 					<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights(), $report['waveheight']);?>
 
 					<div class="field text">
 						<label for="text">Report:</label>
 						<textarea name="text" class="text-input" id="text"><?=$report['text']?></textarea>
 					</div>	
-
-					<?
-					if (isset($report['imagepath'])) {
-						$image = getImageInfo($report['imagepath'], 200, 200);
-						if (!empty($image)) {
-							?>
-							<div class="field image-container">
-								<a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
-								</a>
-								<label><input type="checkbox" name="delete-image" id="" value="true" /> Delete Image</label>	
-							</div>
-							<? 						
-						}				
-					}
-					?>				
 					
 					<div class="field image last">
-						<label for="upload">Upload <?=isset($report['imagepath']) ? 'new' : '';?> image:</label> 
+						<label for="upload">Upload <?= $report['imagepath'] ? "New" : "" ?> Image:</label> 
+
+						<?
+						if ($report['imagepath']) {
+							$image = getImageInfo($report['imagepath'], 200, 200);
+							if ($image) {
+								?>
+								<span class="image-container">
+									<a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/></a>
+									<label><input type="checkbox" name="delete-image" id="" value="true" /> Delete Image</label>	
+								</span>
+								<? 						
+							}				
+						}
+						?>				
+					
 						<input type="file" name="upload" id="upload" capture="camera">
 						<span id="mobile-image-name" class="mobile-note">
 							<?

@@ -32,10 +32,19 @@ class SingleReportPage extends Page {
 		
 		if ($this->report->reporterid == $this->user->id) {
 			?>	
-				<p class="button-container edit-report">
-					<a class="button" href="<?=Path::toEditReport($this->report->id)?>">Edit Report</a>
-				</p>
+			<p class="button-container edit-report">
+				<a class="button" href="<?=Path::toEditReport($this->report->id)?>">Edit Report</a>
+			</p>
 			<?
 		}
+		?>
+		<script type="text/javascript">
+			(function($){
+				$(document).ready(function(){
+					BR.images.lazyLoad('.image-container img');
+				});
+			})(jQuery);
+		</script> 
+		<?	
 	}
 }

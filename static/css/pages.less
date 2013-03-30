@@ -123,11 +123,12 @@
 }
 
 
-	//report form
-.location-detail-page, .edit-report-page {
+//report form
+.location-detail-page, 
+.edit-report-page {
 	.report-form-container {	
 		.field {border-bottom:1px solid darken(@grey, 12%); border-top:1px dotted lighten(@grey, 15%); margin:0; padding:8px 0; }
-		.field.time, .field.wave-height {border-top:0 none;}
+		.field.first {border-top:0 none;}
 		.field.last {border-bottom:0 none;}
 		.select-field select {margin:4px 0 0 0; width:208px;}
 		.select-field select, .text input, textarea {float:left; }
@@ -135,7 +136,7 @@
 		.field {
 			&> label {width:200px; }
 		}
-		.optional-fields { border-top:1px dotted lighten(@grey, 15%);
+		.optional-fields {
 			h5 { font-size:11px; text-transform: uppercase; padding:16px 0 10px; color:desaturate(lighten(@dark-blue,8%),10%);}
 		}
 		.image {
@@ -226,10 +227,9 @@
 /* =================== EDIT POST PAGE =================== */
 .edit-report-page {
 	.container { max-width:820px; }
-	.field.quality { border-top: 0 none;}
 	.report-form-container {
-		.field>label,
-		.image label { width:240px;}
+		.field>label { width:240px;}
+		.field.quality { border-top:0 none;}
 	}
 	.image-container {text-align:left; max-height:none;
 		a {float:left; margin-right:8px;}

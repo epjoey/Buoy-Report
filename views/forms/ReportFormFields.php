@@ -42,7 +42,7 @@ class ReportFormFields {
 
 	public static function renderTimeSelect() {
 		?>				
-		<div class="field time select-field required">
+		<div class="field time select-field required first">
 			<label for="time_offset">Time:</label>
 			<select name="time_offset" id="time-offset">
 				<option value="0">Now</option>
@@ -70,4 +70,27 @@ class ReportFormFields {
 		</div>
 		<?
 	}	
+
+	public static function renderQualitySelect($currentQuality = null) {
+		?>
+		<div class="field quality radio-menu">
+			<label for="quality">Session was:</label>
+			<?
+			foreach (ReportOptions::quality() as $key=>$value) {
+				if ($currentQuality == $key) {
+					$selected = "checked = 'true'";
+				} else {
+					$selected = '';
+				}
+
+				?>
+				<span class="radio-field">
+					<input type="radio" class="required" name="quality" id="quality-<?=$key?>" value="<?=$key?>" <?=$selected?> /><label for="quality-<?=$key?>"> <?=$value?></label>
+				</span>
+				<?
+			}
+			?>
+		</div>
+		<?		
+	}
 }

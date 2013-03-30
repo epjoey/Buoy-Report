@@ -130,12 +130,20 @@ var BR = window.BR = {};
 	        $('#numReports').text(numReports);    		
     	},
     	loadImages: function(feed) {
-    		feed.select('.image-container').each(function(){
-    			var img = $(this).find('img');
-    			img.attr('src', img.attr('imgsrc'));
+    		$(feed).find('.image-container img').each(function(){ 
+    			BR.images.lazyLoad($(this));
     		});
     	}
 
+    }
+    BR.images = {
+    	lazyLoad: function(img) {
+    		var img = $(img);
+    		if (!img) {
+    			return;
+    		}
+    		img.attr('src', img.attr('imgsrc'));
+    	}
     }
 
 })(jQuery);

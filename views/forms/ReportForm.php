@@ -22,7 +22,7 @@ class ReportForm {
 					<?
 				}
 				ReportFormFields::renderTimeSelect();
-		
+	
 				?>		
 
 
@@ -34,14 +34,16 @@ class ReportForm {
 						foreach ($location->buoys as $buoy) {
 							?>
 							<span class="radio-field">
-								<input type="checkbox" id="buoy-<?=$buoy->buoyid ?>" name="buoys[]" value="<?=$buoy->buoyid ?>" checked='checked' /><label for="buoy-<?=$buoy->buoyid ?>">Bouy <?=$buoy->buoyid ?></label>
+								<input type="checkbox" id="buoy-<?=$buoy->buoyid ?>" name="buoys[]" value="<?=$buoy->buoyid ?>" checked='checked' />
+								<label for="buoy-<?=$buoy->buoyid ?>">Bouy <?=$buoy->buoyid ?></label>
 							</span>	
 							<?
 						}
 						foreach ($location->tideStations as $ts) {
 							?>
 							<span class="radio-field">
-								<input type="checkbox" id="ts-<?=$ts->stationid ?>" name="tidestations[]" value="<?=$ts->stationid ?>" checked='checked' /><label for="ts-<?=$ts->stationid ?>">Tide Station <?=$ts->stationid ?></label>
+								<input type="checkbox" id="ts-<?=$ts->stationid ?>" name="tidestations[]" value="<?=$ts->stationid ?>" checked='checked' />
+								<label for="ts-<?=$ts->stationid ?>">Tide Station <?=$ts->stationid ?></label>
 							</span>	
 							<?
 						}											
@@ -53,20 +55,9 @@ class ReportForm {
 						?>
 					</div>		
 				</div>				
-				<div class="field quality radio-menu required">
-					<label for="quality">Quality of Rides:</label>
-					<div class="radio-fields">
-						<?
-						foreach (ReportOptions::quality() as $key=>$value) {
-							?>
-							<span class="radio-field">
-								<input type="radio" class="required" name="quality" id="quality-<?=$key?>" value="<?=$key?>" /><label for="quality-<?=$key?>"> <?=$value?></label>
-							</span>
-							<?
-						}
-						?>
-					</div>
-				</div>
+				<?
+				ReportFormFields::renderQualitySelect();
+				?>
 				<div class="optional-fields <?= $location->sublocations ? 'includes-sublocations' : ''?> ">
 					<!--<h5 class="form-heading">Optional Fields</h5>-->
 					<div class="fields">
