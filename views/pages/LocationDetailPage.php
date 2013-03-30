@@ -160,7 +160,7 @@ class LocationDetailPage extends Page {
 			</div>
 			<div class="tidestation-data sb-section">
 				<h5 class="toggle-btn">Tide Stations &darr;</h5>
-				<div class="toggle-area" style="<?=$this->enteredTide || $this->showReportForm ? 'display:block' : '';?>">
+				<div class="toggle-area" style="<?= $this->showReportForm ? 'display:block' : '';?>">
 					<?
 					foreach($this->location->tideStations as $tideStation) {
 						?>
@@ -174,7 +174,7 @@ class LocationDetailPage extends Page {
 			</div>
 			<div class="buoy-current-data sb-section">	
 				<h5 class="toggle-btn">Buoy Stations &darr;</h5>
-				<div class="toggle-area" style="<?=$this->enteredBuoy || $this->showReportForm ? 'display:block' : '';?>">
+				<div class="toggle-area" style="<?= $this->showReportForm ? 'display:block' : '';?>">
 					<?
 					foreach($this->location->buoys as $buoy){
 						?>

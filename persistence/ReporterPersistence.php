@@ -13,9 +13,7 @@ class ReporterPersistence {
 			return $reporters;
 		}
 		$idStr = implode(',', $uncachedIds);
-		$where = " WHERE id in ($idStr)";
-		$order = Persistence::escape($options['order']);
-		$sql = "SELECT * FROM reporter $where";
+		$sql = "SELECT * FROM reporter WHERE id in ($idStr)";
 		$result = Persistence::run($sql);
 		while ($row = mysqli_fetch_object($result)) {	
 			$reporter = new Reporter($row);

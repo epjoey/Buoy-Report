@@ -48,6 +48,7 @@ class FilterForm {
 			}
 
 			if(!empty($filterOptions['sublocationObjects'])) {
+				$currSL = isset($_REQUEST['sublocation']) ? $_REQUEST['sublocation'] : null;
 				?>
 				<div class="field location">
 					<label for="date">By Sublocation:</label>
@@ -57,7 +58,7 @@ class FilterForm {
 						foreach ($filterOptions['sublocationObjects'] as $sublocation) { 
 							?>
 							<option value="<?= $sublocation->sl_id ?>" <?= 
-								$_REQUEST['sublocation'] == $sublocation->sl_id ? "selected='selected'" :'';
+								$currSL == $sublocation->sl_id ? "selected='selected'" :'';
 								?>><?= $sublocation->sl_name ?></option>
 							<? 
 						} 
