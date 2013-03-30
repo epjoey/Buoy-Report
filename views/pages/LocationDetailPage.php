@@ -79,6 +79,9 @@ class LocationDetailPage extends Page {
 										.removeClass('show-add-buoy-form')
 										.toggleClass('show-report-form');
 					});
+					$(document).ready(function(){
+						BR.images.lazyLoad('.cover-photo img');
+					});
 				})(jQuery);
 			</script>					
 		</div>
@@ -242,7 +245,6 @@ class LocationDetailPage extends Page {
 					$("#add-buoy-form").validate();
 					$("#add-tide-station-form").validate();
 					$("#report-form").validate();
-					BR.images.lazyLoad('.image-container img');
 				});
 			})(jQuery);			
 		</script>
