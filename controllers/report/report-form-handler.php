@@ -9,6 +9,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
  */
 
 $user = UserService::getUser();
+if (!$user->isLoggedIn) {
+	exit();
+}
 $report = new Report(array());
 $report->reporterid = $user->id;
 $report->public = $user->public;

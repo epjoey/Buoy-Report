@@ -2,6 +2,9 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 $user = UserService::getUser();
+if (!$user->isLoggedIn) {
+	exit();
+}
 $locationId = $_REQUEST['locationId'];
 
 

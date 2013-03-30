@@ -3,26 +3,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class SingleReportPage extends Page {
 
-	public function loadData($id) {
-		parent::loadData();
-		$this->pageTitle = 'Single Report';
-
-		$this->report = ReportService::getReport($id, array(
-			'includeBuoyData' => true,
-			'includeTideData' => true,
-			'includeLocation' => true,
-			'includeSublocation' => true,
-			'includeBuoyModel' => true,
-			'includeTideStationModel' => true,
-			'includeReporter' => true
-		));
-		if(!$this->report) {
-			header("HTTP/1.0 404 Not Found");			
-			include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
-			exit();	
-		}	
-	}
-
 	public function getBodyClassName() {
 		return 'single-report-page';
 	}	

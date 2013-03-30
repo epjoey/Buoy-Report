@@ -3,6 +3,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 /* --------------- HANDLE EDIT REPORT FORM SUBMISSION --------------- */
 
+$user = UserService::getUser();
+if (!$user->isLoggedIn) {
+	exit();
+}
+
 $report = ReportService::getReport($_POST['id']);
 $report->waveheight = $_POST['waveheight'];
 $report->quality = $_POST['quality'];

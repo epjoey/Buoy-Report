@@ -284,6 +284,9 @@ class Path {
 	}	
 	public static function toDeleteLocation() {
 		return self::toControllers() . 'location/delete-location.php';
+	}
+	public static function toPostLocation() {
+		return self::toControllers() . 'location/add-location.php';	
 	}			
 }
 ?>

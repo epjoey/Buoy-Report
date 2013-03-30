@@ -8,10 +8,18 @@ if (!$buoyId) {
 	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 	exit();
 }
+$buoy = BuoyService::getBuoy($buoyId);
+if (!$buoy) {
+	header("HTTP/1.0 404 Not Found");
+	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
+	exit();			
+}
 
 $page = new EditBuoyPage;
-$page->loadData($buoyId);
-$page->renderPage();
+$page->renderPage(array(
+	'pageTitle' => 'Edit Buoy ' . $buoyId,
+	'buoy' => $buoy
+));
 
 
 ?>

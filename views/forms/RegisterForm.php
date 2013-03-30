@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class RegisterForm {
-	public function renderForm($registerError = NULL) {	
+	public static function renderForm($registerError = NULL) {	
 		?>
 
 		<div class="form-container <?= isset($registerError) ? 'expanded' : '';?>" id="reg-form-container">			

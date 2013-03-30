@@ -2,7 +2,9 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 $location = LocationService::getLocation($_POST['locationId']);
 $user = UserService::getUser();
-
+if (!$user->isLoggedIn) {
+	exit();
+}
 //empty or same name
 if (!$_POST['locname']) {
 	$error = 1;

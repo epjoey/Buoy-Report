@@ -7,15 +7,21 @@ if (!$user->isLoggedIn) {
 	exit();
 }
 
-$addloc = new AddLocationPage;
-$addloc->loadData();
 
-if (isset($_POST['submit-location'])) {	
-	$addloc->afterSubmit(); 
-}
+$error = null;
+if (isset($_GET['error']) && $_GET['error']) {
+	switch($_GET['error']) {
+		case 1: $error = 'Please enter a location';; break;
+		case 2: $error = "Location name specified already exists"; break;
+	}
+}	
 
-$addloc->submitError = NULL;
-$addloc->renderPage();
 
 
+$page = new AddLocationPage();
+$page->submitError = NULL;
+$page->renderPage(array(
+	'pageTitle' => 'Submit Location',
+	'addLocationError' => $error
+));
 ?>
