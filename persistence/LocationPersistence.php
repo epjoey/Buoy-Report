@@ -78,5 +78,19 @@ class LocationPersistence {
 		Persistence::run($sql);
 		return true;
 	}
+
+	static function getAllLocationIds($options) {
+		$defaultOptions = array(
+			'start' => 0,
+			'limit' => 1000,
+			'order' => 'locname ASC'
+		);
+		$options = array_merge($defaultOptions, $options);		
+		$start = intval($options['start']);
+		$limit = intval($options['limit']);
+		$order = Persistence::escape($options['order']);
+		$sql = "SELECT id FROM location ORDER BY $order LIMIT $start,$limit";
+		return Persistence::getArray($sql);		
+	}
 }
 ?>

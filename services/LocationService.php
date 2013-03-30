@@ -53,5 +53,14 @@ class LocationService {
 	public static function updateLocation($location) {
 		LocationPersistence::updateLocation($location);
 	}
+
+	static function getAllLocations($options = array()) {
+		$ids = self::getAllLocationIds($options);
+		return self::getLocations($ids);
+	}
+
+	static function getAllLocationIds($options = array()) {
+		return LocationPersistence::getAllLocationIds($options);
+	}	
 }
 ?>
