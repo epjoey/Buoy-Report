@@ -32,5 +32,9 @@ class ReporterService {
 	static function getReporterLocationIds($reporter) {
 		return ReporterPersistence::getReporterLocationIds($reporter);
 	}
+
+	static function getReportersForLocationIds($lids) {
+		//$ids = ReporterPersistence::getReporterIdsForLocationIds();
+	}
 }
 ?>
