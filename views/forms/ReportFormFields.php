@@ -95,4 +95,37 @@ class ReportFormFields {
 		</div>
 		<?		
 	}
+
+	public static function renderImageInput($currImagePath, $needPicup) {
+		?>
+		<div class="field image last">
+			<label for="upload">Upload <?= $currImagePath ? "New" : "" ?> Image:</label> 
+
+			<?
+			if ($currImagePath) {
+				$image = getImageInfo($currImagePath, 200, 200);
+				if ($image) {
+					?>
+					<span class="image-container">
+						<a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/></a>
+						<label><input type="checkbox" name="delete-image" id="" value="true" /> Delete Image</label>	
+					</span>
+					<? 						
+				}				
+			}
+			?>				
+		
+			<input type="file" name="upload" id="upload" capture="camera">
+			<span id="mobile-image-name" class="mobile-note">
+				<?
+				if($needPicup) {
+					?>
+					You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
+					<?
+				}
+				?>
+			</span>
+		</div>
+		<?		
+	}
 }

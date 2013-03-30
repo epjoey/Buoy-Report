@@ -29,15 +29,6 @@ class LocationDetailPage extends Page {
 		?>
 		<div class="loc-details">
 			<h1><a href="<?=Path::toLocation($this->location->id)?>"><?= html($this->location->locname)?></a></h1>
-			<?
-			if ($this->device->isSmallDevice()) {
-				?>
-				<div class="cover-photo">
-				</div>
-				<?
-			}
-
-			?>
 			<div class="loc-report-section">
 				<div class="loc-controls">
 					<span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Buoys</span><?
@@ -59,6 +50,16 @@ class LocationDetailPage extends Page {
 				));
 				?>
 			</div>
+			<?
+			if (!$this->device->isSmallDevice() && $this->location->coverImagePath) {
+				?>
+				<div class="cover-photo">
+					<? Image::render($this->location->coverImagePath, false); ?>
+				</div>
+				<?
+			}
+
+			?>			
 			<script type="text/javascript"> 
 				(function($){
 
@@ -241,7 +242,7 @@ class LocationDetailPage extends Page {
 					$("#add-buoy-form").validate();
 					$("#add-tide-station-form").validate();
 					$("#report-form").validate();
-
+					BR.images.lazyLoad('.image-container img');
 				});
 			})(jQuery);			
 		</script>

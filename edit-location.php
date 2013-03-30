@@ -31,8 +31,9 @@ if (!$location) {
 
 if (isset($_GET['error']) && $_GET['error']) {
 	switch($_GET['error']) {
-		case 3: $editLocationError = "No Changes specified"; break;
-		case 4: $editLocationError = "Location name specified already exists"; break;
+		case 1: $editLocationError = "Location must have a name"; break;
+		case 2: $editLocationError = "Location must have a timezone"; break;
+		case 3: $editLocationError = "Location name specified already exists"; break;
 	}
 }
 

@@ -31,69 +31,73 @@ class EditLocationPage extends LocationDetailPage {
 	}
 
 	public function renderForm() {
+		$device = new Mobile_Detect();
+
 		?>
-			<h2>
-				<a href="<?=Path::toLocation($this->locationId)?>"><?= html($this->location->locname)?></a> > Edit
-			</h2>
-			<div class="form-container">
+		<h2>
+			<a href="<?=Path::toLocation($this->locationId)?>"><?= html($this->location->locname)?></a> > Edit
+		</h2>
+		<div class="form-container">
+			<?
+			if (isset($this->editLocationError)) {
+				?>
+				<span class="submission-error"><?= html($this->editLocationError) ?></span>
 				<?
-				if (isset($this->editLocationError)) {
-					?>
-					<span class="submission-error"><?= html($this->editLocationError) ?></span>
+			}
+			?>						
+			<form method="post" action="<?=Path::toEditLocationPost()?>" id="edit-location-name-form" enctype="multipart/form-data">
+				<div class="field">
+					<input type="text" name="locname" class="text-input required" value="<?=html($this->location->locname)?>" />
+				</div>
+
+				<? $zones = timezone_identifiers_list(); ?>
+				<div class="field">
+					<select name="timezone">
 					<?
-				}
-				?>						
-				<form method="post" action="<?=Path::toSetLocationName()?>" id="edit-location-name-form">
-					<div class="field">
-						<input type="text" name="locname" class="text-input required" value="<?=html($this->location->locname)?>" />
-						<input type="hidden" name="locationId" value="<?= $this->locationId ?>" />
-						<input type="submit" name="update-name" value="Update Name" />
-					</div>
-				</form>
-				<form action="<?=Path::toSetLocationTimezone()?>" method="post">
-					<? $zones = timezone_identifiers_list(); ?>
-					<div class="field">
-						<select name="timezone">
-						<?
-							if (isset($this->location->timezone)) {
-								?>
-									<option value="<?= $this->location->timezone ?>" selected="selected"><?= $this->location->timezone ?> (<?= getOffset($this->location->timezone)/3600; ?>)</option>
-								<?
-							}	
-							foreach ($zones as $tz) {
-								$offset = getOffset($tz)/3600;
-								?>
-									<option value="<?= $tz ?>"><?= $tz ?> (<?= $offset ?>)</option>			
-								<?
-							}
-						?>
-						</select>
-						<input type="hidden" name="locationId" value="<?= $this->locationId ?>" />
-						<input type="submit" name="select-timezone" value="Update Timezone" />
-					</div>
-				</form>
-				<form action="<?=Path::toDeleteLocation()?>" method="post" class="delete-form" id="delete-location-form">
-					<input type="hidden" name="locationId" value="<?= $this->locationId ?>" />
-					<input type="button" id="delete-location-btn" class="delete-btn" value="Delete Location" />
-					<div class="overlay" id="delete-btn-overlay" style="display:none;">
-						<p>Are you sure you want to delete this location? <strong>All reports will be deleted forever!</strong></p>
-						<input type="button" class="cancel" id="cancel-deletion" value="Cancel"/>
-						<input class="confirm" type="submit" name="delete-location" id="confirm-deletion" value="Confirm"/>
-					</div>
-				</form>
+						if (isset($this->location->timezone)) {
+							?>
+							<option value="<?= $this->location->timezone ?>" selected="selected"><?= $this->location->timezone ?> (<?= getOffset($this->location->timezone)/3600; ?>)</option>
+							<?
+						}	
+						foreach ($zones as $tz) {
+							$offset = getOffset($tz)/3600;
+							?>
+							<option value="<?= $tz ?>"><?= $tz ?> (<?= $offset ?>)</option>			
+							<?
+						}
+					?>
+					</select>
+					
+				</div>
+				<? 
+				ReportFormFields::renderImageInput($this->location->coverImagePath, $device->isAppleDevice()) ?>
+				<div class="field submit">
+					<input type="hidden" name="locationId" value="<?= $this->location->id ?>" />
+					<input type="submit" name="select-timezone" value="Update Location" />
+				</div>
+			</form>
+			<form action="<?=Path::toDeleteLocation()?>" method="post" class="delete-form" id="delete-location-form">
+				<input type="hidden" name="locationId" value="<?= $this->location->id ?>" />
+				<input type="button" id="delete-location-btn" class="delete-btn" value="Delete Location" />
+				<div class="overlay" id="delete-btn-overlay" style="display:none;">
+					<p>Are you sure you want to delete this location? <strong>All reports will be deleted forever!</strong></p>
+					<input type="button" class="cancel" id="cancel-deletion" value="Cancel"/>
+					<input class="confirm" type="submit" name="delete-location" id="confirm-deletion" value="Confirm"/>
+				</div>
+			</form>
 
-				<script>
-					$('#delete-location-btn').click(function(){
-						$('#delete-btn-overlay').show();
-						window.scrollTo(0,0);
-					});
+			<script>
+				$('#delete-location-btn').click(function(){
+					$('#delete-btn-overlay').show();
+					window.scrollTo(0,0);
+				});
 
-					$('#delete-btn-overlay #cancel-deletion').click(function(){
-						$('#delete-btn-overlay').hide();
-					});				
-				</script>
+				$('#delete-btn-overlay #cancel-deletion').click(function(){
+					$('#delete-btn-overlay').hide();
+				});				
+			</script>
 
-			</div>
+		</div>
 		<?
 	}
 

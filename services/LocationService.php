@@ -49,5 +49,9 @@ class LocationService {
 		$sublocations = LocationPersistence::getSublocations(array($id));
 		return reset($sublocations);
 	}
+
+	public static function updateLocation($location) {
+		LocationPersistence::updateLocation($location);
+	}
 }
 ?>

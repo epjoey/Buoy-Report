@@ -73,6 +73,7 @@ class Classloader {
         "FilterForm" =>                 "/views/forms/FilterForm.php",
         "FilterNote" =>                 "/views/report/FilterNote.php",
         "Header" =>                     "/views/components/Header.php",
+        "Image" =>                      "/views/components/Image.php",
         "ItemList" =>                   "/views/components/ItemList.php",
         "LocationList" =>               "/views/components/LocationList.php",
         "LocationRemoveBuoysForm" =>    "/views/forms/LocationRemoveBuoysForm.php",

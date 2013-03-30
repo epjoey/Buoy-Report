@@ -60,34 +60,7 @@ class EditReportForm {
 						<textarea name="text" class="text-input" id="text"><?=$report['text']?></textarea>
 					</div>	
 					
-					<div class="field image last">
-						<label for="upload">Upload <?= $report['imagepath'] ? "New" : "" ?> Image:</label> 
-
-						<?
-						if ($report['imagepath']) {
-							$image = getImageInfo($report['imagepath'], 200, 200);
-							if ($image) {
-								?>
-								<span class="image-container">
-									<a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/></a>
-									<label><input type="checkbox" name="delete-image" id="" value="true" /> Delete Image</label>	
-								</span>
-								<? 						
-							}				
-						}
-						?>				
-					
-						<input type="file" name="upload" id="upload" capture="camera">
-						<span id="mobile-image-name" class="mobile-note">
-							<?
-							if($isMobile) {
-								?>
-								You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
-								<?
-							}
-							?>
-						</span>
-					</div>
+					<? ReportFormFields::renderImageInput($report['imagepath'], $needPicup) ?>
 				</div>
 
 				<input type="hidden" name="id" id="id" value="<?=$report['id']?>" />

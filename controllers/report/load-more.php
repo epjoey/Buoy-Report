@@ -21,8 +21,4 @@ $reports = ReportService::getReportsForUserWithFilters($user, $reportFilters, ar
 	'start' => $_REQUEST['start'],
 ));
 ReportFeed::renderReports($reports);
-
-//$reportFilters = FilterService::getReportFilterRequests();
-//$reports = Persistence::getReports($reportFilters, 6, $offset' =>);
-//ReportFeed::renderReports($reports);
 ?>

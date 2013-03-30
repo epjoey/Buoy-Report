@@ -64,125 +64,9 @@ class Persistence {
 		}		
 		return $arr;
 	}
-	static function buildWhereClause($dict) {
-		$where = array();
-		foreach($dict as $key=>$val) {
-			if (is_array($val)) {
-				$where[] = "$key IN (" . implode(',' . self::escape($val)) . ")";
-			} else {
-				$where[] = "$key = " . self::escape($val);
-			}
-		}
-		$whereClause = implode(" AND ", $where);
-		return $whereClause;
-	}
 
 /*==================================================== General Reports ====================================================*/
 /*=========================================================================================================================*/
- 
-	public static function getReports($filters = array(), $limit = 6, $offset = 0) {
-	
-		//the basic SELECT statement
-		$select = 'SELECT a.id as r_id, b.id as l_id, a.*, b.*, c.* ';
-		$from = ' FROM report a 
-					INNER JOIN location b ON a.locationid = b.id 
-					LEFT JOIN sublocation c ON a.sublocationid = c.sl_id ';
-		$where = " WHERE TRUE";
-		$orderby = ' ORDER BY obsdate DESC';
-		$limit = ' LIMIT ' . $offset . ',' . $limit;
-
-		//use either specific id or list of ids for reporter clause
-		if (isset($filters['reporterId'])) {
-			$reporterId = intval($filters['reporterId']);
-			$where .= " AND reporterid = '$reporterId' ";			
-		}
-		else if (!empty($filters['reporters'])) {
-			$where .= " AND (";
-			foreach ($filters['reporters'] as $key=>$reporter) {
-				$where .= " reporterid = '$reporter'";
-				if(isset($filters['reporters'][$key+1])) {
-					$where .= " OR";
-				}
-			}
-			$where .= ") "; 			
-		}
-
-		//use either specific id or list of ids for location clause
-		if (isset($filters['locationId'])) {
-			$locationId = intval($filters['locationId']);
-			$where .= " AND locationid = '$locationId' ";			
-		}
-		else if (!empty($filters['locations'])) {
-			$where .= " AND (";
-			foreach ($filters['locations'] as $key=>$location) {
-				$where .= " locationid = '$location'";
-				if(isset($filters['locations'][$key+1])) {
-					$where .= " OR";
-				}
-			}
-			$where .= ") "; 			
-		}			
-
-		if (!empty($filters['sublocation'])) {
-			$sublocation = intval($filters['sublocation']);
-			$where .= " AND sublocationid = '$sublocation' ";			
-		}
-
-		if (isset($filters['quality'])) {
-			$quality = intval($filters['quality']);
-			$where .= " AND quality = '$quality'";
-		}
-
-		if (isset($filters['image'])) {
-			if ($filters['image'] == 1) {
-				$where .= " AND imagepath IS NOT NULL";
-			} else {
-				$where .= " AND imagepath IS NULL";
-			}				
-		}
-
-		if (isset($filters['text'])) {
-			$text = mysqli_real_escape_string(Persistence::dbConnect(), $filters['text']);
-			$where .= " AND text LIKE '%$text%'";
-		}
-
-		if (isset($filters['date'])) {
-			$date = intval($filters['date']);
-			$where .= " AND obsdate <= $date";
-		}		
-	
-
-		//finally, only pull reports our user is allowed to see
-		if (!isset($_SESSION)) session_start();
-		
-		//logged in, pull public and user's own reports
-		if (isset($_SESSION['userid']) && $_SESSION['userid'] != '') {
-			$userId = $_SESSION['userid'];
-			$where .= " AND (public = '1' OR reporterid = '$userId')";
-		} 
-
-		//not logged in, only pull public reports
-		else {
-			$where .= " AND (public = '1')";
-		}
-
-		$sql = $select . $from . $where . $orderby . $limit;
-
-		//var_dump($sql);
-
-		$result = mysqli_query(Persistence::dbConnect(), $sql);
-		if (!$result) {
-			die("Error fetching reports" . mysqli_error(Persistence::dbConnect()));
-		}
-		
-		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
-			$row['id'] = $row['r_id']; //'id' was overwritted by table location table in join	
-			$reports[] = $row;
-		}
-
-		if(!empty($reports)) return $reports;
-		else return NULL;
-	}
 
 	public static function getReportbyId($reportId) {
 		$reportId = intval($reportId);
@@ -295,20 +179,6 @@ class Persistence {
 		return $locationInfo;
 	}
 
-	public static function userCreatedLocation($reporterid, $locationid) {
-		$link = Persistence::dbConnect();
-		$reporterid = intval($reporterid);
-		$locationid = intval($locationid);
-		$sql = "SELECT COUNT(*) FROM location WHERE creator = '$reporterid' AND id = '$locationid'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error searching for user-location bookmark" . mysqli_error($link));
-		}		
-		$row = mysqli_fetch_array($result);	
-		if ($row[0] > 0) return TRUE;
-		else return FALSE;
-	}
-
 	public static function removeLocationFromUser($locationid, $reporterid) {
 		$link = Persistence::dbConnect();
 		$locationid = intval($locationid);
@@ -335,22 +205,6 @@ class Persistence {
 		} else {
 			return FALSE;
 		}
-	}
-
-	public static function updateLocationTimezone($locationid, $timezone) {
-		$link = Persistence::dbConnect();
-		$locationid = intval($locationid);		
-		$timezone = mysqli_real_escape_string($link, $timezone);
-		$sql = "UPDATE location SET timezone = '$timezone' WHERE id = '$locationid'";
-		$result = mysqli_query($link, $sql) or die("Error updating location timezone");
-	}
-
-	public static function updateLocationName($locationid, $name) {
-		$link = Persistence::dbConnect();
-		$locationid = intval($locationid);		
-		$name = mysqli_real_escape_string($link, $name);
-		$sql = "UPDATE location SET locname = '$name' WHERE id = '$locationid'";
-		$result = mysqli_query($link, $sql) or die("Error updating location name");
 	}
 
 	public static function insertLocationForecastUrl($locationid, $forecastUrl) {
@@ -381,18 +235,6 @@ class Persistence {
 			die("Error deleting location forecast link from DB" . mysqli_error($link));
 		}		
 	}	
-
-
-	public static function updateLocationForecastUrl($locationid, $oldForecastUrl, $newForecastUrl) {
-		$link = Persistence::dbConnect();
-		$locationid = intval($locationid);
-		$forecastUrl = mysqli_real_escape_string($link, $forecastUrl);
-		$sql = "UPDATE locationforecast SET forecasturl = '$newForecastUrl' WHERE locationid = '$locationid' AND forecasturl = '$oldForecastUrl'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error updating location forecast link in DB" . mysqli_error($link));
-		}		
-	}
 	
 
 	public static function getForecastUrlsByLocationId($locationid) {
@@ -456,18 +298,7 @@ class Persistence {
 		}
 		return $rows;			
 	}
-
-	public static function getSubLocationInfoById($id) {
-		$link = Persistence::dbConnect();
-		$id = intval($id);
-		$sql = "SELECT * 
-				FROM sublocation 
-				WHERE sl_id = '$id'";
-		$result = mysqli_query($link, $sql);
-		$row = mysqli_fetch_object($result);
-		return $row;			
-	}	
-			
+	
 		
 /*==================================================== Users ====================================================*/
 /*===================================================================================================================*/			
@@ -607,18 +438,6 @@ class Persistence {
 		if ($row[0] > 0) return TRUE;
 		else return FALSE;
 	}
-		
-	public static function returnUserName($email) {
-		$link = Persistence::dbConnect();
-		$email = mysqli_real_escape_string($link, $email);
-		$sql = "SELECT name FROM reporter WHERE email='$email'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error fetching reporter name");
-		}
-		$row = mysqli_fetch_array($result);
-		return $row['name'];	
-	}
 	
 	public static function returnUserId($username, $password = NULL) {
 		$link = Persistence::dbConnect();
@@ -640,18 +459,7 @@ class Persistence {
 		}
 	}
 		
-	public static function returnUserEmail($id) {
-		$link = Persistence::dbConnect();
-		$id = intval($id);
-		$sql = "SELECT email FROM reporter WHERE id='$id'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error fetching reporter email");
-		}
-		$row = mysqli_fetch_array($result);
-		return $row['email'];	
-	}
-		
+
 	public static function insertUserCookie($userId, $userKey) {
 		$link = Persistence::dbConnect();
 		$userId = intval($userId);
@@ -684,16 +492,6 @@ class Persistence {
 			die("Error deleting user cookie");
 		}
 	}
-	
-	public static function removeSingleUserCookie($userId, $userKey) {
-		$link = Persistence::dbConnect();
-		$userId = intval($userId);
-		$sql = "DELETE FROM usercookie WHERE userid = '$userId' AND userkey = '$userKey'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error deleting user cookie");
-		}
-	}
 
 	public static function replaceUserCookie($userId, $newKey, $curKey) {
 		$link = Persistence::dbConnect();
@@ -706,252 +504,5 @@ class Persistence {
 
 		
 	}
-
-/*==================================================== Buoy ====================================================*/
-/*==============================================================================================================*/	
-
-	public static function insertBuoy($id, $name = NULL, $locationid = null, $buoynum = null, $checkDbForBuoy = TRUE) {
-		$link = Persistence::dbConnect();
-		$id = mysqli_real_escape_string($link, $id);
-		if ($checkDbForBuoy) {
-			if (!Persistence::dbContainsBuoy($id)) {
-		
-				if (!empty($name)) {
-					$name = mysqli_real_escape_string($link, $name);
-					$nameSql = ", name = '" . $name . "'";
-				} else $nameSql = "";
-				
-				$sqlbuoy = "INSERT INTO buoy SET buoyid = '$id'" . $nameSql;
-				$result = mysqli_query($link, $sqlbuoy);
-				if (!$result) {
-					die("Error inserting buoy into buoy table" . mysqli_error($link));
-				}
-			}					
-		}
-
-		/* this buoy is associated with a location */
-		if (isset($locationid)) {
-			$locationid = intval($locationid);		
-			$buoynum = intval($buoynum);
-			$field = "buoy" . $buoynum;
-			$sqllocation = "UPDATE location SET $field = '$id' WHERE id = '$locationid'";			
-			$result = mysqli_query($link, $sqllocation);
-			if (!$result) {
-				die("Error inserting buoy into location table" . mysqli_error($link));
-			}
-		}
-	}
-
-	
-	public static function getBuoyData($reportid) {
-		$reportid = intval($reportid);
-		$sql = "SELECT buoy, gmttime, winddir, windspeed, swellheight, swellperiod, swelldir, tide FROM buoydata WHERE reportid = '$reportid'";
-		$result = mysqli_query(Persistence::dbConnect(), $sql);
-		if (!$result) {
-			die("Error fetching buoydata from db" . mysqli_error(Persistence::dbConnect()));
-		}
-		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {	
-			$buoydatarows[] = $row;
-		}
-		if(!empty($buoydatarows)) return $buoydatarows;
-		else return NULL;
-	}
-
-	public static function getAllStations($station, $limit = 100) {
-		$link = Persistence::dbConnect();
-		$station =  mysqli_real_escape_string($link, $station);
-		$limit = intval($limit);
-		$sql = "SELECT * FROM $station LIMIT 0 , $limit";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error fetching stations" . mysqli_error($link));
-		}
-		while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {	
-			$stations[] = $row;
-		}
-		return $stations;
-	}
-
-	public static function getBuoyInfo($buoy) {
-		$link = Persistence::dbConnect();
-		$buoy =  mysqli_real_escape_string($link, $buoy);
-		$sql = "SELECT * FROM buoy WHERE buoyid = '$buoy'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error fetching buoys by location" . mysqli_error($link));
-		}
-		return mysqli_fetch_array($result, MYSQL_ASSOC);
-	}
-
-
-	public static function setPrimaryBuoy($locationid, $buoy) {
-		$locInfo = Persistence::getLocationInfoById($locationid);
-		$link = Persistence::dbConnect();
-		$buoy = mysqli_real_escape_string($link, $buoy);
-		$buoy1 = $locInfo['buoy1'];
-		if ($buoy == $locInfo['buoy2']) {
-			$replace = "buoy2 = '$buoy1'";
-		} else {
-			$replace = "buoy3 = '$buoy1'";
-		}
-		$buoy3 = $locInfo['buoy3'];
-		$sql = "UPDATE location SET buoy1 = '$buoy', " . $replace . " WHERE id = '$locationid'";
-			//vardump($sql);exit();
-	
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error making Buoy primary" . mysqli_error($link));
-		}		
-	}
-
-	public static function removeBuoyFromLocation($key, $buoys, $locationid) {
-		$link = Persistence::dbConnect();
-		$locationid = intval($locationid);
-		$key = mysqli_real_escape_string($link, $key);
-		$switch = '';
-
-		//this is crazy - should of made a seperate table for buoy-location relationships
-		if ($key == 'buoy3') {
-			$switch = "buoy3 = NULL";
-		}
-		
-		if ($key == 'buoy2' && isset($buoys['buoy3'])) {
-			$buoy3 = $buoys['buoy3'];
-			$switch = "buoy2 = '$buoy3', buoy3 = NULL";
-		} else if ($key == 'buoy2' && !isset($buoys['buoy3'])) {
-			$switch = "buoy2 = NULL";
-		}
-		
-		if ($key == 'buoy1' && isset($buoys['buoy2']) && isset($buoys['buoy3'])) {
-			$buoy2 = $buoys['buoy2'];
-			$buoy3 = $buoys['buoy3'];
-			$switch = "buoy1 = '$buoy2', buoy2 = '$buoy3', buoy3 = NULL";
-		} else if ($key == 'buoy1' && isset($buoys['buoy2'])) {
-			$buoy2 = $buoys['buoy2'];
-			$switch = "buoy1 = '$buoy2', buoy2 = NULL";
-		} else if ($key == 'buoy1') {
-			$switch = "buoy1 = NULL";
-		}
-
-		$sql = "UPDATE location SET " . $switch . " WHERE id = '$locationid'";
-		$result = mysqli_query($link, $sql) or die ('unable to remove buoy');
-	}
-
-	public static function dbContainsBuoy($buoyid) {
-		$link = Persistence::dbConnect();
-		$buoyid = mysqli_real_escape_string($link, $buoyid);
-		$sql = "SELECT COUNT(*) FROM buoy WHERE buoyid = '$buoyid'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("error searching for buoys in db");
-		}
-		$row = mysqli_fetch_array($result);
-		if ($row[0] > 0) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-	}
-
-	public static function deleteBuoy($id) {
-		$link = Persistence::dbConnect();
-		$id = mysqli_real_escape_string($link, $id);
-		$sql = "DELETE FROM buoy WHERE buoyid = '$id'";
-		$result = mysqli_query($link, $sql) or die("Error deleting buoy");
-	}
-
-
-	public static function updateBuoy($oldId, $id, $name) {
-		$link = Persistence::dbConnect();
-		$id = mysqli_real_escape_string($link, $id);
-		$name = mysqli_real_escape_string($link, $name);
-		$sql = "UPDATE buoy SET buoyid = '$id', name = '$name' WHERE buoyid = '$oldId'";
-		$result = mysqli_query($link, $sql) or die("Error updating buoy");
-	}	
-
-/*==================================================== Tide stations ====================================================*/
-/*========================================================================================================================*/	
-
-	public static function insertTideStation($stationid, $stationname, $locationid, $checkDbForStation = TRUE) {
-		$link = Persistence::dbConnect();
-		$stationid = mysqli_real_escape_string($link, $stationid);
-		$stationname = mysqli_real_escape_string($link, $stationname);	
-		
-		if ($checkDbForStation) {
-			if (!Persistence::dbContainsTideStation($stationid)) {		
-				if (!empty($stationname)) {
-					$stationname = mysqli_real_escape_string($link, $stationname);
-					$nameSql = ", stationname = '" . $stationname . "'";
-				} else $nameSql = "";
-				
-				$sql = "INSERT INTO tidestation SET stationid = '$stationid'" . $nameSql;
-				$result = mysqli_query($link, $sql);
-				if (!$result) {
-					die("Error inserting station into tide station table" . mysqli_error($link));
-				}
-			}	
-		}
-				
-		$locationid = intval($locationid);
-		$sql = "UPDATE location SET tidestation = '$stationid' WHERE id = '$locationid'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error inserting tide station into location table" . mysqli_error($link));
-		}
-	}
-
-	public static function getTideData($reportid) {
-		$reportid = intval($reportid);
-		$sql = "SELECT tide, tidedate, tideres FROM tidedata WHERE reportid = '$reportid'";
-		$result = mysqli_query(Persistence::dbConnect(), $sql);
-		if (!$result) {
-			die("Error fetching tidedata from db" . mysqli_error(Persistence::dbConnect()));
-		}
-		$row = mysqli_fetch_array($result, MYSQL_ASSOC);	
-		if (!empty($row)) return $row;
-		else return NULL;
-	}
-			
-	public static function getTideStationInfo($stationid) {
-		$link = Persistence::dbConnect();
-		$stationid = mysqli_real_escape_string($link, $stationid);
-		$sql = "SELECT * FROM tidestation WHERE stationid = '$stationid'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("Error fetching buoys by location" . mysqli_error($link));
-		}
-		return mysqli_fetch_array($result, MYSQL_ASSOC);
-	}
-
-	public static function removeTideStationFromLocation($station, $locationid) {
-		$link = Persistence::dbConnect();
-		$locationid = intval($locationid);
-		$station = mysqli_real_escape_string($link, $station);		
-		$sql = "UPDATE location SET tidestation = NULL WHERE id = '$locationid'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("error removing tide station from location");
-		}
-	}
-
-	public static function dbContainsTideStation($stationid) {
-		$link = Persistence::dbConnect();
-		$stationid = mysqli_real_escape_string($link, $stationid);
-		$sql = "SELECT COUNT(*) FROM tidestation WHERE stationid = '$stationid'";
-		$result = mysqli_query($link, $sql);
-		if (!$result) {
-			die("error searching for tide stations in db");
-		}
-		$row = mysqli_fetch_array($result);
-		if ($row[0] > 0) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-	}
-
-
 }
-
-
 ?>

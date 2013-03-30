@@ -279,12 +279,9 @@ class Path {
 	public static function toBookmarkLocation() {
 		return self::toControllers() . 'location/add-reporter.php';
 	}
-	public static function toSetLocationTimezone() {
-		return self::toControllers() . 'location/set-timezone.php';
+	public static function toEditLocationPost() {
+		return self::toControllers() . 'location/edit.php';
 	}	
-	public static function toSetLocationName() {
-		return self::toControllers() . 'location/set-name.php';
-	}		
 	public static function toDeleteLocation() {
 		return self::toControllers() . 'location/delete-location.php';
 	}			

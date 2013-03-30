@@ -75,6 +75,11 @@
 .location-detail-page {
 	.loc-details {margin:6px 0 20px;}
 	h1 {margin-bottom:8px;}
+	.cover-photo {
+		.image-container {
+			background:rgba(0,0,0,.5); max-height:150px; margin-bottom:0;
+		}
+	}
 	.edit-loc-link {font-size: 16px; margin-left:0;}
 	.add-station-div,
 	.report-form-container {font-size:18px; display:none; border-top:3px solid #cc09d6;}
@@ -139,10 +144,6 @@
 		.optional-fields {
 			h5 { font-size:11px; text-transform: uppercase; padding:16px 0 10px; color:desaturate(lighten(@dark-blue,8%),10%);}
 		}
-		.image {
-			label { width: 160px; }
-			input {margin-top:8px;}
-		}
 		.quality {position:relative;
 			.radio-fields { max-width: 300px; display: inline-block;}
 		}
@@ -184,31 +185,19 @@
 
 /* =================== EDIT LOCATION PAGE =================== */
 .edit-location-page {
-	.buoy-to-remove {
-		margin-bottom:12px; overflow:hidden;
-		.buoy { display:inline-block; width: 76%; }
-	}
 	.container {max-width:600px;}
-	.form-container {padding:10px;}
-	form{margin:0;}
 	.text-input, select {float:left;}
-	select {margin-top:4px; width:280px; height:35px;}
+	select {margin-top:4px; max-width:280px; height:35px;}
 	input[type=submit] {float:right; margin:0;}
-	.buoys {margin:0;}
 	.field {margin-bottom:12px;}
-	.field.buoy {line-height:34px;}
-	.remove-buoy {float:right;}
 	#delete-location-form {
 		input:hover { text-decoration:underline; }
 	}
 	#delete-location-form .cancel {}
 	#delete-location-form input[type="submit"] {float:none; margin-left:8px; color:#000;} 
-	.add-station-section {margin:12px 0 40px;}
-	.add-station-div {.drop-shadow-reset(); padding:0; display:none;}
-	.add-station-div.has-status { display:block;}	
-	.add-station-div .text-input {float:right;}
-	.add-station-section .block-link {padding:0; margin:0 12px 0 2px;}
-	.add-station-section .block-link:hover, .block-link.active {background:none; text-decoration:underline;}	
+	.field.image {
+		&>label { display:none;}
+	}
 }
 
 /* =================== PROCESS MOBILE IMAGE PAGE =================== */
@@ -230,10 +219,6 @@
 	.report-form-container {
 		.field>label { width:240px;}
 		.field.quality { border-top:0 none;}
-	}
-	.image-container {text-align:left; max-height:none;
-		a {float:left; margin-right:8px;}
-		label {width:auto; display:block; .museo(300); }
 	}
 }
 

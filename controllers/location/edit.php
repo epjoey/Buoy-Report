@@ -1,38 +1,48 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
-$locationId = $_POST['locationId'];
-$location = LocationService::getLocation($locationId);
+$location = LocationService::getLocation($_POST['locationId']);
+$user = UserService::getUser();
 
-if ($_POST['submit'] == 'update-name') {
-	if (empty($_POST['locname']) || $_POST['locname'] == $location->locname) {
-		$error = 3;
-		header('Location:'.Path::toEditLocation($locationId, $error));
-		exit();				
-	}
-	if (Persistence::dbContainsLocation($_POST['locname'])) {
-		$error = 4;
-		header('Location:'.Path::toEditLocation($locationId, $error));
-		exit();		
-	}
-	Persistence::updateLocationName($locationId, $_POST['locname']);			
-	header('Location:'.Path::toEditLocation($locationId));
-	exit();	
+//empty or same name
+if (!$_POST['locname']) {
+	$error = 1;
+	header('Location:'.Path::toEditLocation($location->id, $error));
+	exit();				
 }
 
-if ($_POST['submit'] == 'select-timezone') {
-	if (empty($_POST['timezone']) || $_POST['timezone'] == $location->timezone) {
-		$error = 3;
-		header('Location:'.Path::toEditLocation($locationId, $error));
-		exit();				
-	}			
-	Persistence::updateLocationTimezone($locationId, $_POST['timezone']);	
-	header('Location:'.Path::toEditLocation($locationId));
-	exit();	
+//empty or same name
+if (!$_POST['timezone']) {
+	$error = 2;
+	header('Location:'.Path::toEditLocation($location->id, $error));
+	exit();				
 }			
 
-if ($_POST['submit'] == 'delete-location') {
-	Persistence::deleteLocation($locationId);
-	header('Location:'.Path::toUserHome());
-	exit();	
+//duplicate name
+if ($_POST['locname'] != $location->locname && Persistence::dbContainsLocation($_POST['locname'])) {
+	$error = 3;
+	header('Location:'.Path::toEditLocation($location->id, $error));
+	exit();		
 }
+
+
+//first handle deleting an image, then handle uploading a new one
+if (isset($_POST['delete-image']) && $_POST['delete-image'] == 'true') {
+	$location->coverImagePath = '';
+}
+
+if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
+	$location->coverImagePath = handleFileUpload($_FILES['upload'], $user->id);
+
+/* in case they used picup, its a remote url */	
+} else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
+	$location->coverImagePath = rawurldecode($_POST['remoteImageURL']);
+}
+
+$location->locname = $_POST['locname'];
+$location->timezone = $_POST['timezone'];
+
+LocationService::updateLocation($location);
+header('Location:'.Path::toEditLocation($location->id));
+exit();
+
 ?>

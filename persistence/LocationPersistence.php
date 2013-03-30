@@ -64,5 +64,19 @@ class LocationPersistence {
 		}
 		return $sublocations;		
 	}
+
+	static function updateLocation($location) {
+		$id = intval($location->id);
+		$tz = Persistence::escape($location->timezone);
+		$locname = Persistence::escape($location->locname);
+		$ip = Persistence::escape($location->coverImagePath);
+		$sql = "UPDATE location SET 
+				timezone = '$tz',
+				locname = '$locname',
+				coverImagePath = '$ip'
+				WHERE id = '$id'";
+		Persistence::run($sql);
+		return true;
+	}
 }
 ?>

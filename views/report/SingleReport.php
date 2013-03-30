@@ -53,7 +53,7 @@ class SingleReport {
 
 				//render a thumbnail image on page load.
 				if(isset($report->imagepath)) { 
-					self::renderReportImage($report, $thumb = TRUE);
+					Image::render($report->imagepath, $thumb = TRUE);
 				}
 				
 				if($report->waveheight) { 
@@ -76,7 +76,7 @@ class SingleReport {
 					<?
 					/* rendered if on single page or new-report ajax */
 					
-					self::renderReportImage($report, false);
+					Image::render($report->imagepath, false);
 					self::renderBuoyDetails($report);
 					self::renderTideDetails($report);
 					self::renderReporterDetails($report);
@@ -98,39 +98,6 @@ class SingleReport {
 		</li>
 		<?		
 	}	
-
-	public static function renderReportImage($report, $thumbnail=FALSE) {
-		$imagepath = $report->imagepath;
-		if (!$imagepath) {
-			return;
-		}
-		$detect = new Mobile_Detect();
-		if ($thumbnail) {
-			$detect->isSmallDevice() ? $dims = array(50,50) : $dims = array(80,80);	
-		}
-		else if (!$thumbnail) {
-			$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(508,400);	
-		}
-		$image = getImageInfo($imagepath, $dims[0], $dims[1]);
-		if (!$image) {
-			return;
-		}
-		if ($thumbnail) {
-			?>
-			<li class="image-container thumbnail-image">
-				<img src="" imgsrc="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
-			</li>
-			<?
-		} else {
-			?>
-			<div class="image-container large-image">
-				<a href="<?=$image['src']?>" target="_blank">
-					<img src="" imgsrc="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/>
-				</a>
-			</div>
-			<?	
-		}		
-	}
 
 	public static function renderBuoyDetails($report) {
 		if (!$report->buoyData) {

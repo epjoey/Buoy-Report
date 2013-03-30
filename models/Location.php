@@ -6,12 +6,7 @@ class Location extends BaseModel {
 	public $locname;
 	public $timezone;
 	public $creator;
-
-	//deprecated - do not use
-	public $tidestation;
-	public $buoy1;
-	public $buoy2;
-	public $buoy3;
+	public $coverImagePath;
 	
 	//from other tables
 	public $tideStations;
