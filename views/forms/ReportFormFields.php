@@ -75,21 +75,23 @@ class ReportFormFields {
 		?>
 		<div class="field quality radio-menu">
 			<label for="quality">Session was:</label>
-			<?
-			foreach (ReportOptions::quality() as $key=>$value) {
-				if ($currentQuality == $key) {
-					$selected = "checked = 'true'";
-				} else {
-					$selected = '';
-				}
-
-				?>
-				<span class="radio-field">
-					<input type="radio" class="required" name="quality" id="quality-<?=$key?>" value="<?=$key?>" <?=$selected?> /><label for="quality-<?=$key?>"> <?=$value?></label>
-				</span>
+			<div class="radio-fields">
 				<?
-			}
-			?>
+				foreach (ReportOptions::quality() as $key=>$value) {
+					if ($currentQuality == $key) {
+						$selected = "checked = 'true'";
+					} else {
+						$selected = '';
+					}
+
+					?>
+					<span class="radio-field">
+						<input type="radio" class="required" name="quality" id="quality-<?=$key?>" value="<?=$key?>" <?=$selected?> /><label for="quality-<?=$key?>"> <?=$value?></label>
+					</span>
+					<?
+				}
+				?>
+			</div>
 		</div>
 		<?		
 	}
