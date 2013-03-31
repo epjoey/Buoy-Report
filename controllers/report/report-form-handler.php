@@ -21,11 +21,13 @@ $report->waveheight = $_POST['waveheight'];
 $report->sublocationid = $_POST['sublocationid'];
 $report->locationid = $_POST['locationid'];
 
+$location = LocationService::getLocation($report->locationid);
+
 try {
 	
 	/* either real date or date offset passed in from form */
 	if (isset($_POST['time']) && $_POST['time']) {
-		$reportDate = new DateTime($_POST['time']);
+		$reportDate = new DateTime($_POST['time'], new DateTimeZone($location->timezone));
 		if (!$reportDate) {
 			throw new InvalidSubmissionException('Date must be valid format');
 		}
