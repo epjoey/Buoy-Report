@@ -15,38 +15,38 @@ class Header {
 
 				<? if ($user->isLoggedIn) { ?>
 
-					<div class="user-menu" id="user-menu">
-						<? if (!$user->locations) { ?>
-							<a class="block-link post-report" href="<?=Path::toLocations($reporter = null,$toPost = true)?>">Report</a>
-						<? 
-						} else { 
-							$locOptions['locations'] = $user->locations;
-							$locOptions['showSeeAll'] = TRUE;
-							$locOptions['toPost'] = TRUE;
-							$locationDrop = new LocationList($locOptions);
-							?>
-							<div class="block-link post-report">
-								<span id="pr-trigger">Report</span>
-								<div class="location-drop-down">
-									<? $locationDrop->renderLocations(); ?>
+						<div class="user-menu" id="user-menu">
+							<? if (!$user->locations) { ?>
+								<a class="block-link post-report" href="<?=Path::toLocations($reporter = null,$toPost = true)?>">Report</a>
+							<? 
+							} else { 
+								$locOptions['locations'] = $user->locations;
+								$locOptions['showSeeAll'] = TRUE;
+								$locOptions['toPost'] = TRUE;
+								$locationDrop = new LocationList($locOptions);
+								?>
+								<div class="block-link post-report">
+									<span id="pr-trigger">Report</span>
+									<div class="location-drop-down">
+										<? $locationDrop->renderLocations(); ?>
+									</div>
 								</div>
+							<? } ?>
+							<div class="block-link user-options">
+								<span class="user" id="user-trigger">
+									<span class="username"><?= html($user->name); ?></span>
+									<img src="<?= Path::toImages() ?>down-arrow.png" width="15" height="9"/>
+								</span>
+								<ul class="inner-user-menu" id="inner-user-menu">
+									<li><a class="block-link" href="<?=Path::toUserHome($user->id);?>">My Home</a></li>
+									<li id="my-locations-btn">
+										<a class="block-link" href="<?=Path::tolocations($user->id);?>">My Locations</a>
+									</li>
+									<li><a class="block-link" href="<?=Path::toProfile($user->id);?>">My Account</a></li>
+									<li><a class="block-link" href="<?=Path::toLogout();?>">Log Out</a></li>
+								</ul>		
 							</div>
-						<? } ?>
-						<div class="block-link user-options">
-							<span class="user" id="user-trigger">
-								<span class="username"><?= html($user->name); ?></span>
-								<img src="<?= Path::toImages() ?>down-arrow.png" width="15" height="9"/>
-							</span>
-							<ul class="inner-user-menu" id="inner-user-menu">
-								<li><a class="block-link" href="<?=Path::toUserHome($user->id);?>">My Home</a></li>
-								<li id="my-locations-btn">
-									<a class="block-link" href="<?=Path::tolocations($user->id);?>">My Locations</a>
-								</li>
-								<li><a class="block-link" href="<?=Path::toProfile($user->id);?>">My Account</a></li>
-								<li><a class="block-link" href="<?=Path::toLogout();?>">Log Out</a></li>
-							</ul>		
 						</div>
-					</div>
 									
 				<? } else { ?>
 

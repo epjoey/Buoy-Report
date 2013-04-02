@@ -9,9 +9,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
  */
 
 $user = UserService::getUser();
-if (!$user->isLoggedIn) {
-	exit();
-}
+
 $report = new Report(array());
 $report->reporterid = $user->id;
 $report->public = $user->public;
@@ -25,6 +23,10 @@ $location = LocationService::getLocation($report->locationid);
 
 try {
 	
+	if (!$user->isLoggedIn) {
+		throw new InvalidSubmissionException('Account required to post reports');
+	}
+		
 	/* either real date or date offset passed in from form */
 	if (isset($_POST['time']) && $_POST['time']) {
 		$reportDate = new DateTime($_POST['time'], new DateTimeZone($location->timezone));

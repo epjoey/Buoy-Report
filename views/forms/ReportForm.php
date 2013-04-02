@@ -12,6 +12,7 @@ class ReportForm {
 		$options = array_merge($defaultOptions, $options);
 		$statusMsg = $options['statusMsg'];
 		$needPicup = $options['needPicup'];
+		$user = UserService::getUser();
 		?>	
 		<div class="form-container report-form-container">
 			<form id="report-form" action="<?=Path::toHandleReportSubmission()?>" enctype="multipart/form-data" method="post" >	
