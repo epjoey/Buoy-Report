@@ -28,9 +28,9 @@ if(!$report) {
 
 
 
-$post = new SingleReportPage();
-$post->renderPage(array(
-	'pageTitle' => 'Single Report',
+$page = new SingleReportPage();
+$page->renderPage(array(
+	'pageTitle' => $report->location->locname . ' report ' . $report->id,
 	'report' => $report,
 	'user' => $user
 ));

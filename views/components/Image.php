@@ -11,7 +11,7 @@ class Image {
 			$detect->isSmallDevice() ? $dims = array(50,50) : $dims = array(80,80);	
 		}
 		else if (!$thumbnail) {
-			$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(520,400);	
+			$detect->isSmallDevice() ? $dims = array(280,260) : $dims = array(820,800);	
 		}
 		$image = getImageInfo($path, $dims[0], $dims[1]);
 		if (!$image) {
