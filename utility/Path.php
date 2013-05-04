@@ -52,10 +52,6 @@ class Path {
 		return $url;
 	}	
 
-	public static function toLogout() {
-		return '/logout.php';
-	}	
-
 	public static function toRegister($error = NULL) {
 		$url = '/register.php';
 		if (isset($error)) {
@@ -149,11 +145,6 @@ class Path {
 		return $url;			
 	}
 
-	public static function toCrew($id = NULL) {
-		if (!isset($id)) 
-			return self::toSubmitCrew(); //make this go to list of crews
-		return '/crew.php?id=' . $id;			
-	}	
 
 	public static function toImageSrc($path, $isRemote = FALSE) {
 		global $local_dev;
@@ -181,13 +172,6 @@ class Path {
 		return '/edit-buoy.php?' . $str;
 	}	
 
-	public static function toImageFile($path, $isRemote = FALSE) {
-		if ($isRemote) {
-			return $path;
-		}
-		return $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $path;
-	}
-
 	public static function toAbout() {
 		return '/about.php';
 	}	
@@ -199,24 +183,23 @@ class Path {
 		return 'http://tidesonline.noaa.gov/plotcomp.shtml?station_info=' . $stationId;
 	}	
 		
+
+
 //-------------------------------------------------------------------------------//
 //-------------------------- CODE DIRECTORIES/FILES -----------------------------//
-	
-	public static function toControllers() {
-		return '/controllers/';
-	}
 		
 	public static function toJs() {
-		return '/static/js/';
+		return '/view/static/js/';
 	}
 
 	public static function toCss() {
-		return '/static/css/';
+		return '/view/static/css/';
 	}
 
 	public static function toImages() {
-		return '/static/images/';
+		return '/view/static/images/';
 	}
+
 
 	public static function absoluteToImages() {
 		global $local_dev;
@@ -226,67 +209,73 @@ class Path {
 		else {
 			$url = Path::URL;
 		}
-		$url .= '/static/images/';
+		$url .= '/view/static/images/';
 		return $url;
 	}	
 
-	public static function toMobileImageProcess() {
-		global $local_dev;
-		return Path::toUrl() . '/controllers/report/mobile-image-process.php';
+	public static function toImageFile($path, $isRemote = FALSE) {
+		if ($isRemote) {
+			return $path;
+		}
+		return $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $path;
 	}
 
-	public static function to404() {
-		return '/controllers/view/404.php';
+	public static function toMobileImageProcess() {
+		global $local_dev;
+		return Path::toUrl() . '/api/report/mobile-image-process.php';
 	}
 
 	//form handlers
 	public static function toLocationAddBuoy() {
-		return self::toControllers() . 'location/add-buoy.php';
+		return '/api/location/add-buoy.php';
 	}
 	public static function toLocationRemoveBuoy() {
-		return self::toControllers() . 'location/remove-buoy.php';
+		return '/api/location/remove-buoy.php';
 	}
 	public static function toLocationAddTidestation() {
-		return self::toControllers() . 'location/add-tidestation.php';
+		return '/api/location/add-tidestation.php';
 	}
 	public static function toLocationRemoveTidestation() {
-		return self::toControllers() . 'location/remove-tidestation.php';
+		return '/api/location/remove-tidestation.php';
 	}	
 	public static function toDeleteBuoy() {
-		return self::toControllers() . 'buoy/delete-buoy.php';
+		return '/api/buoy/delete-buoy.php';
 	}
 	public static function toEditBuoy() {
-		return self::toControllers() . 'buoy/edit-buoy.php';
+		return '/api/buoy/edit-buoy.php';
 	}	
 	public static function toDeleteTidestation() {
-		return self::toControllers() . 'tide/delete-tidestation.php';
+		return '/api/tide/delete-tidestation.php';
 	}
 	public static function toEditTidestation() {
-		return self::toControllers() . 'tide/edit-tidestation.php';
+		return '/api/tide/edit-tidestation.php';
 	}	
 	public static function toHandleReportSubmission() {
-		return self::toControllers() . 'report/report-form-handler.php';
+		return '/api/report/report-form-handler.php';
 	}
 	public static function toHandleEditReportSubmission() {
-		return self::toControllers() . 'report/edit-report-form-handler.php';
+		return '/api/report/edit-report-form-handler.php';
 	}	
 	public static function toHandleLogin() {
-		return self::toControllers() . 'user/login-form-handler.php';
+		return '/api/user/login-form-handler.php';
+	}
+	public static function toLogout() {
+		return '/api/user/logout.php';
 	}
 	public static function toHandleRegistration() {
-		return self::toControllers() . 'user/register-form-handler.php';
+		return '/api/user/register-form-handler.php';
 	}	
 	public static function toBookmarkLocation() {
-		return self::toControllers() . 'location/add-reporter.php';
+		return '/api/location/add-reporter.php';
 	}
 	public static function toEditLocationPost() {
-		return self::toControllers() . 'location/edit.php';
+		return '/api/location/edit.php';
 	}	
 	public static function toDeleteLocation() {
-		return self::toControllers() . 'location/delete-location.php';
+		return '/api/location/delete-location.php';
 	}
 	public static function toPostLocation() {
-		return self::toControllers() . 'location/add-location.php';	
+		return '/api/location/add-location.php';	
 	}			
 }
 ?>
