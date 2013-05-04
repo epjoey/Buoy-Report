@@ -173,7 +173,7 @@ class Path {
 	}	
 
 	public static function toAbout() {
-		return '/about.php';
+		return '/about';
 	}	
 
 	public static function to404() {
