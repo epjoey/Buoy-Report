@@ -158,6 +158,7 @@ class Page {
 			</div>
 		</div>
 		<?
+		print "<span style='display:none'>" . $_SERVER['PHP_SELF'] . "</span>";
 	}
 
 	public function renderFooterJs() {}		

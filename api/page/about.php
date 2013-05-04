@@ -6,5 +6,4 @@ $about->renderPage(array(
 	'user' => UserService::getUser(),
 	'pageTitle' => 'About Buoy Report',
 ));
-print '<span style="display:none"></span>';
 ?>
