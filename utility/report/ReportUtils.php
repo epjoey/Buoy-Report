@@ -27,6 +27,8 @@ class ReportUtils {
 		$filters['text']    	  = $req['text'];
 		$filters['obsdate']    	  = $req['obsdate'];
 		$filters['subLocationId'] = $req['sublocation'];
+		$filters['locationIds']   = !empty($req['locationIds']) ? $req['locationIds'] : ($req['location'] ? array($req['location']) : array());
+		$filters['reporterId']    = $req['reporterId'];
 		return $filters;
 	}
 }
