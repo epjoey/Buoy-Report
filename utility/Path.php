@@ -176,6 +176,9 @@ class Path {
 		return '/about.php';
 	}	
 
+	public static function to404() {
+		return '/api/page/404.php';
+	}
 	public static function toNOAABuoy($buoyId) {
 		return 'http://www.ndbc.noaa.gov/station_page.php?station=' . $buoyId;
 	}
