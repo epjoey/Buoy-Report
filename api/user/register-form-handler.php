@@ -51,8 +51,8 @@ if (Persistence::databaseContainsName($_POST['reg-name'])) {
 $reporterId = Persistence::insertUser(
 	$_POST['reg-name'], 
 	$_POST['reg-email'], 
-	md5($_POST['reg-password'] . 'reportdb'), 
-	$_POST['report-status']
+	$_POST['reg-password'], 
+	array('reportPublicly' => $_POST['report-status'])
 );
 
 User::logInUser($reporterId, NULL);
