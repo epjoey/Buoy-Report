@@ -69,11 +69,11 @@ class Path {
 	}
 
 	public static function toSingleReport($reportId) {
-		return '/report/'.$reportId;
+		return '/reports/'.$reportId;
 	}
 
 	public static function toEditReport($reportId, $submitError = NULL) {
-		$url = '/edit-post?id='.$reportId;
+		$url = '/edit-report/'.$reportId;
 		if (isset($submitError)) {
 			$url .= '&error='.$submitError;
 		}
@@ -122,7 +122,7 @@ class Path {
 	}
 
 	public static function toEditLocation($locationId, $error = NULL) {
-		$url = '/edit-location?location='.$locationId;
+		$url = '/edit-location/'.$locationId;
 		if (isset($error)) {
 			$url .= '&error='.$error;
 		}
