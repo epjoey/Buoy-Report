@@ -41,7 +41,7 @@ class Path {
 	}	
 
 	public static function toLogin($error = NULL, $rel = NULL) {
-		$url = '/login.php';
+		$url = '/login';
 		if (isset($error)) {
 			$url .= '?error=' . $error;
 		}
@@ -53,7 +53,7 @@ class Path {
 	}	
 
 	public static function toRegister($error = NULL) {
-		$url = '/register.php';
+		$url = '/signup';
 		if (isset($error)) {
 			$url .= '?error=' . $error;
 		} 
@@ -64,16 +64,16 @@ class Path {
 		if (!isset($locationid)) {
 			return Path::toLocations(null, true);
 		}
-		$url = '/location.php?location='.$locationid.'&report=1';
+		$url = '/locations/'.$locationid.'/report';
 		return $url;
 	}
 
 	public static function toSingleReport($reportId) {
-		return '/post.php?id='.$reportId;
+		return '/report/'.$reportId;
 	}
 
 	public static function toEditReport($reportId, $submitError = NULL) {
-		$url = '/edit-post.php?id='.$reportId;
+		$url = '/edit-post?id='.$reportId;
 		if (isset($submitError)) {
 			$url .= '&error='.$submitError;
 		}
@@ -81,7 +81,7 @@ class Path {
 	}	
 
 	public static function toProfile($reporterId, $status = NULL) {	
-		$url = '/profile.php?reporter='.$reporterId;
+		$url = '/reporters/'.$reporterId;
 		if (isset($status)) {
 			$url .= '&status='.$status;
 		}
@@ -92,7 +92,7 @@ class Path {
 		if (!isset($locationId)) {
 			return Path::toLocations();
 		}
-		$url = '/location.php?location='.$locationId;
+		$url = '/locations/'.$locationId;
 		if (isset($error)) {
 			$url .= '&error='.$error;
 		}
@@ -101,7 +101,7 @@ class Path {
 
 	public static function toLocations($reporterId = null, $toPost = FALSE) {
 
-		$url = '/locations.php';
+		$url = '/locations';
 
 		if (isset($reporterId)) {
 			$url .= '?reporter=' . $reporterId;
@@ -114,7 +114,7 @@ class Path {
 	}
 
 	public static function toReporters($locationId = NULL) {
-		$url = '/reporters.php';
+		$url = '/reporters';
 		if (isset($locationId)) {
 			$url .= '?location=' . $locationId;
 		}
@@ -122,7 +122,7 @@ class Path {
 	}
 
 	public static function toEditLocation($locationId, $error = NULL) {
-		$url = '/edit-location.php?location='.$locationId;
+		$url = '/edit-location?location='.$locationId;
 		if (isset($error)) {
 			$url .= '&error='.$error;
 		}
@@ -130,15 +130,7 @@ class Path {
 	}
 
 	public static function toSubmitLocation($error = NULL) {
-		$url = '/add-location.php';
-		if (isset($error)) {
-			$url .= '?error='.$error;
-		}
-		return $url;			
-	}
-
-	public static function toSubmitCrew($error = NULL) {
-		$url = '/add-crew.php';
+		$url = '/add-location';
 		if (isset($error)) {
 			$url .= '?error='.$error;
 		}
@@ -158,24 +150,23 @@ class Path {
 	}
 
 	public static function toBuoys() {	
-		return '/buoys.php';
+		return '/buoys';
 	}
 
 	public static function toAddBuoy($error = NULL) {
 		$str = http_build_query(array('error'=>$error));
-		return '/add-buoy.php' . ($str ? "?".$str: "");
+		return '/add-buoy' . ($str ? "?".$str: "");
 	}	
 
 	public static function toEditBuoyPage($id = NULL, $error = NULL) {
 		$str = http_build_query(array('id'=>$id, 'error'=>$error));
 
-		return '/edit-buoy.php?' . $str;
+		return '/edit-buoy?' . $str;
 	}	
 
 	public static function toAbout() {
 		return '/about';
 	}	
-
 	public static function to404() {
 		return '/api/page/404.php';
 	}
