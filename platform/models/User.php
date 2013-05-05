@@ -93,24 +93,6 @@ class User extends BaseModel {
 
 		return $userId;
 	}
-	
-	public function logOut() {
-		if (!isset($_SESSION)) session_start();
-		if (isset($_COOKIE['surf-session'])) {
-			Persistence::removeAllUserCookies($_SESSION['userid']);
-			eatCookie('surf-session');					
-		}	
-	    session_unset();
-	    session_destroy();
-	}
-	
-	static function isDev() {
-		if ($_SERVER["REMOTE_ADDR"] == '::1' || $_SERVER["REMOTE_ADDR"] == "127.0.0.1" ) {
-			return TRUE;
-		}		
-		return FALSE;
-	}
-
 
 
 }

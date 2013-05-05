@@ -4,16 +4,13 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 class UserService {
 
 	static $USER;
+	static $COOKIE_NAME = 'surf-session';
 
 	public static function getUser() {
 		if (!isset(self::$USER)) {
 			self::$USER = new User();
 		}
 		return self::$USER;
-	}
-
-	public static function logOutUser() {
-		self::getUser()->logOut();
 	}
 
 	public static function logInUser($name, $pw) {
@@ -23,6 +20,19 @@ class UserService {
 		}
 		User::logIn($reporter->id);
 	}
+
+	public static function logOutUser() {
+		$user = self::getUser();
+		$userId = intval($user->id);
+		Persistence::run("DELETE FROM usercookie WHERE userid = '$userId'");
+		eatCookie(self::$COOKIE_NAME);					
+		session_unset();
+		session_destroy();
+	}
+	
+	static function isDev() {
+		return $_SERVER["REMOTE_ADDR"] == '::1' || $_SERVER["REMOTE_ADDR"] == "127.0.0.1";
+	}	
 
 }
 ?>
