@@ -1,1 +1,0 @@
-alter table location add column `cover_image_path` varchar(255) DEFAULT NULL
