@@ -24,18 +24,18 @@ if ($user->isLoggedIn && $reporterId == $user->id) {
 		'limit' => $numReportsPerPage
 	));
 
+
+	$editAccountStatus = StatusMessageService::getStatusMsgForAction('edit-account');
+	StatusMessageService::clearStatusForAction('edit-account');
+
 	$page = new EditProfilePage;
-	$page->loadData();
-	if (isset($_POST['submit'])) {
-		$page->afterSubmit();
-		exit();
-	}	
 	$page->renderPage(array(
 		'pageTitle' => 'My Account',
 		'reportFilters' => $reportFilters,
 		'user' => $user,
 		'numReportsPerPage' => $numReportsPerPage,
-		'reports' => $reports
+		'reports' => $reports,
+		'editAccountStatus' => $editAccountStatus
 	));	
 
 

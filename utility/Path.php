@@ -82,9 +82,6 @@ class Path {
 
 	public static function toProfile($reporterId, $status = NULL) {	
 		$url = '/reporters/'.$reporterId;
-		if (isset($status)) {
-			$url .= '&status='.$status;
-		}
 		return $url;		
 	}
 
@@ -269,6 +266,12 @@ class Path {
 	}
 	public static function toPostLocation() {
 		return '/api/location/add-location.php';	
-	}			
+	}		
+	public static function toUpdateReporter() {
+		return '/api/reporter/update.php';
+	}	
+	public static function toDeleteReporter() {
+		return '/api/reporter/delete.php';
+	}
 }
 ?>

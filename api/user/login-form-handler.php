@@ -17,7 +17,7 @@ if (
 } 
 
 
-$userId = Persistence::returnUserId($_POST['login-username'], md5($_POST['login-password'] . 'reportdb'));
+$userId = Persistence::returnUserId($_POST['login-username'], $_POST['login-password']);
 
 if (!isset($userId)) {
 	$error = 2;	

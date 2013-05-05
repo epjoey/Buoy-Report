@@ -77,6 +77,46 @@ class ReporterPersistence {
 		$sql = "SELECT reporterid FROM reporterlocation WHERE locationid = $lid";
 		return Persistence::getArray($sql);
 	}
+
+	public static function deleteReporter($reporter) {
+		$id = intval($reporter->id);
+		$sql = "DELETE FROM reporter WHERE id = '$id'";
+		Persistence::run($sql, array('errorMsg' => "Error deleting reporter"));
+		$sql = "DELETE FROM reporterlocation WHERE reporterid = '$id'";
+		Persistence::run($sql, array('errorMsg' => "Error deleting reporter location associations"));
+		$sql = "DELETE FROM report WHERE reporterid = '$id'";
+		Persistence::run($sql, array('errorMsg' => "Error deleting reporter report associations"));
+	}
+
+	public static function updateReporter($reporter, $properties = array()) {
+		$rid = $reporter->id;
+		if (!$rid) {
+			throw new InvalidArgumentException();
+		}
+		$set = array();
+		if (isset($properties['name']) && $properties['name']) {
+			$set[] = array('field' => 'name', 'value' => Persistence::escape($properties['name']));
+		}
+		if (isset($properties['email']) && $properties['email']) {
+			$set[] = array('field' => 'email', 'value' => Persistence::escape($properties['email']));
+		}	
+		if (isset($properties['public']) && $properties['public']) {
+			$set[] = array('field' => 'public', 'value' => intval($properties['public']));
+		}			
+		if (isset($properties['password']) && $properties['password']) {
+			$set[] = array('field' => 'password', 'value' => md5($properties['password'] . Persistence::$hashSalt));
+		}
+
+		$str = "";
+		for ($i = 0; $i < count($set); $i++) {
+			$str .= $set[$i]['field'] . " = '" . $set[$i]['value'] . "'";
+			$str .= isset($set[$i+1]) ? ", " : "";
+		}
+		//var_dump($set); exit;
+		$sql = "UPDATE reporter SET " . $str . " WHERE id = '$rid'";		
+		//var_dump($sql); exit;
+		Persistence::run($sql);
+	}
 }
 
 

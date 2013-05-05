@@ -42,5 +42,14 @@ class ReporterService {
 		$reporterIds = ReporterPersistence::getReporterIdsForLocation($location);
 		return self::getReporters($reporterIds);
 	}
+
+	static function updateReporter($reporter, $properties = array()) {
+		ReporterPersistence::updateReporter($reporter, $properties);
+	}
+
+	static function deleteReporter($reporter) {
+		ReporterPersistence::deleteReporter($reporter);
+	}
+
 }
 ?>
