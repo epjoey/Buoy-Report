@@ -16,5 +16,13 @@ class UserService {
 		self::getUser()->logOut();
 	}
 
+	public static function logInUser($name, $pw) {
+		$reporter = ReporterService::getReporterByUsernameAndPassword($name, $pw);
+		if (!$reporter) {
+			throw new InvalidSubmissionException('The specified username or password is incorrect');
+		}
+		User::logIn($reporter->id);
+	}
+
 }
 ?>

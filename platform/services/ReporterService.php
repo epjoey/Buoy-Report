@@ -43,6 +43,11 @@ class ReporterService {
 		return self::getReporters($reporterIds);
 	}
 
+	static function createReporter($name, $email, $password, $options = array()) {
+		$id = ReporterPersistence::createReporter($name, $email, $password, $options);
+		return self::getReporter($id);
+	}
+
 	static function updateReporter($reporter, $properties = array()) {
 		ReporterPersistence::updateReporter($reporter, $properties);
 	}
@@ -51,5 +56,9 @@ class ReporterService {
 		ReporterPersistence::deleteReporter($reporter);
 	}
 
+	static function getReporterByUsernameAndPassword($name, $pw) {
+		$id = Persistence::returnUserId($name, $pw);
+		return self::getReporter($id);
+	}
 }
 ?>

@@ -48,14 +48,14 @@ if (Persistence::databaseContainsName($_POST['reg-name'])) {
 }
 
 			
-$reporterId = Persistence::insertUser(
+$reporter = ReporterService::createReporter(
 	$_POST['reg-name'], 
 	$_POST['reg-email'], 
 	$_POST['reg-password'], 
 	array('reportPublicly' => $_POST['report-status'])
 );
 
-User::logInUser($reporterId, NULL);
+UserService::logInUser($reporter->name, $_POST['reg-password']);
 header('Location:'.Path::toUserHome());
 exit();
 

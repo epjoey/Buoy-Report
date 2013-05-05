@@ -117,6 +117,27 @@ class ReporterPersistence {
 		//var_dump($sql); exit;
 		Persistence::run($sql);
 	}
+
+
+	public static function createReporter($name, $email, $password, $options = array()) {
+		$defaultOptions = array(
+			'reportPublicly' => true
+		);
+		$options = array_merge($defaultOptions, $options);
+
+		$link = Persistence::dbConnect();
+		$nameStr = "name = '" . mysqli_real_escape_string($link, $name) . "'";
+		$emailStr = ", email = '" . mysqli_real_escape_string($link, $email) . "'";
+		$passwordStr = ", password = '" . md5($password . Persistence::$hashSalt) . "'";
+		$privacyStr = ", public = '" . intval($options['reportPublicly']) . "'";
+		$sql = "INSERT INTO reporter SET " . $nameStr . $emailStr . $passwordStr . $privacyStr;
+		$result = mysqli_query($link, $sql);
+		if (!$result) {
+			die("Error inserting reporter into DB" . mysqli_error($link));
+		}	
+		return mysqli_insert_id($link);	
+	}
+
 }
 
 
