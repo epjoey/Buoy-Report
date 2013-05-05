@@ -53,7 +53,7 @@ class User extends BaseModel {
 
 		/*--- IF KEY EXISTS IN DB LOG USER IN WITH PARAMS TO SET NEW COOKIE -----*/
 		if (Persistence::userCookieExists($userId, $curEncryptedKey)) {
-			return self::logInUser($userId, curEncryptedKey);
+			return self::logIn($userId, curEncryptedKey);
 		}
 		return false;
 		
@@ -67,7 +67,7 @@ class User extends BaseModel {
 		return md5($key . 'makawao');
 	}
 
-	public static function logInUser($userId, $curEncryptedKey = NULL) {
+	public static function logIn($userId, $curEncryptedKey = NULL) {
 
 		if (!isset($_SESSION)) {
 			session_start();
