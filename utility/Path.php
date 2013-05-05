@@ -170,6 +170,9 @@ class Path {
 	public static function to404() {
 		return '/api/page/404.php';
 	}
+	public static function toMobileImageProcess() {
+		return Path::toUrl() . '/api/page/mobile-image-process.php';
+	}	
 	public static function toNOAABuoy($buoyId) {
 		return 'http://www.ndbc.noaa.gov/station_page.php?station=' . $buoyId;
 	}
@@ -214,10 +217,6 @@ class Path {
 		return $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $path;
 	}
 
-	public static function toMobileImageProcess() {
-		global $local_dev;
-		return Path::toUrl() . '/api/report/mobile-image-process.php';
-	}
 
 	//form handlers
 	public static function toLocationAddBuoy() {
