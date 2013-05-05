@@ -11,21 +11,20 @@ if (
 	|| !isset($_POST['login-password']) 
 	|| $_POST['login-password'] == '') 
 {
-	$error = 1;
-	header('Location:'.Path::toLogin($error));
+	StatusMessageService::setStatusMsgForAction('Please fill in both fields', 'login');	
+	header('Location:'.Path::toLogin());
 	exit();		
 } 
 
 
-$userId = Persistence::returnUserId($_POST['login-username'], $_POST['login-password']);
+try {
+	UserService::logInUser($_POST['login-username'], $_POST['login-password']);
 
-if (!isset($userId)) {
-	$error = 2;	
-	header('Location:'.Path::toLogin($error));
+} catch (InvalidSubmissionException $e) {
+	StatusMessageService::setStatusMsgForAction($e->getMessage(), 'login');	
+	header('Location:'.Path::toLogin());
 	exit();		
 }
-
-User::logInUser($userId, NULL);
 	
 if (isset($_POST['login-rel']) && $_POST['login-rel']) {
 	header('Location:'.$_POST['login-rel']);

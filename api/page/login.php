@@ -8,13 +8,10 @@ if ($user->isLoggedIn) {
 	exit();
 }
 
-$error = null;
-if (isset($_GET['error']) && $_GET['error']) {
-	switch($_GET['error']) {
-		case 1: $error = 'Please fill in both fields'; break;
-		case 2: $error = 'The specified username or password was incorrect.';
-	}
-}		
+$error = StatusMessageService::getStatusMsgForAction('login');
+StatusMessageService::clearStatusForAction('login');
+
+	
 $loginRel = null;
 if (isset($_GET['rel']) && $_GET['rel'] != '') {
 	$loginRel = $_GET['rel'];
