@@ -7,10 +7,7 @@ class EditProfilePage extends Page {
 	protected $statusSuccess = FALSE;
 
 	public function loadData() {
-		$this->pageTitle = 'My Account';	
 		parent::loadData();
-
-		$this->editAccountForm = new EditAccountForm;
 
 		if (isset($_GET['status']) && $_GET['status']) {
 			switch($_GET['status']) {
@@ -24,21 +21,7 @@ class EditProfilePage extends Page {
 			}
 			$this->editAccountStatus = $e;
 		}	
-
-		$this->reportFilters = array();
-		$this->reportFilters['quality'] 	  = $_REQUEST['quality'];
-		$this->reportFilters['image']   	  = $_REQUEST['image'];
-		$this->reportFilters['text']    	  = $_REQUEST['text'];
-		$this->reportFilters['obsdate']    	  = $_REQUEST['obsdate'];
-		$this->reportFilters['locationIds']   = $_REQUEST['location'] ? array($_REQUEST['location']) : array();
-		$this->reportFilters['reporterId']	  = $this->user->id;
-
-		/* load Reports */
-		$this->numReportsPerPage = 6;
-		$this->reports = ReportService::getReportsForUserWithFilters($this->user, $this->reportFilters, array(
-			'start' => 0,
-			'limit' => $this->numReportsPerPage
-		));			
+		
 	}
 
 	public function getBodyClassName() {
