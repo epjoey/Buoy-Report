@@ -13,11 +13,7 @@ if (isset($_GET['location']) && $_GET['location']) {
 		exit();
 	} 
 	$isLocationReporters = TRUE;
-	$reporterIds = Persistence::getUsersByLocation($locationId);
-	$reporters = array();
-	foreach($reporterIds as $id) {
-		$reporters[] = Persistence::getUserInfoById($id['reporterid']);
-	} 
+	$reporters = ReporterService::getLocationReporters($location);
 } else {
 	$reporters = ReporterService::getAllReporters();
 }

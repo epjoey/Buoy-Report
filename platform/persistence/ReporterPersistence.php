@@ -68,6 +68,15 @@ class ReporterPersistence {
 		$sql = "SELECT id FROM reporter";
 		return Persistence::getArray($sql);
 	}
+
+	public static function getReporterIdsForLocation($location) {
+		$lid = intval($location->id);
+		if (!$lid) {
+			throw new InvalidArgumentException();
+		}
+		$sql = "SELECT reporterid FROM reporterlocation WHERE locationid = $lid";
+		return Persistence::getArray($sql);
+	}
 }
 
 
