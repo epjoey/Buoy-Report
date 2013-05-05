@@ -3,7 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class EditAccountForm {
 
-	public function renderForm($user, $editAccountStatus = NULL) {	
+	public static function renderForm($user, $editAccountStatus = NULL) {	
 		?>
 		<div class="form-container">
 

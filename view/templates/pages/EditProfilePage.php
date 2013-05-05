@@ -164,7 +164,7 @@ class EditProfilePage extends Page {
 		?>
 		<div class="account-details">
 			<h3>Account Settings</h3>
-			<? $this->editAccountForm->renderForm($this->user, $this->editAccountStatus); ?>
+			<? EditAccountForm::renderForm($this->user, $this->editAccountStatus); ?>
 		</div>
 		<?
 	}	
