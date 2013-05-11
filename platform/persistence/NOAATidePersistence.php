@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/simple_html_dom.php';
 
-class NOAATideDataException {}
+class NOAATideDataException extends Exception {}
 
 class NOAATidePersistence {
 	

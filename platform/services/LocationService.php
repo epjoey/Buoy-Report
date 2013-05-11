@@ -30,12 +30,12 @@ class LocationService {
 		return $locations;
 	}
 
-	public static function getReporterLocations($reporter){
+	public static function getReporterLocations($reporter, $options = array()){
 		if (!$reporter) {
 			return array();
 		}
 		$lids = ReporterService::getReporterLocationIds($reporter);
-		return self::getLocations($lids);
+		return self::getLocations($lids, $options);
 	}		
 
 	public static function getSublocationsForLocation($location) {
@@ -56,7 +56,7 @@ class LocationService {
 
 	static function getAllLocations($options = array()) {
 		$ids = self::getAllLocationIds($options);
-		return self::getLocations($ids);
+		return self::getLocations($ids, $options);
 	}
 
 	static function getAllLocationIds($options = array()) {

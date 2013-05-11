@@ -4,7 +4,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 //todo: use instance of NoaaBuoy Model for single-buoy related operations
 
-class NOAABuoyException {}
+class NOAABuoyException extends Exception {}
 class NOAABuoyPersistence {
 
 	static $fileRowLimit = 1000; //number of rows to sift through before giving up
