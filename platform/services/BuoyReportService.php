@@ -17,7 +17,7 @@ class BuoyReportService {
 		return $buoyReports;
 	}
 
-	static function getBuoyReportFromBuoysForReport($buoyIds, $report, $options = array()) {
+	static function getBuoyReportsFromBuoysForReport($buoyIds, $report, $options = array()) {
 		$defaultOptions = array(
 			'stationType' => 'NOAA'
 		);
