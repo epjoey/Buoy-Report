@@ -77,9 +77,9 @@ class SingleReport {
 					/* rendered if on single page or new-report ajax */
 					
 					Image::render($report->imagepath, false);
-					self::renderBuoyDetails($report);
-					self::renderTideDetails($report);
-					self::renderReporterDetails($report);
+					self::renderBuoyReports($report);
+					self::renderTideReports($report);
+					self::renderReporter($report);
 					?>
 				</li>
 			</ul>
@@ -99,7 +99,7 @@ class SingleReport {
 		<?		
 	}	
 
-	public static function renderBuoyDetails($report) {
+	public static function renderBuoyReports($report) {
 		if (!$report->buoyReports) {
 			return;
 		}
@@ -120,7 +120,7 @@ class SingleReport {
 		<? 
 	}
 
-	public function renderTideDetails($report) {
+	public function renderTideReports($report) {
 		if (!$report->tideData) {
 			return;
 		}		
@@ -141,7 +141,7 @@ class SingleReport {
 		<?	
 	}
 
-	public function renderReporterDetails($report) {
+	public function renderReporter($report) {
 		if (isset($report->location->timezone)) {
 			$reportTime = getLocalTimeFromGMT($report->reportdate, $report->location->timezone);
 			$tzAbbrev = getTzAbbrev($report->location->timezone);
