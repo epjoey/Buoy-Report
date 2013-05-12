@@ -9,7 +9,7 @@ class NOAABuoyPersistence {
 
 	static $fileRowLimit = 1000; //number of rows to sift through before giving up
 
-	static function getBuoyDataFromBuoyAtTime($buoyId, $time) {
+	static function getBuoyReportFromBuoyAtTime($buoyId, $time) {
 		if (!$buoyId || !$time) {
 			throw new InvalidArgumentException();
 		}				
@@ -78,7 +78,7 @@ class NOAABuoyPersistence {
 			throw new NOAABuoyException();
 		}
 
-		return new BuoyData(array(
+		return new BuoyReport(array(
 			'gmttime' => $closestRow['date'],
 			'swellheight' => $closestRow[8],
 			'swellperiod' => $closestRow[9],

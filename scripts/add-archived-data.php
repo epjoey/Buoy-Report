@@ -29,7 +29,7 @@ if (!$buoyId) {
 $d = getData($data, $reportId, $buoyId);
 var_dump($d);
 print "entering data <br>";
-BuoyDataService::saveBuoyDataForReport(array($d));
+BuoyReportService::saveBuoyReportsForReport(array($d));
 print "entered data";
 printForm($reportId, $buoyId, $data);
 
@@ -40,7 +40,7 @@ function getData($data = null, $reportId, $buoyId) {
 		$row = NOAABuoyPersistence::parseRowIntoData($data);
 		$row['date'] = NOAABuoyPersistence::getTimestampOfRow($row);
 	}
-	return new BuoyData(array(
+	return new BuoyReport(array(
 		'reportid' => $reportId,
 		'buoy' => $buoyId,
 		'gmttime' => $row['date'],

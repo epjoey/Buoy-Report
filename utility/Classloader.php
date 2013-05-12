@@ -9,9 +9,9 @@ class Classloader {
         "Buoy" =>                       "/platform/models/Buoy.php",
         "BuoyPersistence" =>            "/platform/persistence/BuoyPersistence.php",
         "BuoyService" =>                "/platform/services/BuoyService.php",
-        "BuoyData" =>                   "/platform/models/BuoyData.php",
-        "BuoyDataPersistence" =>        "/platform/persistence/BuoyDataPersistence.php",
-        "BuoyDataService" =>            "/platform/services/BuoyDataService.php",
+        "BuoyReport" =>                 "/platform/models/BuoyReport.php",
+        "BuoyReportPersistence" =>      "/platform/persistence/BuoyReportPersistence.php",
+        "BuoyReportService" =>          "/platform/services/BuoyReportService.php",
         "Location" =>                   "/platform/models/Location.php",
         "LocationPersistence" =>        "/platform/persistence/LocationPersistence.php",
         "LocationService" =>            "/platform/services/LocationService.php",
@@ -65,7 +65,7 @@ class Classloader {
         //VIEWS
         "AddBuoyForm" =>                "/view/templates/forms/AddBuoyForm.php",
         "AddTideStationForm" =>         "/view/templates/forms/AddTideStationForm.php",
-        "BuoyDataView" =>               "/view/templates/report/BuoyDataView.php",
+        "BuoyReportView" =>             "/view/templates/report/BuoyReportView.php",
         "DeleteBuoyForm" =>             "/view/templates/forms/DeleteBuoyForm.php",
         "EditAccountForm" =>            "/view/templates/forms/EditAccountForm.php",
         "EditBuoyForm" =>               "/view/templates/forms/EditBuoyForm.php",
@@ -88,7 +88,7 @@ class Classloader {
         "TideDataView" =>               "/view/templates/report/TideDataView.php",        
 
         //UTILITY
-        "BuoyDataViewUtils" =>          "/utility/report/BuoyDataViewUtils.php",
+        "BuoyReportViewUtils" =>        "/utility/report/BuoyReportViewUtils.php",
         "Classloader" =>                "/utility/Classloader.php",
         "JSMin" =>                      "/utility/JSMin.php",
         "Mobile_Detect" =>              "/utility/Mobile_Detect.php",

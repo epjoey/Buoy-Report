@@ -1,9 +1,9 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class BuoyDataViewUtils {
+class BuoyReportViewUtils {
 	static function render($data, $type) {
-		if (!isset($data) || strtolower($data) == 'mm' || $data == 99.00) { //todo:move to NOAAUtils::isSetBuoyData
+		if (!isset($data) || strtolower($data) == 'mm' || $data == 99.00) {
 			return '--';
 		}
 		switch ($type) {

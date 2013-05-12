@@ -1,7 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class BuoyData extends BaseModel  {
+class BuoyReport extends BaseModel  {
 	public $id;
 	public $reportid; //which "report" it corresponds to
 	public $buoy;

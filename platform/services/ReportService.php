@@ -13,7 +13,7 @@ class ReportService {
 
 	static function getReports($ids, $options = array()) {
 		$defaultOptions = array(
-			'includeBuoyData' => false,
+			'includeBuoyReports' => false,
 			'includeTideData' => false,
 			'includeLocation' => false,
 			'includeBuoyModel' => false,
@@ -24,8 +24,8 @@ class ReportService {
 		$options = array_merge($defaultOptions, $options);		
 		$reports = ReportPersistence::getReports($ids);
 		foreach($reports as $report) {
-			if ($options['includeBuoyData']) {
-				$report->buoyData = BuoyDataService::getSavedBuoyDataForReport($report, array(
+			if ($options['includeBuoyReports']) {
+				$report->buoyReports = BuoyReportService::getSavedBuoyReportsForReport($report, array(
 					'includeBuoyModel' => $options['includeBuoyModel']
 				));
 			}
@@ -67,7 +67,7 @@ class ReportService {
 		}
 
 		if ($options['buoyIds']) {
-			BuoyDataService::getAndSaveBuoyDataForReport($report, $options['buoyIds']);
+			BuoyReportService::getAndSaveBuoyReportsForReport($report, $options['buoyIds']);
 		}
 
 		ReporterService::reporterAddLocation($report->reporterid, $report->locationid);
@@ -80,7 +80,7 @@ class ReportService {
 		$ids = ReportPersistence::getReportIdsForUserWithFilters($user, $filters, $options);
 		//temporary inefficient loop
 		return self::getReports($ids, array(
-			'includeBuoyData' => true,
+			'includeBuoyReports' => true,
 			'includeTideData' => true,
 			'includeLocation' => true,
 			'includeBuoyModel' => true,

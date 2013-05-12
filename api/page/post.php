@@ -11,7 +11,7 @@ if(isset($_REQUEST['id']) && $_REQUEST['id']) {
 
 $user = UserService::getUser();
 $report = ReportService::getReport($id, array(
-	'includeBuoyData' => true,
+	'includeBuoyReport' => true,
 	'includeTideData' => true,
 	'includeLocation' => true,
 	'includeSublocation' => true,

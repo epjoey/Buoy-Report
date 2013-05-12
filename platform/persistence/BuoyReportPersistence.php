@@ -1,9 +1,9 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class BuoyDataPersistence {
+class BuoyReportPersistence {
 
-	static function getSavedBuoyDataForReport($report, $options = array()) {
+	static function getSavedBuoyReportsForReport($report, $options = array()) {
 		$defaultOptions = array(
 			'start' => 0,
 			'limit' => 150,
@@ -16,19 +16,19 @@ class BuoyDataPersistence {
 		$order = Persistence::escape($options['order']);
 		$sql = "SELECT * FROM buoydata WHERE reportid = '$id' ORDER BY $order LIMIT $start,$limit";
 		$result = Persistence::run($sql);
-		$buoyData = array();
+		$buoyReports = array();
 		while ($row = mysqli_fetch_object($result)) {	
-			$buoyData[] = new BuoyData($row);
+			$buoyReports[] = new BuoyReport($row);
 		}
-		return $buoyData;		
+		return $buoyReports;		
 	}
 
 	/* properties could be "MM" so need to escape and not use floatval or intval */
-	static function insertBuoyData($buoyData) {
-		$reportid = intval($buoyData->reportid);
+	static function insertBuoyReport($buoyReport) {
+		$reportid = intval($buoyReport->reportid);
 		$set = "reportid = '$reportid'";
-		$buoyDataArr = get_object_vars($buoyData);
-		foreach($buoyDataArr as $key=>$val) {
+		$buoyReportArr = get_object_vars($buoyReport);
+		foreach($buoyReportArr as $key=>$val) {
 			if (in_array($key, array('buoy','winddir','windspeed','swellheight','swelldir','swellperiod','tide','watertemp','gmttime'))) {
 				$val = Persistence::escape($val);
 				$set .= ", $key = '$val'";

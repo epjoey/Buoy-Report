@@ -3,7 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class TideDataViewUtils {
 	static function render($data, $type) {
-		if (!isset($data)) { //todo:move to NOAAUtils::isSetBuoyData
+		if (!isset($data)) {
 			return '--';
 		}
 		switch ($type) {
