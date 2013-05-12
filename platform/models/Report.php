@@ -16,7 +16,7 @@ class Report extends BaseModel {
 
 	//from other tables
 	public $buoyReports; //array of BuoyReport models
-	public $tideData; //array of tideData models
+	public $tideReports; //array of tideReport models
 	public $location; //Location Model Object
 	public $sublocation; //Sublocation Model Object
 	public $reporter; //Reporter Model Object	

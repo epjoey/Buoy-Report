@@ -1,7 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class TideData extends BaseModel {
+class TideReport extends BaseModel {
 	public $id;
 	public $tide;
 	public $tidedate;

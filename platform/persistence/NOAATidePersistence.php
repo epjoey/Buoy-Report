@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/simple_html_dom.php';
 
-class NOAATideDataException extends Exception {}
+class NOAATideReportException extends Exception {}
 
 class NOAATidePersistence {
 	
@@ -10,13 +10,13 @@ class NOAATidePersistence {
 
 	static $tideDataRootUrl = 'http://tidesonline.noaa.gov/data_read.shtml?station_info=';
 
-	static function getTideDataFromStationAtTime($stationId, $time) {
+	static function getTideReportFromStationAtTime($stationId, $time) {
 		if (!$stationId || !$time) {
 			throw new InvalidArgumentException();
 		}		
 		$lastTideReport = self::getLastTideReportFromStation($stationId);
 		if (!$lastTideReport) {
-			throw new NOAATideDataException();
+			throw new NOAATideReportException();
 		}
 		return self::getApproximateData($lastTideReport, $time);
 	}	
@@ -69,7 +69,7 @@ class NOAATidePersistence {
 
 		//if time difference bw most accurate row and observation date is more than $maxProximity, return null
 		if (!$mostApproximateRow || $mostApproximateRow['proximity'] > $maxProximity) {
-			throw new NOAATideDataException();
+			throw new NOAATideReportException();
 		}
 
 		$tideRise = null;

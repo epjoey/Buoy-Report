@@ -1,7 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class TideDataViewUtils {
+class TideReportViewUtils {
 	static function render($data, $type) {
 		if (!isset($data)) {
 			return '--';

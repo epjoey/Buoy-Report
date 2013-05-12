@@ -14,7 +14,7 @@ class ReportService {
 	static function getReports($ids, $options = array()) {
 		$defaultOptions = array(
 			'includeBuoyReports' => false,
-			'includeTideData' => false,
+			'includeTideReports' => false,
 			'includeLocation' => false,
 			'includeBuoyModel' => false,
 			'includeTideStationModel' => false,
@@ -29,8 +29,8 @@ class ReportService {
 					'includeBuoyModel' => $options['includeBuoyModel']
 				));
 			}
-			if ($options['includeTideData']) {
-				$report->tideData = TideDataService::getSavedTideDataForReport($report, array(
+			if ($options['includeTideReports']) {
+				$report->tideReports = TideReportService::getTideReportsForReport($report, array(
 					'includeTideStationModel' => $options['includeTideStationModel']
 				));
 			}
@@ -63,7 +63,7 @@ class ReportService {
 		$report = self::getReport($id);
 		
 		if ($options['tidestationIds']) {
-			TideDataService::getAndSaveTideDataForReport($report, $options['tidestationIds']);
+			TideReportService::getAndSaveTideReportsForReport($report, $options['tidestationIds']);
 		}
 
 		if ($options['buoyIds']) {
@@ -81,7 +81,7 @@ class ReportService {
 		//temporary inefficient loop
 		return self::getReports($ids, array(
 			'includeBuoyReports' => true,
-			'includeTideData' => true,
+			'includeTideReports' => true,
 			'includeLocation' => true,
 			'includeBuoyModel' => true,
 			'includeTideStationModel' => true,

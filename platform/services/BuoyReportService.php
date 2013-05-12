@@ -22,7 +22,7 @@ class BuoyReportService {
 			'stationType' => 'NOAA'
 		);
 		$options = array_merge($defaultOptions, $options);
-		$data = array();
+		$buoyReports = array();
 		foreach($buoyIds as $buoyId) {
 			try {
 				$buoyReport = NOAABuoyPersistence::getBuoyReportFromBuoyAtTime($buoyId, $report->obsdate);
@@ -33,10 +33,10 @@ class BuoyReportService {
 			if ($buoyReport instanceof BuoyReport) {
 				$buoyReport->buoy = $buoyId;
 				$buoyReport->reportid = $report->id;
-				$data[] = $buoyReport;
+				$buoyReports[] = $buoyReport;
 			}			
 		}
-		return $data;
+		return $buoyReports;
 	}
 
 	static function getAndSaveBuoyReportsForReport($report, $buoyIds) {

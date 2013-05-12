@@ -87,7 +87,7 @@ class SingleReport {
 				<? if ($report->buoyReports) { ?>
 					<span class="buoy-icon icon" title="<?=$report->location->locname?> has buoy stations">B</span>
 				<? } ?>
-				<? if ($report->tideData) { ?>
+				<? if ($report->tideReports) { ?>
 					<span class="tide-icon icon" title="<?=$report->location->locname?> has a tide station">T</span>
 				<? } ?>		
 			</span>	
@@ -121,17 +121,17 @@ class SingleReport {
 	}
 
 	public function renderTideReports($report) {
-		if (!$report->tideData) {
+		if (!$report->tideReports) {
 			return;
 		}		
 		?>
 		<ul class="buoy-data">
 			<? 
-			foreach ($report->tideData as $tideData) { 
+			foreach ($report->tideReports as $tideReport) { 
 				?>
 				<li>
 					<?
-					TideDataView::renderTideData($tideData, $report->location->timezone);
+					TideReportView::renderTideReport($tideReport, $report->location->timezone);
 					?>
 				</li>
 				<? 

@@ -1,9 +1,9 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class TideDataPersistence {
+class TideReportPersistence {
 
-	static function getSavedTideDataForReport($report, $options = array()) {
+	static function getTideReportsForReport($report, $options = array()) {
 		$defaultOptions = array(
 			'start' => 0,
 			'limit' => 150,
@@ -16,20 +16,20 @@ class TideDataPersistence {
 		$order = Persistence::escape($options['order']);
 		$sql = "SELECT * FROM tidedata WHERE reportid = '$id' ORDER BY $order LIMIT $start,$limit";
 		$result = Persistence::run($sql);
-		$tideData = array();
+		$tideReports = array();
 		while ($row = mysqli_fetch_object($result)) {	
-			$tideData[] = new TideData($row);
+			$tideReports[] = new TideReport($row);
 		}
-		return $tideData;				
+		return $tideReports;				
 	}
 
-	static function insertTideData($tideData) {
-		$reportid = intval($tideData->reportid);
-		$date = intval($tideData->tidedate);
-		$tide = floatval($tideData->tide);
-		$rise = intval($tideData->tideRise);
-		$tidestation = Persistence::escape($tideData->tidestation);
-		$predictedTide = Persistence::escape($tideData->predictedTide);
+	static function insertTideReport($tideReport) {
+		$reportid = intval($tideReport->reportid);
+		$date = intval($tideReport->tidedate);
+		$tide = floatval($tideReport->tide);
+		$rise = intval($tideReport->tideRise);
+		$tidestation = Persistence::escape($tideReport->tidestation);
+		$predictedTide = Persistence::escape($tideReport->predictedTide);
 		$sql = "INSERT INTO tidedata SET reportid = '$reportid', tide = '$tide', predictedTide = '$predictedTide',  tideRise = '$rise', tidedate = '$date', tidestation = '$tidestation'";
 		Persistence::run($sql);
 	}

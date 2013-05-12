@@ -27,9 +27,9 @@ class Classloader {
         "ReporterService" =>            "/platform/services/ReporterService.php",
         "StatusMessageService" =>       "/platform/services/StatusMessageService.php",
         "Sublocation" =>                "/platform/models/Sublocation.php", //remove
-        "TideData" =>                   "/platform/models/TideData.php",
-        "TideDataPersistence" =>        "/platform/persistence/TideDataPersistence.php",
-        "TideDataService" =>            "/platform/services/TideDataService.php",
+        "TideReport" =>                 "/platform/models/TideReport.php",
+        "TideReportPersistence" =>      "/platform/persistence/TideReportPersistence.php",
+        "TideReportService" =>          "/platform/services/TideReportService.php",
         "TideStation" =>                "/platform/models/TideStation.php",
         "TideStationPersistence" =>     "/platform/persistence/TideStationPersistence.php",
         "TideStationService" =>         "/platform/services/TideStationService.php",
@@ -85,7 +85,7 @@ class Classloader {
         "ReportFormFields" =>           "/view/templates/forms/ReportFormFields.php",
         "SearchModule" =>               "/view/templates/forms/SearchModule.php",
         "SingleReport" =>               "/view/templates/report/SingleReport.php",
-        "TideDataView" =>               "/view/templates/report/TideDataView.php",        
+        "TideReportView" =>             "/view/templates/report/TideReportView.php",        
 
         //UTILITY
         "BuoyReportViewUtils" =>        "/utility/report/BuoyReportViewUtils.php",
@@ -98,7 +98,7 @@ class Classloader {
         "ReportUtils" =>                "/utility/report/ReportUtils.php",
         "SimpleImage" =>                "/utility/SimpleImage.php",
         "Text" =>                       "/utility/Text.php",
-        "TideDataViewUtils" =>          "/utility/report/TideDataViewUtils.php",
+        "TideReportViewUtils" =>        "/utility/report/TideReportViewUtils.php",
         "Utils" =>                      "/utility/Utils.php",
 
         //EXCEPTIONS
