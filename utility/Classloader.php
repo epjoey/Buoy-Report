@@ -15,7 +15,7 @@ class Classloader {
         "Location" =>                   "/platform/models/Location.php",
         "LocationPersistence" =>        "/platform/persistence/LocationPersistence.php",
         "LocationService" =>            "/platform/services/LocationService.php",
-        "NOAABuoyPersistence" =>        "/platform/persistence/NOAABuoyPersistence.php",
+        "NOAABuoyReportPersistence" =>  "/platform/persistence/NOAABuoyReportPersistence.php",
         "NOAATidePersistence" =>        "/platform/persistence/NOAATidePersistence.php",
         "ModelCache" =>                 "/platform/persistence/ModelCache.php",
         "Persistence" =>                "/platform/persistence/Persistence.php",

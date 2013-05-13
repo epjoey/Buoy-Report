@@ -12,8 +12,18 @@ class BuoyService {
 		return reset(self::getBuoys(array($id)));
 	}
 
-	static function getBuoys($buoyIds) {
-		return BuoyPersistence::getBuoys($buoyIds);
+	static function getBuoys($buoyIds, $options = array()) {
+		$defaultOptions = array(
+			'numBuoyReportsToInclude' => 0
+		);
+		$options = array_merge($defaultOptions, $options);		
+		$buoys = BuoyPersistence::getBuoys($buoyIds);
+		foreach($buoys as $buoy) {
+			// if ($options['numBuoyReportsToInclude'] > 0) {
+			// 	$buoy->buoyReports = BuoyReportService::getBuoyReportsForBuoys($buoy, $options);
+			// }
+		}		
+		return $buoys;
 	}
 
 	static function getAllBuoys($options = array()) {
@@ -50,14 +60,15 @@ class BuoyService {
 		if (!$name) {
 			throw new AddStationException("New buoy must have a name");
 		}
-		if (!self::isValidBuoy($id)) {
+		$buoy = new Buoy(array('buoyid'=>$id, 'name'=>$name));
+		if (!self::isValidBuoy($buoy)) {
 			throw new AddStationException("$id is not a valid NOAA buoy");
 		}
-		BuoyPersistence::addBuoy($id, $name);
+		BuoyPersistence::addBuoy($buoy);
 	}
 
 	static function isValidBuoy($id) {
-		return !!NOAABuoyPersistence::isBuoyOnline($id);
+		return !!NOAABuoyReportPersistence::isBuoyOnline($id);
 	}
 
 	static function editBuoy($id, $name) {

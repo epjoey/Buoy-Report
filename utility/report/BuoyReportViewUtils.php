@@ -26,7 +26,7 @@ class BuoyReportViewUtils {
 			return $data . ' ft';
 			break;
 		case 'water-temp':
-			return $data . ' &deg' . 'C';
+			return intval($data * 1.8 + 32) . '&deg (F)';
 			break;
 		}
 	}

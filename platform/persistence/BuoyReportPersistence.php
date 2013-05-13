@@ -3,7 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class BuoyReportPersistence {
 
-	static function getSavedBuoyReportsForReport($report, $options = array()) {
+	static function getBuoyReportsForReport($report, $options = array()) {
 		$defaultOptions = array(
 			'start' => 0,
 			'limit' => 150,

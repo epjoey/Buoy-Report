@@ -25,7 +25,7 @@ class ReportService {
 		$reports = ReportPersistence::getReports($ids);
 		foreach($reports as $report) {
 			if ($options['includeBuoyReports']) {
-				$report->buoyReports = BuoyReportService::getSavedBuoyReportsForReport($report, array(
+				$report->buoyReports = BuoyReportService::getBuoyReportsForReport($report, array(
 					'includeBuoyModel' => $options['includeBuoyModel']
 				));
 			}
@@ -48,31 +48,15 @@ class ReportService {
 	}
 
 
-	/* big one */
-	static function saveReport($report, $options = array()) {
-		if (!$report->quality) {
+	static function insertReport($options = array()) {
+		if (!$options['quality']) {
 			throw new InvalidSubmissionException('You must choose a quality.');
 		}
-		if (!$report->obsdate) {
+		if (!$options['obsdate']) {
 			throw new InvalidSubmissionException('No time entered');
-		}			
-		$report->reportdate = intval(gmdate("U")); //time of report (now)
-		
-		$id = ReportPersistence::insertReport($report);	
-
-		$report = self::getReport($id);
-		
-		if ($options['tidestationIds']) {
-			TideReportService::getAndSaveTideReportsForReport($report, $options['tidestationIds']);
 		}
-
-		if ($options['buoyIds']) {
-			BuoyReportService::getAndSaveBuoyReportsForReport($report, $options['buoyIds']);
-		}
-
-		ReporterService::reporterAddLocation($report->reporterid, $report->locationid);
-
-		return $report;
+		
+		return ReportPersistence::insertReport($options);	
 	}
 
 

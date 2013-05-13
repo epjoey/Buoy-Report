@@ -37,8 +37,8 @@ printForm($reportId, $buoyId, $data);
 function getData($data = null, $reportId, $buoyId) {
 	$row = array();
 	if ($data) {
-		$row = NOAABuoyPersistence::parseRowIntoData($data);
-		$row['date'] = NOAABuoyPersistence::getTimestampOfRow($row);
+		$row = NOAABuoyReportPersistence::parseRowIntoData($data);
+		$row['date'] = NOAABuoyReportPersistence::getTimestampOfRow($row);
 	}
 	return new BuoyReport(array(
 		'reportid' => $reportId,

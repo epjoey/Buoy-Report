@@ -54,12 +54,12 @@ class BuoyPersistence {
 		return Persistence::getArray($sql);		
 	}	
 
-	static function addBuoy($id, $name) {
-		if (!$id || !$name) {
+	static function insertBuoy($buoy) {
+		if (!$buoy->buoyid || !$buoy->name) {
 			throw new PersistenceException('addBuoy needs $id, $name');
 		}		
-		$id = Persistence::escape($id);
-		$name = Persistence::escape($name);
+		$id = Persistence::escape($buoy->id);
+		$name = Persistence::escape($buoy->name);
 		$sql = "INSERT INTO buoy SET buoyid = '$id', name = '$name'";
 		Persistence::run($sql);
 		return true;

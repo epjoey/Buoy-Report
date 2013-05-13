@@ -50,7 +50,9 @@ class ReportPersistence {
 		return $orderedReports;
 	}
 
-	static function insertReport($report) {
+	static function insertReport($options) {
+		$report = (object)$options;
+
 		$link = Persistence::dbConnect();
 
 		$public = intval($report->public);

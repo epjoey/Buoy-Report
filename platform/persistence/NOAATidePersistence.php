@@ -10,15 +10,27 @@ class NOAATidePersistence {
 
 	static $tideDataRootUrl = 'http://tidesonline.noaa.gov/data_read.shtml?station_info=';
 
-	static function getTideReportFromStationAtTime($stationId, $time) {
-		if (!$stationId || !$time) {
-			throw new InvalidArgumentException();
-		}		
-		$lastTideReport = self::getLastTideReportFromStation($stationId);
+	static function getTideStationTideReport($station, $options = array()) {
+		$defaultOptions = array(
+			'time' => null
+		);			
+		$options = array_merge($defaultOptions, $options);
+		$time = $options['time'];
+		
+		if (!$station) {
+			throw new InvalidArgumentException("No station");
+		}	
+
+		if (!$time) {
+			throw new InvalidArgumentException("No time");
+		}	
+
+		$lastTideReport = self::getLastTideReportFromStation($station->stationid);
 		if (!$lastTideReport) {
-			throw new NOAATideReportException();
+			throw new NOAATideReportException("No recent data for tide station " . $station->stationid);
 		}
-		return self::getApproximateData($lastTideReport, $time);
+
+		return self::getApproximateData($station, $lastTideReport, $time);
 	}	
 
 	static function parseRowIntoData($row) {
@@ -46,7 +58,7 @@ class NOAATidePersistence {
 		return $report;
 	}
 
-	private static function getApproximateData($dataFile, $obsdate, $maxProximity = 3600) {
+	private static function getApproximateData($station, $dataFile, $obsdate, $maxProximity = 3600) {
 
 		for ($i=0; $i<=self::$fileRowLimit; $i++) {
 			
@@ -69,7 +81,7 @@ class NOAATidePersistence {
 
 		//if time difference bw most accurate row and observation date is more than $maxProximity, return null
 		if (!$mostApproximateRow || $mostApproximateRow['proximity'] > $maxProximity) {
-			throw new NOAATideReportException();
+			throw new NOAATideReportException("No accurate tide data");
 		}
 
 		$tideRise = null;
@@ -88,12 +100,13 @@ class NOAATidePersistence {
 			$tideRise = $predictedTide > $pastDataRow[3] ? 1 : -1;
 		}
 
-		return array(
+		return new TideReport(array(
 			'predictedTide' => $predictedTide,
 			'tide' => $observedTide,
 			'tidedate' => $mostApproximateRow['date'],
-			'tideRise' => $tideRise //-1 or 1
-		);
+			'tideRise' => $tideRise, //-1 or 1
+			'tidestation' => $station->stationid
+		));
 	}
 }
 ?>

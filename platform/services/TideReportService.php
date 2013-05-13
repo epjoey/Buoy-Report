@@ -17,41 +17,18 @@ class TideReportService {
 		return $tideReports;
 	}
 
-	static function getTideReportsFromStationsForReport($tideStationIds, $report, $options = array()) {
-		$defaultOptions = array(
-			'stationType' => 'NOAA'
-		);
-		$options = array_merge($defaultOptions, $options);
-		$tideReports = array();
-		foreach($tideStationIds as $tideStationId) {
-			try {
-				$tideReport = NOAATidePersistence::getTideReportFromStationAtTime($tideStationId, $report->obsdate);
-			} catch (NOAATideReportException $e) {
-				continue;
-			}
-			$tideReports[] = new TideReport(array_merge($tideReport, array(
-				'tidestation' => $tideStationId,
-				'reportid' => $report->id
-			)));
+	static function getTideStationTideReport($tideStation, $options = array()) {
+		try {
+			$tideReport = NOAATidePersistence::getTideStationTideReport($tideStation, $options);
+		} catch (NOAATideReportException $e) {
+			error_log("Tide station $tideStation->stationid failure - ". $e->getMessage());
+			return null;
 		}
-		return $tideReports;
+		return $tideReport;
 	}
 
-	static function getAndSaveTideReportsForReport($report, $tideStationIds) {
-		$tideReports = self::getTideReportsFromStationsForReport($tideStationIds, $report);
-		self::saveTideReportsForReport($tideReports);
+	static function insertTideReport($tideReport) {
+		TideReportPersistence::insertTideReport($tideReport);
 	}
-
-	static function saveTideReportsForReport($tideReports) {
-		foreach ($tideReports as $tideReport) {
-			TideReportPersistence::insertTideReport($tideReport);	
-		}
-	}
-
-
-
 }
-
-
-
 ?>
