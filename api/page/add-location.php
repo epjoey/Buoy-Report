@@ -21,6 +21,7 @@ if (isset($_GET['error']) && $_GET['error']) {
 $page = new AddLocationPage();
 $page->submitError = NULL;
 $page->renderPage(array(
+	'user' => $user,
 	'pageTitle' => 'Submit Location',
 	'addLocationError' => $error
 ));
