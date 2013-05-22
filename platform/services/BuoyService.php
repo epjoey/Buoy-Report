@@ -17,13 +17,7 @@ class BuoyService {
 			'numBuoyReportsToInclude' => 0
 		);
 		$options = array_merge($defaultOptions, $options);		
-		$buoys = BuoyPersistence::getBuoys($buoyIds);
-		foreach($buoys as $buoy) {
-			// if ($options['numBuoyReportsToInclude'] > 0) {
-			// 	$buoy->buoyReports = BuoyReportService::getBuoyReportsForBuoys($buoy, $options);
-			// }
-		}		
-		return $buoys;
+		return BuoyPersistence::getBuoys($buoyIds);
 	}
 
 	static function getAllBuoys($options = array()) {

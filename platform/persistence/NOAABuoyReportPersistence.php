@@ -89,6 +89,9 @@ class NOAABuoyReportPersistence {
 	}	
 
 	static function getIndexOfClosestRowToTime($dataArray, $time) {
+		if ($time instanceof DateTime) {
+			$time = $time->getTimestamp();
+		}
 		//break each line into array of measurements by spaces
 		for ($i=2; $i<=self::$fileRowLimit; $i++) { //skip first 2 lines because it doesnt have data
 			
