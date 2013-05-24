@@ -4,20 +4,20 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 /* --------------- HANDLE REPORT FORM SUBMISSION --------------- */
 
 
-$user = UserService::getUser();
+if (!$_POST['locationid']) {
+	throw new Error('Location ID required to post report');
+}
+
 
 try {	
 
+	$user = UserService::getUser();
+	$location = LocationService::getLocation($_POST['locationid']);
+	
 	if (!$user->isLoggedIn) {
 		throw new InvalidSubmissionException('Account required to post report');
 	}
-
-	if (!$_POST['locationid']) {
-		throw new InvalidSubmissionException('Location ID required to post report');
-	}
-
-	$location = LocationService::getLocation($_POST['locationid']);
-		
+	
 	/* either real date or date offset passed in from form */
 	if (isset($_POST['time']) && $_POST['time']) {
 		$reportDate = new DateTime($_POST['time'], new DateTimeZone($location->timezone));
