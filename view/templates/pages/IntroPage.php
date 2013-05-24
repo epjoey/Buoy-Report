@@ -23,6 +23,7 @@ class IntroPage extends Page {
 		?>
 		<div class="header"> 
 			<div class="container">
+					<span class="header-left"><a class="left-link" href="<?= Path::toLocations(); ?>">Locations</a></span>
 					<span class="header-right login-btn" id="login-trigger"><a class="block-link" href="javascript:">LOGIN</a></span>
 					<? LoginForm::renderForm(); ?>
 					<div class="clear"></div>
