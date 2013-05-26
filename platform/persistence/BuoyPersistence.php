@@ -58,7 +58,7 @@ class BuoyPersistence {
 		if (!$buoy->buoyid || !$buoy->name) {
 			throw new PersistenceException('addBuoy needs $id, $name');
 		}		
-		$id = Persistence::escape($buoy->id);
+		$id = Persistence::escape($buoy->buoyid);
 		$name = Persistence::escape($buoy->name);
 		$sql = "INSERT INTO buoy SET buoyid = '$id', name = '$name'";
 		Persistence::run($sql);
