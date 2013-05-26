@@ -58,7 +58,7 @@ class BuoyService {
 		if (!self::isValidBuoy($buoy)) {
 			throw new AddStationException("$id is not a valid NOAA buoy");
 		}
-		BuoyPersistence::addBuoy($buoy);
+		BuoyPersistence::insertBuoy($buoy);
 	}
 
 	static function isValidBuoy($id) {
