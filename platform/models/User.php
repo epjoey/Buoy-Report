@@ -53,7 +53,7 @@ class User extends BaseModel {
 
 		/*--- IF KEY EXISTS IN DB LOG USER IN WITH PARAMS TO SET NEW COOKIE -----*/
 		if (Persistence::userCookieExists($userId, $curEncryptedKey)) {
-			return self::logIn($userId, curEncryptedKey);
+			return self::logIn($userId, $curEncryptedKey);
 		}
 		return false;
 		
