@@ -1,9 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-interface Interfacial {}
-
-class UserService implements Interfacial {
+class UserService {
 
 	static $USER;
 	static $COOKIE_NAME = 'surf-session';

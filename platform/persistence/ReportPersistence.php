@@ -52,7 +52,6 @@ class ReportPersistence {
 
 	static function insertReport($options) {
 		$report = (object)$options;
-		var_dump($report->text);
 		$link = Persistence::dbConnect();
 
 		$public = intval($report->public);
@@ -68,7 +67,6 @@ class ReportPersistence {
 		}
 		if ($report->text) {
 			$text = mysqli_real_escape_string($link, $report->text);
-			var_dump($text);
 			$fields .= ", text = '" . $text . "'";			
 		}
 		if ($report->imagepath) {
