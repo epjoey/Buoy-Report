@@ -8,7 +8,7 @@ if (!$_POST['locationid']) {
 	throw new Error('Location ID required to post report');
 }
 
-
+var_dump($_POST['text']);
 try {	
 
 	$user = UserService::getUser();

@@ -57,7 +57,7 @@ var BR = window.BR = {};
 			}
 			if (linkContainer.hasClass('loaded') && newUrl == '') return;
 			linkContainer.addClass('loading');
-			linkContainer.load('/api/location/forecast-links.php?info=forecast&locationid=<?=$this->location->id?>', 
+			linkContainer.load('/controllers/location/forecast-links.php?info=forecast&locationid=<?=$this->location->id?>', 
 				data,			
 				function(){
 					linkContainer.removeClass('loading').addClass('loaded');
@@ -81,7 +81,7 @@ var BR = window.BR = {};
 			});
 
 			$.ajax({
-				url: "/api/location/forecast-links.php?info=deletelinks&locationid=<?=$this->location->id?>",
+				url: "/controllers/location/forecast-links.php?info=deletelinks&locationid=<?=$this->location->id?>",
 				type: "GET",
 				data: { links : links },
 				cache: false,
@@ -101,7 +101,7 @@ var BR = window.BR = {};
 		},
 		paginate: function(params, onSuccess) {
 			$.ajax({
-				url: "/api/report/feed.php", 
+				url: "/controllers/report/feed.php", 
 				type: "GET",
 				data: params,
 				cache: false,

@@ -65,7 +65,7 @@ class AddTideStationForm {
 					});					
 					new BR.LocationAddStationForm({
 						el: '#add-tide-station-form',
-						existingStationsUrl: "/api/tide/tidestation-selector.php",
+						existingStationsUrl: "/controllers/tide/tidestation-selector.php",
 						locationId: "<?= $location->id ?>"
 					});				
 				})(jQuery)

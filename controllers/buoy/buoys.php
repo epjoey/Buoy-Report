@@ -2,7 +2,6 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';  
 
 $locationId = $_REQUEST['location'];
-error_log($locationId);
 $location = LocationService::getLocation($locationId);
 $buoys = array_values(BuoyService::getBuoysForLocation($location));
 foreach($buoys as $buoy) {

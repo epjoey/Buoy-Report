@@ -97,7 +97,7 @@ class BuoyPage extends Page {
 
 		        $.ajax({
 		            //this is the php file that processes the data
-		            url: "/api//buoy/iframe.php?id=" + id,
+		            url: "/controllers//buoy/iframe.php?id=" + id,
 		             
 		            //GET method is used
 		            type: "GET",

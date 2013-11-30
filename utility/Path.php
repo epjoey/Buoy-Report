@@ -165,10 +165,10 @@ class Path {
 		return '/about';
 	}	
 	public static function to404() {
-		return '/api/page/404.php';
+		return '/controllers/page/404.php';
 	}
 	public static function toMobileImageProcess() {
-		return Path::toUrl() . '/api/page/mobile-image-process.php';
+		return Path::toUrl() . '/controllers/page/mobile-image-process.php';
 	}	
 	public static function toNOAABuoy($buoyId) {
 		return 'http://www.ndbc.noaa.gov/station_page.php?station=' . $buoyId;
@@ -217,61 +217,61 @@ class Path {
 
 	//form handlers
 	public static function toLocationAddBuoy() {
-		return '/api/location/add-buoy.php';
+		return '/controllers/location/add-buoy.php';
 	}
 	public static function toLocationRemoveBuoy() {
-		return '/api/location/remove-buoy.php';
+		return '/controllers/location/remove-buoy.php';
 	}
 	public static function toLocationAddTidestation() {
-		return '/api/location/add-tidestation.php';
+		return '/controllers/location/add-tidestation.php';
 	}
 	public static function toLocationRemoveTidestation() {
-		return '/api/location/remove-tidestation.php';
+		return '/controllers/location/remove-tidestation.php';
 	}	
 	public static function toDeleteBuoy() {
-		return '/api/buoy/delete-buoy.php';
+		return '/controllers/buoy/delete-buoy.php';
 	}
 	public static function toEditBuoy() {
-		return '/api/buoy/edit-buoy.php';
+		return '/controllers/buoy/edit-buoy.php';
 	}	
 	public static function toDeleteTidestation() {
-		return '/api/tide/delete-tidestation.php';
+		return '/controllers/tide/delete-tidestation.php';
 	}
 	public static function toEditTidestation() {
-		return '/api/tide/edit-tidestation.php';
+		return '/controllers/tide/edit-tidestation.php';
 	}	
 	public static function toHandleReportSubmission() {
-		return '/api/report/report-form-handler.php';
+		return '/controllers/report/report-form-handler.php';
 	}
 	public static function toHandleEditReportSubmission() {
-		return '/api/report/edit-report-form-handler.php';
+		return '/controllers/report/edit-report-form-handler.php';
 	}	
 	public static function toHandleLogin() {
-		return '/api/user/login-form-handler.php';
+		return '/controllers/user/login-form-handler.php';
 	}
 	public static function toLogout() {
-		return '/api/user/logout.php';
+		return '/controllers/user/logout.php';
 	}
 	public static function toHandleRegistration() {
-		return '/api/user/register-form-handler.php';
+		return '/controllers/user/register-form-handler.php';
 	}	
 	public static function toBookmarkLocation() {
-		return '/api/location/add-reporter.php';
+		return '/controllers/location/add-reporter.php';
 	}
 	public static function toEditLocationPost() {
-		return '/api/location/edit.php';
+		return '/controllers/location/edit.php';
 	}	
 	public static function toDeleteLocation() {
-		return '/api/location/delete-location.php';
+		return '/controllers/location/delete-location.php';
 	}
 	public static function toPostLocation() {
-		return '/api/location/add-location.php';	
+		return '/controllers/location/add-location.php';	
 	}		
 	public static function toUpdateReporter() {
-		return '/api/reporter/update.php';
+		return '/controllers/reporter/update.php';
 	}	
 	public static function toDeleteReporter() {
-		return '/api/reporter/delete.php';
+		return '/controllers/reporter/delete.php';
 	}
 }
 ?>

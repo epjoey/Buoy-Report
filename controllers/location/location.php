@@ -5,6 +5,10 @@ $locationId = $_REQUEST['location'];
 if (!$locationId) {
   die("No Location ID");
 }
-$location = LocationService::getLocation($locationId);
+$location = LocationService::getLocation($locationId, array(
+    // 'includeSublocations' => true,
+    // 'includeBuoys' => true,
+    // 'includeTideStations' => true
+));
 print json_encode($location);
 ?>

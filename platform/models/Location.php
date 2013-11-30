@@ -12,5 +12,14 @@ class Location extends BaseModel {
 	public $tideStations;
 	public $buoys;
 	public $sublocations;	
+
+	//derived in code
+	public $urlName;
+
+	function __construct($data) {
+		parent::__construct($data);
+		$this->urlName = urlencode($this->locname);
+	}
+
 }
 ?>

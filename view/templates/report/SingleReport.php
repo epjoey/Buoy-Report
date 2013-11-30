@@ -66,7 +66,7 @@ class SingleReport {
 
 				if($report->text) { 
 					?>
-					<li class="text-report"><?= bbcode2html($report->text) ?></li>
+					<li class="text-report"><?= $report->text ?></li>
 					<? 
 				} 				
 

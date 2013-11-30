@@ -67,7 +67,7 @@ class AddBuoyForm {
 					});
 					new BR.LocationAddStationForm({
 						el: '#add-buoy-form',
-						existingStationsUrl: "/api/buoy/buoy-selector.php",
+						existingStationsUrl: "/controllers/buoy/buoy-selector.php",
 						locationId: "<?=$location->id?>"
 					});				
 				})(jQuery)
