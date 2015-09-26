@@ -1,8 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-error_log("hey");
-
 $user = UserService::getUser();
 
 if (!$user->isLoggedIn) {
