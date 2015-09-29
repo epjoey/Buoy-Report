@@ -1,7 +1,7 @@
 <?php
 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'db_conf.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/db_conf.php';
 
 class PersistenceException extends Exception {}
 
