@@ -9,6 +9,7 @@ class Persistence {
 	static $hashSalt = 'reportdb';
 	static function dbConnect() {
 
+		print 'here', DB_HOST, DB_NAME, DB_USER, DB_PW
 
 		if (isset(self::$dbLink)) {
 			return self::$dbLink;
