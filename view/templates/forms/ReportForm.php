@@ -22,6 +22,7 @@ class ReportForm {
 					<span class="submission-error"><?= $statusMsg ?></span>
 					<?
 				}
+				error_log("1")
 				ReportFormFields::renderTimeSelect();
 
 				?>
