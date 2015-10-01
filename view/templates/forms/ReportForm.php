@@ -89,6 +89,7 @@ class ReportForm {
 						</div>
 					</div>
 				</div><!--end optional fields-->
+				<? error_log("hiiii") ?>
 				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
 				<input type="hidden" name="locationid" value="<?=$location->id?>" />
 				<input type="hidden" name="locationname" value="<?=$location->locname?>" />
