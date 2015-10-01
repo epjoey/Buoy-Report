@@ -1,7 +1,7 @@
 <?php
 
 class Path {
-	
+
 	const SHORTURL = 'http://buoy-report.com';
 	const URL = 'http://www.buoy-report.com';
 	const LOCALURL = 'http://localhost:8888';
@@ -29,16 +29,16 @@ class Path {
 			return "";
 		} else {
 			return Path::COOKIEDOMAIN;
-		}		
+		}
 	}
 
 	public static function toIntro() {
 		return '/';
-	}	
+	}
 
 	public static function toUserHome() {
 		return '/';
-	}	
+	}
 
 	public static function toLogin($error = NULL, $rel = NULL) {
 		$url = '/login';
@@ -48,15 +48,15 @@ class Path {
 		if (isset($rel)) {
 			$url .= isset($error) ? '&' : '?';
 			$url .= 'rel=' . $rel;
-		}		
+		}
 		return $url;
-	}	
+	}
 
 	public static function toRegister($error = NULL) {
 		$url = '/signup';
 		if (isset($error)) {
 			$url .= '?error=' . $error;
-		} 
+		}
 		return $url;
 	}
 
@@ -77,12 +77,12 @@ class Path {
 		if (isset($submitError)) {
 			$url .= '&error='.$submitError;
 		}
-		return $url;		
-	}	
+		return $url;
+	}
 
-	public static function toProfile($reporterId, $status = NULL) {	
+	public static function toProfile($reporterId, $status = NULL) {
 		$url = '/reporters/'.$reporterId;
-		return $url;		
+		return $url;
 	}
 
 	public static function toLocation($locationId = null, $error=NULL) {
@@ -103,7 +103,7 @@ class Path {
 		if (isset($reporterId)) {
 			$url .= '?reporter=' . $reporterId;
 		}
-		if ($toPost) { 
+		if ($toPost) {
 			$url .= isset($reporterId) ? '&' : '?' . 'post=true';
 		}
 
@@ -123,7 +123,7 @@ class Path {
 		if (isset($error)) {
 			$url .= '&error='.$error;
 		}
-		return $url;		
+		return $url;
 	}
 
 	public static function toSubmitLocation($error = NULL) {
@@ -131,7 +131,7 @@ class Path {
 		if (isset($error)) {
 			$url .= '?error='.$error;
 		}
-		return $url;			
+		return $url;
 	}
 
 
@@ -140,48 +140,45 @@ class Path {
 		if ($isRemote) {
 			return $path;
 		}
-		if ($local_dev) {
-			return '/uploads/' . $path;
-		}
-		return Path::URL . '/uploads/' . $path;
+		return '/uploads/' . $path;
 	}
 
-	public static function toBuoys() {	
+	public static function toBuoys() {
 		return '/buoys';
 	}
 
 	public static function toAddBuoy($error = NULL) {
 		$str = http_build_query(array('error'=>$error));
 		return '/add-buoy' . ($str ? "?".$str: "");
-	}	
+	}
 
 	public static function toEditBuoyPage($id = NULL, $error = NULL) {
 		$str = http_build_query(array('id'=>$id, 'error'=>$error));
 
 		return '/edit-buoy?' . $str;
-	}	
+	}
 
 	public static function toAbout() {
 		return '/about';
-	}	
+	}
 	public static function to404() {
 		return '/controllers/page/404.php';
 	}
 	public static function toMobileImageProcess() {
 		return Path::toUrl() . '/controllers/page/mobile-image-process.php';
-	}	
+	}
 	public static function toNOAABuoy($buoyId) {
 		return 'http://www.ndbc.noaa.gov/station_page.php?station=' . $buoyId;
 	}
 	public static function toNOAATideStation($stationId) {
 		return 'http://tidesonline.noaa.gov/plotcomp.shtml?station_info=' . $stationId;
-	}	
-		
+	}
+
 
 
 //-------------------------------------------------------------------------------//
 //-------------------------- CODE DIRECTORIES/FILES -----------------------------//
-		
+
 	public static function toJs() {
 		return '/view/static/js/';
 	}
@@ -199,13 +196,13 @@ class Path {
 		global $local_dev;
 		if ($local_dev) {
 			$url = Path::LOCALURL;
-		} 
+		}
 		else {
 			$url = Path::URL;
 		}
 		$url .= '/view/static/images/';
 		return $url;
-	}	
+	}
 
 	public static function toImageFile($path, $isRemote = FALSE) {
 		if ($isRemote) {
@@ -227,25 +224,25 @@ class Path {
 	}
 	public static function toLocationRemoveTidestation() {
 		return '/controllers/location/remove-tidestation.php';
-	}	
+	}
 	public static function toDeleteBuoy() {
 		return '/controllers/buoy/delete-buoy.php';
 	}
 	public static function toEditBuoy() {
 		return '/controllers/buoy/edit-buoy.php';
-	}	
+	}
 	public static function toDeleteTidestation() {
 		return '/controllers/tide/delete-tidestation.php';
 	}
 	public static function toEditTidestation() {
 		return '/controllers/tide/edit-tidestation.php';
-	}	
+	}
 	public static function toHandleReportSubmission() {
 		return '/controllers/report/report-form-handler.php';
 	}
 	public static function toHandleEditReportSubmission() {
 		return '/controllers/report/edit-report-form-handler.php';
-	}	
+	}
 	public static function toHandleLogin() {
 		return '/controllers/user/login-form-handler.php';
 	}
@@ -254,22 +251,22 @@ class Path {
 	}
 	public static function toHandleRegistration() {
 		return '/controllers/user/register-form-handler.php';
-	}	
+	}
 	public static function toBookmarkLocation() {
 		return '/controllers/location/add-reporter.php';
 	}
 	public static function toEditLocationPost() {
 		return '/controllers/location/edit.php';
-	}	
+	}
 	public static function toDeleteLocation() {
 		return '/controllers/location/delete-location.php';
 	}
 	public static function toPostLocation() {
-		return '/controllers/location/add-location.php';	
-	}		
+		return '/controllers/location/add-location.php';
+	}
 	public static function toUpdateReporter() {
 		return '/controllers/reporter/update.php';
-	}	
+	}
 	public static function toDeleteReporter() {
 		return '/controllers/reporter/delete.php';
 	}
