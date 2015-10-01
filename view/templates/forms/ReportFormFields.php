@@ -41,6 +41,32 @@ class ReportFormFields {
 	}
 
 	public static function renderTimeSelect() {
+		?>
+		<div class="field time select-field required first">
+			<label for="time_offset">Time:</label>
+			<select name="time_offset" id="time-offset">
+				<option value="0">Now</option>
+				<?
+				for ($i=1; $i <= 48; $i++) {
+					?>
+					<option value="-<?=$i?>"><?= $i . " hours ago" ?></option>
+					<?
+				}
+				?>
+				<option value="older-date">Older...</option>
+			</select>
+			<input id="report-form-older-date" style="display:none" placeholder="mm/dd/yyyy hh:mm:ss" type="text" value="" name="time" />
+			<script type="text/javascript">
+				(function(){
+					$('select#time-offset').change(function(event){
+						if ($(this).find(":selected").val() == 'older-date') {
+							$('#report-form-older-date').show();
+						}
+					});
+				})();
+			</script>
+		</div>
+		<?
 	}
 
 	public static function renderQualitySelect($currentQuality = null) {
