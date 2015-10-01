@@ -140,7 +140,7 @@ class Path {
 		if ($isRemote) {
 			return $path;
 		}
-		return '/uploads/' . $path;
+		return Path::URL . '/uploads/' . $path;
 	}
 
 	public static function toBuoys() {
