@@ -79,6 +79,7 @@ class Classloader {
         "LocationRemoveBuoysForm" =>    "/view/templates/forms/LocationRemoveBuoysForm.php",
         "LoginForm" =>                  "/view/templates/forms/LoginForm.php",
         "LogoutForm" =>                 "/view/templates/forms/LogoutForm.php",
+        "Observations" =>               "/view/templates/forms/Observations.php",
         "RegisterForm" =>               "/view/templates/forms/RegisterForm.php",
         "ReportFeed" =>                 "/view/templates/report/ReportFeed.php",
         "ReportForm" =>                 "/view/templates/forms/ReportForm.php",

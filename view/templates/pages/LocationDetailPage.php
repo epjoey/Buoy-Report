@@ -10,24 +10,48 @@ class LocationDetailPage extends Page {
 		$str .= $this->showReportForm ? 'show-report-form' : '';
 		return $str;
 	}	
-	
-	
-	public function renderLeft() {
-		$filterOptions = array(
-			'sublocationObjects' => $this->location->sublocations
-		);
-		FilterForm::renderFilterModule($filterOptions, array('location'=>$this->location->id));
-	}
-	
-	public function renderMain() {
-		$this->renderLocDetails();		
-		$this->renderLocReports();	
 
-	}	
+	public function renderBodyContent() {
+		?>
+		<div class="sixteen columns">
+			<? $this->renderLocDetails(); ?>
+		</div>
+		<div class="sixteen columns">
+			<?	
+			foreach($this->location->buoys as $buoy) { 
+				?>
+				<div buoy-observations station-id="<?= $buoy->buoyid ?>"></div>
+				<?
+			}
+			?>
+		</div>
+		<div class="three columns">
+			<?
+			$filterOptions = array(
+				'sublocationObjects' => $this->location->sublocations
+			);
+			FilterForm::renderFilterModule($filterOptions, array('location'=>$this->location->id));
+
+			?>
+		</div>
+		<div id="main-container" class="nine columns">
+			<?
+			$this->renderLocReports();	
+			?>			
+		</div>
+		<div class="four columns">
+			<?
+			$this->renderCurrentData();
+			$this->renderLocationInfo();
+			?>
+		</div>
+		<?	
+	}
+
 
 	public function renderLocDetails() {
 		?>
-		<div class="loc-details">
+		<div class="loc-details nine columns">
 			<h1><a href="<?=Path::toLocation($this->location->id)?>"><?= html($this->location->locname)?></a></h1>
 			<div class="loc-report-section">
 				<div class="loc-controls">
@@ -109,12 +133,6 @@ class LocationDetailPage extends Page {
 		<?
 	} 
 
-	public function renderRight() {
-
-		$this->renderCurrentData();
-		$this->renderLocationInfo();
-
-	}
 
 	private function renderCurrentData() {
 		?>

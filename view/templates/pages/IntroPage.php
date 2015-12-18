@@ -25,11 +25,30 @@ class IntroPage extends Page {
 		<?
 	}
 
+<<<<<<< Updated upstream
+=======
+	public function renderHeader() {
+		?>
+		<div class="header"> 
+			<div class="container">
+					<span class="header-right">
+						<a href="<?=Path::toRegister()?>" class="block-link">Sign Up</a>
+						<a class="block-link" id="login-trigger" href="javascript:">Login</a></span>
+					</span>
+					<? LoginForm::renderForm(); ?>
+					<div class="clear"></div>
+			</div>
+		</div>
+		<? 
+	}
+
+>>>>>>> Stashed changes
 	public function renderBodyContent() {
 		?>
 			<img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="101" height="101"/>
 			
 			<h1 class="welcome-to-br"><span class="welcome">Welcome to</span> Buoy Report<span class="pattern"></span></h1>
+<<<<<<< Updated upstream
 <!-- 			<div class="sub-text">
 				<div class="desc">
 					<h2 class="tag-line" id="desc-trigger">Log buoy data after you surf.</h2>
@@ -64,7 +83,15 @@ class IntroPage extends Page {
 			<br />
 			<br />
 
+=======
+>>>>>>> Stashed changes
 		<?
+
+		$locations = LocationService::getAllLocations();
+		$options['locations'] = $locations;
+		$list = new LocationList($options);
+		$list->renderLocations();
+
 	}
 
 	public function renderFooterJs() {

@@ -16,7 +16,7 @@ class Page {
 
 		?>
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-		<html xmlns="http://www.w3.org/1999/xhtml">
+		<html xmlns="http://www.w3.org/1999/xhtml" ng-app="buoyReport">
 			<? $this->renderHead(); ?>
 			<body class="br <?= $this->getBodyClassName() ?>">
 				<div id="wrapper">
@@ -91,7 +91,13 @@ class Page {
 
 	public function renderJs() {
 		global $local_dev;
-
+		?>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.9.0/jquery.validate.min.js"></script>
+		<?
 		if ($local_dev) {
 			?><script type="text/javascript" src="<?=Path::toJs()?>js-aggregator.php"></script><?
 		} else {
