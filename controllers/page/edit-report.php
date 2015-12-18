@@ -2,7 +2,6 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
-
 if(isset($_REQUEST['id']) && $_REQUEST['id']) {
 	$id = $_REQUEST['id'];
 } else {
@@ -12,9 +11,10 @@ if(isset($_REQUEST['id']) && $_REQUEST['id']) {
 }
 
 $user = UserService::getUser();
-$report = Persistence::getReportById($id);
+$report = ReportService::getReport($id);
+$report->location = LocationService::getLocation($report->locationid, array('includeSublocations'=>TRUE));
 
-if(($report['reporterid'] != $user->id) || !$report) {
+if(($report->reporterid != $user->id) || !$report) {
 	header("HTTP/1.0 404 Not Found");
 	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 	exit();	
@@ -29,16 +29,12 @@ if ($needPicup) {
 	setPicupSessionId('edit-report-form', $id);
 }
 
-//old functions
-$report['locationInfo'] = Persistence::getLocationInfoById($report['locationid']);
-$report['locationInfo']['sublocations'] = Persistence::getSubLocationsByLocation($report['locationid']);
-
 
 $reportFormStatus = StatusMessageService::getStatusMsgForAction('edit-report-form');
 StatusMessageService::clearStatusForAction('edit-report-form');
 
 
-$page = new EditPostPage();
+$page = new EditReportPage();
 $page->renderPage(array(
 	'pageTitle' => 'Edit Report',
 	'user' => $user,

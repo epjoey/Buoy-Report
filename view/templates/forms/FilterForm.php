@@ -108,7 +108,7 @@ class FilterForm {
 			<input type="submit" id="filter-submit" value="Filter" />
 			<p class="reset">
 				<? 
-					$url = $_SERVER['PHP_SELF'];
+					$url = Path::toReports();
 					if ($_REQUEST['reporter']) {
 						$url .= '?reporter=' . $_REQUEST['reporter'];
 					} else if ($_REQUEST['location']) {

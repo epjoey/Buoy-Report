@@ -68,28 +68,6 @@ class Persistence {
 		return $arr;
 	}
 
-/*==================================================== General Reports ====================================================*/
-/*=========================================================================================================================*/
-
-	public static function getReportbyId($reportId) {
-		$reportId = intval($reportId);
-		$sql = "SELECT a.id as r_id, b.id as l_id, a.*, b.*, c.*
-				FROM report a
-				INNER JOIN location b ON a.locationid = b.id
-				LEFT JOIN sublocation c ON a.sublocationid = c.sl_id
-				WHERE a.id = '$reportId'";
-		$result = mysqli_query(Persistence::dbConnect(), $sql);
-		if (!$result) {
-			die("Error fetching buoys by location" . mysqli_error($link));
-		}
-		$row = mysqli_fetch_array($result, MYSQL_ASSOC);
-		if (!empty($row)) {
-			$row['id'] = $row['r_id'];
-			return $row;
-		} else return NULL;
-
-	}
-
 
 /*==================================================== Locations ====================================================*/
 /*===================================================================================================================*/

@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class EditPostPage extends Page {	
+class EditReportPage extends Page {	
 
 	public function getBodyClassName() {
 		return 'report-form-page edit-report-page';

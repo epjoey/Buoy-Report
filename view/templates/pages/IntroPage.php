@@ -4,31 +4,25 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 class IntroPage extends Page {
 
 	public function getBodyClassName() {
-		return 'intro-page';
+		return 'intro-page list-page';
 	}
 
 
 	public function renderJs() {
 		parent::renderJs();
+		SearchModule::renderFilterJs();
 		?>
 		<script type="text/javascript">	
 			$(document).ready(function(){
+				$('#query').focus();
+			});
+
+			$(document).ready(function(){
 				$("#login-form").validate();
 			});
+
 		</script>
 		<?
-	}
-
-	public function renderHeader() {
-		?>
-		<div class="header"> 
-			<div class="container">
-					<span class="header-right"><a class="locations-link" href="<?= Path::toLocations(); ?>">Locations</a><a class="block-link" id="login-trigger" href="javascript:">LOGIN</a></span>
-					<? LoginForm::renderForm(); ?>
-					<div class="clear"></div>
-			</div>
-		</div>
-		<? 
 	}
 
 	public function renderBodyContent() {
@@ -36,7 +30,7 @@ class IntroPage extends Page {
 			<img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="101" height="101"/>
 			
 			<h1 class="welcome-to-br"><span class="welcome">Welcome to</span> Buoy Report<span class="pattern"></span></h1>
-			<div class="sub-text">
+<!-- 			<div class="sub-text">
 				<div class="desc">
 					<h2 class="tag-line" id="desc-trigger">Log buoy data after you surf.</h2>
 					<a href="<?=Path::toAbout();?>" class="what">What?</a>
@@ -51,8 +45,24 @@ class IntroPage extends Page {
  					<a class="browse-spots" href="<?=Path::toLocations()?>">Browse Spots ></a>
  					<? /*<a class="browse-spots" href="<?=Path::toBuoys()?>">Browse Buoys ></a> */?>			
  				</div>
-				<div class="clear"></div>
+ 				<div class="clear"></div>
+			</div> -->
+			<div class="search-container">
+				<? SearchModule::renderFilterInput('Locations'); ?>
 			</div>
+			<div class="grid-list-container" id="grid-list-container">
+				<?
+					$options['locations'] = $this->locations;
+					$options['toPost'] = $this->isToPost;
+					$options['showAddLocation'] = TRUE;
+					$options['showSeeAll'] = FALSE;
+					$options['isSearchable'] = TRUE;
+					$list = new LocationList($options);
+					$list->renderLocations();
+				?>			
+			</div>
+			<br />
+			<br />
 
 		<?
 	}

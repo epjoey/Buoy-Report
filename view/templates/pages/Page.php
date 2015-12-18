@@ -100,6 +100,11 @@ class Page {
 	}
 
 	public function renderGoogleAnalytics() {
+		global $local_dev;
+
+		if ($local_dev) {
+			return;
+		}		
 		?>
 		<script type="text/javascript">
 
