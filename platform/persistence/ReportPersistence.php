@@ -104,18 +104,18 @@ class ReportPersistence {
 		$defaultOptions = array(
 			"start" => 0,
 			"limit" => 6,
-			"order" => "obsdate DESC"
+			"order" => "r.obsdate DESC"
 		);
 		$options = array_merge($defaultOptions, $options);
 		$start = intval($options["start"]);
 		$limit = intval($options["limit"]);
 		$order = Persistence::escape($options["order"]);
-		$where = array("TRUE");
+		$where = array();
 		$userId = intval($user->id);
 		if ($userId) {
-			$where[] = "(public = '1' OR reporterid = '$userId')";
+			$where[] = "(r.public = '1' OR r.reporterid = '$userId')";
 		} else {
-			$where[] = "public = '1'";
+			$where[] = "r.public = '1'";
 		}
 
 		foreach($filters as $key => $val) {
@@ -124,31 +124,38 @@ class ReportPersistence {
 			}
 			switch ($key) {
 				case 'quality':
-					$where[] = "quality = " . intval($val);
+					$where[] = "r.quality = " . intval($val);
 					break;
 				case 'image': 
-					$where[] = $val == 1 ? "imagepath IS NOT NULL" : "imagepath IS NULL";
+					$where[] = $val == 1 ? "r.imagepath IS NOT NULL" : "r.imagepath IS NULL";
 					break;
 				case 'text':
-					$where[] = "text LIKE '%" . Persistence::escape($val) . "%'";	
+					$where[] = "r.text LIKE '%" . Persistence::escape($val) . "%'";	
 					break;
 				case 'obsdate':
-					$where[] = "obsdate <= " . strval(strtotime($val) + 59*60*24); //adding just under 24 hours to catch that day's reports
+					$where[] = "r.obsdate <= " . strval(strtotime($val) + 59*60*24); //adding just under 24 hours to catch that day's reports
 					break;
 				case 'locationIds':
-					$where[] = "locationid in (" . implode(',', array_map('intval',$val)) .")";
+					$where[] = "r.locationid in (" . implode(',', array_map('intval',$val)) .")";
 					break;	
 				case 'reporterId':
-					$where[] = "reporterid = " . intval($val);
+					$where[] = "r.reporterid = " . intval($val);
 					break;					
 				case 'subLocationId':
-					$where[] = "sublocationid = " . intval($val);
+					$where[] = "r.sublocationid = " . intval($val);
+					break;
+				case 'buoyIds':
+					$where[] = "b.buoy in (" . implode(',', array_map('intval', array_map('intval',$val))) .")";
 					break;
 			}
 		}
-		//var_dump($where);
 		$whereClause = implode(" AND ", $where);
-		$sql = "SELECT id FROM report WHERE $whereClause ORDER BY $order LIMIT $start,$limit";
+		$sql = "SELECT r.id FROM report r ";
+		$buoyIds = $filters['buoyIds'];
+		if (isset($buoyIds) && $buoyIds) {
+			$sql .= " INNER JOIN buoydata b ON r.id = b.reportid ";
+		}
+		$sql .= " WHERE $whereClause ORDER BY $order LIMIT $start,$limit"; 
 		$ids = Persistence::getArray($sql);
 		return $ids;
 	}

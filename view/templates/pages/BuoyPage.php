@@ -47,18 +47,13 @@ class BuoyPage extends Page {
 					<?
 					foreach ($this->buoys as $buoy):
 						?>
-						<li class="block-list-item" buoyid="<?=html($buoy->buoyid)?>"<!--  onclick="handleBuoyClick($(this))"; -->>
+						<li class="block-list-item" buoyid="<?=html($buoy->buoyid)?>">
 							<a class="item-inner" href="<?= Path::toBuoy($buoy->buoyid) ?>">
 								<span class="name">
 									<span class="buoy-id"><?= html($buoy->buoyid) ?></span>&nbsp;
 									<span class="buoy-desc"><?= html($buoy->name) ?></span> 
 								</span>
 							</a>
-							<div class='iframe-container' style="display:none"></div>
-							<div class="edit-delete">
-								<a class="edit" href="<?=Path::toEditBuoyPage($buoy->buoyid, null)?>">Edit</a>
-								<?/*<span class="delete"></span>*/?>
-							</div>
 						</li>
 						<?
 					endforeach; 

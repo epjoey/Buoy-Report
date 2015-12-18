@@ -14,7 +14,7 @@ class ReportsPage extends Page {
 	public function renderMain() {
 		?>
 		<div class="reports-container">
-			<h2>Recent Reports</h2>		
+			<h2><?= $this->reportFilters['reporterId'] == $this->user->id ? 'My ' : 'Recent ' ?> Reports</h2>
 			<? FilterForm::renderOpenFilterTrigger(); ?>
 			<div id="report-feed-container">
 				<?

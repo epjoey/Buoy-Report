@@ -50,9 +50,15 @@ class Header {
 			</div>		
 		</div>
 		<script type="text/javascript">
-			jQuery('.dd-menu').on('hover', function(){
-				jQuery(this).find('.inner-dd-menu').toggle();
+			jQuery(".dd-menu").on('mouseover', function(){
+        jQuery(this).addClass('open')
 			});
+      jQuery(".dd-menu").on('mouseout', function() {
+        jQuery(this).removeClass('open')
+      });
+      jQuery(".dd-trigger").on('click', function() {
+        jQuery(this).parent('.dd-menu.open').toggleClass('open');
+      });
 		</script>
 		<?
 	}

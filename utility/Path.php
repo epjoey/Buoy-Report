@@ -153,8 +153,7 @@ class Path {
 	}
 
 	public static function toBuoy($buoyId) {
-		return '/controllers/page/buoy.php?buoyid='.$buoyId;
-		//return '/buoys/'.$buoyId;
+		return '/buoys/'.$buoyId;
 	}
 
 

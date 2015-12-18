@@ -10,16 +10,19 @@
 	.header-left { float:left; 		
 		.br-icon { width:46px; height:46px; display:block; position:absolute; top:-6px; left:0;}
 	}
-
 	.header-right {float:right;}	
-	.dd-menu { position:relative; z-index:2;
-		.dd-trigger {display:block; }
-		.dd-trigger:hover { background:@pink;}
-		.dd-title {.text-overflow(); max-width:140px; min-height: 23px; }
-		.inner-dd-menu {display:none; background:@grey; position:absolute; top:32px; right:0;
-			li { width:150px; margin:0; border-bottom:1px solid darken(@grey,10%);}
-			a { margin:0; display:block; padding:8px; border-top:1px dotted lighten(@grey,20%); font-size:16px;}
-		}
+}
+
+.dd-menu { position:relative; z-index:2;
+	.dd-trigger {display:block; }
+	.dd-trigger:hover { background:@pink;}
+	.dd-title {.text-overflow(); max-width:140px; min-height: 23px; }
+	.inner-dd-menu {display:none; background:@grey; position:absolute; top:32px; right:0;
+		li { width:150px; margin:0; border-bottom:1px solid darken(@grey,10%);}
+		a { margin:0; display:block; padding:8px; border-top:1px dotted lighten(@grey,20%); font-size:16px;}
+	}
+	&.open {
+		.inner-dd-menu { display: block; }
 	}
 }
 

@@ -19,7 +19,7 @@ $user = UserService::getUser();
 
 /* load Report Filters */
 $reportFilters = ReportUtils::getFiltersFromRequest($_REQUEST);
-$reportFilters['buoyIds'] = array($buoy->id);
+$reportFilters['buoyIds'] = array($buoy->buoyid);
 
 /* load Reports */
 $numReportsPerPage = 6;
