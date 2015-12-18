@@ -152,6 +152,12 @@ class Path {
 		return '/buoys';
 	}
 
+	public static function toBuoy($buoyId) {
+		return '/controllers/page/buoy.php?buoyid='.$buoyId;
+		//return '/buoys/'.$buoyId;
+	}
+
+
 	public static function toAddBuoy($error = NULL) {
 		$str = http_build_query(array('error'=>$error));
 		return '/add-buoy' . ($str ? "?".$str: "");

@@ -47,8 +47,8 @@ class BuoyPage extends Page {
 					<?
 					foreach ($this->buoys as $buoy):
 						?>
-						<li class="block-list-item" buoyid="<?=html($buoy->buoyid)?>" onclick="handleBuoyClick($(this))";>
-							<a class="item-inner" href="javascript:">
+						<li class="block-list-item" buoyid="<?=html($buoy->buoyid)?>"<!--  onclick="handleBuoyClick($(this))"; -->>
+							<a class="item-inner" href="<?= Path::toBuoy($buoy->buoyid) ?>">
 								<span class="name">
 									<span class="buoy-id"><?= html($buoy->buoyid) ?></span>&nbsp;
 									<span class="buoy-desc"><?= html($buoy->name) ?></span> 
@@ -82,13 +82,13 @@ class BuoyPage extends Page {
 
 			var searchModuleList = 'buoylist';
 
-			function handleBuoyClick(elem) {
-				if (elem.hasClass('loaded')) {
-					elem.find('.iframe-container').toggle();
-				} else {
-					showBuoyDetails(elem);	
-				}
-			}		
+			// function handleBuoyClick(elem) {
+			// 	if (elem.hasClass('loaded')) {
+			// 		elem.find('.iframe-container').toggle();
+			// 	} else {
+			// 		showBuoyDetails(elem);	
+			// 	}
+			// }		
 			
 		 	function showBuoyDetails(elem) {
 		 		var id = elem.attr('buoyid');

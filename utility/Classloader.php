@@ -43,6 +43,7 @@ class Classloader {
         "AddCrewPage" =>                "/view/templates/pages/AddCrewPage.php",
         "AddLocationPage" =>            "/view/templates/pages/AddLocationPage.php",
         "BuoyPage" =>                   "/view/templates/pages/BuoyPage.php",
+        "BuoyDetailPage" =>             "/view/templates/pages/BuoyDetailPage.php",
         "CrewPage" =>                   "/view/templates/pages/CrewPage.php",
         "EditBuoyPage" =>               "/view/templates/pages/EditBuoyPage.php",
         "EditLocationPage" =>           "/view/templates/pages/EditLocationPage.php",
