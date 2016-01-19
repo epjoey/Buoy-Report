@@ -31,7 +31,8 @@ if (isset($_POST['login-rel']) && $_POST['login-rel']) {
 	exit();	
 } 
 
-header('Location:'.Path::toUserHome());	
+$user = UserService::getUser();
+header('Location:'.Path::toReports($user->id));	
 
 		
 ?>

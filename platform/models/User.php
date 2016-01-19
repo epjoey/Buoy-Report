@@ -89,7 +89,7 @@ class User extends BaseModel {
 		}
 
 		eatCookie('surf-session');	
-		dropCookie('surf-session', $userId . '%' . $newKey, time()+60*60*24*7);
+		dropCookie('surf-session', $userId . '%' . $newKey, time()+60*60*24*365);
 
 		return $userId;
 	}

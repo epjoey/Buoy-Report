@@ -12,10 +12,11 @@ $report = ReportService::getReport($_POST['id']);
 $report->waveheight = $_POST['waveheight'];
 $report->quality = $_POST['quality'];
 $report->text = $_POST['text'];
+$report->sublocationid = $_POST['sublocationid'];
 
 if ($_POST['submit'] == 'delete-report') {
 	ReportService::deleteReport($report->id);
-	header('Location:'.Path::toUserHome());
+	header('Location:'.Path::toReports($user->id));
 	exit();	
 }
 

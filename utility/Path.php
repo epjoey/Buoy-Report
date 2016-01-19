@@ -2,10 +2,10 @@
 
 class Path {
 
-	const SHORTURL = 'http://buoy-report.com';
-	const URL = 'http://www.buoy-report.com';
+	const SHORTURL = 'http://buoyreport.com';
+	const URL = 'http://www.buoyreport.com';
 	const LOCALURL = 'http://localhost:8888';
-	const COOKIEDOMAIN = '.buoy-report.com';
+	const COOKIEDOMAIN = '.buoyreport.com';
 
 	public static function toUrl() {
 		global $local_dev;
@@ -36,10 +36,6 @@ class Path {
 		return '/';
 	}
 
-	public static function toUserHome() {
-		return '/';
-	}
-
 	public static function toLogin($error = NULL, $rel = NULL) {
 		$url = '/login';
 		if (isset($error)) {
@@ -65,6 +61,15 @@ class Path {
 			return Path::toLocations(null, true);
 		}
 		$url = '/locations/'.$locationid.'/report';
+		return $url;
+	}
+
+	public static function toReports($reporterId = null) {
+		$url = '/reports';
+
+		if (isset($reporterId)) {
+			$url .= '?reporterId=' . $reporterId;
+		}	
 		return $url;
 	}
 

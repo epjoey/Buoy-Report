@@ -1,10 +1,10 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class HomePage extends Page {
+class ReportsPage extends Page {
 
 	public function getBodyClassName() {
-		return 'user-home-page';
+		return 'user-reports-page';
 	}	
 
 	public function renderLeft() {
@@ -18,9 +18,7 @@ class HomePage extends Page {
 			<? FilterForm::renderOpenFilterTrigger(); ?>
 			<div id="report-feed-container">
 				<?
-				FilterNote::renderFilterNote(array_merge($this->reportFilters, array(
-					'location' => 'my locations'
-				)));
+				FilterNote::renderFilterNote($this->reportFilters);
 				ReportFeed::renderFeed($this->reports, array(
 					'limit' => $this->numReportsPerPage,
 					'reportFilters' => $this->reportFilters

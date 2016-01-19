@@ -1,43 +1,25 @@
-/*  =====================  Components ===================== */
+/*  ===================== Utils ===================== */
+/* UTILS */
+.pull-left { float: left; }
+.pull-right { float: right; }
 
+
+/*  =====================  Components ===================== */
 /* HEADER */
 .header { .museo500(20px, 1.6em); width:100%; background:@dark-blue; position:relative; margin-bottom:20px; color:@grey;
 	.header-left { float:left; 		
-		.left-link { font-size:18px; color: @grey; padding-left:6px; display:inline-block; vertical-align: top;}
 		.br-icon { width:46px; height:46px; display:block; position:absolute; top:-6px; left:0;}
-		//.home { padding-left:50px;}
-		.locations { padding-left:50px;}
 	}
 
 	.header-right {float:right;}	
-	.user-menu { position:relative; z-index:2;
-		.post-report {position:relative; float: left;}
-		.location-drop-down {display:none; position:absolute; top:32px; right:0;
-			.locations { margin:0; }
-			.location {width:188px; margin:0;}
-			.notification-icons {display:none;}
-			.location-inner {padding:0; border-bottom:1px solid darken(@grey,10%);}
-			.name {.block-link; font-size:16px; margin:0; padding:8px; border-top:1px dotted lighten(@grey,20%); width:auto; .text-overflow(); max-width:172px; display:block;}	
-			.name:hover {background:@pink;}
-			.see-all {width:188px; margin:0; padding:0; float:left; margin-top:0; 
-				span {display:block; font-size:16px; padding:8px; border-top:1px dotted lighten(@grey,20%); line-height:1.3em; border-bottom:1px solid darken(@grey,10%);}
-			}
-		}
-		.user-options { background:@pink;}
-		.user {display:block; }
-		.username {.text-overflow(); max-width:140px; min-height: 23px; }
-		.inner-user-menu {display:none; background:@grey; position:absolute; top:32px; right:0;
+	.dd-menu { position:relative; z-index:2;
+		.dd-trigger {display:block; }
+		.dd-trigger:hover { background:@pink;}
+		.dd-title {.text-overflow(); max-width:140px; min-height: 23px; }
+		.inner-dd-menu {display:none; background:@grey; position:absolute; top:32px; right:0;
 			li { width:150px; margin:0; border-bottom:1px solid darken(@grey,10%);}
 			a { margin:0; display:block; padding:8px; border-top:1px dotted lighten(@grey,20%); font-size:16px;}
 		}
-	}
-	&.expanded-report .user-menu {
-		.location-drop-down { display:block; }
-		.inner-user-menu { display:none; }
-	}
-	&.expanded-user-menu .user-menu {
-		.inner-user-menu { display:block; }
-		.location-drop-down { display:none; }
 	}
 }
 
@@ -114,7 +96,7 @@
 .outer-link span {padding:6px; display:block; }	
 .block-list-item { width:100%; background:@dark-blue; float:left; margin:1px 0; position:relative;
 	a { width:100%; display:block; .text-shadow(0px,1px,1px,rgba(0,0,0,.6)); color:#FFF; font-size:18px; line-height:1.3em; 
-		.name { padding:10px 8px; display:block; .museo500(); max-width:230px; .text-overflow();}
+		.name { padding:10px 8px; display:block; .museo500(); max-width:230px; .text-overflow(); font-size: 16px; }
 	}
 	a:hover { background:#000; text-decoration:none; }	
 	&.selected { background:#000; }

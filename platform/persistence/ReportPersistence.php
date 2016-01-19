@@ -110,10 +110,14 @@ class ReportPersistence {
 		$start = intval($options["start"]);
 		$limit = intval($options["limit"]);
 		$order = Persistence::escape($options["order"]);
-
+		$where = array("TRUE");
 		$userId = intval($user->id);
-		$where = array("(public = '1' OR reporterid = '$userId')");
-		//var_dump($filters);
+		if ($userId) {
+			$where[] = "(public = '1' OR reporterid = '$userId')";
+		} else {
+			$where[] = "public = '1'";
+		}
+
 		foreach($filters as $key => $val) {
 			if (!$val) {
 				continue;
@@ -145,7 +149,6 @@ class ReportPersistence {
 		//var_dump($where);
 		$whereClause = implode(" AND ", $where);
 		$sql = "SELECT id FROM report WHERE $whereClause ORDER BY $order LIMIT $start,$limit";
-		//var_dump($sql);
 		$ids = Persistence::getArray($sql);
 		return $ids;
 	}

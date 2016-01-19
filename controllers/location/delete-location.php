@@ -5,6 +5,6 @@ if (!$_REQUEST['delete-location']) {
 	exit;
 }
 Persistence::deleteLocation($_REQUEST['locationId']);
-header('Location:'.Path::toUserHome());
+header('Location:'.Path::toLocations());
 
 ?>

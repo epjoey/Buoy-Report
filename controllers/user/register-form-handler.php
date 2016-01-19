@@ -56,7 +56,7 @@ $reporter = ReporterService::createReporter(
 );
 
 UserService::logInUser($reporter->name, $_POST['reg-password']);
-header('Location:'.Path::toUserHome());
+header('Location:'.Path::toReports($reporter->id));
 exit();
 
 
