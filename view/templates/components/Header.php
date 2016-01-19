@@ -34,7 +34,6 @@ class Header {
               </span>
               <ul class="inner-dd-menu">
                 <li><a class="block-link" href="<?=Path::toReports($user->id);?>">My Reports</a></li>
-                <li><a class="block-link" href="<?=Path::toBuoys($user->id);?>">My Buoys</a></li>
                 <li><a class="block-link" href="<?=Path::tolocations($user->id);?>">My Locations</a></li>
                 <li><a class="block-link" href="<?=Path::toProfile($user->id);?>">My Account</a></li>
                 <li><a class="block-link" href="<?=Path::toLogout();?>">Log Out</a></li>
