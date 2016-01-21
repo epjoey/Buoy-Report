@@ -22,7 +22,7 @@ class ReportForm {
 					<span class="submission-error"><?= $statusMsg ?></span>
 					<?
 				}
-				ReportFormFields::renderTimeSelect();
+				ReportFormFields::renderTimeSelect($location);
 
 				?>
 

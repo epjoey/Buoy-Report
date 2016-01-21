@@ -40,16 +40,22 @@ class ReportFormFields {
 		<?
 	}
 
-	public static function renderTimeSelect() {
+	public static function renderTimeSelect($location) {
+		$localTimezone = new DateTimeZone($location->timezone);
+		$now = new DateTime('now', $localTimezone)
 		?>
 		<div class="field time select-field required first">
 			<label for="time_offset">Time:</label>
 			<select name="time_offset" id="time-offset">
 				<option value="0">Now</option>
 				<?
-				for ($i=1; $i <= 48; $i++) {
+				for ($i=1; $i <= 240; $i++) {
+					$now->modify("-".(60 * 60)." seconds")
 					?>
-					<option value="-<?=$i?>"><?= $i . " hours ago" ?></option>
+					<option value="-<?=$i?>">
+						<?= $i . " hours ago" ?>
+						<?= $i >= 24 ? "(" .  $now->format('m/d/y g:i A') . ")" : "" ?>
+					</option>
 					<?
 				}
 				?>
