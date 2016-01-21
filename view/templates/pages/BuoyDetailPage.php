@@ -10,6 +10,25 @@ class BuoyDetailPage extends Page {
 		return $str;
 	}	
 	
+	public function renderBodyContent() {
+		?>
+		<div class="three columns">
+			<?
+			$this->renderLeft();
+			?>
+		</div>
+		<div class="four columns pull-right">
+			<?
+			$this->renderRight();
+			?>
+		</div>
+		<div id="main-container" class="nine columns pull-left">
+			<?
+			$this->renderMain();
+			?>
+		</div>
+		<?
+	}
 	
 	public function renderLeft() {
 		$filterOptions = array();
@@ -21,6 +40,7 @@ class BuoyDetailPage extends Page {
 		$this->renderBuoyReports();	
 
 	}	
+
 
 	public function renderBuoyDetails() {
 		?>
@@ -35,7 +55,6 @@ class BuoyDetailPage extends Page {
 	private function renderBuoyReports() {
 		?>
 		<div class="reports-container">
-			<h2>Recent Reports</h2>		
 			<? FilterForm::renderOpenFilterTrigger(); ?>
 			<div id="report-feed-container">
 				<? 
@@ -60,11 +79,6 @@ class BuoyDetailPage extends Page {
 		?>
 		<div class="current-data">	
 			<div class="buoy-current-data sb-section">	
-				<div class="buoy-heading">
-					<a class="buoy-iframe-link" target="_blank" href="<?=Path::toNOAABuoy($this->buoy->buoyid)?>">
-						NOAA <?= $this->buoy->buoyid ?>
-					</a>
-				</div>
 				<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=$this->buoy->buoyid?>" style="width:100%; min-height: 300px"></iframe>
 			</div>
 		</div>
