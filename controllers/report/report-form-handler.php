@@ -32,12 +32,7 @@ try {
 		$obsdate = gmdate("U", time()-$offset);			
 	}
 
-	if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-		$imagepath = handleFileUpload($_FILES['upload'], $user->id);
-
-	/* in case they used picup, its a remote url */	
-
-	} else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
+	if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
 		$imagepath = rawurldecode($_POST['remoteImageURL']);
 	}	
 

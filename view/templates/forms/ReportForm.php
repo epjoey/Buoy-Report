@@ -15,7 +15,7 @@ class ReportForm {
 		$user = UserService::getUser();
 		?>
 		<div class="form-container report-form-container">
-			<form id="report-form" action="<?=Path::toHandleReportSubmission()?>" enctype="multipart/form-data" method="post" >
+			<form id="report-form" action="<?=Path::toHandleReportSubmission()?>" method="post" >
 				<?
 				if ($statusMsg) {
 					?>
@@ -76,20 +76,10 @@ class ReportForm {
 
 						<div class="field image last">
 							<label for="upload">Upload an image:</label>
-							<input type="file" name="upload" id="upload" capture="camera">
-							<span id="mobile-image-name" class="mobile-note">
-								<?
-								if($needPicup) {
-									?>
-									You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
-									<?
-								}
-								?>
-							</span>
+							<input type="file" name="upload" capture="camera">
 						</div>
 					</div>
 				</div><!--end optional fields-->
-				<? error_log("hiiii") ?>
 				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
 				<input type="hidden" name="locationid" value="<?=$location->id?>" />
 				<input type="hidden" name="locationname" value="<?=$location->locname?>" />
@@ -97,6 +87,38 @@ class ReportForm {
 				<input type="submit" name="submit_report" value="Submit Report" />
 			</form>
 		</div>
+		<script type="text/javascript">
+			var uploadInput = $("input[name='upload']");
+			var handleFileSelect = function(evt) {
+				var files = evt.target.files;
+				if (files && files.length) {
+					var formData = new FormData();
+					formData.append("image", uploadInput[0].files[0]);
+					uploadInput.val('');
+					$.ajax({
+						url: "https://api.imgur.com/3/image",
+						type: "POST",
+						datatype: "json",
+						contentType: false,
+						processData: false,
+						headers: {
+							'Authorization': 'Client-ID edda62204c13785'
+						},
+						data: formData,
+						success: function(result) { 
+							var link = result.data.link;
+							$("input[name='remoteImageURL']").val(link);
+						},
+						error: function() { console.log("ERRORZ"); },
+					});
+				}
+			};
+			if (window.FormData) {
+				uploadInput.on('change', handleFileSelect);
+			} else {
+				console && console.log('The File APIs are not fully supported in this browser.');
+			}
+		</script>
 		<?
 	}
 }
