@@ -18,7 +18,7 @@ class AboutPage extends Page {
 			<span class="border"></span>
 			<p class="joey">Buoy Report is designed and developed by me, Joey Hodara, a San Francisco web designer from Maui, Hawaii. This project was initially designed so that I could gain a better understanding of the complexity of Ocean Beach, SF.</p>
 			<span class="border"></span>
-			<p class="dev">Please report any bugs to jhodara(at)gmail.com. If you would like to help with the development of Buoy Report, check out the repo <a target="_blank" href="https://github.com/jhodara/bouyreport"> on github</a>.</p>
+			<p class="dev">Please report any bugs to jhodara(at)gmail.com. If you would like to help with the development of Buoy Report, check out the repo <a target="_blank" href="https://github.com/epjoey/Buoy-Report"> on github</a>.</p>
 		</div>
 		<?	
 	}
