@@ -27,15 +27,9 @@ try {
 		$report->imagepath = '';
 	}
 	
-	/* handleFileUpload either saves photo and returns path, or returns an error */	
-	if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-		/* handleFileUpload either saves photo and returns path, or returns an error */	
-		$report->imagepath = handleFileUpload($_FILES['upload'], $report->reporterid);
-	}
-	/* in case they used picup, its a remote url */	
-	else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
-		$report->imagepath = rawurldecode($_POST['remoteImageURL']);
-	}
+	if (isset($_POST['imageurl']) && $_POST['imageurl'] !='') {
+		$report->imagepath = rawurldecode($_POST['imageurl']);
+	}	
 
 } catch(InvalidSubmissionException $e) {
 	StatusMessageService::setStatusMsgForAction($e->getMessage(), 'edit-report-form');

@@ -32,8 +32,8 @@ try {
 		$obsdate = gmdate("U", time()-$offset);			
 	}
 
-	if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
-		$imagepath = rawurldecode($_POST['remoteImageURL']);
+	if (isset($_POST['imageurl']) && $_POST['imageurl'] !='') {
+		$imagepath = rawurldecode($_POST['imageurl']);
 	}	
 
 	$reportId = ReportService::insertReport(array(

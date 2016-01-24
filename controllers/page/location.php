@@ -1,6 +1,5 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/picup_functions.php';
 
 $locationId = $_GET['location'];
 if (!$locationId) {
@@ -20,6 +19,7 @@ if (!$location) {
 }
 
 $user = UserService::getUser();
+$device = new Mobile_Detect();
 
 /* load Report Filters */
 $reportFilters = ReportUtils::getFiltersFromRequest($_REQUEST);
@@ -32,15 +32,6 @@ $reports = ReportService::getReportsForUserWithFilters($user, $reportFilters, ar
 	'limit' => $numReportsPerPage
 ));
 
-//for picup callback. - mobile app redirection based on session var
-$needPicup = false;
-$device = new Mobile_Detect();
-if ($device->isAppleDevice()) {
-	$needPicup = true;
-}
-if ($needPicup) {
-	setPicupSessionId('report-form', $locationId);
-}
 
 $reportFormStatus = StatusMessageService::getStatusMsgForAction('submit-report-form');
 StatusMessageService::clearStatusForAction('submit-report-form');
@@ -55,7 +46,6 @@ $page->renderPage(array(
 	'numReportsPerPage' => $numReportsPerPage,
 	'reports' => $reports,
 	'device' => $device,
-	'needPicup' => $needPicup,
 	'showReportForm' => isset($_REQUEST['report']) && $_REQUEST['report'],
 	'reportFormStatus' => $reportFormStatus
 ));

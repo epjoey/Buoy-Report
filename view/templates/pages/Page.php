@@ -3,10 +3,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class Page {
 
-	public function loadData() {
-		$this->user = UserService::getUser();
-	}
-
 	public function renderPage($data = array()) {
 
 		//temporary until Page is no longer an instance objects and $this is just $viewData or something
@@ -91,7 +87,12 @@ class Page {
 
 	public function renderJs() {
 		global $local_dev;
-
+		?>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.9.0/jquery.validate.min.js"></script>
+		<?
 		if ($local_dev) {
 			?><script type="text/javascript" src="<?=Path::toJs()?>js-aggregator.php"></script><?
 		} else {

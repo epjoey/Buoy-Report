@@ -37,8 +37,7 @@ class LocationDetailPage extends Page {
 				</div>
 				<?
 				ReportForm::renderReportForm($this->location, array(
-					'statusMsg' => $this->reportFormStatus, //from session
-					'needPicup' => $this->needPicup
+					'statusMsg' => $this->reportFormStatus
 				));
 				AddBuoyForm::render(array(
 					'status'=>null, //get from session
@@ -248,20 +247,7 @@ class LocationDetailPage extends Page {
 				});
 			})(jQuery);			
 		</script>
-
 		<?
-		if($this->needPicup) {
-			?>
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
-			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
-			<script type="text/javascript">
-				document.observe('dom:loaded', function(){
-				//$(document).ready(function(){
-					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
-				});
-			</script>	
-			<?	
-		}
 	}	
 	
 

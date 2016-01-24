@@ -32,12 +32,8 @@ if (isset($_POST['delete-image']) && $_POST['delete-image'] == 'true') {
 	$location->coverImagePath = '';
 }
 
-if (isset($_FILES['upload']['tmp_name']) && $_FILES['upload']['tmp_name'] !='') {
-	$location->coverImagePath = handleFileUpload($_FILES['upload'], $user->id);
-
-/* in case they used picup, its a remote url */	
-} else if (isset($_POST['remoteImageURL']) && $_POST['remoteImageURL'] !='') {
-	$location->coverImagePath = rawurldecode($_POST['remoteImageURL']);
+if (isset($_POST['imageurl']) && $_POST['imageurl'] !='') {
+	$location->coverImagePath = rawurldecode($_POST['imageurl']);
 }
 
 $location->locname = $_POST['locname'];

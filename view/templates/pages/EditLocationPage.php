@@ -69,8 +69,9 @@ class EditLocationPage extends LocationDetailPage {
 					</select>
 					
 				</div>
-				<? 
-				ReportFormFields::renderImageInput($this->location->coverImagePath, $device->isAppleDevice()) ?>
+				<div class="field image last">
+					<? FormFields::renderImageInput($this->location->coverImagePath) ?>
+				</div>
 				<div class="field submit">
 					<input type="hidden" name="locationId" value="<?= $this->location->id ?>" />
 					<input type="submit" name="select-timezone" value="Update Location" />

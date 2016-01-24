@@ -9,8 +9,7 @@ class EditReportPage extends Page {
 
 	public function renderBodyContent() {
 		EditReportForm::renderEditReportForm($this->report, array(
-			'statusMsg' => $this->reportFormStatus,
-			'needPicup' => $this->needPicup
+			'statusMsg' => $this->reportFormStatus
 		));
 	}
 }

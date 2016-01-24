@@ -5,10 +5,6 @@ if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandl
 else ob_start();
 
 $files = array(
-    array('name'=>'lib/jquery-1.7.1.min.js', 'min'=>true),
-    array('name'=>'lib/underscore-1.4.3.min.js', 'min'=>true),
-    array('name'=>'lib/backbone-0.9.10.min.js', 'min'=>true),
-    array('name'=>'lib/jquery.validate.min.js', 'min'=>true),
     array('name'=>'BR.js', 'min'=>false),
 );
 

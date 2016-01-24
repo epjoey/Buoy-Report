@@ -1,7 +1,7 @@
 <?
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class ReportFormFields {
+class FormFields {
 	public static function renderWaveHeightField($waveHeights = array(), $preselected = null) {
 		?>
 		<div class="field wave-height select-field">
@@ -100,36 +100,37 @@ class ReportFormFields {
 		<?
 	}
 
-	public static function renderImageInput($currImagePath, $needPicup) {
+	public static function renderImageInput($currImagePath) {
 		?>
-		<div class="field image last">
-			<label for="upload">Upload <?= $currImagePath ? "New" : "" ?> Image:</label>
-
+		<span id='render-image-input' class="render-image-input">
+			<label for="upload">Upload <?= $currImagePath ? "New" : "" ?> Image:&nbsp;</label>
 			<?
 			if ($currImagePath) {
 				$image = getImageInfo($currImagePath, 200, 200);
 				if ($image) {
 					?>
-					<span class="image-container">
+					<div class="image-container">
 						<a href="<?=$image['src']?>" target="_blank"><image src="<?= $image['src'] ?>" width="<?=$image['width']?>" height="<?=$image['height']?>"/></a>
 						<label><input type="checkbox" name="delete-image" id="" value="true" /> Delete Image</label>
-					</span>
+					</div>
 					<?
 				}
 			}
 			?>
-
-			<input type="file" name="upload" id="upload" capture="camera">
-			<span id="mobile-image-name" class="mobile-note">
-				<?
-				if($needPicup) {
-					?>
-					You will need <a href="itms-apps://itunes.com/apps/picup" target="_blank">Picup</a> to upload photos from your phone.
-					<?
-				}
-				?>
-			</span>
-		</div>
+			<input type="file" name="upload" capture="camera" />
+			<input type="hidden" name="imageurl" value="" />
+			<span class="loader dark"></span>
+			<span class="field-value uploading">Preparing&nbsp;</span>
+			<span class="field-value image-name"></span>
+			<span class="remove-x">[x]</span>
+		</span>
+		<script type="text/javascript">
+			(function($){
+				new BR.UploadImageField({
+					el: '#render-image-input'
+				});
+			})(jQuery);
+		</script>
 		<?
 	}
 }

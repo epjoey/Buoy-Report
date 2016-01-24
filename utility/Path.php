@@ -174,9 +174,6 @@ class Path {
 	public static function to404() {
 		return '/controllers/page/404.php';
 	}
-	public static function toMobileImageProcess() {
-		return Path::toUrl() . '/controllers/page/mobile-image-process.php';
-	}
 	public static function toNOAABuoy($buoyId) {
 		return 'http://www.ndbc.noaa.gov/station_page.php?station=' . $buoyId;
 	}

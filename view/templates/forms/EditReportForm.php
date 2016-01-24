@@ -6,11 +6,9 @@ class EditReportForm {
 	public static function renderEditReportForm($report, $options = array()) {
 		$defaultOptions = array(
 			'statusMsg' => '',
-			'needPicup' => false
 		);
 		$options = array_merge($defaultOptions, $options);
 		$statusMsg = $options['statusMsg'];
-		$needPicup = $options['needPicup'];
 
 		//remove when I make this joined with report query
 		$location = $report->location;
@@ -41,9 +39,9 @@ class EditReportForm {
 					<? 
 				}
 
-				ReportFormFields::renderQualitySelect($report->quality);
+				FormFields::renderQualitySelect($report->quality);
 				if (!empty($location->sublocations)) {
-					ReportFormFields::renderSubLocationSelect($location->sublocations, $report->sublocationid);	
+					FormFields::renderSubLocationSelect($location->sublocations, $report->sublocationid);	
 				}
 				
 
@@ -52,19 +50,18 @@ class EditReportForm {
 				?>
 
 				<div class="optional-fields">
-					<? ReportFormFields::renderWaveHeightField(ReportOptions::getWaveHeights(), $report->waveheight);?>
+					<? FormFields::renderWaveHeightField(ReportOptions::getWaveHeights(), $report->waveheight);?>
 
 					<div class="field text">
 						<label for="text">Report:</label>
 						<textarea name="text" class="text-input" id="text"><?=$report->text?></textarea>
-					</div>	
-					
-					<? ReportFormFields::renderImageInput($report->imagepath, $needPicup) ?>
+					</div>
+					<div class="field image last">
+						<? FormFields::renderImageInput($report->imagepath) ?>
+					</div>
 				</div>
 
 				<input type="hidden" name="id" id="id" value="<?=$report->id?>" />
-				<input type="hidden" name="imagepath" id="imagepath" value="<?=$report->imagepath?>" />
-				<input type="hidden" name="remoteImageURL" id="remoteImageURL" value="" />
 				<input type="hidden" name="submit" value="update-report" />				
 				<input type="submit" name="update_report" value="Update Report" />							
 					
@@ -72,19 +69,7 @@ class EditReportForm {
 			</form>	
 			<? self::renderDeleteReportForm($report); ?>
 		</div>
-		<?	
-		if($needPicup) {
-			?>
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
-			<script type="text/javascript" src="<?=Path::toJs()?>lib/picup.js"></script>
-			<script type="text/javascript">
-				document.observe('dom:loaded', function(){
-				//$(document).ready(function(){
-					usePicup('<?=Path::toMobileImageProcess()?>', 'report_form');
-				});
-			</script>	
-			<?	
-		}
+		<?
 	}
 
 	public static function renderDeleteReportForm($report) {

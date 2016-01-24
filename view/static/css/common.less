@@ -2,7 +2,7 @@
 /* UTILS */
 .pull-left { float: left; }
 .pull-right { float: right; }
-
+.hide { display: none !important; }
 
 /*  =====================  Components ===================== */
 /* HEADER */
@@ -13,6 +13,8 @@
 	.header-right {float:right;}	
 }
 
+
+/* DROP DOWN MENU */
 .dd-menu { position:relative; z-index:2;
 	.dd-trigger {display:block; }
 	.dd-trigger:hover { background:@pink;}
@@ -39,7 +41,11 @@
 .form-container { overflow:hidden; .rounded-corner(0 0 0 6px); background-color:@grey; clear:both; .drop-shadow();
 	form { overflow:hidden; margin:10px; }
 	label { display:inline-block; .text-highlight(); line-height:34px; color:@dark-blue; float:left; .museo(500); }
-	input[type="submit"] { .museo500(18px, 30px); color:@pink; padding:0px 22px; margin-top:8px; float:right; }
+	.field-value { display:inline-block; color:@dark-blue; .museo300(18px, 34px); }
+	input[type="submit"] { 
+		.museo500(18px, 30px); color:@pink; padding:0px 22px; margin-top:8px; float:right; 
+		&[disabled="disabled"] { color: @grey; }
+	}
 	.field {clear:both; margin-bottom: 12px; overflow:hidden;}
 	.radio-field label {width:auto; float:none; .museo300(18px, 34px);}	
 	.radio-container {float:right;}
@@ -91,6 +97,7 @@
 	//.delete { background-position:-20px 0; }
 }
 .block-list-item:hover .edit-delete { display:block;}
+
 
 /* LIST */
 .list-title {float:left; min-width:180px;}
@@ -210,6 +217,12 @@ ul.items { margin-top:10px; overflow:hidden;
 /* Ajax */
 .loading {.bg-image('ajax-loader.gif?v=2',50%,2px); min-height:40px; display:block; z-index:3;}
 .loadec {background:none;}
+.loader {
+	 width:30px; height:30px; display:inline-block; .bg-image('ajax-loader.gif?v=2');
+	&.dark { 
+		.bg-image('ajax-loader-dark.gif');
+	}
+}
 
 /* Mobile */
 .mobile-only {display:none;} //shown in media query
@@ -231,6 +244,25 @@ ul.items { margin-top:10px; overflow:hidden;
 pre {color:black;}
 iframe {overflow:auto;}
 
+.render-image-input {
+	.remove-x { display: none; }
+	&.has-image {
+		input[name='upload'] { display: none; }
+		.remove-x { display: inline-block; }
+	}
+	.loader, .uploading { display: none; }
+	&.is-loading {
+		.loader, .uploading { display: inline-block; }
+	}
+}
+
+.remove-x {
+	color:@red;
+	cursor: pointer;
+	&:hover {
+		font-weight: bold;
+	}
+}
 
 //not being used
 .autocomplete {background:@grey; color:@dark-blue; .text-highlight();
