@@ -1,33 +1,11 @@
 /* =================== INTRO PAGE =================== */
 .intro-page {
-	.header { margin-bottom:50px;
-		.form-container {display:none; float:right; .rounded-corner(6px 0 0 0); .drop-shadow-reset(); /*top:-200px;*/}
-		.form-container.expanded {display:inline-block; /*.translate3d(0,200px,0);*/}	
-	}
+	.header { margin-bottom:50px;}
 
 	.logo-graphic { display:block; position:absolute; top:-78px; left:-34px; z-index:0;}
 	h1.welcome-to-br { .museoSlab(84px, .8em); .text-shadow(0, 2px, 2px, rgba(0,0,0,.6)); text-transform:uppercase; margin:0px 0 20px 0; letter-spacing:-1px; color:#FFF; position:relative;
 		.welcome { font-size:40px; display:block; line-height:40px; }
 	}
-	.sub-text { margin-bottom:40px; clear:both;
-		.desc { position:relative; float:left;  background-color:@grey; padding:8px 10px; margin:0 4px 4px 0; cursor:pointer; .rounded-corner(0 0 0 6px); }
-		.tag-line {  margin:0; display:inline-block; color:@dark-blue; font-size:30px; line-height:1.1em; .text-highlight(); }
-		.what {position:absolute; bottom:-22px; .museo500(14px) ; right:0; color: @grey; cursor:pointer;}
-		.desc .detail { color:@dark-blue; font-size:24px; line-height:1.1em; .text-highlight(); max-width:390px; display:none; margin:0; overflow:hidden; }
-		.desc.expanded .detail { margin:6px 0 0; display:inline;}
-		.reg-browse {float:left; }
-		.reg-container { float:left;  position:relative;  }
-		.reg-btn { display:inline-block; margin-right:8px; background-color:@pink; color:@dark-blue; line-height:49px; font-size:30px; padding:0 6px; .text-shadow(0,1px,1px,rgba(255,255,255,.4)); cursor:pointer;}
-		.reg-btn:hover {text-decoration:none;}
-		.form-container { display:none; position:absolute; background-color:@pink; .drop-shadow-reset();
-			form { max-width:280px; margin-top:2px;}
-			label {.text-highlight();}
-			.field {margin:8px 0 0;}
-		}
-		.form-container.expanded {display:block;}
-		.reg-btn:hover { background-color:#FFF;}
-		.browse-spots { float:left; color:#FFF; line-height:1.3em; display:block; padding-top:12px;}
-	}	
 	#outer-container {min-height:0; position:relative;}
 	.footer .top {margin-top:-120px;}	
 }

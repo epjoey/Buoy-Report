@@ -1,138 +1,118 @@
 /* #Media Queries
 ================================================== */
-	
-	/* screens > 960 */
-	@media only screen and (min-width: 960px) {
-		.br.list-page .container { width:912px;}
-	}
+  
+/* screens > 960 */
+@media only screen and (min-width: 960px) {
+  .br.list-page .container { width:912px;}
+}
 
-	/* screens < 960 */
-	@media only screen and (max-width: 959px) {
-		
-		.filter .field { margin-right:10px; float:left;
-			input, select { float:none;}
-		}
-        .filter {display:none; position:absolute; top:0; left:0; padding-bottom:12px; z-index:2; overflow:hidden;}
-        .filter-inner-container { .drop-shadow(0,4px,8px,.6); overflow:hidden; background-color:@grey-blue; padding-bottom:12px;}
-        .filter-expanded {overflow:hidden;}
-        .filter-expanded .filter {display:block; width:100%;
-        	.cancel {display:block; position:absolute; right:4px; color:#FFF; .sans-serif(14px); }
-        }
-        .filter-trigger {display:block; position:absolute; top:6px; right:2px; cursor:pointer; 
-        	.filter-label { display:inline-block; color:@grey; .sans-serif(14px,31px); vertical-align:top; margin-right:6px; } 
-        }		
-	}
-		
-	/* screens => 768 */	
-	@media only screen and (min-width: 768px) {
-		#outer-container {min-height:260px;}
-		.intro-page .header .form-container { width:450px;}
-        .list-page .grid-list-container {
-        	.block-list-item { width:300px; margin:1px; }
-        	.outer-link {  width:300px; margin:1px; }
-        	.add {position:absolute; top:-46px; right:0; width:auto; .text-shadow-reset(); background:none; color:#FFF;}
-        	.add:hover { text-decoration:underline; background:none; }
-       
-        }	
-        .block-list-item a .name {max-width:155px;}
-        .list-page .block-list-item a .name {max-width:216px;}	
-		.intro-page .container {width:728px;}
-		.account-details .text-input {width:200px;}
-
-	}
-
-	/* screens > 840 (840 is breakpoint for only intro page so far) */	
-	@media only screen and (min-width: 840px) {
-		.intro-page .container {width:820px;}
-
-	}
-
-	/* screens 768 - 840 (tablet portrait) */
-	@media only screen and (min-width: 768px) and (max-width: 840px) {
-		.br.intro-page .container .logo-graphic {left:-14px;}
-		.br.intro-page .sub-text .what {bottom:0; right:-50px;}
-
-	}
-
-	/* Tablet Portrait size to standard 960 (devices and browsers) */
-	@media only screen and (min-width: 768px) and (max-width: 959px) {
-
-		.container .three.columns { width: 748px; }
-		.container .four.columns { width: 236px; }
-		.container .nine.columns { width: 492px; }
-
-		
-		.br.intro-page .container .logo-graphic {left:-14px;}
-		.br.location-list-page .container { width:608px;}
+/* screens < 960 */
+@media only screen and (max-width: 959px) {
+  
+  .filter .field { margin-right:10px; float:left;
+    input, select { float:none;}
+  }
+  .filter {display:none; position:absolute; top:0; left:0; padding-bottom:12px; z-index:2; overflow:hidden;}
+  .filter-inner-container { .drop-shadow(0,4px,8px,.6); overflow:hidden; background-color:@grey-blue; padding-bottom:12px;}
+  .filter-expanded {overflow:hidden;}
+  .filter-expanded .filter {display:block; width:100%;
+    .cancel {display:block; position:absolute; right:4px; color:#FFF; .sans-serif(14px); }
+  }
+  .filter-trigger {display:block; position:absolute; top:6px; right:2px; cursor:pointer; 
+    .filter-label { display:inline-block; color:@grey; .sans-serif(14px,31px); vertical-align:top; margin-right:6px; } 
+  }   
+}
+  
+/* screens => 768 */  
+@media only screen and (min-width: 768px) {
+  #outer-container {min-height:260px;}
+  .list-page .grid-list-container {
+    .block-list-item { width:33%; margin:.15%; }
+    .add {position:absolute; top:-46px; right:0; width:auto; .text-shadow-reset(); background:none; color:#FFF;}
+    .add:hover { text-decoration:underline; background:none; }
+ 
+  } 
+  .block-list-item a .name {max-width:155px;}
+  .list-page .block-list-item a .name {max-width:216px;}  
+  .account-details .text-input {width:200px;}
+}
 
 
-	}
+/* screens 768 - 840 (tablet portrait) */
+@media only screen and (min-width: 768px) and (max-width: 840px) {
+  .br.intro-page .container .logo-graphic {left:-14px;}
+}
 
-	/* All Mobile Sizes (devices and browser) */
-	@media only screen and (max-width: 767px) {
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
 
-        h1 { font-size: 32px;}
-        h2 { font-size: 26px; }
-        h3 { font-size: 22px; }
-        h4 { font-size: 20px; }
+  .container .three.columns { width: 748px; }
+  .container .four.columns { width: 236px; }
+  .container .nine.columns { width: 492px; }
 
-        .br.intro-page .header { margin-bottom:20px;}
-        .br.intro-page .container h1.welcome-to-br { font-size:64px; } 
-        .br.intro-page .container .logo-graphic { background-position:0 -101px; top:-57px; left:-3px; height:74px; width:74px;}
-        .intro-page .header .form-container { width:300px;}
-        .location-detail-page h1 {font-size:36px;}
-		.location-detail-page .edit-loc-link { margin:0 2px 6px 0; padding:4px 8px; letter-spacing:0;}	
-		.location-detail-page .fc-link a { max-width:260px; }
-		.location-detail-page .current-data .toggle-area {display:block;}
-        .filter-trigger {top:0;
-        	img {width:18px; height:24px;}
-        }
-        .reports-container h2 .name { max-width:140px; }
-        .reports-container {border-bottom:1px dotted @grey;}
-        .report {background:lighten(@grey,20%);}
-        .reporter-info {border-bottom:1px dotted @grey;}
-        .account-details {border-bottom:1px dotted @grey; padding-bottom:12px;}
-        .image-container {max-height:160px; max-width:280px;}
+  
+  .br.intro-page .container .logo-graphic {left:-14px;}
+  .br.location-list-page .container { width:608px;}
 
-        .click-to-expand {display:none !important;}
 
-        .header .header-right .user-menu .user {padding:13px 8px 10px 8px; }
-        .header .header-right .user-menu .username {display:none;}
-        .report-form-page .field > label {width:auto; margin-right:10px;}
-        .form-container .radio-menu span {float:left;}
-        .no-data-post {display:block; margin-bottom:20px; padding:5px;}
-		.edit-location-page input[type=submit] {margin-top:6px;}
-		.footer .top { height:170px; width:100%; .bg-image('waves.png', 50%, 0, repeat-x); background-size:460px 170px; margin-top:-80px; }	   
-		
-		.block-list-item .edit-delete { display:block;}     
+}
 
-	}
+/* All Mobile Sizes (devices and browser) */
+@media only screen and (max-width: 767px) {
 
-	/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
-	@media only screen and (min-width: 480px) and (max-width: 767px) {
-        
-        .br .container h1.welcome-to-br { font-size:74px; }
-     	.add-location-page .text-input {width:236px;}
-        .filter .field select { width:200px; }
-        .filter .field .text-input { width:190px;}
+  h1 { font-size: 32px;}
+  h2 { font-size: 26px; }
+  h3 { font-size: 22px; }
+  h4 { font-size: 20px; }
 
-	
-	}
+  .br.intro-page .header { margin-bottom:20px;}
+  .br.intro-page .container h1.welcome-to-br { font-size:64px; } 
+  .br.intro-page .container .logo-graphic { background-position:0 -101px; top:-57px; left:-3px; height:74px; width:74px;}
+  .location-detail-page h1 {font-size:36px;}
+  .location-detail-page .edit-loc-link { margin:0 2px 6px 0; padding:4px 8px; letter-spacing:0;}  
+  .location-detail-page .fc-link a { max-width:260px; }
+  .location-detail-page .current-data .toggle-area {display:block;}
+  .filter-trigger {top:0;
+    img {width:18px; height:24px;}
+  }
+  .reports-container h2 .name { max-width:140px; }
+  .reports-container {border-bottom:1px dotted @grey;}
+  .report {background:lighten(@grey,20%);}
+  .reporter-info {border-bottom:1px dotted @grey;}
+  .account-details {border-bottom:1px dotted @grey; padding-bottom:12px;}
+  .image-container {max-height:160px; max-width:280px;}
 
-	/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
-	@media only screen and (max-width: 479px) {
-		.header .header-left {
-			.br-icon { display:none;}
-			.locations { padding:0;}
-		}
-		.filter {
-			.field { margin-right:0; float:none;
-				select { width:100%; float:none; }
-				.text-input { width:96%; max-width:96%;}
-			}
-		}
-		.report .notification-icons { display:none;}
-		.filter-trigger .filter-label { display:none; }
-		.br .report .obs-time {display:block; margin:6px 0 0 0;}
+  .click-to-expand {display:none !important;}
 
-	}
+  .header .header-right .user-menu .user {padding:13px 8px 10px 8px; }
+  .header .header-right .user-menu .username {display:none;}
+  .report-form-page .field > label {width:auto; margin-right:10px;}
+  .form-container .radio-menu span {float:left;}
+  .no-data-post {display:block; margin-bottom:20px; padding:5px;}
+  .edit-location-page input[type=submit] {margin-top:6px;}
+  .footer .top { height:170px; width:100%; .bg-image('waves.png', 50%, 0, repeat-x); background-size:460px 170px; margin-top:-80px; }    
+  
+  .block-list-item .edit-delete { display:block;}     
+}
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    
+  .br .container h1.welcome-to-br { font-size:74px; }
+  .add-location-page .text-input {width:236px;}
+  .filter .field select { width:200px; }
+  .filter .field .text-input { width:190px;}  
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+  .filter {
+    .field { margin-right:0; float:none;
+      select { width:100%; float:none; }
+      .text-input { width:96%; max-width:96%;}
+    }
+  }
+  .report .notification-icons { display:none;}
+  .filter-trigger .filter-label { display:none; }
+  .br .report .obs-time {display:block; margin:6px 0 0 0;}
+}
