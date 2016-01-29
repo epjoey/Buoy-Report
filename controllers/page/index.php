@@ -2,15 +2,19 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 $user = UserService::getUser();
-
-$locations = LocationService::getAllLocations();
-$page = new IntroPage();
-$page->renderPage(array(
-	'pageTitle' => 'Welcome',
-	'user' => $user,
-	'detect' => new Mobile_Detect(),
-	'locations' => $locations
-));
+if ($user->isLoggedIn) {
+  header('Location:'.Path::toReports($user->id));
+  exit();
+} else {
+  $locations = LocationService::getAllLocations();
+  $page = new IntroPage();
+  $page->renderPage(array(
+  	'pageTitle' => 'Welcome',
+  	'user' => $user,
+  	'detect' => new Mobile_Detect(),
+  	'locations' => $locations
+  ));
+}
 //   exit();
 // }
 
