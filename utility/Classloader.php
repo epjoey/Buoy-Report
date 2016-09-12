@@ -54,6 +54,7 @@ class Classloader {
         "IntroPage" =>                  "/view/templates/pages/IntroPage.php",
         "LocationDetailPage" =>         "/view/templates/pages/LocationDetailPage.php",
         "LocationPage" =>               "/view/templates/pages/LocationPage.php",
+        "Location2Page" =>              "/view/templates/pages/Location2Page.php",
         "LoginPage" =>                  "/view/templates/pages/LoginPage.php",
         "Page" =>                       "/view/templates/pages/Page.php",
         "ProfilePage" =>                "/view/templates/pages/ProfilePage.php",

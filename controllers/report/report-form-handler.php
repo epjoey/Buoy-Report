@@ -64,7 +64,7 @@ try {
 	if ($_POST['buoys']) {
 		$buoys = BuoyService::getBuoys($_POST['buoys']);
 		foreach ($buoys as $buoy) {
-			$buoyReports = BuoyReportService::getBuoyReports($buoy, array(
+			$buoyReports = BuoyReportService::getBuoyReports($buoy->buoyid, array(
 				'time'=>$obsdate,
 				'limit'=>1 //only want one report
 			));

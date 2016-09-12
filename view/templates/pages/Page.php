@@ -14,7 +14,7 @@ class Page {
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<? $this->renderHead(); ?>
-			<body class="br <?= $this->getBodyClassName() ?>">
+			<body class="br <?= $this->getBodyClassName() ?>" <?= $this->bodyAttrs() ?>>
 				<div id="wrapper">
 					<?		
 					$this->renderHeader(); 
@@ -33,6 +33,8 @@ class Page {
 		</html>
 		<?	
 	}
+
+	public function bodyAttrs() {}
 
 	public function renderHead() {
 		?>

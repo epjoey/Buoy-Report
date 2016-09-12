@@ -55,7 +55,7 @@ class BuoyService {
 			throw new AddStationException("New buoy must have a name");
 		}
 		$buoy = new Buoy(array('buoyid'=>$id, 'name'=>$name));
-		if (!self::isValidBuoy($buoy)) {
+		if (!self::isValidBuoy($id)) {
 			throw new AddStationException("$id is not a valid NOAA buoy");
 		}
 		BuoyPersistence::insertBuoy($buoy);
