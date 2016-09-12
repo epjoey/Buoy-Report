@@ -11,18 +11,18 @@ class NOAABuoyReportPersistence {
 	static $maxProximity = 28800; //max seconds closest match can be off
 
 
-	static function getDataFileURLForBuoy($buoy) {
-		return 'http://www.ndbc.noaa.gov/data/realtime2/' . trim($buoy->buoyid) . '.txt';
+	static function getDataFileURLForBuoy($buoyid) {
+		return 'http://www.ndbc.noaa.gov/data/realtime2/' . trim($buoyid) . '.txt';
 	}
 
-	static function isBuoyOnline($buoy) {
-		$headers = get_headers(self::getDataFileURLForBuoy($buoy), true);
+	static function isBuoyOnline($buoyid) {
+		$headers = get_headers(self::getDataFileURLForBuoy($buoyid), true);
 		return !(!$headers || strpos($headers[0], '404'));
 	}
 
 
-	static function getDataArrayFromBuoy($buoy) {
-		return file(self::getDataFileURLForBuoy($buoy));
+	static function getDataArrayFromBuoy($buoyid) {
+		return file(self::getDataFileURLForBuoy($buoyid));
 	}
 
 	static function parseRowIntoData($row) {
@@ -40,17 +40,18 @@ class NOAABuoyReportPersistence {
 	//file is ordered from most recent readings down to earliest, so go through each row until the date
 	//difference starts going up
 	//todo - break this up into 2 - getting data row, then parsing that.
-	static function getBuoyReports($buoy, $options = array()) {
+	static function getBuoyReports($buoyid, $options = array()) {
 		$defaultOptions = array(
 			'maxProximity' => 28800,
 			'time' => null,
-			'limit' => 1
+			'limit' => 1,
+			'checkOnline' => true
 		);			
 		$options = array_merge($defaultOptions, $options);
 		$time = $options['time'];
 		$limit = $options['limit'];
 		
-		if (!$buoy) {
+		if (!$buoyid) {
 			throw new InvalidArgumentException();
 		}
 
@@ -58,13 +59,13 @@ class NOAABuoyReportPersistence {
 			throw new InvalidArgumentException();
 		}		
 
-		if (!self::isBuoyOnline($buoy)) {
-			throw new NOAABuoyReportException("Buoy " . $buoy->buoyid . " offline");
+		if ($options['checkOnline'] && !self::isBuoyOnline($buoyid)) {
+			throw new NOAABuoyReportException("Buoy " . $buoyid . " offline");
 		}
 
-		$dataArray = self::getDataArrayFromBuoy($buoy);
+		$dataArray = self::getDataArrayFromBuoy($buoyid);
 		if (!$dataArray) {
-			throw new NOAABuoyReportException("No recent report from " . $buoy->buoyid);
+			throw new NOAABuoyReportException("No recent report from " . $buoyid);
 		}		
 
 		$closestIndex = self::getIndexOfClosestRowToTime($dataArray, $time);
@@ -82,7 +83,7 @@ class NOAABuoyReportPersistence {
 				'winddir' => $data[5],
 				'windspeed' => $data[6],
 				'watertemp' => $data[14],
-				'buoy' => $buoy->buoyid
+				'buoy' => $buoyid
 			));
 		}
 		return $buoyReports;

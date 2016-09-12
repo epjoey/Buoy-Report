@@ -43,7 +43,8 @@ $page->renderPage(array(
 	'pageTitle' => 'Edit: ' . $location->locname,
 	'locationId' => $locationId,
 	'location' => $location,
-	'editLocationError' => $editLocationError
+	'editLocationError' => $editLocationError,
+	'locations' => LocationService::getAllLocations()
 ));
 
 

@@ -17,11 +17,11 @@ class BuoyReportService {
 		return $buoyReports;
 	}
 
-	static function getBuoyReports($buoy, $options = array()) {
+	static function getBuoyReports($buoyid, $options = array()) {
 		try {
-			$buoyReports = NOAABuoyReportPersistence::getBuoyReports($buoy, $options);
+			$buoyReports = NOAABuoyReportPersistence::getBuoyReports($buoyid, $options);
 		} catch (NOAABuoyReportException $e) {
-			error_log("$buoy->buoyid failure - ". $e->getMessage());
+			error_log("$buoyid failure - ". $e->getMessage());
 			return array();
 		}
 		return $buoyReports;

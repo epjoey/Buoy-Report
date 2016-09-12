@@ -69,6 +69,21 @@ class EditLocationPage extends LocationDetailPage {
 					</select>
 					
 				</div>
+				<div class="field">
+					<? /*
+					// Add Sublocations
+					foreach($this->locations as $location) {
+						if($location->id != $this->locationId){
+							?>
+							<div class="input-field">
+								<a href="<?=Path::toLocation($location->id)?>"><?= $location->locname ?></a>
+								<input type="checkbox" name="sublocationid" value="<?= $location->id ?>"/>
+							</div>
+							<?
+						}
+					} */
+					?>
+				</div>				
 				<div class="field image last">
 					<? FormFields::renderImageInput($this->location->coverImagePath) ?>
 				</div>
