@@ -22,7 +22,7 @@ class EditBuoyForm {
 					<input type="text" class="text-input required station-name" placeholder='location, coords, moored...' name="buoyname" value="<?= $buoy->name ?>"/>
 				</div>
 				<div class="field">	
-					<input type="submit" name="enterbuoy" value="Enter Buoy" />
+					<input type="submit" name="enterbuoy" value="Edit Buoy" />
 					<input type="hidden" name="buoyid" value="<?=$buoy->buoyid?>" />
 				</div>
 			</form>

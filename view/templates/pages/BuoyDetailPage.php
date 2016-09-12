@@ -72,7 +72,11 @@ class BuoyDetailPage extends Page {
 	public function renderRight() {
 
 		$this->renderCurrentData();
-
+		?>
+		<p class="sb-section">
+			<a href="<?= Path::toEditBuoyPage($this->buoy->buoyid) ?>">Edit buoy</a>
+		</p>
+		<?
 	}
 
 	private function renderCurrentData() {
