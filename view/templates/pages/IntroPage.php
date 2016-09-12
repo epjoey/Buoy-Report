@@ -29,7 +29,7 @@ class IntroPage extends Page {
 		?>
 			<img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="101" height="101"/>
 			
-			<h1 class="welcome-to-br"><span class="welcome">Welcome to</span> Buoy Report<span class="pattern"></span></h1>
+			<h1 class="welcome-to-br">Buoy Report<span class="pattern"></span></h1>
 <!-- 			<div class="sub-text">
 				<div class="desc">
 					<h2 class="tag-line" id="desc-trigger">Log buoy data after you surf.</h2>
