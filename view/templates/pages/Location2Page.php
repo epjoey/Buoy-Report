@@ -23,7 +23,6 @@ class Location2Page extends Page {
 			.buoy {
 				display: inline-block;
 				margin-bottom: 30px;
-				width: 310px;
 			}
 			.data-loading {
 				font-size: 12px;
@@ -34,13 +33,10 @@ class Location2Page extends Page {
 				font-weight: bold;
 			}						
 			table {
-				width: 310px;
-			}
-			tr {
-				border-left: 4px solid #06223c;
+				width: 300px;
 			}
 			thead {
-				background: rgba(255,255,255,.1);
+				background: rgba(255,255,255,.35);
 				border-bottom: 2px solid #06223c
 			}
 			thead tr:first-child th {
@@ -81,7 +77,12 @@ class Location2Page extends Page {
 				.buoy {
 					margin-right: 20px;
 					padding-left: 12px;
+					width: 300px;
 				}
+				tr {
+					border-left: 4px solid #06223c;
+				}
+
 			}
 		</style>
 		<?
