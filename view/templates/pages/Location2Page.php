@@ -60,10 +60,13 @@ class Location2Page extends Page {
 			}
 			@media only screen and (min-width: 768px) {
 				.buoy { 
-					width: auto; 
+					width: 300px; 
 					margin-right: 20px; 
 					border-left: 4px solid #06223c;
 					padding-left: 12px;
+				}
+				table {
+					width: 300px;
 				}
 			}
 		</style>

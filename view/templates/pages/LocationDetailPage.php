@@ -172,27 +172,11 @@ class LocationDetailPage extends Page {
 				</div>
 			</div>
 			<div class="buoy-current-data sb-section">	
-				<h5 class="toggle-btn">
+				<h5>
 					<a href="<?= Path::toLocation2($this->location->id) ?>">
-						Buoy Stations &darr;
+						Buoy Stations
 					</a>
 				</h5>
-				<div class="toggle-area" style="<?= $this->showReportForm ? 'display:block' : '';?>">
-					<?
-					foreach($this->location->buoys as $buoy){
-						?>
-						<div>
-							<div class="buoy-heading">
-								<a class="buoy-iframe-link" target="_blank" href="<?=Path::toNOAABuoy($buoy->buoyid)?>"><?
-									print isset($buoy->name) ? html($buoy->name) : html($buoy->buoyid) 													
-								?></a>
-							</div>
-							<iframe src="http://www.ndbc.noaa.gov/widgets/station_page.php?station=<?=$buoy->buoyid?>" style="width:100%; min-height: 300px"></iframe>
-						</div>								
-						<?
-					}
-					?>
-				</div>
 			</div>
 		</div>
 		<?
