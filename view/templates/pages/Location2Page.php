@@ -87,7 +87,7 @@ class Location2Page extends Page {
 						if(m == 'MM'){
 							return '-';
 						}
-						return (m * 3.281).toFixed(2);
+						return (m * 3.281).toFixed(1);
 					};
 				});
 				filters.filter('clean', function(){
