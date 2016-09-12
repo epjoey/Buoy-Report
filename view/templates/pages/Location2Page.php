@@ -71,7 +71,6 @@ class Location2Page extends Page {
 			td sub { 
 				font-size: 9px;
 				line-height: 12px;
-				padding-left: 1px;
 			}
 			@media only screen and (min-width: 768px) {
 				.buoy {
