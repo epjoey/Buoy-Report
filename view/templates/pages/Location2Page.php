@@ -52,7 +52,11 @@ class Location2Page extends Page {
 			.buoy {
 				display: inline-block;
 				margin-bottom: 30px;
+				width: 300px;
 			}
+			table {
+				width: 300px;
+			}			
 			h1 {
 				margin-bottom: 20px;	
 				font-size: 22px;
@@ -60,13 +64,9 @@ class Location2Page extends Page {
 			}
 			@media only screen and (min-width: 768px) {
 				.buoy { 
-					width: 300px; 
 					margin-right: 20px; 
 					border-left: 4px solid #06223c;
 					padding-left: 12px;
-				}
-				table {
-					width: 300px;
 				}
 			}
 		</style>
