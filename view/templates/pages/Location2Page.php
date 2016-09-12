@@ -127,10 +127,17 @@ class Location2Page extends Page {
 		return "ng-app='app'";
 	}
 
+	public function renderHeader() {
+		Header::renderSimpleHeader();
+	}
+
+
 	public function renderBodyContent() {
 		?>
 		<h1>
-			<?= html($this->location->locname) ?>
+			<a href="<?=Path::toLocation($this->location->id)?>">
+				<?= html($this->location->locname) ?>
+			</a>
 		</h1>
 		<div class="buoys">
 			<?

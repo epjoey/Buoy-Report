@@ -101,6 +101,11 @@ class Path {
 		return $url;
 	}
 
+	public static function toLocation2($locationId = null) {
+		$url = '/l/'.$locationId;
+		return $url;
+	}
+
 	public static function toLocations($reporterId = null, $toPost = FALSE) {
 
 		$url = '/locations';

@@ -172,7 +172,11 @@ class LocationDetailPage extends Page {
 				</div>
 			</div>
 			<div class="buoy-current-data sb-section">	
-				<h5 class="toggle-btn">Buoy Stations &darr;</h5>
+				<h5 class="toggle-btn">
+					<a href="<?= Path::toLocation2($this->location->id) ?>">
+						Buoy Stations &darr;
+					</a>
+				</h5>
 				<div class="toggle-area" style="<?= $this->showReportForm ? 'display:block' : '';?>">
 					<?
 					foreach($this->location->buoys as $buoy){
