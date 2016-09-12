@@ -133,9 +133,9 @@ class Location2Page extends Page {
 							<th><? // time ?></th>
 							<th>&nbsp;WVHT</th>
 							<th>&nbsp;DPD</th>
-							<th>&nbsp;MWD</th>
-							<th>&nbsp;WSPD</th>
-							<th>&nbsp;WDIR</th>
+							<th>&nbsp;MWDIR</th>
+							<th>&nbsp;WINDSPD</th>
+							<th>&nbsp;WINDDIR</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -144,8 +144,8 @@ class Location2Page extends Page {
 							<td>{{ ::d.swellheight|m2f }}</td>
 							<td>{{ ::d.swellperiod|clean }}</td>
 							<td>{{ ::d.swelldir|clean }}</td>
-							<td>{{ ::d.winddir|clean }}</td>
 							<td>{{ ::d.windspeed|clean }}</td>
+							<td>{{ ::d.winddir|clean }}</td>
 						</tr>
 					</tbody>
 				</table>
