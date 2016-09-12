@@ -11,61 +11,75 @@ class Location2Page extends Page {
 		parent::renderCss();
 		?>
 		<style>
-			tr:nth-child(odd) {
-				background: rgba(255,255,255,.1);
-			}
-			thead tr { background: transparent !important; }
-			td { 
-				text-align: right; 
-				color: white;
-				font-family: helvetica, arial;
-				font-size: 13px;
-				line-height: 22px;
-			}
-			td:first-child, th:first-child {
-				text-align: left;
-				padding-left: 4px; 
-			}
-			td:last-child, th:last-child {
-				padding-right: 4px; 
-			}
-			th {
-				text-align: right; 
-				color: black;
-				font-weight: bold;
-				font-size: 11px;
-				font-family: helvetica, arial;
-				line-height: 22px;
-			}
-			h3 {
-				color: white;
-				font-weight: bold;
-				font-size: 14px;
-			}
-			.data-loading {
-				font-size: 12px;
-				font-family: helvetica, arial;				
-			}
+			h1 {
+				margin-bottom: 20px;
+				font-size: 22px;
+				text-align: center;
+			}		
 			.buoys {
 				text-align: center;
+				font-family: helvetica, arial;
 			}
 			.buoy {
 				display: inline-block;
 				margin-bottom: 30px;
-				width: 300px;
+				width: 310px;
 			}
+			.data-loading {
+				font-size: 12px;
+			}
+			h3 {
+				color: white;
+				font-size: 13px;
+				font-weight: bold;
+			}						
 			table {
-				width: 300px;
-			}			
-			h1 {
-				margin-bottom: 20px;	
-				font-size: 22px;
-				text-align: center;
+				width: 310px;
+			}
+			tr {
+				border-left: 4px solid #06223c;
+			}
+			thead {
+				background: rgba(255,255,255,.1);
+				border-bottom: 2px solid #06223c
+			}
+			thead tr:first-child th {
+				padding-top: 4px;
+			}
+			thead tr.units th {
+				font-size: 8px;
+				line-height: 12px;
+				text-transform: uppercase;
+			}
+			th {
+				text-align: left;
+				color: black;
+				font-weight: bold;
+				font-size: 11px;
+				line-height: 12px;
+				padding-right: 2px;
+			}
+			tbody tr:nth-child(odd) {
+				background: rgba(255,255,255,.1);
+			}						
+			td {
+				color: white;
+				font-size: 13px;
+				line-height: 22px;
+				text-align: left;
+				padding-right: 2px;
+			}
+			td:first-child, th:first-child {
+				padding-left: 4px;
+			}
+			td sub { 
+				font-size: 9px;
+				line-height: 12px;
+				padding-left: 1px;
 			}
 			@media only screen and (min-width: 768px) {
-				.buoy { 
-					margin-right: 20px; 
-					border-left: 4px solid #06223c;
+				.buoy {
+					margin-right: 20px;
 					padding-left: 12px;
 				}
 			}
@@ -81,7 +95,7 @@ class Location2Page extends Page {
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 		<script type="text/javascript">
 		  (function() {
-		  	angular.module('app', [ 'app.directives', 'app.filters' ]);
+		  	angular.module('app', [ 'app.directives', 'app.filters', 'app.services' ]);
 				var directives = angular.module('app.directives', []);
 				directives.directive('ngBuoy', [
 					'$http', '$parse',
@@ -102,6 +116,7 @@ class Location2Page extends Page {
 						};
 					}
 				]);
+
 				var filters = angular.module('app.filters', []);
 				filters.filter('unix2date', function(){
 					return function(input){
@@ -110,9 +125,7 @@ class Location2Page extends Page {
 				});
 				filters.filter('m2f', function(){
 					return function(m){
-						if(m == 'MM'){
-							return '-';
-						}
+						if(m == 'MM') return '-';
 						return (m * 3.281).toFixed(1);
 					};
 				});
@@ -120,9 +133,59 @@ class Location2Page extends Page {
 					return function(d){
 						return d === 'MM' ? '-' : d;
 					};
-				});				
+				});
+				filters.filter('mps2kn', function(){
+					return function(d){
+						if(d == 'MM') return '-';
+						return (d * 1.944).toFixed(1);
+					};
+				});
+
+				1.94384
+				filters.filter('dir2str', function(){
+					return function(d){
+						if(d === 'MM') return '';
+						d = parseInt(d);
+						return (
+							(d < 11.25) ? 'N' :
+							(d < 33.75) ? 'NNE' :
+							(d < 56.25) ? 'NE' :
+							(d < 78.75) ? 'ENE' :
+							(d < 101.25) ? 'E' :
+							(d < 123.75) ? 'ESE' :
+							(d < 146.25) ? 'SE' :
+							(d < 168.75) ? 'SSE' :
+							(d < 191.25) ? 'S' :
+							(d < 213.75) ? 'SSW' :
+							(d < 236.25) ? 'SW' :
+							(d < 258.75) ? 'WSW' :
+							(d < 281.25) ? 'W' :
+							(d < 303.75) ? 'WNW' :
+							(d < 326.25) ? 'NW' :
+							(d < 348.75) ? 'NNW' : 'N'
+						);
+					};
+				});
+
+				var services = angular.module('app.services', []);
+				services.factory('path', [
+					function(){
+						return {
+							toNoaaBuoy: function(buoyId){
+								return 'http://www.ndbc.noaa.gov/station_page.php?station=' + buoyId;
+							}
+						};
+					}
+				]);
+
+			  services.run([
+			    '$rootScope', 'path',
+			    function($rootScope, path){
+			      $rootScope.path = path;
+			    }
+			  ]);
 		  })();
-		</script>		
+		</script>
 		<?
 	}
 
@@ -141,6 +204,7 @@ class Location2Page extends Page {
 			<a href="<?=Path::toLocation($this->location->id)?>">
 				<?= html($this->location->locname) ?>
 			</a>
+			<!-- <span class="btn save-btn">Save</span> -->
 		</h1>
 		<div class="buoys">
 			<?
@@ -154,7 +218,7 @@ class Location2Page extends Page {
 		</div>
 		<script type="text/ng-template" id="buoy">
 			<h3>
-				<a href="<?=Path::toNOAABuoy($buoy->buoyid)?>">
+				<a ng-href="{{ ::path.toNoaaBuoy(buoyId) }}">
 					{{ buoyId }}: {{ buoyName }}
 				</a>
 			</h3>
@@ -167,21 +231,35 @@ class Location2Page extends Page {
 				<thead>
 					<tr>
 						<th>TIME</th>
-						<th>&nbsp;WVHT</th>
-						<th>&nbsp;DPD</th>
-						<th>&nbsp;MWD</th>
-						<th>&nbsp;WSPD</th>
-						<th>&nbsp;WDIR</th>
+						<th>WVHT</th>
+						<th>DPD</th>
+						<th>MWD</th>
+						<th>WSPD</th>
+						<th>WDIR</th>
 					</tr>
+					<tr class='units'>
+						<th></th>
+						<th>ft</th>
+						<th>sec</th>
+						<th></th>
+						<th>kn</th>
+						<th></th>
+					</tr>									
 				</thead>
 				<tbody>
 					<tr ng-repeat="d in data">
 						<td>{{ ::d.gmttime|unix2date }}</td>
 						<td>{{ ::d.swellheight|m2f }}</td>
 						<td>{{ ::d.swellperiod|clean }}</td>
-						<td>{{ ::d.swelldir|clean }}</td>
-						<td>{{ ::d.windspeed|clean }}</td>
-						<td>{{ ::d.winddir|clean }}</td>
+						<td>
+							{{ ::d.swelldir|clean }}
+							<sub>{{::d.swelldir|dir2str}}</sub>
+						</td>
+						<td>{{ ::d.windspeed|mps2kn }}</td>
+						<td>
+							{{ ::d.winddir|clean }}
+							<sub>{{::d.winddir|dir2str}}</sub>
+						</td>
 					</tr>
 				</tbody>
 			</table>

@@ -19,12 +19,10 @@ if (!$location) {
 }
 
 $user = UserService::getUser();
-$device = new Mobile_Detect();
 $page = new Location2Page();
 $page->renderPage(array(
 	'pageTitle' => $location->locname,
 	'user' => $user,
-	'device' => $device,
   'location' => $location,
 ));
 ?>

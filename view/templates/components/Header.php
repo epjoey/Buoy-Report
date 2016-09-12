@@ -11,9 +11,8 @@ class Header {
           <a href="<?= Path::toIntro();?>" class="br-icon"><img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="46" height="46"/></a>
         </span>
         <div class="header-right">
-          <div class="dd-menu pull-left">
-            <span class="block-link dd-trigger">
-              <span class="dd-title">Menu</span>
+          <div class="dd-menu" ng-init="open = false" ng-class="{ open: open }">
+            <span class="block-link dd-trigger" ng-click="open = !open">
               <img src="<?= Path::toImages() ?>down-arrow.png" width="15" height="9"/>
             </span>
             <ul class="inner-dd-menu">
@@ -25,17 +24,6 @@ class Header {
         </div>
       </div>
     </div>
-    <script type="text/javascript">
-      jQuery(".dd-menu").on('mouseover', function(){
-        jQuery(this).addClass('open')
-      });
-      jQuery(".dd-menu").on('mouseout', function() {
-        jQuery(this).removeClass('open')
-      });
-      jQuery(".dd-trigger").on('click', function() {
-        jQuery(this).parent('.dd-menu.open').toggleClass('open');
-      });
-    </script>    
     <?
   }
 

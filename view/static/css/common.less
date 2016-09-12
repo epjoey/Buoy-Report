@@ -6,18 +6,20 @@
 
 /*  =====================  Components ===================== */
 /* HEADER */
-.header { .museo500(20px, 1.6em); width:100%; background:@dark-blue; position:relative; margin-bottom:20px; color:@grey;
+.header { .museo500(20px, 1.6em); width:100%; background:@dark-blue; position:relative; margin-bottom:20px; color:@grey; min-height: 32px;
 	.header-left { float:left; 		
 		.br-icon { width:46px; height:46px; display:block; position:absolute; top:-6px; left:0;}
 	}
-	.header-right {float:right;}	
+	.header-right {float:right;}
 }
 
 
 /* DROP DOWN MENU */
 .dd-menu { position:relative; z-index:2;
-	.dd-trigger {display:block; }
-	.dd-trigger:hover { background:@pink;}
+	.dd-trigger {
+		display:block; min-height: 32px; 
+		img { padding-top: 12px; }
+	}
 	.dd-title {.text-overflow(); max-width:140px; min-height: 23px; }
 	.inner-dd-menu {display:none; background:@grey; position:absolute; top:32px; right:0;
 		li { width:150px; margin:0; border-bottom:1px solid darken(@grey,10%);}
@@ -31,7 +33,6 @@
 
 /* LINKS */
 .block-link { cursor:pointer; .museo(500); background:@grey; margin-left:3px; padding:0 6px; color:@dark-blue; display:inline-block; letter-spacing:1px; .text-highlight(); }
-.block-link:hover { background:@pink; text-decoration:none; }	
 .block-link.active { background:@pink;}
 .no-data-post {margin-bottom:20px; }
 .random {color:#FFF;}
