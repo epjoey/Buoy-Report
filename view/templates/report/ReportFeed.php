@@ -23,13 +23,6 @@ class ReportFeed {
 					button = feed.find('#more-reports').first();
 
 				BR.reportFeed.onLoad(feed);
-				
-				feed.delegate(".report", "click", function(event) {
-					if($(event.target).is('a')) {
-						return true;
-					}
-					$(this).toggleClass("expanded");
-				});
 
 				$(button).click(function() {
 					if (button.hasClass('disabled')) {

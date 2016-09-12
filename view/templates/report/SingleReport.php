@@ -20,7 +20,7 @@ class SingleReport {
 		}
 		?>
 
-		<li class="report <?= $options['expanded'] ? 'expanded' : '' ?>" reportid="<?= $report->id ?>" reporterid="<?=$report->reporterid?>">
+		<li class="report expanded" reportid="<?= $report->id ?>" reporterid="<?=$report->reporterid?>">
 			<ul>
 				<li class="report-head">
 					<a class="loc-name" href="<?=Path::toLocation($report->locationid);?>"><?= html($report->location->locname)?></a>
