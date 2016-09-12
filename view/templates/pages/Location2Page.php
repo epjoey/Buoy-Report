@@ -11,37 +11,60 @@ class Location2Page extends Page {
 		parent::renderCss();
 		?>
 		<style>
+			tr:nth-child(odd) {
+				background: rgba(255,255,255,.1);
+			}
+			thead tr { background: transparent !important; }
 			td { 
 				text-align: right; 
 				color: white;
 				font-family: helvetica, arial;
-				font-size: 14px;
+				font-size: 13px;
+				line-height: 22px;
 			}
-			td:first-child {
-				text-align: left; 
+			td:first-child, th:first-child {
+				text-align: left;
+				padding-left: 4px; 
+			}
+			td:last-child, th:last-child {
+				padding-right: 4px; 
 			}
 			th {
 				text-align: right; 
-				color: #aaa;
+				color: black;
 				font-weight: bold;
-				font-size: 12px;
+				font-size: 11px;
 				font-family: helvetica, arial;
+				line-height: 22px;
 			}
 			h3 {
 				color: white;
 				font-weight: bold;
-				font-size: 18px;
+				font-size: 14px;
 			}
 			.data-loading {
 				font-size: 12px;
 				font-family: helvetica, arial;				
 			}
+			.buoys {
+				text-align: center;
+			}
 			.buoy {
+				display: inline-block;
 				margin-bottom: 30px;
 			}
 			h1 {
 				margin-bottom: 20px;	
 				font-size: 22px;
+				text-align: center;
+			}
+			@media only screen and (min-width: 768px) {
+				.buoy { 
+					width: auto; 
+					margin-right: 20px; 
+					border-left: 4px solid #06223c;
+					padding-left: 12px;
+				}
 			}
 		</style>
 		<?
@@ -109,47 +132,49 @@ class Location2Page extends Page {
 		<h1>
 			<?= html($this->location->locname) ?>
 		</h1>
-		<?
-
-		foreach($this->location->buoys as $buoy){
-			?>
-			<div ng-buoy="<?= $buoy->buoyid ?>"
-				ng-buoy-name="<?= $buoy->name ?>"></div>
+		<div class="buoys">
 			<?
-		}
-
-		?>
+			foreach($this->location->buoys as $buoy){
+				?>
+				<div class="buoy" ng-buoy="<?= $buoy->buoyid ?>"
+					ng-buoy-name="<?= $buoy->name ?>"></div>
+				<?
+			}
+			?>
+		</div>
 		<script type="text/ng-template" id="buoy">
-			<div class="buoy">
-				<h3>{{ buoyId }} {{ buoyName }}</h3>
-				<div ng-if="!data">
-					<span class="data-loading">
-						Loading...
-					</span>
-				</div>
-				<table ng-if="data">
-					<thead>
-						<tr>
-							<th><? // time ?></th>
-							<th>&nbsp;WVHT</th>
-							<th>&nbsp;DPD</th>
-							<th>&nbsp;MWD</th>
-							<th>&nbsp;WSPD</th>
-							<th>&nbsp;WDIR</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="d in data">
-							<td>{{ ::d.gmttime|unix2date }}</td>
-							<td>{{ ::d.swellheight|m2f }}</td>
-							<td>{{ ::d.swellperiod|clean }}</td>
-							<td>{{ ::d.swelldir|clean }}</td>
-							<td>{{ ::d.windspeed|clean }}</td>
-							<td>{{ ::d.winddir|clean }}</td>
-						</tr>
-					</tbody>
-				</table>
+			<h3>
+				<a href="<?=Path::toNOAABuoy($buoy->buoyid)?>">
+					{{ buoyId }}: {{ buoyName }}
+				</a>
+			</h3>
+			<div ng-if="!data">
+				<span class="data-loading">
+					Loading...
+				</span>
 			</div>
+			<table ng-if="data">
+				<thead>
+					<tr>
+						<th>TIME</th>
+						<th>&nbsp;WVHT</th>
+						<th>&nbsp;DPD</th>
+						<th>&nbsp;MWD</th>
+						<th>&nbsp;WSPD</th>
+						<th>&nbsp;WDIR</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="d in data">
+						<td>{{ ::d.gmttime|unix2date }}</td>
+						<td>{{ ::d.swellheight|m2f }}</td>
+						<td>{{ ::d.swellperiod|clean }}</td>
+						<td>{{ ::d.swelldir|clean }}</td>
+						<td>{{ ::d.windspeed|clean }}</td>
+						<td>{{ ::d.winddir|clean }}</td>
+					</tr>
+				</tbody>
+			</table>
 		</script>
 		<?
 	}
