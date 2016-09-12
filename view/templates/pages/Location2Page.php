@@ -133,9 +133,9 @@ class Location2Page extends Page {
 							<th><? // time ?></th>
 							<th>&nbsp;WVHT</th>
 							<th>&nbsp;DPD</th>
-							<th>&nbsp;MWDIR</th>
-							<th>&nbsp;WINDSPD</th>
-							<th>&nbsp;WINDDIR</th>
+							<th>&nbsp;MWD</th>
+							<th>&nbsp;WSPD</th>
+							<th>&nbsp;WDIR</th>
 						</tr>
 					</thead>
 					<tbody>
