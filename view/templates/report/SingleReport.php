@@ -142,16 +142,15 @@ class SingleReport {
 	}
 
 	public function renderReporter($report) {
-		if (isset($report->location->timezone)) {
-			$reportTime = getLocalTimeFromGMT($report->reportdate, $report->location->timezone);
-			$tzAbbrev = getTzAbbrev($report->location->timezone);
-		} else {
-			$reportTime = gmstrftime("%m/%d/%Y %l:%M %p", $report->reportdate);
-			$tzAbbrev = "GMT";
-		}				
 		?>
 		<div class="reporter-details">
-			<a href="<?=Path::toSingleReport($report->id)?>">report #<?=$report->id?></a> by <a href="<?=Path::toProfile($report->reporterid);?>"><?= html($report->reporter->name); ?></a> on <?= $reportTime ?> <span class="tz"><?=$tzAbbrev?></span>
+			<a href="<?=Path::toSingleReport($report->id)?>">report #<?=$report->id?></a>
+			<? if ($report->reporterid) {
+				?>
+				by <a href="<?=Path::toProfile($report->reporterid);?>"><?= html($report->reporter->name); ?></a>
+				<?
+			}
+			?>
 		</div>
 		<?
 	}

@@ -59,14 +59,14 @@ class NOAABuoyReportPersistence {
 			throw new InvalidArgumentException();
 		}		
 
-		if ($options['checkOnline'] && !self::isBuoyOnline($buoyid)) {
-			throw new NOAABuoyReportException("Buoy " . $buoyid . " offline");
-		}
-
-		$dataArray = self::getDataArrayFromBuoy($buoyid);
-		if (!$dataArray) {
+		try {
+			$dataArray = self::getDataArrayFromBuoy($buoyid);
+			if (!$dataArray) {
+				throw new Exception();
+			}					
+		} catch (Exception $e) {
 			throw new NOAABuoyReportException("No recent report from " . $buoyid);
-		}		
+		}
 
 		$closestIndex = self::getIndexOfClosestRowToTime($dataArray, $time);
 		

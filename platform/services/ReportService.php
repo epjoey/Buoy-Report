@@ -49,9 +49,9 @@ class ReportService {
 
 
 	static function insertReport($options = array()) {
-		if (!$options['quality']) {
-			throw new InvalidSubmissionException('You must choose a quality.');
-		}
+		// if (!$options['quality']) {
+		// 	throw new InvalidSubmissionException('You must choose a quality.');
+		// }
 		if (!$options['obsdate']) {
 			throw new InvalidSubmissionException('No time entered');
 		}

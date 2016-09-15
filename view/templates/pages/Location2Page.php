@@ -15,7 +15,47 @@ class Location2Page extends Page {
 				margin-bottom: 20px;
 				font-size: 22px;
 				text-align: center;
-			}		
+			}	
+			h1 .loc-name {
+				display: inline-block;
+			}
+			.save-btn {
+				vertical-align: middle;
+			}
+			.snapshot-form {
+		    max-width: 280px;
+		    margin: 0 auto 20px;
+		    color: white;
+		    font-size: 14px;
+		    font-family: helvetica, arial;
+		    border-bottom: 4px solid #06223c;
+		    box-sizing: border-box;
+		  }
+			.snapshot-form .open-subfields {
+				font-size: 15px;
+				margin: 4px 0;
+			}		  
+		  .snapshot-form .subfields {
+  	    background: black;
+		    padding: 12px;
+		    margin-bottom: 12px;
+		    border-radius: 3px;
+		  }
+
+		  .snapshot-form .field {
+		  	margin-bottom: 12px;
+		  }
+
+			.snapshot-form .field label {
+			}
+			.snapshot-form .submit-btn {
+				width: 100%;
+				margin-top: 6px;
+			}
+			.snapshot-form select {
+				width: 100%;
+				max-width: none;
+			}
 			.buoys {
 				text-align: center;
 				font-family: helvetica, arial;
@@ -33,7 +73,8 @@ class Location2Page extends Page {
 				font-weight: bold;
 			}						
 			table {
-				width: 300px;
+				max-width: 300px;
+				width: 100%;
 			}
 			thead {
 				background: rgba(255,255,255,.35);
@@ -73,6 +114,10 @@ class Location2Page extends Page {
 				line-height: 12px;
 			}
 			@media only screen and (min-width: 768px) {
+				.snapshot-form {
+			    max-width: 360px;
+			  }
+
 				.buoy {
 					margin-right: 20px;
 					padding-left: 12px;
@@ -81,7 +126,6 @@ class Location2Page extends Page {
 				tr {
 					border-left: 4px solid #06223c;
 				}
-
 			}
 		</style>
 		<?
@@ -228,19 +272,19 @@ class Location2Page extends Page {
 				<a class="loc-name" href="<?=Path::toLocation($this->location->id)?>">
 					<?= html($this->location->locname) ?>
 				</a>
+				&nbsp;
 				<button class="btn save-btn"
-					ng-disabled="saveFormOpen"
 					ng-click="toggleForm()"
 				>
-					Save snapshot
+					Save snapshot &darr;
 				</button>
 			</h1>
 			<div class="snapshot-form"
-				ng-if="isFormOpen"
+				ng-show="isFormOpen"
 			>
-				<form class="centered-form" action="<?=Path::toHandleReportSubmission2()?>" method="post">
+				<form class="centered-form" action="<?=Path::toHandleReportSubmission()?>" method="post">
 					<? FormFields::renderTimeSelect($this->location); ?>
-					<div class="open-subfields" ng-click="subFieldsOpen = !subFieldsOpen">Report &darr;</div>
+					<div class="open-subfields clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
 					<div class="subfields" ng-show="subFieldsOpen">
 						<?
 						FormFields::renderQualitySelect(); 
@@ -258,11 +302,12 @@ class Location2Page extends Page {
 					<input type="hidden" name="submit" value="submit-report" />					
 					<input class="submit-btn" type="submit" name="submit_report" value="Submit">
 
-					<div>
-						<span class='cancel' ng-click='closeForm()'>Cancel</span>
+					<div class='cancel text-center clickable'>
+						<span ng-click='closeForm()'>Cancel</span>
 					</div>
 				</form>
 			</div>
+		</div>
 		<div class="buoys">
 			<?
 			foreach($this->location->buoys as $buoy){

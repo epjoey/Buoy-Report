@@ -11,19 +11,14 @@ if (!$_POST['locationid']) {
 try { 
 
   $user = UserService::getUser();
-  if($user){
-  	$userid = $user->id;
-  	$public = $user->public;
-  } else {
-  	$userid = null;
-  	$public = true;
-  }
-
   $location = LocationService::getLocation($_POST['locationid'], array(
     //'includeSublocations' => true,
     'includeBuoys' => true,
     'includeTideStations' => true
   ));  
+  // if (!$user->isLoggedIn) {
+  //   throw new InvalidSubmissionException('Account required to post report');
+  // }
   
   /* either real date or date offset passed in from form */
   if (isset($_POST['time']) && $_POST['time']) {
@@ -40,40 +35,19 @@ try {
     $obsdate = gmdate("U", time()-$offset);     
   }
 
-  $imagepath = null;
   if (isset($_POST['imageurl']) && $_POST['imageurl'] !='') {
     $imagepath = rawurldecode($_POST['imageurl']);
   } 
 
-  $quality = null;
-  if (isset($_POST['quality'])) {
-  	$quality = $_POST['quality'];
-  }
-
-  $text = null;
-  if(isset($_POST['text'])) {
-  	$text = $_POST['text'];
-  }
-
-  $waveheight = null;
-  if(isset($_POST['waveheight'])) {
-  	$waveheight = $_POST['waveheight'];
-  }
-
-  $sublocationid = null;
-  if(isset($_POST['sublocationid'])) {
-  	$sublocationid = $_POST['sublocationid'];
-  }
-
   $reportId = ReportService::insertReport(array(
-    'quality' => $quality,
+    'quality' => $_POST['quality'],
     'obsdate' => $obsdate,
-    'reporterid' => $userid,
-    'public' => $public,
-    'locationid' => $location->id,
-    'text' => $text,
-    'waveheight' => $waveheight,
-    'sublocationid' => $sublocationid,
+    'reporterid' => $user->id,
+    'public' => $user->public,
+    'locationid' => $_POST['locationid'],
+    'text' => $_POST['text'],
+    'waveheight' => $_POST['waveheight'],
+    'sublocationid' => $_POST['sublocationid'],
     'imagepath' => $imagepath
   ));
 
