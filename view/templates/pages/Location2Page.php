@@ -18,23 +18,21 @@ class Location2Page extends Page {
 			}	
 			h1 .loc-name {
 				display: inline-block;
+				margin-bottom: 12px;
 			}
 			.save-btn {
 				vertical-align: middle;
 			}
 			.snapshot-form {
 		    max-width: 280px;
-		    margin: 0 auto 20px;
+		    margin: 0 auto 50px;
 		    color: white;
 		    font-size: 14px;
 		    font-family: helvetica, arial;
 		    border-bottom: 4px solid #06223c;
 		    box-sizing: border-box;
 		  }
-			.snapshot-form .open-subfields {
-				font-size: 15px;
-				margin: 4px 0;
-			}		  
+
 		  .snapshot-form .subfields {
   	    background: black;
 		    padding: 12px;
@@ -46,11 +44,12 @@ class Location2Page extends Page {
 		  	margin-bottom: 12px;
 		  }
 
-			.snapshot-form .field label {
-			}
 			.snapshot-form .submit-btn {
 				width: 100%;
 				margin-top: 6px;
+				margin-bottom: 22px;
+				font: 18px / 30px 'Museo500', 'Helvetica Neue', sans-serif;
+    		color: #cc09d6;				
 			}
 			.snapshot-form select {
 				width: 100%;
@@ -284,7 +283,18 @@ class Location2Page extends Page {
 			>
 				<form class="centered-form" action="<?=Path::toHandleReportSubmission()?>" method="post">
 					<? FormFields::renderTimeSelect($this->location); ?>
-					<div class="open-subfields clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
+					
+					<input type="hidden" name="locationid" value="<?=$this->location->id?>" />
+					<input type="hidden" name="locationname" value="<?=$this->location->locname?>" />
+					<input type="hidden" name="submit" value="submit-report" />					
+					<input class="submit-btn" type="submit" name="submit_report" value="Submit">
+
+					<div>
+						<div class="open-subfields pull-left clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
+						<span class='cancel pull-right clickable' ng-click='closeForm()'>Cancel snapshot</span>
+						<div class="clear"></div>
+					</div>
+					
 					<div class="subfields" ng-show="subFieldsOpen">
 						<?
 						FormFields::renderQualitySelect(); 
@@ -296,15 +306,8 @@ class Location2Page extends Page {
 							<? FormFields::renderImageInput() ?>
 						</div>
 					</div>
-					
-					<input type="hidden" name="locationid" value="<?=$this->location->id?>" />
-					<input type="hidden" name="locationname" value="<?=$this->location->locname?>" />
-					<input type="hidden" name="submit" value="submit-report" />					
-					<input class="submit-btn" type="submit" name="submit_report" value="Submit">
 
-					<div class='cancel text-center clickable'>
-						<span ng-click='closeForm()'>Cancel</span>
-					</div>
+
 				</form>
 			</div>
 		</div>
