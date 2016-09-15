@@ -7,7 +7,7 @@ class EditAccountForm {
 		?>
 		<div class="form-container">
 
-			<form action="<?= Path::toUpdateReporter()?>" method="POST">
+			<form action="<?= Path::toUpdateReporter()?>" method="POST" class="labels-left">
 				<?
 				if (isset($editAccountStatus)) {
 					?>

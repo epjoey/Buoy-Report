@@ -24,7 +24,7 @@ class AddLocationPage extends Page {
 		?>
 			<h1 class="form-head">Submit New Location</h1>
 			<div class="form-container">
-				<form action="<?= Path::toPostLocation() ?>" method="post" id="add-loc-form" class="" >
+				<form action="<?= Path::toPostLocation() ?>" method="post" id="add-loc-form" class="labels-left" >
 					<? if (isset($this->addLocationError)) { ?>
 						<span class="submission-error"><?= $this->addLocationError ?></span>
 					<? } ?>			

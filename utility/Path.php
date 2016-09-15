@@ -252,6 +252,9 @@ class Path {
 	public static function toHandleReportSubmission() {
 		return '/controllers/report/report-form-handler.php';
 	}
+	public static function toHandleReportSubmission2() {
+		return '/controllers/report/report-form-handler2.php';
+	}	
 	public static function toHandleEditReportSubmission() {
 		return '/controllers/report/edit-report-form-handler.php';
 	}

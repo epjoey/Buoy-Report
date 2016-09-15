@@ -33,7 +33,7 @@ class AddTideStationForm {
 				<input type="submit" name="remove-station" value="Remove Selected Stations"/>
 			</form>
 
-			<form id="add-tide-station-form" action="<?= Path::toLocationAddTidestation() ?>" method="post">
+			<form id="add-tide-station-form" class="labels-left" action="<?= Path::toLocationAddTidestation() ?>" method="post">
 				
 				<span class="submission-error"><?= isset($status) ? $status : '';?></span>
 

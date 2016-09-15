@@ -35,7 +35,7 @@ class AddBuoyForm {
 			</form>
 			
 
-			<form id="add-buoy-form" action="<?= Path::toLocationAddBuoy()?>" method="post">
+			<form id="add-buoy-form" class="labels-left" action="<?= Path::toLocationAddBuoy()?>" method="post">
 				
 				<span class="submission-error"><?= isset($status) ? $status : '';?></span>
 

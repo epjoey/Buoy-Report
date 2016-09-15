@@ -20,7 +20,7 @@ class ReportForm {
 					<span class="submission-error"><?= $statusMsg ?></span>
 					<?
 				}
-				FormFields::renderTimeSelect($location);
+				FormFields::renderTimeSelect($location, array('showLabel'=>true));
 
 				?>
 
@@ -73,7 +73,7 @@ class ReportForm {
 						</div>
 
 						<div class="field image last">
-							<? FormFields::renderImageInput($report->imagepath) ?>
+							<? FormFields::renderImageInput() ?>
 						</div>
 					</div>
 				</div><!--end optional fields-->

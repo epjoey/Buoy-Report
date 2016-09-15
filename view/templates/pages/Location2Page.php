@@ -89,13 +89,13 @@ class Location2Page extends Page {
 
 	public function renderJs() {
 		?>
-    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://code.angularjs.org/1.5.8/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+    <script src="/view/static/js/lib/jquery-2.1.4.js"></script>
+    <script src="/view/static/js/lib/angular-1.5.8.js"></script>
+    <script src="/view/static/js/lib/underscore-1.4.3.min.js"></script>
+		<script src="/view/static/js/lib/moment-2.14.1.min.js"></script>
 		<script type="text/javascript">
 		  (function() {
-		  	angular.module('app', [ 'app.directives', 'app.filters', 'app.services' ]);
+		  	angular.module('app', [ 'app.directives', 'app.filters', 'app.services', 'app.controllers' ]);
 				var directives = angular.module('app.directives', []);
 				directives.directive('ngBuoy', [
 					'$http', '$parse',
@@ -141,7 +141,6 @@ class Location2Page extends Page {
 					};
 				});
 
-				1.94384
 				filters.filter('dir2str', function(){
 					return function(d){
 						if(d === 'MM') return '';
@@ -168,21 +167,46 @@ class Location2Page extends Page {
 				});
 
 				var services = angular.module('app.services', []);
-				services.factory('path', [
+				services.factory('urls', [
 					function(){
 						return {
-							toNoaaBuoy: function(buoyId){
+							noaaBuoy: function(buoyId){
 								return 'http://www.ndbc.noaa.gov/station_page.php?station=' + buoyId;
+							},
+							api: {
+								reportFormHandler: '/controllers/report/report-form-handler.php'
 							}
 						};
 					}
 				]);
 
 			  services.run([
-			    '$rootScope', 'path',
-			    function($rootScope, path){
-			      $rootScope.path = path;
+			    '$rootScope', 'urls',
+			    function($rootScope, urls){
+			      $rootScope.urls = urls;
 			    }
+			  ]);
+
+			  var controllers = angular.module('app.controllers', []);
+			  controllers.controller('SnapshotFormCtrl', [
+			  	'$scope', 'urls', '$http',
+			  	function($scope, urls, $http){
+			  		$scope.post = {};
+			  		// $scope.submit = function(){
+			  		// 	$http.post(urls.api.reportFormHandler, _.extend($scope.post, {
+			  		// 		'locationId': $scope.locationId,
+			  		// 		'foo': 'bar'
+			  		// 	})).then(function(data){
+			  		// 		console.log(data);
+			  		// 	});
+			  		// };
+			  		$scope.closeForm = function(){
+			  			$scope.isFormOpen = false;
+			  		};
+			  		$scope.toggleForm = function(){
+			  			$scope.isFormOpen = !$scope.isFormOpen;
+			  		};
+			  	}
 			  ]);
 		  })();
 		</script>
@@ -197,15 +221,48 @@ class Location2Page extends Page {
 		Header::renderSimpleHeader();
 	}
 
-
 	public function renderBodyContent() {
 		?>
-		<h1>
-			<a href="<?=Path::toLocation($this->location->id)?>">
-				<?= html($this->location->locname) ?>
-			</a>
-			<!-- <span class="btn save-btn">Save</span> -->
-		</h1>
+		<div ng-controller="SnapshotFormCtrl">
+			<h1>
+				<a class="loc-name" href="<?=Path::toLocation($this->location->id)?>">
+					<?= html($this->location->locname) ?>
+				</a>
+				<button class="btn save-btn"
+					ng-disabled="saveFormOpen"
+					ng-click="toggleForm()"
+				>
+					Save snapshot
+				</button>
+			</h1>
+			<div class="snapshot-form"
+				ng-if="isFormOpen"
+			>
+				<form class="centered-form" action="<?=Path::toHandleReportSubmission2()?>" method="post">
+					<? FormFields::renderTimeSelect($this->location); ?>
+					<div class="open-subfields" ng-click="subFieldsOpen = !subFieldsOpen">Report &darr;</div>
+					<div class="subfields" ng-show="subFieldsOpen">
+						<?
+						FormFields::renderQualitySelect(); 
+						if ($this->location->sublocations) {
+							FormFields::renderSubLocationSelect($this->location->sublocations);
+						}
+						FormFields::renderWaveHeightField(ReportOptions::getWaveHeights());?>
+						<div class="field image last">
+							<? FormFields::renderImageInput() ?>
+						</div>
+					</div>
+					
+					<input type="hidden" name="locationid" value="<?=$this->location->id?>" />
+					<input type="hidden" name="locationname" value="<?=$this->location->locname?>" />
+					<input type="hidden" name="submit" value="submit-report" />					
+					<input class="submit-btn" type="submit" name="submit_report" value="Submit">
+
+					<div>
+						<span class='cancel' ng-click='closeForm()'>Cancel</span>
+					</div>
+				</form>
+			</div>
 		<div class="buoys">
 			<?
 			foreach($this->location->buoys as $buoy){
@@ -218,7 +275,7 @@ class Location2Page extends Page {
 		</div>
 		<script type="text/ng-template" id="buoy">
 			<h3>
-				<a ng-href="{{ ::path.toNoaaBuoy(buoyId) }}">
+				<a ng-href="{{ ::urls.noaaBuoy(buoyId) }}">
 					{{ buoyId }}: {{ buoyName }}
 				</a>
 			</h3>

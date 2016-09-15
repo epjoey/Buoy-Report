@@ -40,12 +40,18 @@ class FormFields {
 		<?
 	}
 
-	public static function renderTimeSelect($location) {
+	public static function renderTimeSelect($location, $options = array()) {
 		$localTimezone = new DateTimeZone($location->timezone);
 		$now = new DateTime('now', $localTimezone)
 		?>
 		<div class="field time select-field required first">
-			<label for="time_offset">Time:</label>
+			<?
+			if($options['showLabel']){
+				?>
+				<label for="time_offset">Time:</label>
+				<?
+			}
+			?>
 			<select name="time_offset" id="time-offset">
 				<option value="0">Now</option>
 				<?
@@ -67,6 +73,8 @@ class FormFields {
 					$('select#time-offset').change(function(event){
 						if ($(this).find(":selected").val() == 'older-date') {
 							$('#report-form-older-date').show();
+						} else {
+							$('#report-form-older-date').hide();
 						}
 					});
 				})();
@@ -126,9 +134,61 @@ class FormFields {
 		</span>
 		<script type="text/javascript">
 			(function($){
-				new BR.UploadImageField({
-					el: '#render-image-input'
-				});
+
+				if (!window.FormData) {
+					console && console.log('The File APIs are not fully supported in this browser.');
+					return;
+				}
+				var $el = $('#render-image-input');
+				var $input = $el.find("input[name='upload']");
+				var $imageNameDisplay = $el.find('.image-name');
+				var $imageUrlInput = $el.find("input[name='imageurl']");
+				var $formSubmit = $el.parents('form').find("[type='submit']");
+				var IMGUR_CLIENT_ID = 'edda62204c13785';				
+
+				var removeFile = function(event){
+					$el.removeClass('has-image').removeClass('is-loading');
+					$imageUrlInput.val("");
+					$formSubmit.attr('disabled', null);
+					$imageNameDisplay.text("");
+				};
+
+				var handleFileSelect = function(event){
+					console.log(event)
+					var files = event.target.files;
+					if (!files || !files.length) {
+						return;
+					}
+					var file = files[0];
+					var formData = new FormData();
+					formData.append("image", file);
+					$formSubmit.attr('disabled', 'disabled');
+					$el.addClass('is-loading');
+					$el.addClass('has-image');
+					$input.val('');
+					$imageNameDisplay.text(file.name);
+					$.ajax({
+						url: "https://api.imgur.com/3/image",
+						type: "POST",
+						datatype: "json",
+						contentType: false,
+						processData: false,
+						headers: {
+							'Authorization': 'Client-ID ' + IMGUR_CLIENT_ID
+						},
+						data: formData,
+						success: function(result) { 
+							$formSubmit.attr('disabled', null);
+							$el.removeClass('is-loading');
+							$imageUrlInput.val(result.data.link);
+						},
+						error: function() { console.log("error uploading image"); },
+					});
+				};
+				
+				$el.on("change", "[name='upload']", handleFileSelect);
+				$el.on("click", ".remove-x", removeFile);				
+
 			})(jQuery);
 		</script>
 		<?
