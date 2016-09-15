@@ -59,6 +59,10 @@ class NOAABuoyReportPersistence {
 			throw new InvalidArgumentException();
 		}		
 
+		if ($options['checkOnline'] && !self::isBuoyOnline($buoyid)) {
+			throw new NOAABuoyReportException("Buoy " . $buoyid . " offline");
+		}
+
 		try {
 			$dataArray = self::getDataArrayFromBuoy($buoyid);
 			if (!$dataArray) {
