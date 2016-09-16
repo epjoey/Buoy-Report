@@ -28,7 +28,7 @@ class LocationDetailPage extends Page {
 	public function renderLocDetails() {
 		?>
 		<div class="loc-details">
-			<h1><a href="<?=Path::toLocation($this->location->id)?>"><?= html($this->location->locname)?></a></h1>
+			<h1><a href="<?=Path::toLocation2($this->location->id)?>"><?= html($this->location->locname)?></a></h1>
 			<div class="loc-report-section">
 				<div class="loc-controls">
 					<span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Buoys</span><?
@@ -119,6 +119,27 @@ class LocationDetailPage extends Page {
 		?>
 		<div class="current-data">	
 			<h3>Current Data</h4>
+			<div class="buoy-current-data sb-section">	
+				<h5>
+					<a href="<?= Path::toLocation2($this->location->id) ?>">
+						Buoy Observations
+					</a>
+				</h5>
+			</div>			
+			<div class="tidestation-data sb-section">
+				<h5 class="toggle-btn">Tide Stations &darr;</h5>
+				<div class="toggle-area" style="<?= $this->showReportForm ? 'display:block' : '';?>">
+					<?
+					foreach($this->location->tideStations as $tideStation) {
+						?>
+						<p>
+							<a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a> (<?= $tideStation->stationname ?>)
+						</p>
+						<?
+					}
+					?>
+				</div>
+			</div>			
 			<div class="fc-links sb-section">
 				<h5 class="toggle-btn" id="toggle-fc-list">Forecast Links &darr;</h5>
 				<div class="toggle-area">
@@ -156,27 +177,6 @@ class LocationDetailPage extends Page {
 					})(jQuery);
 
 				</script>
-			</div>
-			<div class="tidestation-data sb-section">
-				<h5 class="toggle-btn">Tide Stations &darr;</h5>
-				<div class="toggle-area" style="<?= $this->showReportForm ? 'display:block' : '';?>">
-					<?
-					foreach($this->location->tideStations as $tideStation) {
-						?>
-						<p>
-							<a target="_blank" href="<?=Path::toNOAATideStation($tideStation->stationid)?>"><?=$tideStation->stationid?></a> (<?= $tideStation->stationname ?>)
-						</p>
-						<?
-					}
-					?>
-				</div>
-			</div>
-			<div class="buoy-current-data sb-section">	
-				<h5>
-					<a href="<?= Path::toLocation2($this->location->id) ?>">
-						Buoy Stations
-					</a>
-				</h5>
 			</div>
 		</div>
 		<?

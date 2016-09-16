@@ -261,7 +261,7 @@ class Location2Page extends Page {
 	}
 
 	public function renderHeader() {
-		Header::renderSimpleHeader();
+		Header::renderSimpleHeader($this->user);
 	}
 
 	public function renderBodyContent() {

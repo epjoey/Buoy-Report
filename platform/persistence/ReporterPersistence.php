@@ -100,7 +100,7 @@ class ReporterPersistence {
 		if (isset($properties['email']) && $properties['email']) {
 			$set[] = array('field' => 'email', 'value' => Persistence::escape($properties['email']));
 		}	
-		if (isset($properties['public']) && $properties['public']) {
+		if (isset($properties['public'])) {
 			$set[] = array('field' => 'public', 'value' => intval($properties['public']));
 		}			
 		if (isset($properties['password']) && $properties['password']) {
@@ -114,6 +114,7 @@ class ReporterPersistence {
 		}
 		//var_dump($set); exit;
 		$sql = "UPDATE reporter SET " . $str . " WHERE id = '$rid'";		
+
 		//var_dump($sql); exit;
 		Persistence::run($sql);
 	}

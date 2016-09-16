@@ -19,18 +19,14 @@ class EditProfilePage extends Page {
 	}
 	
 	public function renderMain() {
-		?>
-		<h1>My account</h1>
-		<?
 		$this->renderEditInfo();
 		$this->renderMyReports();
-		
 	}
 
 	public function renderMyReports() {
 		?>
 		<div class="reports-container">
-			<h3>My Reports</h3>
+			<h3><a href="<?=Path::toReports($user->id);?>">My Reports</a></h3>
 			<? FilterForm::renderOpenFilterTrigger(); ?>
 			<div id="report-feed-container">
 				<?
