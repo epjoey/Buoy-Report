@@ -276,6 +276,7 @@ class Location2Page extends Page {
 				&nbsp;
 				<button class="btn save-btn"
 					ng-click="toggleForm()"
+					ng-cloak
 				>
 					{{ isFormOpen ? 'Cancel snapshot &uarr;' : 'Save snapshot &darr;' }}
 				</button>
