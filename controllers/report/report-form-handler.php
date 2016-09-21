@@ -11,7 +11,8 @@ if (!$_POST['locationid']) {
 try { 
 
   $user = UserService::getUser();
-  if($user){
+
+  if($user->isLoggedIn){
   	$userid = $user->id;
   	$public = $user->public;
   } else {
