@@ -10,7 +10,7 @@ class SingleReportPage extends Page {
 	public function renderBodyContent() {
 		SingleReport::renderSingleReport($this->report, array('showDetails'=>true));
 		
-		if ($this->report->reporterid == $this->user->id) {
+		if (!$this->report->reporterid || $this->report->reporterid == $this->user->id) {
 			?>	
 			<p class="button-container edit-report">
 				<a class="button" href="<?=Path::toEditReport($this->report->id)?>">Edit Report</a>

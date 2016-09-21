@@ -29,17 +29,19 @@ class Location2Page extends Page {
 		    color: white;
 		    font-size: 14px;
 		    font-family: helvetica, arial;
-		    border-bottom: 4px solid #06223c;
 		    box-sizing: border-box;
+		    border-bottom: 4px solid #06223c;
 		  }
-
 		  .snapshot-form .subfields {
   	    background: black;
 		    padding: 12px;
 		    margin-bottom: 12px;
 		    border-radius: 3px;
 		  }
-
+		  .snapshot-form textarea {
+		  	min-height: 0;
+		  	max-width: none;
+		  }
 		  .snapshot-form .field {
 		  	margin-bottom: 12px;
 		  }
@@ -275,27 +277,25 @@ class Location2Page extends Page {
 				<button class="btn save-btn"
 					ng-click="toggleForm()"
 				>
-					Save snapshot &darr;
+					{{ isFormOpen ? 'Cancel snapshot &uarr;' : 'Save snapshot &darr;' }}
 				</button>
 			</h1>
 			<div class="snapshot-form"
 				ng-show="isFormOpen"
 			>
-				<form class="centered-form" action="<?=Path::toHandleReportSubmission()?>" method="post">
+				<form action="<?=Path::toHandleReportSubmission()?>" method="post">
 					<? FormFields::renderTimeSelect($this->location); ?>
 					
 					<input type="hidden" name="locationid" value="<?=$this->location->id?>" />
 					<input type="hidden" name="locationname" value="<?=$this->location->locname?>" />
 					<input type="hidden" name="submit" value="submit-report" />					
 					<input class="submit-btn" type="submit" name="submit_report" value="Submit">
-
-					<div>
-						<div class="open-subfields pull-left clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
-						<span class='cancel pull-right clickable' ng-click='closeForm()'>Cancel snapshot</span>
-						<div class="clear"></div>
-					</div>
+					<div class="open-subfields clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
 					
 					<div class="subfields" ng-show="subFieldsOpen">
+						<div class="field text">
+							<textarea name="text" class="text-input" placeholder="Note"></textarea>
+						</div>					
 						<?
 						FormFields::renderQualitySelect(); 
 						if ($this->location->sublocations) {
@@ -306,9 +306,7 @@ class Location2Page extends Page {
 							<? FormFields::renderImageInput() ?>
 						</div>
 					</div>
-
-
-				</form>
+				</form>				
 			</div>
 		</div>
 		<div class="buoys">

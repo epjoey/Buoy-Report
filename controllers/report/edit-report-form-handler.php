@@ -2,12 +2,6 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 /* --------------- HANDLE EDIT REPORT FORM SUBMISSION --------------- */
-
-$user = UserService::getUser();
-if (!$user->isLoggedIn) {
-	exit();
-}
-
 $report = ReportService::getReport($_POST['id']);
 $report->waveheight = $_POST['waveheight'];
 $report->quality = $_POST['quality'];
@@ -16,7 +10,7 @@ $report->sublocationid = $_POST['sublocationid'];
 
 if ($_POST['submit'] == 'delete-report') {
 	ReportService::deleteReport($report->id);
-	header('Location:'.Path::toReports($user->id));
+	header('Location:'.Path::toLocation($report->locationid));
 	exit();	
 }
 
