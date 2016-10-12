@@ -90,7 +90,7 @@ try {
   //fetch and insert buoy data for submitted tide stations
   foreach($location->buoys as $buoy) {
     $buoyReports = BuoyReportService::getBuoyReports($buoy->buoyid, array(
-      'time'=>$obsdate,
+      'offset'=>$obsdate,
       'limit'=>1 //only want one report
     ));
     if ($buoyReports) {
