@@ -43,14 +43,14 @@ class NOAABuoyReportPersistence {
 	static function getBuoyReports($buoyid, $options = array()) {
 		$defaultOptions = array(
 			'maxProximity' => 28800,
-			'offset' => null,
+			'offset' => 0,
 			'limit' => 1,
 			'preCheckOnline' => true
 		);
 		$options = array_merge($defaultOptions, $options);
 		$offset = $options['offset'];
 		$limit = $options['limit'];
-		
+
 		if (!$buoyid) {
 			throw new InvalidArgumentException();
 		}
@@ -67,8 +67,7 @@ class NOAABuoyReportPersistence {
 		} catch (Exception $e) {
 			throw new NOAABuoyReportException("No recent report from " . $buoyid);
 		}
-
-		if ($offset instanceof DateTime) {
+		if (($offset instanceof DateTime) || is_string($offset)) {
 			$offset = self::getIndexOfClosestRowToTime($dataArray, $offset);
 		}
 		if (!$offset) {
