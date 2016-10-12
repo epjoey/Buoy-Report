@@ -43,23 +43,19 @@ class NOAABuoyReportPersistence {
 	static function getBuoyReports($buoyid, $options = array()) {
 		$defaultOptions = array(
 			'maxProximity' => 28800,
-			'time' => null,
+			'offset' => null,
 			'limit' => 1,
-			'checkOnline' => true
-		);			
+			'preCheckOnline' => true
+		);
 		$options = array_merge($defaultOptions, $options);
-		$time = $options['time'];
+		$offset = $options['offset'];
 		$limit = $options['limit'];
 		
 		if (!$buoyid) {
 			throw new InvalidArgumentException();
 		}
 
-		if (!$time) {
-			throw new InvalidArgumentException();
-		}		
-
-		if ($options['checkOnline'] && !self::isBuoyOnline($buoyid)) {
+		if ($options['preCheckOnline'] && !self::isBuoyOnline($buoyid)) {
 			throw new NOAABuoyReportException("Buoy " . $buoyid . " offline");
 		}
 
@@ -67,17 +63,26 @@ class NOAABuoyReportPersistence {
 			$dataArray = self::getDataArrayFromBuoy($buoyid);
 			if (!$dataArray) {
 				throw new Exception();
-			}					
+			}
 		} catch (Exception $e) {
 			throw new NOAABuoyReportException("No recent report from " . $buoyid);
 		}
 
-		$closestIndex = self::getIndexOfClosestRowToTime($dataArray, $time);
-		
+		if ($offset instanceof DateTime) {
+			$offset = self::getIndexOfClosestRowToTime($dataArray, $offset);
+		}
+		if (!$offset) {
+			$offset = 0;
+		}
+
 		$buoyReports = array();
 		for ($i=0; $i < $limit; $i++) {
-			$rowDate = self::getTimestampOfRow($dataArray[$closestIndex + $i]);
-			$data = self::parseRowIntoData($dataArray[$closestIndex + $i]);
+			$row = $dataArray[$offset + $i];
+			if(!$row){
+				continue;
+			}
+			$rowDate = self::getTimestampOfRow($row);
+			$data = self::parseRowIntoData($row);
 			$buoyReports[] = new BuoyReport(array(
 				'gmttime' => $rowDate,
 				'swellheight' => $data[8],
@@ -91,7 +96,7 @@ class NOAABuoyReportPersistence {
 			));
 		}
 		return $buoyReports;
-	}	
+	}
 
 	static function getIndexOfClosestRowToTime($dataArray, $time) {
 		if ($time instanceof DateTime) {
@@ -99,7 +104,7 @@ class NOAABuoyReportPersistence {
 		}
 		//break each line into array of measurements by spaces
 		for ($i=2; $i<=self::$fileRowLimit; $i++) { //skip first 2 lines because it doesnt have data
-			
+
 			$rowDate = self::getTimestampOfRow($dataArray[$i]);		
 			$proximity = abs($time - $rowDate); //calculate proximity of this row to the observation date
 
