@@ -284,18 +284,6 @@ class LocationSnapshotPage extends Page {
 						{{ isFormOpen ? 'Cancel snapshot &uarr;' : 'Save snapshot &darr;' }}
 					</button>
 				</h1>
-				<?
-					if (property_exists($this->location, 'parentLocation') && $this->location->parentLocation) {
-						?>
-						<p class="sb-section">
-							Subspot of
-							<a href="<?=Path::toLocation($this->location->parentLocationId);?>">
-								<?=html($this->location->parentLocation->locname)?>
-							</a>
-						</p>
-						<?
-					}
-				?>
 			</div>
 
 			<div class="snapshot-form"
