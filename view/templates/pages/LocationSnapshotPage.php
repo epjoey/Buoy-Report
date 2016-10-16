@@ -285,7 +285,7 @@ class LocationSnapshotPage extends Page {
 					</button>
 				</h1>
 				<?
-					if ($this->location->parentLocation) {
+					if (property_exists($this->location, 'parentLocation') && $this->location->parentLocation) {
 						?>
 						<p class="sb-section">
 							Subspot of
