@@ -57,9 +57,9 @@ class FilterForm {
 						<? 
 						foreach ($filterOptions['sublocationObjects'] as $sublocation) { 
 							?>
-							<option value="<?= $sublocation->sl_id ?>" <?= 
-								$currSL == $sublocation->sl_id ? "selected='selected'" :'';
-								?>><?= $sublocation->sl_name ?></option>
+							<option value="<?= $sublocation->id ?>" <?=
+								$currSL == $sublocation->id ? "selected='selected'" :'';
+								?>><?= $sublocation->locname ?></option>
 							<? 
 						} 
 						?>

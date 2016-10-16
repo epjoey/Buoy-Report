@@ -45,7 +45,7 @@ class LocationList {
 					$location = (object)$location; //temporory small hack until we refactor getLocations
 					?>
 					<li class="location block-list-item <?=isset($this->selectedLocation) && $this->selectedLocation == $location->id ? "selected" : "" ?>">
-						<a class="location-inner" href="<?= $this->toPost ? Path::toPostReport($location->id) : Path::toLocation2($location->id)?>">
+						<a class="location-inner" href="<?= $this->toPost ? Path::toPostReport($location->id) : Path::toLocationSnapshot($location->id)?>">
 							<span class="name"><?= html($location->locname) ?></span>
 						</a>
 						<span class="notification-icons">

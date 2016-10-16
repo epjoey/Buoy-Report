@@ -101,7 +101,7 @@ class Path {
 		return $url;
 	}
 
-	public static function toLocation2($locationId = null) {
+	public static function toLocationSnapshot($locationId = null) {
 		$url = '/l/'.$locationId;
 		return $url;
 	}

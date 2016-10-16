@@ -29,9 +29,9 @@ class FormFields {
 				<option value="" />select</option>
 				<?
 				foreach ($sublocations as $sublocation) {
-					$selected = isset($preselected) && $preselected == $sublocation->sl_id ? "selected = 'selected'" : '';
+					$selected = isset($preselected) && $preselected == $sublocation->id ? "selected = 'selected'" : '';
 					?>
-					<option value="<?=$sublocation->sl_id?>" <?=$selected?> /><?=$sublocation->sl_name?></option>
+					<option value="<?=$sublocation->id?>" <?=$selected?> /><?=$sublocation->locname?></option>
 					<?
 				}
 				?>

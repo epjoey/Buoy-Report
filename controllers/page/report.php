@@ -14,7 +14,6 @@ $report = ReportService::getReport($id, array(
 	'includeBuoyReports' => true,
 	'includeTideReports' => true,
 	'includeLocation' => true,
-	'includeSublocation' => true,
 	'includeBuoyModel' => true,
 	'includeTideStationModel' => true,
 	'includeReporter' => true

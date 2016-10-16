@@ -9,6 +9,8 @@ class Location extends BaseModel {
 	public $coverImagePath;
 	
 	//from other tables
+	public $parentLocationId;
+	public $parentLocation;
 	public $tideStations;
 	public $buoys;
 	public $sublocations;	

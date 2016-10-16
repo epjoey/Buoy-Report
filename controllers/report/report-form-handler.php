@@ -3,8 +3,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 /* --------------- HANDLE REPORT FORM SUBMISSION --------------- */
 
+$locationid = $_POST['locationid'];
 
-if (!$_POST['locationid']) {
+if (!$locationid) {
   throw new Error('Location ID required to post report');
 }
 
@@ -20,12 +21,26 @@ try {
   	$public = true;
   }
 
-  $location = LocationService::getLocation($_POST['locationid'], array(
+
+  if(isset($_POST['sublocationid'])) {
+    $locationid = $_POST['sublocationid'];
+  }
+
+  $location = LocationService::getLocation($locationid, array(
     //'includeSublocations' => true,
     'includeBuoys' => true,
     'includeTideStations' => true
-  ));  
-  
+  ));
+
+  if ($location->parentLocationId) {
+    $location->parentLocation = LocationService::getLocation($location->parentLocationId, array(
+      'includeBuoys' => true,
+      'includeTideStations' => true
+    ));
+    $location->tideStations = array_merge($location->tideStations, $location->parentLocation->tideStations);
+    $location->buoys = array_merge($location->buoys, $location->parentLocation->buoys);
+  }
+
   /* either real date or date offset passed in from form */
   if (isset($_POST['time']) && $_POST['time']) {
     $reportDate = new DateTime($_POST['time'], new DateTimeZone($location->timezone));
@@ -61,11 +76,6 @@ try {
   	$waveheight = $_POST['waveheight'];
   }
 
-  $sublocationid = null;
-  if(isset($_POST['sublocationid'])) {
-  	$sublocationid = $_POST['sublocationid'];
-  }
-
   $reportId = ReportService::insertReport(array(
     'quality' => $quality,
     'obsdate' => $obsdate,
@@ -74,7 +84,6 @@ try {
     'locationid' => $location->id,
     'text' => $text,
     'waveheight' => $waveheight,
-    'sublocationid' => $sublocationid,
     'imagepath' => $imagepath
   ));
 

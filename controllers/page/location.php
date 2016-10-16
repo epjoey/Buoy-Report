@@ -7,7 +7,6 @@ if (!$locationId) {
 	exit();
 }
 $location = LocationService::getLocation($locationId, array(
-	'includeSublocations' => true,
 	'includeBuoys' => true,
 	'includeTideStations' => true
 ));
@@ -18,12 +17,22 @@ if (!$location) {
 	exit();	
 }
 
+if ($location->parentLocationId) {
+	$location->parentLocation = LocationService::getLocation($location->parentLocationId, array(
+		'includeBuoys' => true,
+		'includeTideStations' => true
+	));
+}
+
 $user = UserService::getUser();
 $device = new Mobile_Detect();
 
+$sublocationIds = LocationService::getSublocationIdsForLocation($location);
+$location->sublocations = LocationService::getLocations($sublocationIds);
+
 /* load Report Filters */
 $reportFilters = ReportUtils::getFiltersFromRequest($_REQUEST);
-$reportFilters['locationIds'] = array($location->id);
+$reportFilters['locationIds'] = array_merge(array($location->id), $sublocationIds);
 
 /* load Reports */
 $numReportsPerPage = 6;

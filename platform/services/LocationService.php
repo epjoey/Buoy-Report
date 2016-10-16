@@ -42,16 +42,12 @@ class LocationService {
 		return LocationPersistence::getSublocationsForLocation($location);
 	}
 
-	public static function getSublocation($id) {
-		if (!$id) {
-			return null;
-		}
-		$sublocations = LocationPersistence::getSublocations(array($id));
-		return reset($sublocations);
-	}
-
 	public static function updateLocation($location) {
 		LocationPersistence::updateLocation($location);
+	}
+
+	public static function getSublocationIdsForLocation($location) {
+		return LocationPersistence::getSublocationIdsForLocation($location->id);
 	}
 
 	static function getAllLocations($options = array()) {

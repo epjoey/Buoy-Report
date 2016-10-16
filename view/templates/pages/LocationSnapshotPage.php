@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
-class Location2Page extends Page {
+class LocationSnapshotPage extends Page {
 
 	public function getBodyClassName() {
 		return 'location-page';
@@ -11,10 +11,12 @@ class Location2Page extends Page {
 		parent::renderCss();
 		?>
 		<style>
-			h1 {
-				margin-bottom: 20px;
-				font-size: 22px;
+			.ss-header {
 				text-align: center;
+				margin-bottom: 20px;
+			}
+			h1 {
+				font-size: 22px;
 			}	
 			h1 .loc-name {
 				display: inline-block;
@@ -269,18 +271,33 @@ class Location2Page extends Page {
 	public function renderBodyContent() {
 		?>
 		<div ng-controller="SnapshotFormCtrl">
-			<h1>
-				<a class="loc-name" href="<?=Path::toLocation($this->location->id)?>">
-					<?= html($this->location->locname) ?>
-				</a>
-				&nbsp;
-				<button class="btn save-btn"
-					ng-click="toggleForm()"
-					ng-cloak
-				>
-					{{ isFormOpen ? 'Cancel snapshot &uarr;' : 'Save snapshot &darr;' }}
-				</button>
-			</h1>
+			<div class="ss-header">
+				<h1>
+					<a class="loc-name" href="<?=Path::toLocation($this->location->id)?>">
+						<?= html($this->location->locname) ?>
+					</a>
+					&nbsp;
+					<button class="btn save-btn"
+						ng-click="toggleForm()"
+						ng-cloak
+					>
+						{{ isFormOpen ? 'Cancel snapshot &uarr;' : 'Save snapshot &darr;' }}
+					</button>
+				</h1>
+				<?
+					if ($this->location->parentLocation) {
+						?>
+						<p class="sb-section">
+							Subspot of
+							<a href="<?=Path::toLocation($this->location->parentLocationId);?>">
+								<?=html($this->location->parentLocation->locname)?>
+							</a>
+						</p>
+						<?
+					}
+				?>
+			</div>
+
 			<div class="snapshot-form"
 				ng-show="isFormOpen"
 			>

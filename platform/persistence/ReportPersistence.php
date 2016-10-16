@@ -77,10 +77,6 @@ class ReportPersistence {
 			$waveheight = floatval($report->waveheight);
 			$fields .= ", waveheight = '" . $waveheight . "'";			
 		}	
-		if ($report->sublocationid) {
-			$sublocationId = intval($report->sublocationid);
-			$fields .= ", sublocationid = '" . $sublocationId . "'";			
-		}				
 		$sql = "INSERT INTO report SET $fields";
 		$result = mysqli_query($link, $sql);
 		if (!$result) {

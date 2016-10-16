@@ -28,7 +28,7 @@ class LocationDetailPage extends Page {
 	public function renderLocDetails() {
 		?>
 		<div class="loc-details">
-			<h1><a href="<?=Path::toLocation2($this->location->id)?>"><?= html($this->location->locname)?></a></h1>
+			<h1><a href="<?=Path::toLocationSnapshot($this->location->id)?>"><?= html($this->location->locname)?></a></h1>
 			<div class="loc-report-section">
 				<div class="loc-controls">
 					<span id="add-buoy-btn" class="edit-loc-link block-link <?=isset($this->addBuoyError) ? 'active' : ''?>">Buoys</span><?
@@ -121,7 +121,7 @@ class LocationDetailPage extends Page {
 			<h3>Current Data</h4>
 			<div class="buoy-current-data sb-section">	
 				<h5>
-					<a href="<?= Path::toLocation2($this->location->id) ?>">
+					<a href="<?= Path::toLocationSnapshot($this->location->id) ?>">
 						Buoy Observations
 					</a>
 				</h5>
@@ -188,6 +188,18 @@ class LocationDetailPage extends Page {
 			<h3>Location Info</h3>
 			<div class="reporters">
 				<p class="creator sb-section">Set up by <a href="<?=Path::toProfile($this->location->creator);?>"><?=html($this->creator->name)?></a></p>
+				<?
+				if($this->location->parentLocationId){
+					?>
+					<p class="sb-section">
+						Subspot of
+						<a href="<?=Path::toLocation($this->location->parentLocationId);?>">
+							<?=html($this->location->parentLocation->locname)?>
+						</a>
+					</p>
+					<?
+				}
+				?>
 				<p class="sb-section"><a href="<?=Path::toReporters($this->location->id);?>">See Reporters</a></p>
 				<p class="sb-section"><a class="edit-location" href="<?=Path::toEditLocation($this->location->id);?>">Edit Location</a></p>
 

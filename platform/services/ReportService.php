@@ -19,7 +19,6 @@ class ReportService {
 			'includeBuoyModel' => false,
 			'includeTideStationModel' => false,
 			'includeReporter' => false,
-			'includeSublocation' => false
 		);
 		$options = array_merge($defaultOptions, $options);		
 		$reports = ReportPersistence::getReports($ids);
@@ -37,9 +36,6 @@ class ReportService {
 			if ($options['includeLocation']) {
 				$report->location = LocationService::getLocation($report->locationid);
 			}
-			if ($options['includeSublocation']) {
-				$report->sublocation = LocationService::getSublocation($report->sublocationid);
-			}	
 			if ($options['includeReporter']) {
 				$report->reporter = ReporterService::getReporter($report->reporterid);
 			}
@@ -70,7 +66,6 @@ class ReportService {
 			'includeBuoyModel' => true,
 			'includeTideStationModel' => true,
 			'includeReporter' => true,
-			'includeSublocation' => true
 		));
 	}
 

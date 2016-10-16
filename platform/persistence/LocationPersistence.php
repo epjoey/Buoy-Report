@@ -12,57 +12,36 @@ class LocationPersistence {
 		$uncachedIds = array_diff($ids, array_keys($locations));
 		if (!$uncachedIds) {
 			return $locations;
-		}		
+		}
 		$idStr = implode(',', $uncachedIds);
-		$sql = "SELECT * FROM location WHERE id in ($idStr)";
+		$sql = "SELECT a.*, b.locationid as parentLocationId
+			FROM location a
+			LEFT JOIN locationsublocation b ON b.sublocationid = a.id
+			WHERE a.id in ($idStr)";
 		$result = Persistence::run($sql);
 		while ($row = mysqli_fetch_object($result)) {	
 			$location = new Location($row);
 			$locations[$location->id] = $location;
 			//error_log("Location $location->id used db");
 			ModelCache::set('Location', $location->id, $location);
-
 		}
 		return $locations;
-	}	
+	}
+
+	public static function getSublocationIdsForLocation($locationId) {
+		$id = intval($locationId);
+		$sql = "SELECT sublocationid FROM locationsublocation WHERE locationid = '$id'";
+		$result = Persistence::run($sql);
+		$ids = array();
+		while ($row = mysqli_fetch_array($result)) {
+			$ids[] = $row[0];
+		}
+		return array_unique($ids);
+	}
 
 	public static function getSublocationsForLocation($location) {
-		$id = intval($location->id);
-		$sql = "SELECT a.* 
-				FROM sublocation a 
-				INNER JOIN locationsublocation b ON a.sl_id = b.sublocationid 
-				WHERE b.locationid = '$id'";
-		$result = Persistence::run($sql);
-		$sublocations = array();
-		while ($row = mysqli_fetch_object($result)) {
-			$sublocations[] = new Sublocation($row);
-		}
-		return $sublocations;			
-	}	
-
-	public static function getSublocations($ids, $options = array()) {
-		if (!$ids) {
-			return array();
-		}
-		$defaultOptions = array(
-			'start' => 0,
-			'limit' => 150,
-			'order' => 'sl_id DESC'
-		);
-		$options = array_merge($defaultOptions, $options);
-		$ids = array_map('intval', $ids);
-		$ids = implode(',', $ids);
-		$where = " WHERE sl_id in ($ids)";
-		$start = intval($options['start']);
-		$limit = intval($options['limit']);
-		$order = Persistence::escape($options['order']);
-		$sql = "SELECT * FROM sublocation $where ORDER BY $order LIMIT $start,$limit";
-		$result = Persistence::run($sql);
-		$sublocations = array();
-		while ($row = mysqli_fetch_object($result)) {	
-			$sublocations[] = new Sublocation($row);
-		}
-		return $sublocations;		
+		$ids = self::getSublocationIdsForLocation($location->id);
+		return self::getLocations($ids);
 	}
 
 	static function updateLocation($location) {
