@@ -299,6 +299,19 @@ class LocationSnapshotPage extends Page {
 					<div class="open-subfields clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
 					
 					<div class="subfields" ng-show="subFieldsOpen">
+						<div class="field text">
+							<textarea name="text" class="text-input" placeholder="Note"></textarea>
+						</div>
+						<?
+						FormFields::renderQualitySelect();
+						if ($this->location->sublocations) {
+							FormFields::renderSubLocationSelect($this->location->sublocations);
+						}
+						FormFields::renderWaveHeightField(ReportOptions::getWaveHeights());
+						?>
+						<div class="field image last">
+							<? FormFields::renderImageInput() ?>
+						</div>
 					</div>
 				</form>				
 			</div>
