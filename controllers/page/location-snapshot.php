@@ -7,7 +7,7 @@ if (!$locationId) {
 	exit();
 }
 $location = LocationService::getLocation($locationId, array(
-  'includeSublocations' => true,
+  //'includeSublocations' => true,
   'includeBuoys' => true,
   'includeTideStations' => true
 ));
