@@ -148,7 +148,7 @@ class LocationSnapshotPage extends Page {
 					'$http', '$parse',
 					function($http, $parse){
 						return {
-							templateUrl: 'buoy',
+							templateUrl: 'buoy.template',
 							scope: true,
 							compile: function($el, $attrs){
 								return function(scope, el, attrs){
@@ -270,63 +270,8 @@ class LocationSnapshotPage extends Page {
 
 	public function renderBodyContent() {
 		?>
-		<div ng-controller="SnapshotFormCtrl">
-			<div class="ss-header">
-				<h1>
-					<a class="loc-name" href="<?=Path::toLocation($this->location->id)?>">
-						<?= html($this->location->locname) ?>
-					</a>
-					&nbsp;
-					<button class="btn save-btn"
-						ng-click="toggleForm()"
-						ng-cloak
-					>
-						{{ isFormOpen ? 'Cancel snapshot &uarr;' : 'Save snapshot &darr;' }}
-					</button>
-				</h1>
-			</div>
 
-			<div class="snapshot-form"
-				ng-show="isFormOpen"
-			>
-				<form action="<?=Path::toHandleReportSubmission()?>" method="post">
-					<? FormFields::renderTimeSelect($this->location); ?>
-					
-					<input type="hidden" name="locationid" value="<?=$this->location->id?>" />
-					<input type="hidden" name="locationname" value="<?=$this->location->locname?>" />
-					<input type="hidden" name="submit" value="submit-report" />					
-					<input class="submit-btn" type="submit" name="submit_report" value="Submit">
-					<div class="open-subfields clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
-					
-					<div class="subfields" ng-show="subFieldsOpen">
-						<div class="field text">
-							<textarea name="text" class="text-input" placeholder="Note"></textarea>
-						</div>
-						<?
-						FormFields::renderQualitySelect();
-						if ($this->location->sublocations) {
-							FormFields::renderSubLocationSelect($this->location->sublocations);
-						}
-						FormFields::renderWaveHeightField(ReportOptions::getWaveHeights());
-						?>
-						<div class="field image last">
-							<? FormFields::renderImageInput() ?>
-						</div>
-					</div>
-				</form>				
-			</div>
-		</div>
-		<div class="buoys">
-			<?
-			foreach($this->location->buoys as $buoy){
-				?>
-				<div class="buoy" ng-buoy="<?= $buoy->buoyid ?>"
-					ng-buoy-name="<?= $buoy->name ?>"></div>
-				<?
-			}
-			?>
-		</div>
-		<script type="text/ng-template" id="buoy">
+		<script type="text/ng-template" id="buoy.template">
 			<h3>
 				<a ng-href="{{ ::urls.noaaBuoy(buoyId) }}">
 					{{ buoyId }}: {{ buoyName }}
@@ -354,7 +299,7 @@ class LocationSnapshotPage extends Page {
 						<th></th>
 						<th>kn</th>
 						<th></th>
-					</tr>									
+					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="d in data">
@@ -374,6 +319,63 @@ class LocationSnapshotPage extends Page {
 				</tbody>
 			</table>
 		</script>
+
+		<div ng-controller="SnapshotFormCtrl">
+			<div class="ss-header">
+				<h1>
+					<a class="loc-name" href="<?=Path::toLocation($this->location->id)?>">
+						<?= html($this->location->locname) ?>
+					</a>
+					&nbsp;
+					<button class="btn save-btn"
+						ng-click="toggleForm()"
+						ng-cloak
+					>
+						{{ isFormOpen ? 'Cancel snapshot &uarr;' : 'Save snapshot &darr;' }}
+					</button>
+				</h1>
+			</div>
+
+			<div class="snapshot-form"
+				ng-show="isFormOpen"
+			>
+				<form action="<?=Path::toHandleReportSubmission()?>" method="post">
+					<? FormFields::renderTimeSelect($this->location); ?>
+
+					<input type="hidden" name="locationid" value="<?=$this->location->id?>" />
+					<input type="hidden" name="locationname" value="<?=$this->location->locname?>" />
+					<input type="hidden" name="submit" value="submit-report" />
+					<input class="submit-btn" type="submit" name="submit_report" value="Submit">
+					<div class="open-subfields clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
+
+					<div class="subfields" ng-show="subFieldsOpen">
+						<div class="field text">
+							<textarea name="text" class="text-input" placeholder="Note"></textarea>
+						</div>
+						<?
+						FormFields::renderQualitySelect();
+						if ($this->location->sublocations) {
+							FormFields::renderSubLocationSelect($this->location->sublocations);
+						}
+						FormFields::renderWaveHeightField(ReportOptions::getWaveHeights());
+						?>
+						<div class="field image last">
+							<? FormFields::renderImageInput() ?>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="buoys">
+			<?
+			foreach($this->location->buoys as $buoy){
+				?>
+				<div class="buoy" ng-buoy="<?= $buoy->buoyid ?>"
+					ng-buoy-name="<?= $buoy->name ?>"></div>
+				<?
+			}
+			?>
+		</div>
 		<?
 	}
 
