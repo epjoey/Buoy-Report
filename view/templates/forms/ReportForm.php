@@ -51,7 +51,7 @@ class ReportForm {
 						</div>
 
 						<div class="field image last">
-							<? FormFields::renderImageInput() ?>
+							<? FormFields::renderImageInput(null) ?>
 						</div>
 					</div>
 				</div><!--end optional fields-->

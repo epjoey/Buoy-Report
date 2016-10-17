@@ -360,7 +360,7 @@ class LocationSnapshotPage extends Page {
 						FormFields::renderWaveHeightField(ReportOptions::getWaveHeights());
 						?>
 						<div class="field image last">
-							<? FormFields::renderImageInput() ?>
+							<? FormFields::renderImageInput(null) ?>
 						</div>
 					</div>
 				</form>
