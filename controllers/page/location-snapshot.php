@@ -18,13 +18,13 @@ if (!$location) {
 	exit();
 }
 
-if ($location->parentLocationId) {
-  $location->parentLocation = LocationService::getLocation($location->parentLocationId, array(
-    'includeBuoys' => true,
-    'includeTideStations' => true
-  ));
-  $location->buoys = array_merge($location->buoys, $location->parentLocation->buoys);
-}
+// if ($location->parentLocationId) {
+//   $location->parentLocation = LocationService::getLocation($location->parentLocationId, array(
+//     'includeBuoys' => true,
+//     'includeTideStations' => true
+//   ));
+//   $location->buoys = array_merge($location->buoys, $location->parentLocation->buoys);
+// }
 
 $user = UserService::getUser();
 $page = new LocationSnapshotPage();

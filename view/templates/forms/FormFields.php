@@ -95,7 +95,6 @@ class FormFields {
 					} else {
 						$selected = '';
 					}
-
 					?>
 					<span class="radio-field">
 						<input type="radio" class="required" name="quality" id="quality-<?=$key?>" value="<?=$key?>" <?=$selected?> /><label for="quality-<?=$key?>"> <?=$value?></label>
