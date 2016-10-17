@@ -303,11 +303,12 @@ class LocationSnapshotPage extends Page {
 							<textarea name="text" class="text-input" placeholder="Note"></textarea>
 						</div>					
 						<?
-						FormFields::renderQualitySelect(); 
-						if ($this->location->sublocations) {
-							FormFields::renderSubLocationSelect($this->location->sublocations);
-						}
-						FormFields::renderWaveHeightField(ReportOptions::getWaveHeights());?>
+						// FormFields::renderQualitySelect();
+						// if ($this->location->sublocations) {
+						// 	FormFields::renderSubLocationSelect($this->location->sublocations);
+						// }
+						// FormFields::renderWaveHeightField(ReportOptions::getWaveHeights());
+						?>
 						<div class="field image last">
 							<? FormFields::renderImageInput() ?>
 						</div>
