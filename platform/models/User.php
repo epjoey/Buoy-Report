@@ -28,6 +28,9 @@ class User extends BaseModel {
 		if (!isset($_SESSION)) {
 			session_start();
 		}
+		if (!isset($_SESSION['userid'])) {
+			return NULL;
+		}
 		return $_SESSION['userid'];
 	}
 

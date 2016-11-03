@@ -13,7 +13,7 @@ $user = UserService::getUser();
 $report = ReportService::getReport($id);
 $report->location = LocationService::getLocation($report->locationid, array('includeSublocations'=>TRUE));
 
-if(($report->reporterid && $report->reporterid != $user->id) || !$report) {
+if(!$report || ($report->reporterid && $report->reporterid != $user->id)) {
 	header("HTTP/1.0 404 Not Found");
 	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 	exit();	
