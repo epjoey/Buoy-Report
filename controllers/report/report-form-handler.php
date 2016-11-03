@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 /* --------------- HANDLE REPORT FORM SUBMISSION --------------- */
-
+//var_dump($_POST);
 $locationid = $_POST['locationid'];
 
 if (!$locationid) {
@@ -22,7 +22,7 @@ try {
   }
 
 
-  if(isset($_POST['sublocationid'])) {
+  if(get($_POST, 'sublocationid')) {
     $locationid = $_POST['sublocationid'];
   }
 
@@ -31,6 +31,12 @@ try {
     'includeBuoys' => true,
     'includeTideStations' => true
   ));
+
+  if (!$location) {
+    StatusMessageService::setStatusMsgForAction('Invalid location', 'submit-report-form');
+    header('Location:'.Path::toLocations());
+    exit;
+  }
 
   if ($location->parentLocationId) {
     $location->parentLocation = LocationService::getLocation($location->parentLocationId, array(

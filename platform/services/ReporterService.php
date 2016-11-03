@@ -6,7 +6,8 @@ class ReporterService {
 		if (!$id) {
 			return null;
 		}
-		return reset(self::getReporters(array($id), $options));
+		$arr = self::getReporters(array($id), $options);
+		return reset($arr);
 	}
 
 	static function getReporters($ids, $options = array()) {

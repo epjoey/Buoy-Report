@@ -4,7 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 class TideStationService {
 
 	static function getTideStation($id) {
-		return reset(self::getTideStations(array($id)));
+		$arr = self::getTideStations(array($id));
+		return reset($arr);
 	}
 
 	static function getTideStationsForLocation($location) {

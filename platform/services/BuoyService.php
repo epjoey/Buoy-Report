@@ -9,7 +9,8 @@ class BuoyService {
 	}
 
 	static function getBuoy($id) {
-		return reset(self::getBuoys(array($id)));
+		$buoys = self::getBuoys(array($id));
+		return reset($buoys);
 	}
 
 	static function getBuoys($buoyIds, $options = array()) {

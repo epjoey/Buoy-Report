@@ -138,11 +138,13 @@
 	a.button.disabled,
 	span.button.disabled,
 	button.disabled,
+	button[disabled],
 	input[type="submit"].disabled,
 	input[type="reset"].disabled,
 	input[type="button"].disabled {
-		text-decoration: line-through;
-	}	
+		opacity: .5;
+		cursor: inherit;
+	}
 
 
 

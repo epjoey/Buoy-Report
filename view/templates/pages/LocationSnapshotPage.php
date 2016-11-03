@@ -330,8 +330,9 @@ class LocationSnapshotPage extends Page {
 					<button class="btn save-btn"
 						ng-click="toggleForm()"
 						ng-cloak
+						ng-disabled="isFormOpen"
 					>
-						{{ isFormOpen ? 'Cancel snapshot &uarr;' : 'Save snapshot &darr;' }}
+						Save snapshot &darr;
 					</button>
 				</h1>
 			</div>
@@ -346,8 +347,15 @@ class LocationSnapshotPage extends Page {
 					<input type="hidden" name="locationname" value="<?=$this->location->locname?>" />
 					<input type="hidden" name="submit" value="submit-report" />
 					<input class="submit-btn" type="submit" name="submit_report" value="Submit">
-					<div class="open-subfields clickable" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
+					<div class="open-subfields clickable pull-left" ng-click="subFieldsOpen = !subFieldsOpen">+ Add Report</div>
 
+					<span class="pull-right clickable"
+						ng-click="toggleForm()"
+						ng-cloak
+					>
+						Cancel
+					</span>
+					<div class="clear"></div>
 					<div class="subfields" ng-show="subFieldsOpen">
 						<div class="field text">
 							<textarea name="text" class="text-input" placeholder="Note"></textarea>

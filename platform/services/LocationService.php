@@ -4,7 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 class LocationService {
 	
 	static function getLocation($id, $options = array()) {
-		return reset(self::getLocations(array($id), $options));
+		$locations = self::getLocations(array($id), $options);
+		return reset($locations);
 	}
 
 	static function getLocations($ids, $options = array()) {

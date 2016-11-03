@@ -42,6 +42,10 @@ class User extends BaseModel {
 
 
 	public function logInUserWithValidCookie() {
+		if (!isset($_COOKIE['surf-session'])) {
+			return false;
+		}
+
 		$c = $_COOKIE['surf-session'];
 		if (!$c) {
 			return false;

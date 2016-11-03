@@ -46,7 +46,7 @@ class FormFields {
 		?>
 		<div class="field time select-field required first">
 			<?
-			if($options['showLabel']){
+			if(get($options, 'showLabel')){
 				?>
 				<label for="time_offset">Time:</label>
 				<?

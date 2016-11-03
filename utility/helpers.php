@@ -210,4 +210,8 @@ function exit_404() {
 	exit();
 }
 
+function get($obj, $key) {
+	return isset($obj[$key]) && $obj[$key];
+}
+
 ?>
