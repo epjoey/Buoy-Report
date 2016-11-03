@@ -4,19 +4,19 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 if(isset($_REQUEST['id']) && $_REQUEST['id']) {
 	$id = $_REQUEST['id'];
 } else {
-	header("HTTP/1.0 404 Not Found");
-	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
-	exit();	
+	exit_404();
 }
 
 $user = UserService::getUser();
 $report = ReportService::getReport($id);
+if(!$report) {
+	exit_404();
+}
+
 $report->location = LocationService::getLocation($report->locationid, array('includeSublocations'=>TRUE));
 
-if(!$report || ($report->reporterid && $report->reporterid != $user->id)) {
-	header("HTTP/1.0 404 Not Found");
-	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
-	exit();	
+if($report->reporterid && $report->reporterid != $user->id) {
+	exit_404();
 }	
 
 $reportFormStatus = StatusMessageService::getStatusMsgForAction('edit-report-form');

@@ -204,4 +204,10 @@ function handleFileUpload($upload, $reporterId) {
 	return $imagepath; 	
 }
 
+function exit_404() {
+	header("HTTP/1.0 404 Not Found");
+	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
+	exit();
+}
+
 ?>
