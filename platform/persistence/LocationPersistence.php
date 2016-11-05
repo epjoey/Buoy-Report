@@ -59,17 +59,25 @@ class LocationPersistence {
 	}
 
 	static function getAllLocationIds($options) {
+		// DOES NOT RETURN SUBLOCATIONS
 		$defaultOptions = array(
 			'start' => 0,
 			'limit' => 1000,
 			'order' => 'locname ASC'
 		);
-		$options = array_merge($defaultOptions, $options);		
+		$options = array_merge($defaultOptions, $options);
 		$start = intval($options['start']);
 		$limit = intval($options['limit']);
 		$order = Persistence::escape($options['order']);
-		$sql = "SELECT id FROM location ORDER BY $order LIMIT $start,$limit";
-		return Persistence::getArray($sql);		
+		$sql = "SELECT id
+			FROM location
+			LEFT OUTER JOIN locationsublocation
+			ON locationsublocation.sublocationid = location.id
+			WHERE locationsublocation.locationid IS NULL
+			ORDER BY $order LIMIT $start,$limit";
+		$arr = Persistence::getArray($sql, $options);
+		return $arr;
+
 	}
 }
 ?>
