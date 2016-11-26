@@ -204,14 +204,53 @@ function handleFileUpload($upload, $reporterId) {
 	return $imagepath; 	
 }
 
-function exit_404() {
+function exit_404_page() {
 	header("HTTP/1.0 404 Not Found");
 	include_once $_SERVER['DOCUMENT_ROOT'] . Path::to404();
 	exit();
 }
 
-function get($obj, $key) {
-	return isset($obj[$key]) && $obj[$key];
+function log_status_error($status) {
+	$request_body = file_get_contents('php://input');
+	error_log($status . ':' . json_encode(array('request_body'=>$request_body)));
 }
 
+function exit_404($message) {
+	header("HTTP/1.0 404 Not Found");
+	log_status_error(404);
+	print json_encode(array('success'=>FALSE));
+	exit();
+}
+
+function exit_405() {
+	header("HTTP/1.0 405 Bad Request");
+	log_status_error(405);
+	print json_encode(array('success'=>FALSE));
+	exit();
+}
+
+function parse_post(){
+	$request_body = file_get_contents('php://input');
+	return json_decode($request_body);
+}
+
+function get($arr, $key) {
+	if(is_object($arr)){
+		$arr = get_object_vars($arr);
+	}
+	if(!isset($arr[$key])){
+		return NULL;
+	}
+	return $arr[$key];
+}
+
+function sort_by_keys($arr, $keys){
+	$result = array();
+	foreach ($keys as $key) {
+		if(get($arr, $key)){
+			$result[$key] = $arr[$key];
+		}
+	}
+	return $result;
+}
 ?>

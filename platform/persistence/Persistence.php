@@ -35,6 +35,14 @@ class Persistence {
 		self::$dbLink = $link;
 		return $link;
 	}
+	static function sanitizeIds($ids) {
+		$ids = Utils::compact($ids);
+		$ids = array_map('addslashes', $ids);
+		return $ids;
+	}
+	static function sanitizeId($id) {
+		return addslashes($id);
+	}
 	static function escape($str) {
 		return addslashes($str);
 	}

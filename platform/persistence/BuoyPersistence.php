@@ -3,32 +3,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class BuoyPersistence {
 
-	static function getBuoys($ids) {
-		$ids = Utils::compact($ids);
-		$ids = array_map('Persistence::escape', $ids);
-		if (!$ids) {
-			return array();
-		}
-		$buoys = ModelCache::get('Buoy', $ids);
-		$uncachedIds = array_diff($ids, array_keys($buoys));
-		if (!$uncachedIds) {
-			return $buoys;
-		}
-		//they could be alphanumerical
-		$uncachedIds = array_map(function($id) {
-			return "'" . $id . "'";
-		}, $uncachedIds);
-		$idStr = implode(",", $uncachedIds);
-		$sql = "SELECT * FROM buoy WHERE buoyid in ($idStr)";
-		$result = Persistence::run($sql);		
-		while ($row = mysqli_fetch_object($result)) {	
-			$buoy = new Buoy($row);
-			$buoys[$buoy->buoyid] = $buoy;
-			ModelCache::set('Buoy', $buoy->buoyid, $buoy);
-		}
-		return $buoys;	
-	}
-
 	static function getAllBuoyIds($options = array()) {
 		$defaultOptions = array(
 			'start' => 0,
@@ -43,17 +17,6 @@ class BuoyPersistence {
 		return Persistence::getArray($sql);
 	}
 
-	static function getBuoyIdsForLocation($location) {
-		$id = intval($location->id);
-		if (!$id) {
-			return array();
-		}
-		$sql = "SELECT buoyid 
-				FROM buoy_location
-				WHERE locationid = '$id'";
-		return Persistence::getArray($sql);		
-	}	
-
 	static function insertBuoy($buoy) {
 		if (!$buoy->buoyid || !$buoy->name) {
 			throw new PersistenceException('addBuoy needs $id, $name');
@@ -64,18 +27,6 @@ class BuoyPersistence {
 		Persistence::run($sql);
 		return true;
 	}
-
-	static function updateBuoy($id, $name) {
-		if (!$id || !$name) {
-			throw new PersistenceException('updateBuoy needs $id, $name');
-		}
-		$id = Persistence::escape($id);
-		$name = Persistence::escape($name);
-		$sql = "UPDATE buoy SET name = '$name' WHERE buoyid = '$id'";
-		Persistence::run($sql);
-		return true;				
-	}
-
 
 	static function deleteBuoy($id) {
 		if (!$id) {

@@ -15,6 +15,7 @@ $files = array(
     'base.less',
     'common.less',
     'pages.less',
+    'snapshot-page.less',
     'overlay.less',
     'media-queries.less'
 );

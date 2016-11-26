@@ -75,13 +75,21 @@ class NOAABuoyReportPersistence {
 		}
 
 		$buoyReports = array();
-		for ($i=0; $i < $limit; $i++) {
+		$maxTries = 200;
+		for ($i=0; $i < $maxTries; $i++) {
+			if(count($buoyReports) == $limit){
+				break;
+			}
 			$row = $dataArray[$offset + $i];
 			if(!$row){
 				continue;
 			}
 			$rowDate = self::getTimestampOfRow($row);
 			$data = self::parseRowIntoData($row);
+			$swellheight = $data[8];
+			if(!$swellheight || $swellheight == 'MM'){
+				continue;
+			}
 			$buoyReports[] = new BuoyReport(array(
 				'gmttime' => $rowDate,
 				'swellheight' => $data[8],

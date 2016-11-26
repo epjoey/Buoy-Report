@@ -1,0 +1,135 @@
+.snapshot-page {
+	.ss-header {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+	h1 {
+		font-size: 22px;
+	}
+	h1 .loc-name {
+		display: inline-block;
+		margin-bottom: 12px;
+	}
+	.save-btn {
+		vertical-align: middle;
+	}
+	.snapshot-form {
+    max-width: 280px;
+    margin: 0 auto 50px;
+    color: white;
+    font-size: 14px;
+    font-family: helvetica, arial;
+    box-sizing: border-box;
+    border-bottom: 4px solid #06223c;
+  }
+  .snapshot-form .subfields {
+    background: black;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 3px;
+  }
+  .snapshot-form textarea {
+  	min-height: 0;
+  	max-width: none;
+  }
+  .snapshot-form .field {
+  	margin-bottom: 12px;
+  }
+
+	.snapshot-form .submit-btn {
+		width: 100%;
+		margin-top: 6px;
+		margin-bottom: 22px;
+		font: 18px / 30px 'Museo500', 'Helvetica Neue', sans-serif;
+		color: #cc09d6;
+	}
+	.snapshot-form select {
+		width: 100%;
+		max-width: none;
+	}
+	.buoys {
+		text-align: center;
+		font-family: helvetica, arial;
+	}
+	.buoy {
+		display: inline-block;
+		margin-bottom: 30px;
+    max-height: 600px;
+    overflow-y: auto;
+    vertical-align: top;
+	}
+	.data-loading {
+		font-size: 12px;
+	}
+	h3 {
+		color: white;
+		font-size: 13px;
+		font-weight: bold;
+	}
+	table {
+		max-width: 300px;
+		width: 100%;
+	}
+	thead {
+		background: rgba(255,255,255,.35);
+		border-bottom: 2px solid #06223c
+	}
+	thead tr:first-child th {
+		padding-top: 4px;
+	}
+	thead tr.units th {
+		font-size: 8px;
+		line-height: 12px;
+		text-transform: uppercase;
+	}
+	th {
+		text-align: left;
+		color: black;
+		font-weight: bold;
+		font-size: 11px;
+		line-height: 12px;
+		padding-right: 2px;
+	}
+	tbody tr:nth-child(odd) {
+		background: rgba(255,255,255,.1);
+	}
+	td {
+		color: white;
+		font-size: 13px;
+		line-height: 22px;
+		text-align: left;
+		padding-right: 2px;
+	}
+	td:first-child, th:first-child {
+		padding-left: 4px;
+	}
+	td sub {
+		font-size: 9px;
+		line-height: 12px;
+	}
+}
+@media only screen and (min-width: 768px) {
+	.snapshot-page {
+		.container {
+			width: 100%;
+		}
+		.snapshot-form {
+	    max-width: 360px;
+	  }
+		.buoys-wrap {
+	    max-width: 96%;
+	    overflow-x: auto;
+	    margin: 0 2%;
+		}
+		.buoys {
+			text-align: left;
+		}
+		.buoy {
+			padding-left: 32px;
+			width: 300px;
+		}
+		tr {
+			border-left: 4px solid #06223c;
+		}
+	}
+}
