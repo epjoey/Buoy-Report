@@ -59,6 +59,7 @@
 	.buoy {
 		display: inline-block;
     vertical-align: top;
+    width: @buoy-width;
 	}
 	.buoy .paginate {
 		color: white;
@@ -74,7 +75,7 @@
 	.buoy-data-window {
     max-height: 600px;
     overflow-y: auto;
-    margin-bottom: 30px;
+    margin-bottom: 45px;
 	}
 	.data-loading {
 		color: white;
@@ -84,7 +85,9 @@
 		color: white;
 		font-size: 13px;
 		font-weight: bold;
-		min-height: 28px;
+		line-height: 13px;
+		min-height: 26px;
+		margin-bottom: 4px;
 	}
 	table {
 		max-width: @buoy-width;
@@ -143,11 +146,10 @@
 		}
 		.buoys {
 			text-align: left;
-			padding-bottom: 50px;
+			padding-bottom: 20px;
 		}
 		.buoy {
 			padding-left: 32px;
-			width: @buoy-width;
 		}
 		tr {
 			border-left: 4px solid #06223c;
