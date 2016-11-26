@@ -11,9 +11,9 @@ class Header {
           <a href="<?= Path::toIntro();?>" class="br-icon"><img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="46" height="46"/></a>
           <? if(isset($location)){
             ?>
-            <a class="loc-name" href="<?=Path::toLocation($location->id)?>">
+            <h1><a class="loc-name" href="<?=Path::toLocation($location->id)?>">
               <?= html($location->locname) ?>
-            </a>
+            </a></h1>
             <?
           }
           ?>
