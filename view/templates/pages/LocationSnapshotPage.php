@@ -52,7 +52,7 @@ class LocationSnapshotPage extends Page {
 	}
 
 	public function renderHeader() {
-		Header::renderSimpleHeader($this->user);
+		Header::renderSimpleHeader($this->user, $this->location);
 	}
 
 	public function renderBodyContent() {
@@ -61,10 +61,6 @@ class LocationSnapshotPage extends Page {
 			<div ng-controller="SnapshotFormCtrl">
 				<div class="ss-header">
 					<h1>
-						<a class="loc-name" href="<?=Path::toLocation($this->location->id)?>">
-							<?= html($this->location->locname) ?>
-						</a>
-						&nbsp;
 						<button class="btn save-btn"
 							ng-click="toggleForm()"
 							ng-cloak
@@ -113,10 +109,7 @@ class LocationSnapshotPage extends Page {
 				</div>
 			</div>
 			<div class="buoys-wrap">
-				<div class="buoys"
-					ondrop="dropBuoy(event)"
-					ondragover="allowBuoyDrop(event)"
-				>
+				<div class="buoys">
 					<?
 					foreach($this->location->buoys as $buoy){
 						?>
@@ -125,6 +118,8 @@ class LocationSnapshotPage extends Page {
 							ng-buoy-name="<?= $buoy->name ?>"
 							draggable="true"
 							ondragstart="dragBuoy(event)"
+							ondrop="dropBuoy(event)"
+							ondragover="allowBuoyDrop(event)"
 						></div>
 						<?
 					}
@@ -183,12 +178,12 @@ class LocationSnapshotPage extends Page {
 							</tr>
 						</tbody>
 					</table>
-					<!--<a class="paginate"
+					<a class="paginate"
 					 	ng-if="$last && page.data.length"
 						ng-click="buoyCtrl.paginate()"
 					>
 						&darr;
-					</a>-->
+					</a>
 				</div>
 			</div>
 		</script>

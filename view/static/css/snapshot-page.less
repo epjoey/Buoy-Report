@@ -89,23 +89,23 @@
 		min-height: 26px;
 		margin-bottom: 4px;
 	}
-	table {
+	.buoy table {
 		max-width: @buoy-width;
 		width: 100%;
 	}
-	thead {
+	.buoy thead {
 		background: rgba(255,255,255,.35);
 		border-bottom: 2px solid #06223c
 	}
-	thead tr:first-child th {
+	.buoy thead tr:first-child th {
 		padding-top: 4px;
 	}
-	thead tr.units th {
+	.buoy thead tr.units th {
 		font-size: 8px;
 		line-height: 12px;
 		text-transform: uppercase;
 	}
-	th {
+	.buoy th {
 		text-align: left;
 		color: black;
 		font-weight: bold;
@@ -113,20 +113,20 @@
 		line-height: 12px;
 		padding-right: 2px;
 	}
-	tbody tr:nth-child(odd) {
+	.buoy tbody tr:nth-child(odd) {
 		background: rgba(255,255,255,.1);
 	}
-	td {
+	.buoy td {
 		color: white;
 		font-size: 13px;
 		line-height: 22px;
 		text-align: left;
 		padding-right: 2px;
 	}
-	td:first-child, th:first-child {
+	.buoy td:first-child, .buoy th:first-child {
 		padding-left: 4px;
 	}
-	td sub {
+	.buoy td sub {
 		font-size: 9px;
 		line-height: 12px;
 	}
@@ -145,12 +145,17 @@
 	    margin: 0 2%;
 		}
 		.buoys {
-			text-align: left;
+			margin: 0 auto;
 			padding-bottom: 20px;
 		}
 		.buoy {
-			padding-left: 32px;
 			width: @buoy-width + 20px; // scrollbars
+		}
+		.buoy:not(:first-child) {
+			padding-left: 32px;
+		}
+		.buoy table {
+			max-width: @buoy-width + 20px; // scrollbars
 		}
 		tr {
 			border-left: 4px solid #06223c;

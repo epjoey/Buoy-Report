@@ -38,12 +38,24 @@
 
           ctrl.pages = [];
           ctrl.loadData = function(page){
-            $http.get(urls.api.buoyData($scope.buoyId, page.number)).success(function(data){
+            $http.get(urls.api.buoyData({
+              buoyId:$scope.buoyId,
+              offset:page.offset
+            })).success(function(data){
               page.data = data;
+              var lastRow = _.last(data);
+              if(lastRow){
+                page.lastIndex = lastRow.index;
+              }
             });
           };
           ctrl.paginate = function(){
-            var nextPage = {data: null, number: ctrl.pages.length};
+            var lastPage = _.last(ctrl.pages);
+            var lastIndex = 0;
+            if(lastPage){
+              lastIndex = lastPage.lastIndex;
+            }
+            var nextPage = {data: null, offset: lastIndex};
             ctrl.pages.push(nextPage);
             ctrl.loadData(nextPage);
           };

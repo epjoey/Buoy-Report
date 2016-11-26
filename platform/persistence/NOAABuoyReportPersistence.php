@@ -26,11 +26,17 @@ class NOAABuoyReportPersistence {
 	}
 
 	static function parseRowIntoData($row) {
-		return preg_split("/[\s,]+/", $row);
+		if(!$row){
+			return NULL;
+		}
+		if(substr($row, 0, 1) == '#'){
+			return NULL;
+		}
+		$data = preg_split("/[\s,]+/", $row);
+		return $data;
 	}
 
 	static function getTimestampOfRow($buoyDataRow) {
-		$buoyDataRow = self::parseRowIntoData($buoyDataRow);
 		//convert row date/time into a timestamp
 		$buoyDataRowDateStr = $buoyDataRow[0] . '-' . $buoyDataRow[1] . '-' .  $buoyDataRow[2] . ' ' .  $buoyDataRow[3] . ':' .  $buoyDataRow[4] . "GMT";
 		$buoyDataRowDateTime = DateTime::createFromFormat('Y-m-d H:i e', $buoyDataRowDateStr);
@@ -42,7 +48,6 @@ class NOAABuoyReportPersistence {
 	//todo - break this up into 2 - getting data row, then parsing that.
 	static function getBuoyReports($buoyid, $options = array()) {
 		$defaultOptions = array(
-			'maxProximity' => 28800,
 			'offset' => 0,
 			'limit' => 1,
 			'preCheckOnline' => true
@@ -73,19 +78,19 @@ class NOAABuoyReportPersistence {
 		if (!$offset) {
 			$offset = 0;
 		}
-
 		$buoyReports = array();
 		$maxTries = 200;
 		for ($i=0; $i < $maxTries; $i++) {
 			if(count($buoyReports) == $limit){
 				break;
 			}
-			$row = $dataArray[$offset + $i];
-			if(!$row){
+			$index = $offset + $i;
+			$row = $dataArray[$index];
+			$data = self::parseRowIntoData($row);
+			if(!$data){
 				continue;
 			}
-			$rowDate = self::getTimestampOfRow($row);
-			$data = self::parseRowIntoData($row);
+			$rowDate = self::getTimestampOfRow($data);
 			$swellheight = $data[8];
 			if(!$swellheight || $swellheight == 'MM'){
 				continue;
@@ -99,7 +104,8 @@ class NOAABuoyReportPersistence {
 				'winddir' => $data[5],
 				'windspeed' => $data[6],
 				'watertemp' => $data[14],
-				'buoy' => $buoyid
+				'buoy' => $buoyid,
+				'index' => $index,
 			));
 		}
 		return $buoyReports;
@@ -110,9 +116,13 @@ class NOAABuoyReportPersistence {
 			$time = $time->getTimestamp();
 		}
 		//break each line into array of measurements by spaces
-		for ($i=2; $i<=self::$fileRowLimit; $i++) { //skip first 2 lines because it doesnt have data
-
-			$rowDate = self::getTimestampOfRow($dataArray[$i]);		
+		for ($i=0; $i<=self::$fileRowLimit; $i++) {
+			$row = $dataArray[$i];
+			$data = self::parseRowIntoData($row);
+			if(!$data){
+				continue;
+			}
+			$rowDate = self::getTimestampOfRow($data);
 			$proximity = abs($time - $rowDate); //calculate proximity of this row to the observation date
 
 			if (isset($closestProximity) && $closestProximity < $proximity) {

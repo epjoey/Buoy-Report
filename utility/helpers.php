@@ -234,12 +234,12 @@ function parse_post(){
 	return json_decode($request_body);
 }
 
-function get($arr, $key) {
+function get($arr, $key, $default=NULL) {
 	if(is_object($arr)){
 		$arr = get_object_vars($arr);
 	}
 	if(!isset($arr[$key])){
-		return NULL;
+		return $default;
 	}
 	return $arr[$key];
 }

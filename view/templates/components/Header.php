@@ -3,12 +3,20 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class Header {
 
-  static function renderSimpleHeader($user) {
+  static function renderSimpleHeader($user, $location=NULL) {
     ?>
     <div id="header" class="header"> 
       <div class="container">
         <span class="header-left">
           <a href="<?= Path::toIntro();?>" class="br-icon"><img class="logo-graphic" id="large-logo" src="<?= Path::toImages() ?>logo-lrg.png" width="46" height="46"/></a>
+          <? if(isset($location)){
+            ?>
+            <a class="loc-name" href="<?=Path::toLocation($location->id)?>">
+              <?= html($location->locname) ?>
+            </a>
+            <?
+          }
+          ?>
         </span>
         <div class="header-right">
           <div class="dd-menu" ng-init="open = false" ng-class="{ open: open }">

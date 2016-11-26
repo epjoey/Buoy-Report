@@ -14,6 +14,9 @@ class BuoyReport extends BaseModel  {
 	public $gmttime;
 	public $watertemp;
 
+	// row number in the NOAA doc. For pagination.
+	public $index;
+
 	//from other table
 	public $buoyModel; //Buoy Model Object	
 }
