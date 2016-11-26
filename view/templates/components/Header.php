@@ -3,7 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 
 class Header {
 
-  static function renderSimpleHeader($user, $location=NULL) {
+  static function renderSimpleHeader($user, $location=NULL, $status=NULL) {
     ?>
     <div id="header" class="header"> 
       <div class="container">
@@ -14,6 +14,12 @@ class Header {
             <h1><a class="loc-name" href="<?=Path::toLocation($location->id)?>">
               <?= html($location->locname) ?>
             </a></h1>
+            <?
+          }
+          ?>
+          <? if(isset($status)){
+            ?>
+            <h1><?= html($status) ?></h1>
             <?
           }
           ?>

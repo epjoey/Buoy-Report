@@ -7,6 +7,9 @@ class IntroPage extends Page {
 		return 'intro-page list-page';
 	}
 
+	public function renderHeader() {
+		Header::renderSimpleHeader($this->user, NULL, "Buoy Report!");
+	}
 
 	public function renderJs() {
 		parent::renderJs();
