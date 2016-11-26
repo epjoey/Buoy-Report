@@ -140,47 +140,57 @@ class LocationSnapshotPage extends Page {
 					{{ buoyId }}: {{ buoyName }}
 				</a>
 			</h3>
-			<div ng-if="!data">
-				<span class="data-loading">
-					Loading...
-				</span>
+			<div class="buoy-data-window">
+				<div ng-repeat="page in buoyCtrl.pages">
+					<span class="data-loading"
+						ng-if="!page.data"
+					>
+						Loading...
+					</span>
+					<table ng-if="page.data">
+						<thead>
+							<tr>
+								<th>TIME</th>
+								<th>WVHT</th>
+								<th>DPD</th>
+								<th>MWD</th>
+								<th>WSPD</th>
+								<th>WDIR</th>
+							</tr>
+							<tr class='units'>
+								<th></th>
+								<th>ft</th>
+								<th>sec</th>
+								<th></th>
+								<th>kn</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="d in page.data">
+								<td>{{ ::d.gmttime|unix2date }}</td>
+								<td>{{ ::d.swellheight|m2f }}</td>
+								<td>{{ ::d.swellperiod|clean }}</td>
+								<td>
+									{{ ::d.swelldir|clean }}
+									<sub>{{::d.swelldir|dir2str}}</sub>
+								</td>
+								<td>{{ ::d.windspeed|mps2kn }}</td>
+								<td>
+									{{ ::d.winddir|clean }}
+									<sub>{{::d.winddir|dir2str}}</sub>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<!--<a class="paginate"
+					 	ng-if="$last && page.data.length"
+						ng-click="buoyCtrl.paginate()"
+					>
+						&darr;
+					</a>-->
+				</div>
 			</div>
-			<table ng-if="data">
-				<thead>
-					<tr>
-						<th>TIME</th>
-						<th>WVHT</th>
-						<th>DPD</th>
-						<th>MWD</th>
-						<th>WSPD</th>
-						<th>WDIR</th>
-					</tr>
-					<tr class='units'>
-						<th></th>
-						<th>ft</th>
-						<th>sec</th>
-						<th></th>
-						<th>kn</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="d in data">
-						<td>{{ ::d.gmttime|unix2date }}</td>
-						<td>{{ ::d.swellheight|m2f }}</td>
-						<td>{{ ::d.swellperiod|clean }}</td>
-						<td>
-							{{ ::d.swelldir|clean }}
-							<sub>{{::d.swelldir|dir2str}}</sub>
-						</td>
-						<td>{{ ::d.windspeed|mps2kn }}</td>
-						<td>
-							{{ ::d.winddir|clean }}
-							<sub>{{::d.winddir|dir2str}}</sub>
-						</td>
-					</tr>
-				</tbody>
-			</table>
 		</script>
 		<?
 	}

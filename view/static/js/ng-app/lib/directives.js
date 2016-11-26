@@ -17,10 +17,10 @@
     '$http', '$parse', 'urls',
     function($http, $parse, urls){
       var buoyCount = 0;
-      var BUOY_WIDTH = 350;
+      var BUOY_WIDTH = 370;
       return {
         templateUrl: 'buoy.template',
-        require: '^ngLocation',
+        require: ['^ngLocation', 'ngBuoy'],
         scope: true,
         controllerAs: 'buoyCtrl',
         controller: ['$scope', '$http', function($scope, $http){
@@ -35,9 +35,22 @@
               buoyIds: buoyIds
             });
           };
+
+          ctrl.pages = [];
+          ctrl.loadData = function(page){
+            $http.get(urls.api.buoyData($scope.buoyId, page.number)).success(function(data){
+              page.data = data;
+            });
+          };
+          ctrl.paginate = function(){
+            var nextPage = {data: null, number: ctrl.pages.length};
+            ctrl.pages.push(nextPage);
+            ctrl.loadData(nextPage);
+          };
         }],
         compile: function($el, $attrs){
-          return function(scope, el, attrs){
+          return function(scope, el, attrs, ctrls){
+            var ctrl = ctrls[1];
             // Widen screen.
             var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
             buoyCount++;
@@ -47,9 +60,7 @@
 
             scope.buoyId = attrs.ngBuoy;
             scope.buoyName = attrs.ngBuoyName;
-            $http.get(urls.api.buoyData(scope.buoyId)).success(function(data){
-              scope.data = data;
-            });
+            ctrl.paginate();
           };
         }
       };

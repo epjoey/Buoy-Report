@@ -9,8 +9,8 @@
         api: {
           reportFormHandler: '/controllers/report/report-form-handler.php',
           buoySort: '/controllers/buoy/buoy-sort.php',
-          buoyData: function(buoyId){
-            return '/controllers/buoy/buoy.php?buoyid=' + buoyId;
+          buoyData: function(buoyId, page){
+            return '/controllers/buoy/buoy.php?buoyid=' + buoyId + '&page=' + page;
           }
         }
       };

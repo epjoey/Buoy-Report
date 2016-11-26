@@ -1,3 +1,5 @@
+@buoy-width:320px;
+
 .snapshot-page {
 	.ss-header {
 		text-align: center;
@@ -56,12 +58,26 @@
 	}
 	.buoy {
 		display: inline-block;
-		margin-bottom: 30px;
-    max-height: 600px;
-    overflow-y: auto;
     vertical-align: top;
 	}
+	.buoy .paginate {
+		color: white;
+		font-size: 12px;
+		padding: 6px 0;
+		cursor: pointer;
+		background: #06223c;
+		width: 100%;
+		text-align: center;
+    display: block;
+    line-height: 12px;
+	}
+	.buoy-data-window {
+    max-height: 600px;
+    overflow-y: auto;
+    margin-bottom: 30px;
+	}
 	.data-loading {
+		color: white;
 		font-size: 12px;
 	}
 	.buoy h3 {
@@ -71,7 +87,7 @@
 		min-height: 28px;
 	}
 	table {
-		max-width: 300px;
+		max-width: @buoy-width;
 		width: 100%;
 	}
 	thead {
@@ -127,10 +143,11 @@
 		}
 		.buoys {
 			text-align: left;
+			padding-bottom: 50px;
 		}
 		.buoy {
 			padding-left: 32px;
-			width: 300px;
+			width: @buoy-width;
 		}
 		tr {
 			border-left: 4px solid #06223c;
