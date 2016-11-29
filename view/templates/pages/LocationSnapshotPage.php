@@ -58,7 +58,7 @@ class LocationSnapshotPage extends Page {
 	public function renderBodyContent() {
 		?>
 		<div ng-location="<?= $this->location->id ?>">
-			<div ng-controller="SnapshotFormCtrl">
+			<div class="ss-outer" ng-controller="SnapshotFormCtrl">
 				<div class="ss-header">
 					<h1>
 						<button class="btn save-btn"
@@ -71,7 +71,7 @@ class LocationSnapshotPage extends Page {
 					</h1>
 				</div>
 
-				<div class="snapshot-form"
+				<div class="ss-form"
 					ng-show="isFormOpen"
 				>
 					<form action="<?=Path::toHandleReportSubmission()?>" method="post">

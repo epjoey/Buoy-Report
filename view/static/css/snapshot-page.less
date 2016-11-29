@@ -1,6 +1,10 @@
 @buoy-width:300px;
 
 .snapshot-page {
+	.ss-outer {
+    max-width: 280px;
+    margin: 0 auto 50px;
+	}
 	.ss-header {
 		text-align: center;
 		margin-bottom: 20px;
@@ -8,30 +12,28 @@
 	.save-btn {
 		vertical-align: middle;
 	}
-	.snapshot-form {
-    max-width: 280px;
-    margin: 0 auto 50px;
+	.ss-form {
     color: white;
     font-size: 14px;
     font-family: helvetica, arial;
     box-sizing: border-box;
     border-bottom: 4px solid #06223c;
   }
-  .snapshot-form .subfields {
+  .ss-form .subfields {
     background: black;
     padding: 12px;
     margin-bottom: 12px;
     border-radius: 3px;
   }
-  .snapshot-form textarea {
+  .ss-form textarea {
   	min-height: 0;
   	max-width: none;
   }
-  .snapshot-form .field {
+  .ss-form .field {
   	margin-bottom: 12px;
   }
 
-	.snapshot-form .submit-btn {
+	.ss-form .submit-btn {
 		width: 100%;
 		margin-top: 6px;
 		margin-bottom: 22px;
@@ -41,7 +43,7 @@
 		font-weight: 500;
 		color: #cc09d6;
 	}
-	.snapshot-form select {
+	.ss-form select {
 		width: 100%;
 		max-width: none;
 	}
@@ -129,7 +131,7 @@
 		.container {
 			width: 100%;
 		}
-		.snapshot-form {
+		.ss-form {
 	    max-width: 360px;
 	  }
 		.buoys-wrap {
