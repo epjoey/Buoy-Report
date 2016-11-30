@@ -47,8 +47,8 @@ class Header {
     <?
   }
 
-	static function renderHeader($user) {
-    self::renderSimpleHeader($user)
+	static function renderHeader($user, $location=NULL, $status=NULL) {
+    self::renderSimpleHeader($user, $location, $status)
 		?>
 		<script type="text/javascript">
       jQuery(".dd-menu .dd-trigger").on('click', function() {

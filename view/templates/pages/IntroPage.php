@@ -8,7 +8,7 @@ class IntroPage extends Page {
 	}
 
 	public function renderHeader() {
-		Header::renderSimpleHeader($this->user, NULL, "Buoy Report!");
+		Header::renderHeader($this->user, NULL, "Buoy Report!");
 	}
 
 	public function renderJs() {
