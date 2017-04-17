@@ -9,12 +9,12 @@ if (isset($_GET['reporter']) && $_GET['reporter']) {
 	$reporterId = $_GET['reporter'];			
 }
 
-$isReporterLocations = false;
+$isReporterLocations = FALSE;
 if (isset($reporterId)) {
 	$isReporterLocations = TRUE;
 }	
 
-$isCurrentUserLocations = false;
+$isCurrentUserLocations = FALSE;
 if ($user->isLoggedIn && $reporterId == $user->id) {
 	$isCurrentUserLocations = TRUE;
 }
@@ -37,12 +37,10 @@ if ($isCurrentUserLocations) {
 
 }
 
+$isToPost = FALSE;
 if (isset($_GET['post']) && $_GET['post'] == 'true') {
 	$isToPost = TRUE;
 }
-
-
-
 
 $page = new LocationPage();
 $page->renderPage(array(

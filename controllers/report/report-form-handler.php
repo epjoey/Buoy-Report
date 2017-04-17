@@ -5,11 +5,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 //var_dump($_POST);
 $locationid = $_POST['locationid'];
 
-if (!$locationid) {
-  throw new Error('Location ID required to post report');
-}
+try {
 
-try { 
+  if (!$locationid) {
+    throw new InvalidSubmissionException('Location ID required to post report');
+  }
 
   $user = UserService::getUser();
 

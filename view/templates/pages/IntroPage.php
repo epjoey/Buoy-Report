@@ -56,7 +56,7 @@ class IntroPage extends Page {
 			<div class="grid-list-container" id="grid-list-container">
 				<?
 					$options['locations'] = $this->locations;
-					$options['toPost'] = $this->isToPost;
+					$options['toPost'] = FALSE;
 					$options['showAddLocation'] = TRUE;
 					$options['showSeeAll'] = FALSE;
 					$options['isSearchable'] = TRUE;

@@ -7,8 +7,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/utility/Classloader.php';
 class NOAABuoyReportException extends Exception {}
 class NOAABuoyReportPersistence {
 
-	static $fileRowLimit = 1000; //number of rows to sift through before giving up
-	static $maxProximity = 28800; //max seconds closest match can be off
+	static $fileRowLimit = 5000; //number of rows to sift through before giving up
+	static $maxProximity = 28800; //max seconds closest match can be off - 8 hrs
 
 
 	static function getDataFileURLForBuoy($buoyid) {
