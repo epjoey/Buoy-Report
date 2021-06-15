@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h1 Locations
+  ul
+    for row in locations.rows
+        li= row.locname

@@ -10,7 +10,7 @@ const config = {
     connectionLimit: 10,
     queueLimit: 0
   },
-  listPerPage: env.LIST_PER_PAGE || 10,
+  listPerPage: env.LIST_PER_PAGE || 1000,
 };
 
 

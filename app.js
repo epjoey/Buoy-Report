@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/l', locationsRouter); // support short legacy urls. TODO: redirect.
 app.use('/locations', locationsRouter);
 app.use('/reporters', reportersRouter);
 app.use('/account', accountRouter);
