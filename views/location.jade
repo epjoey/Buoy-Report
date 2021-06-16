@@ -12,3 +12,44 @@ block content
         h3
           a(href=buoy.buoyId)
             span #{buoy.buoyid}: #{buoy.name}
+
+        .buoy-data-window
+          div(ng-repeat="page in buoyCtrl.pages")
+            span.data-loading(ng-if="!page.data")
+              Loading...
+            table(ng-if="page.data")
+              thead
+                tr
+                  th TIME
+                  th WVHT
+                  th DPD
+                  th MWD
+                  th WSPD
+                  th WDIR
+
+                tr.units
+                  th
+                  th ft
+                  th sec
+                  th
+                  th kn
+                  th
+
+              tbody
+                tr(ng-repeat="d in page.data")
+                  td {{ ::d.gmttime|unix2date }}
+                  td {{ ::d.swellheight|m2f }}
+                  td {{ ::d.swellperiod|clean }}
+                  td 
+                    {{ ::d.swelldir|clean }}
+                    sub {{::d.swelldir|dir2str}}
+                  td {{ ::d.windspeed|mps2kn }}
+                  td
+                    {{ ::d.winddir|clean }}
+                    sub {{::d.winddir|dir2str}}
+
+            a.paginate(
+              ng-if="$last && page.data.length",
+              ng-click="buoyCtrl.paginate()"
+            )
+              &darr;
