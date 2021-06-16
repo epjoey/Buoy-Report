@@ -1,0 +1,14 @@
+extends layout
+block vars
+  - var bodyClass = 'location-page';
+
+block headerLink
+  a.header-link(href="/locations/#{location.id}")= location.locname
+
+block content
+  div.buoys-wrap
+    div.buoys
+      for buoy in buoys.rows
+        h3
+          a(href=buoy.buoyId)
+            span #{buoy.buoyid}: #{buoy.name}

@@ -5,8 +5,10 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/fonts.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+
   - var bodyClass = '';
   block vars
+
   body(class='#{bodyClass}')
     div.wrapper
       block header
@@ -16,6 +18,8 @@ html
               a(href='/')
                 img.logo(src="/images/logo-lrg.png", width="46", height="46")
                 img.logo-large(src="/images/logo-lrg.png", width="101", height="101")
+              block headerLink
+                a.header-link(href='/') Buoy Report  
             div.right
               div.dd-menu
                 a.dd-trigger
@@ -33,14 +37,10 @@ html
     div.footer
       div.top
       div.bottom
-        div.container
-          p
-            a(href="http://www.hodaradesign.com", target="_blank") © hodara design 2012
-            &nbsp;|&nbsp;
-            a(href="/about") About Buoy Report
-            &nbsp;|&nbsp;
-            a(href="/buoys") Browse Buoys
-            &nbsp;|&nbsp;
-            a(href="/reporters") Browse Reporters
-          p All buoy and tide data from 
-            a(href="http://noaa.gov", target="_blank") NOAA
+        p
+          a(href="http://www.hodaradesign.com", target="_blank") © hodara design 2012 &nbsp;|&nbsp;
+          a(href="/about") About Buoy Report &nbsp;|&nbsp;
+          a(href="/buoys") Browse Buoys &nbsp;|&nbsp;
+          a(href="/reporters") Browse Reporters
+        p All buoy and tide data from 
+          a(href="http://noaa.gov", target="_blank") NOAA

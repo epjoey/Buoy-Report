@@ -4,4 +4,5 @@ block content
   h1 Locations
   ul
     for row in locations.rows
-        li= row.locname
+        li
+            a(href="/locations/#{location.id}")= row.locname

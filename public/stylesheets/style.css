@@ -1,3 +1,7 @@
+/*================================*/
+/* BASIC */
+/*================================*/
+/*================================*/
 body {
   font: 20px / 1.3em 'Museo300', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -5,25 +9,29 @@ body {
   padding: 0;
   margin: 0;
 }
-
 a {
   text-decoration: none;
   outline: 0;
 }
-p { margin: 0 0 8px 0; }
+p { margin: 0; }
 
+/*================================*/
+/* HELPERS */
+/*================================*/
+/*================================*/
 .left {float: left;}
 .right {float: right;}
 
+/*================================*/
+/* Wrapper/container */
+/*================================*/
+/*================================*/
 .wrapper {
   background: #0a3660;
-  min-height: calc(100vh - 400px);
+  min-height: calc(100vh - 380px); /* subtract footer height */
   width: 100%;
 }
-.footer {
-  height: 400px;
-  background: #0a3660;
-}
+
 .container {
   position: relative;
   margin: 0 auto;
@@ -36,6 +44,10 @@ p { margin: 0 0 8px 0; }
   }
 }
 
+/*================================*/
+/* HEADER */
+/*================================*/
+/*================================*/
 .header {
   font: 20px / 1.6em 'Museo500', 'Helvetica Neue', sans-serif;
   width: 100%;
@@ -51,33 +63,43 @@ p { margin: 0 0 8px 0; }
   left: 4px;
 }
 .header .logo-large { display: none; }
-
-@media only screen and (max-width: 959px){
-  .index-page .header .logo-large { display: none; }  
-  .index-page .banner { display: none; }
-}
-@media only screen and (min-width: 960px){
-  .index-page .header { margin-bottom: 46px; }
-  .index-page .header .logo { display: none; }
-  .index-page .header .logo-large {
-    display: block;
-    position: absolute;
-    top: -10px;
-    left: -30px;
-  }
-  .index-page .banner {
-    font: 49px / .8em 'MuseoSlab500', 'Museo500', 'Helvetica Neue', sans-serif;
-    -webkit-text-shadow: 0 2px 2px rgba(0,0,0,0.6);
-    -moz-text-shadow: 0 2px 2px rgba(0,0,0,0.6);
-    text-shadow: 0 2px 2px rgb(0 0 0 / 60%);
-    text-transform: uppercase;
-    margin: 0px 0 20px 0;
-    letter-spacing: -1px;
-    color: #ffffff;
-  }
+.header .header-link {
+  margin-left: 56px;
+  color: white;
+  font-size: 18px;
+  line-height: 32px;
 }
 
-/* Dropdowns */
+
+/*================================*/
+/* FOOTER */
+/*================================*/
+/*================================*/
+.footer {
+  height: 380px; /* The footer is pushed down by the wrapper height */
+  background: #0a3660;
+}
+.footer .top {
+  height: 280px;
+  background: url(/images/waves.png) 50% 0 repeat-x transparent;
+}
+.footer .bottom {
+  background-color: #0004d8;
+  color: #adb9c4;
+  font: 14px / 1.3em 'Museo500', 'Helvetica Neue', sans-serif;
+  overflow: hidden;
+  padding-top: 40px;
+  padding-left: 20px;
+  height: 60px;
+}
+.footer a { color: #adb9c4; }
+.footer p { margin-bottom: 4px; }
+
+
+/*================================*/
+/* DROPDOWNS */
+/*================================*/
+/*================================*/
 .dd-inner {display: none;}
 .dd-inner.show {display: block;}
 .dd-trigger {
@@ -89,6 +111,11 @@ p { margin: 0 0 8px 0; }
   text-align: center;
 }
 
+
+/*================================*/
+/* BLOCK LISTS */
+/*================================*/
+/*================================*/
 .block-list {
   overflow: hidden;
   list-style: none outside;
@@ -96,7 +123,6 @@ p { margin: 0 0 8px 0; }
   padding: 0;
   border: 0;
 }
-
 .block-list-item {
   width: 100%;
   margin: .15%;
@@ -134,18 +160,38 @@ p { margin: 0 0 8px 0; }
   overflow: hidden;
 }
 
-.footer .top {
-  height: 280px;
-  background: url(/images/waves.png) 50% 0 repeat-x transparent;
+
+/*================================*/
+/* INDEX PAGE */
+/*================================*/
+/*================================*/
+.index-page .header .logo-large { display: none; }  
+.index-page .banner { display: none; }
+@media only screen and (min-width: 960px){
+  .index-page .header { margin-bottom: 46px; }
+  .index-page .header .logo { display: none; }
+  .index-page .header-link { display: none; }
+  .index-page .header .logo-large {
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: -30px;
+  }
+  .index-page .banner {
+    display: block;
+    font: 49px / .8em 'MuseoSlab500', 'Museo500', 'Helvetica Neue', sans-serif;
+    -webkit-text-shadow: 0 2px 2px rgba(0,0,0,0.6);
+    -moz-text-shadow: 0 2px 2px rgba(0,0,0,0.6);
+    text-shadow: 0 2px 2px rgb(0 0 0 / 60%);
+    text-transform: uppercase;
+    margin: 0px 0 20px 0;
+    letter-spacing: -1px;
+    color: #ffffff;
+  }
 }
-.footer .bottom {
-  background-color: #0004d8;
-  color: #adb9c4;
-  font: 14px / 1.3em 'Museo500', 'Helvetica Neue', sans-serif;
-  overflow: hidden;
-  padding-top: 40px;
-  height: 80px;
-}
-.footer a {
-  color: #adb9c4;
-}
+
+/*================================*/
+/* LOCATION PAGE PAGE */
+/*================================*/
+/*================================*/
+.location-page .header > .container { width: auto; } /* header full-width cause it looks cool */

@@ -8,4 +8,4 @@ block content
   ul.block-list
     for row in locations.rows
       li.block-list-item
-        a= row.locname
+        a(href="/locations/#{row.id}")= row.locname
