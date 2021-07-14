@@ -5,51 +5,100 @@ block vars
 block headerLink
   a.header-link(href="/locations/#{location.id}")= location.locname
 
-block content
-  div.buoys-wrap
-    div.buoys
+block container
+  div.buoy-view-wrap
+    div.buoy-view-inner-wrap
       for buoy in buoys.rows
-        h3
-          a(href=buoy.buoyId)
-            span #{buoy.buoyid}: #{buoy.name}
 
-        .buoy-data-window
-          div(ng-repeat="page in buoyCtrl.pages")
-            span.data-loading(ng-if="!page.data")
-              Loading...
-            table(ng-if="page.data")
+        // Wave Data
+        div.buoy-view(ng-buoy-wave-data="#{buoy.buoyid}")
+          h3
+            a(href='https://www.ndbc.noaa.gov/station_page.php?station=#{buoy.buoyid}')
+              | #{buoy.buoyid}: #{buoy.name} (Spectral Wave)
+
+          .table-wrap
+
+            table(ng-repeat="table in buoyCtrl.tables")
               thead
                 tr
-                  th TIME
-                  th WVHT
-                  th DPD
+                  th Time
+                  th SwH
+                  th SwP
                   th MWD
-                  th WSPD
-                  th WDIR
+                  th Wind Wave
 
                 tr.units
                   th
                   th ft
                   th sec
                   th
-                  th kn
+                  th ft / sec dir
+
+              tbody
+                tr(ng-repeat="row in table.rows")
+                  td {{ row.time }}
+                  td {{ row.swellHeight }}
+                  td.swell-period {{ row.swellPeriod }}
+                  td
+                    {{ row.meanWaveDirection }}
+                    sub {{ row.swellDirection }}
+                  td
+                    {{ row.windWaveSummary }}
+                    &nbsp;
+                    sub {{ row.windWaveDirection }}
+
+            span.loading(ng-if="buoyCtrl.isLoading") Loading...
+            span.no-data(ng-if="!buoyCtrl.isLoading && !buoyCtrl.tables.length") Nothing to display.
+            a.paginate(
+              ng-click="buoyCtrl.load()"
+            )
+              &darr;
+
+        // Standard Data
+        div.buoy-view(ng-buoy-standard-data="#{buoy.buoyid}")
+          h3
+            a(href='https://www.ndbc.noaa.gov/station_page.php?station={{buoy.buoyid}}')
+              | #{buoy.buoyid}: #{buoy.name} (Standard)
+
+          .table-wrap
+
+            table(ng-repeat="table in buoyCtrl.tables")
+              thead
+                tr
+                  th Time
+                  th WvH
+                  th WvP
+                  th WvD
+                  th WdS
+                  th Gust
+                  th WdD
+
+                tr.units
+                  th
+                  th ft
+                  th sec
+                  th
+                  th mph
+                  th mph
                   th
 
               tbody
-                tr(ng-repeat="d in page.data")
-                  td {{ ::d.gmttime|unix2date }}
-                  td {{ ::d.swellheight|m2f }}
-                  td {{ ::d.swellperiod|clean }}
-                  td 
-                    {{ ::d.swelldir|clean }}
-                    sub {{::d.swelldir|dir2str}}
-                  td {{ ::d.windspeed|mps2kn }}
+                tr(ng-repeat="row in table.rows")
+                  td {{ row.time }}
+                  td {{ row.waveHeight }}
+                  td {{ row.wavePeriod }}
                   td
-                    {{ ::d.winddir|clean }}
-                    sub {{::d.winddir|dir2str}}
+                    {{ row.waveDirection }}
+                    sub {{ row.waveDirectionAbbr }}
+                  td {{ row.windSpeed }}
+                  td {{ row.gust }}
+                  td
+                    {{ row.windDirection }}
+                    sub {{ row.windDirectionAbbr }}
 
+            span.loading(ng-if="buoyCtrl.isLoading") Loading...
+            span.no-data(ng-if="!buoyCtrl.isLoading && !buoyCtrl.tables.length") Nothing to display.
             a.paginate(
-              ng-if="$last && page.data.length",
-              ng-click="buoyCtrl.paginate()"
+              ng-click="buoyCtrl.load()"
             )
               &darr;

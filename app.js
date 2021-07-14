@@ -19,6 +19,7 @@ const authRouter = require("./routes/auth");
 const indexRouter = require('./routes/index');
 const locationsRouter = require('./routes/locations');
 const reportersRouter = require('./routes/reporters');
+const buoysRouter = require('./routes/buoys');
 
 /**
  * App Variables
@@ -92,7 +93,6 @@ passport.deserializeUser((user, done) => {
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
-  console.log(res.locals.isAuthenticated)
   next();
 });
 
@@ -122,6 +122,7 @@ app.use('/', authRouter);
 app.use('/l', locationsRouter); // support short legacy urls. TODO: redirect.
 app.use('/locations', locationsRouter);
 app.use('/reporters', reportersRouter);
+app.use('/buoys', buoysRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

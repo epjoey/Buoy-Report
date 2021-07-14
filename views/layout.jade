@@ -5,11 +5,17 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/fonts.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="https://code.jquery.com/jquery-2.1.4.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js")
+    script(src="/javascripts/directives.js")
+    script(src="/javascripts/controllers.js")
+    script(src="/javascripts/app.js")
 
   - var bodyClass = '';
   block vars
 
-  body(class='#{bodyClass}')
+  body(class='#{bodyClass}', ng-app='app')
     div.wrapper
       block header
         div.header
@@ -31,8 +37,9 @@ html
                   else
                     li
                       a(href="/login") Log in
-      .container
-          block content
+      block container
+        .container
+            block content
 
     div.footer
       div.top
