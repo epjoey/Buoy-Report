@@ -2,14 +2,12 @@ const express = require('express');
 const router = express.Router();
 const locationService = require('../services/locations');
 
-router.get('/', async function(req, res, next) {
-  const locations = await locationService.getMultiple(req.query.page);
-  res.render('locations', { locations: locations });
-});
 
-router.get('/:locationId', async function(req, res, next) {
-  const location = await locationService.getSingle(parseInt(req.params.locationId));
-  console.log(location)
+router.get('/:locationId', async function(req, res, next){
+  let locationId = parseInt(req.params.locationId);
+  locationService.updateFavorites(req, res, locationId);
+
+  const location = await locationService.getSingle(locationId);
   const buoys = await locationService.getBuoys(location);
   res.render('location', {
     location: location,

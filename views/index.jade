@@ -5,7 +5,11 @@ block vars
 block content
   h1.banner Buoy Report
 
-  ul.block-list
-    for row in locations.rows
-      li.block-list-item
-        a(href="/locations/#{row.id}")= row.locname
+  div(ng-controller="LocationsCtrl")
+    div.mb-20
+      input(type="text" ng-model="locationSearchText" placeholder="Search Locations")
+
+    ul.block-list
+      for location in locations
+        li.block-list-item(ng-if='!locationSearchText || locationMatchesSearch("#{location.locname}")')
+          a(href="/locations/#{location.id}")= location.locname

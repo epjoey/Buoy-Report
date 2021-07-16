@@ -8,6 +8,7 @@ const expressSession = require("express-session");
 const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
 const logger = require('morgan');
+const cookieParser = require('cookie-parser');
 
 require("dotenv").config(); // loads the vars from the .env file into process.env
 
@@ -75,6 +76,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSession(session));
 

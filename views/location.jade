@@ -13,7 +13,7 @@ block container
         // Wave Data
         div.buoy-view(ng-buoy-wave-data="#{buoy.buoyid}")
           h3
-            a(href='https://www.ndbc.noaa.gov/station_page.php?station=#{buoy.buoyid}')
+            a(href="https://www.ndbc.noaa.gov/station_page.php?station=#{buoy.buoyid}" target="_blank")
               | #{buoy.buoyid}: #{buoy.name} (Spectral Wave)
 
           .table-wrap
@@ -40,11 +40,11 @@ block container
                   td {{ row.swellHeight }}
                   td.swell-period {{ row.swellPeriod }}
                   td
-                    {{ row.meanWaveDirection }}
+                    | {{ row.meanWaveDirection }}
                     sub {{ row.swellDirection }}
                   td
-                    {{ row.windWaveSummary }}
-                    &nbsp;
+                    | {{ row.windWaveSummary }}
+                    | &nbsp;
                     sub {{ row.windWaveDirection }}
 
             span.loading(ng-if="buoyCtrl.isLoading") Loading...
@@ -52,12 +52,12 @@ block container
             a.paginate(
               ng-click="buoyCtrl.load()"
             )
-              &darr;
+              | &darr;
 
         // Standard Data
         div.buoy-view(ng-buoy-standard-data="#{buoy.buoyid}")
           h3
-            a(href='https://www.ndbc.noaa.gov/station_page.php?station={{buoy.buoyid}}')
+            a(href="https://www.ndbc.noaa.gov/station_page.php?station=#{buoy.buoyid}" target="_blank")
               | #{buoy.buoyid}: #{buoy.name} (Standard)
 
           .table-wrap
@@ -88,12 +88,12 @@ block container
                   td {{ row.waveHeight }}
                   td {{ row.wavePeriod }}
                   td
-                    {{ row.waveDirection }}
+                    | {{ row.waveDirection }}
                     sub {{ row.waveDirectionAbbr }}
                   td {{ row.windSpeed }}
                   td {{ row.gust }}
                   td
-                    {{ row.windDirection }}
+                    | {{ row.windDirection }}
                     sub {{ row.windDirectionAbbr }}
 
             span.loading(ng-if="buoyCtrl.isLoading") Loading...
@@ -101,4 +101,4 @@ block container
             a.paginate(
               ng-click="buoyCtrl.load()"
             )
-              &darr;
+              | &darr;

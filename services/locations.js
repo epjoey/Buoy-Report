@@ -43,8 +43,38 @@ async function getBuoys(location, page = 1){
   }
 }
 
+
+function getFavorites(req){
+  let favorites = req.cookies.favorites;
+  favorites = favorites ? favorites.split('-') : [];
+  return favorites.map(f => parseInt(f));  
+}
+
+
+function setFavorites(res, favorites){
+  favorites = (favorites || []).join('-');
+  res.cookie('favorites', favorites);
+}
+
+
+// Keep your favorite locations at the top of the list.
+function updateFavorites(req, res, locationId){
+  let favorites = getFavorites(req);
+  let index = favorites.indexOf(locationId);
+  if(index >= 0){
+    favorites.splice(index, 1);
+  }
+  favorites.unshift(locationId);
+  setFavorites(res, favorites);
+}
+
+
 module.exports = {
   getSingle,
   getMultiple,
-  getBuoys
+  getBuoys,
+
+  getFavorites,
+  setFavorites,
+  updateFavorites
 }
