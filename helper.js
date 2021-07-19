@@ -11,6 +11,13 @@ function emptyOrRows(rows){
   return rows;
 }
 
+function first(rows){
+  if(!rows || !rows.length){
+    return null;
+  }
+  return rows[0];
+}
+
 function makeRequest(url){
   return new Promise((resolve, reject) => {
     const req = https.get(url, res => {
@@ -39,5 +46,6 @@ function makeRequest(url){
 module.exports = {
   getOffset,
   emptyOrRows,
+  first,
   makeRequest
 }

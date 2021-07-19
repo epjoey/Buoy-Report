@@ -20,26 +20,25 @@ html
 
   body(class='#{bodyClass}', ng-app='app')
     div.wrapper
-      block header
-        div.header
-          div.container
-            div.left
-              a(href='/')
-                img.logo(src="/images/logo-lrg.png", width="46", height="46")
-                img.logo-large(src="/images/logo-lrg.png", width="101", height="101")
-              block headerLink
-                a.header-link(href='/') Buoy Report  
+      div.header
+        div.container
+          div.header-left
+            a(href='/')
+              img.logo(src="/images/logo-lrg.png", width="46", height="46")
+              img.logo-large(src="/images/logo-lrg.png", width="101", height="101")
+            block headerLink
+              a.header-link(href='/') Buoy Report  
+          div.header-right
             div.right
-              div.dd-menu
-                a.dd-trigger
-                  img(src="/images/down-arrow.png", width="15", height="9")
-                ul.dd-inner
-                  if isAuthenticated
-                    li
-                      a(href="/user") My Reports
-                  else
-                    li
-                      a(href="/login") Log in
+              a.header-menu-trigger
+                img(src="/images/down-arrow.png", width="15", height="9")
+              ul.header-menu-inner
+                if isAuthenticated
+                  li
+                    a(href="/user") My Reports
+                else
+                  li
+                    a(href="/login") Log in
       block container
         .container
             block content

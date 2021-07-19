@@ -18,7 +18,6 @@ async function getMultiple(page = 1){
 }
 
 async function getSingle(id){
-  console.log('getSingle', id)
   let [rows, fields] = await db.query(
     'SELECT id, locname, timezone, latitude, longitude FROM `location` WHERE id = ?', 
     [id]

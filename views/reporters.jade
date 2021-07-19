@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1 Reporters
-  ul
+  ul.block-list
     for row in reporters.rows
-        li= row.name
+        li
+            span= row.name

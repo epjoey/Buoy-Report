@@ -32,8 +32,34 @@ async function getBuoyWaveData(id, offset = 0){
   });
 }
 
+async function getMultiple(page = 1){
+  const LIMIT = 1000;
+  const offset = helper.getOffset(page, LIMIT);
+  let [rows, fields] = await db.query(
+    'SELECT buoyid, name FROM `buoy` LIMIT ?,?', 
+    [offset, LIMIT]
+  );
+  rows = helper.emptyOrRows(rows);
+  const meta = {page};
+
+  return {
+    rows,
+    meta
+  }
+}
+
+async function getSingle(id){
+  let [rows, fields] = await db.query(
+    'SELECT buoyid, name FROM `buoy` WHERE buoyid = ?', 
+    [id]
+  );
+  return helper.first(rows);
+}
+
 
 module.exports = {
   getBuoyStandardData,
-  getBuoyWaveData
+  getBuoyWaveData,
+  getMultiple,
+  getSingle
 }

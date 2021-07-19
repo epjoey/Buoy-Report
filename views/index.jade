@@ -11,5 +11,7 @@ block content
 
     ul.block-list
       for location in locations
-        li.block-list-item(ng-if='!locationSearchText || locationMatchesSearch("#{location.locname}")')
+        li(
+          ng-if='!locationSearchText || locationMatchesSearch("#{location.locname}")'
+        )
           a(href="/locations/#{location.id}")= location.locname

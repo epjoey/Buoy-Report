@@ -1,0 +1,92 @@
+// Wave Data
+div.buoy-view(ng-buoy-wave-data="#{buoy.buoyid}")
+  h3
+    a(href="https://www.ndbc.noaa.gov/station_page.php?station=#{buoy.buoyid}" target="_blank")
+      | #{buoy.buoyid}: #{buoy.name} (Wave)
+
+  .table-wrap
+
+    table(ng-repeat="table in buoyCtrl.tables")
+      thead
+        tr
+          th Time
+          th SwH
+          th SwP
+          th MWD
+          th Wind Wave
+
+        tr.units
+          th UTC
+          th ft
+          th sec
+          th
+          th ft / sec dir
+
+      tbody
+        tr(ng-repeat="row in table.rows")
+          td {{ row.time.format('M/D h:mm a') }}
+          td {{ row.swellHeight }}
+          td.swell-period {{ row.swellPeriod }}
+          td
+            | {{ row.meanWaveDirection }}
+            sub {{ row.swellDirection }}
+          td
+            | {{ row.windWaveSummary }}
+            | &nbsp;
+            sub {{ row.windWaveDirection }}
+
+    span.loading(ng-if="buoyCtrl.isLoading") Loading...
+    span.no-data(ng-if="!buoyCtrl.isLoading && !buoyCtrl.tables.length") Nothing to display.
+    a.paginate(
+      ng-click="buoyCtrl.load()"
+    )
+      | &darr;
+
+// Standard Data
+div.buoy-view(ng-buoy-standard-data="#{buoy.buoyid}")
+  h3
+    a(href="https://www.ndbc.noaa.gov/station_page.php?station=#{buoy.buoyid}" target="_blank")
+      | #{buoy.buoyid}: #{buoy.name} (Standard)
+
+  .table-wrap
+
+    table(ng-repeat="table in buoyCtrl.tables")
+      thead
+        tr
+          th Time
+          th WvH
+          th WvP
+          th WvD
+          th WdS
+          th Gust
+          th WdD
+
+        tr.units
+          th UTC
+          th ft
+          th sec
+          th
+          th mph
+          th mph
+          th
+
+      tbody
+        tr(ng-repeat="row in table.rows")
+          td {{ row.time.format('M/D h:mm a') }}
+          td {{ row.waveHeight }}
+          td {{ row.wavePeriod }}
+          td
+            | {{ row.waveDirection }}
+            sub {{ row.waveDirectionAbbr }}
+          td {{ row.windSpeed }}
+          td {{ row.gust }}
+          td
+            | {{ row.windDirection }}
+            sub {{ row.windDirectionAbbr }}
+
+    span.loading(ng-if="buoyCtrl.isLoading") Loading...
+    span.no-data(ng-if="!buoyCtrl.isLoading && !buoyCtrl.tables.length") Nothing to display.
+    a.paginate(
+      ng-click="buoyCtrl.load()"
+    )
+      | &darr;

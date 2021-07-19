@@ -94,18 +94,43 @@ input[type="email"], textarea, select {
   color: #adb9c4;
   height: 32px;
 }
+.header .container {
+  display: flex;
+}
 .header .logo {
   position: absolute;
   top: -4px;
   left: 1px;
 }
 .header .logo-large { display: none; }
+.header-left {
+  flex: 1 1 80%;
+  overflow: hidden;
+}
+.header-right { flex: 1 1 20%; }
 .header .header-link {
   margin-left: 56px;
   color: white;
   font-size: 18px;
   line-height: 32px;
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 106px); /* logo on left, trigger on right */
+  position: absolute;
+  overflow: hidden;
 }
+.header-menu-inner {display: none;}
+.header-menu-inner.show {display: block;}
+.header-menu-trigger {
+  cursor: pointer;
+  background: #adb9c4;
+  display: block;
+  height: 32px;
+  width: 40px;
+  text-align: center;
+}
+
 
 
 /*================================*/
@@ -134,22 +159,6 @@ input[type="email"], textarea, select {
 
 
 /*================================*/
-/* DROPDOWNS */
-/*================================*/
-/*================================*/
-.dd-inner {display: none;}
-.dd-inner.show {display: block;}
-.dd-trigger {
-  cursor: pointer;
-  background: #adb9c4;
-  display: block;
-  height: 32px;
-  width: 40px;
-  text-align: center;
-}
-
-
-/*================================*/
 /* BLOCK LISTS */
 /*================================*/
 /*================================*/
@@ -160,7 +169,7 @@ input[type="email"], textarea, select {
   padding: 0;
   border: 0;
 }
-.block-list-item {
+.block-list > li {
   width: 100%;
   margin: .15%;
   background: #06223c;
@@ -170,12 +179,13 @@ input[type="email"], textarea, select {
   display: block;
 }
 @media only screen and (min-width: 768px){
-  .block-list-item {
+  .block-list > li {
     width: 33%;
   }
 }
 
-.block-list-item a {
+.block-list > li > a,
+.block-list > li > span {
   display: block;
   text-shadow: 0px 1px 1px rgb(0 0 0 / 60%);
   color: #ffffff;
@@ -187,7 +197,7 @@ input[type="email"], textarea, select {
   white-space: nowrap;
   overflow: hidden;
 }
-.block-list-item a:hover {
+.block-list > li > a:hover {
   background: #000;
   text-decoration: none;
 }
@@ -221,6 +231,7 @@ input[type="email"], textarea, select {
     color: #ffffff;
   }
 }
+
 
 /*================================*/
 /* LOCATION PAGE PAGE */
