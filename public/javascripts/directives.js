@@ -19,16 +19,8 @@
     return (parseFloat(metersPerSec) * 2.23694).toFixed(1); // meters/sec -> mph
   };
 
-  var parseDateTime = function(month, day, hour, minute){
-    if(month[0] === '0'){
-      month = month.slice(1);
-    }
-    var hour = hour === '00' ? 12 : parseInt(hour);
-    var isPm = hour > 12;
-    if(isPm){
-      hour -= 12;
-    }
-    return month + '/' + day + ' ' + hour + ':' + minute + (isPm ? 'pm' : 'am');
+  var parseDateTime = function(year, month, day, hour, minute){
+    return m = moment(year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":00Z");
   };
 
   var parseSeconds = function(seconds){
@@ -69,7 +61,7 @@
   // 2021 07 14 21 20 220  3.0  4.0    MM    MM    MM  MM 1015.6  12.6    MM  11.0   MM   MM    MM
   var parseStandardData = function(dataRow){
     var row = {};
-    row.time = parseDateTime(dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
+    row.time = parseDateTime(dataRow[0], dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
     row.windDirection = dataRow[5];
     row.windDirectionAbbr = parseDirection(row.windDirection);
     row.windSpeed = metersPerSec2mph(dataRow[6]);
@@ -89,7 +81,7 @@
   // 2021 07 14 19 40  2.0  2.0 10.0  0.4  4.0  NW   W    AVERAGE  7.4 312
   var parseWaveData = function(dataRow){
     var row = {};
-    row.time = parseDateTime(dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
+    row.time = parseDateTime(dataRow[0], dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
     row.swellHeight = meters2Feet(dataRow[6]);
     row.swellPeriod = parseSeconds(dataRow[7]);
     row.meanWaveDirection = parseInt(dataRow[14]);

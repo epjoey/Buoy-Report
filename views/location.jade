@@ -14,7 +14,7 @@ block container
         div.buoy-view(ng-buoy-wave-data="#{buoy.buoyid}")
           h3
             a(href="https://www.ndbc.noaa.gov/station_page.php?station=#{buoy.buoyid}" target="_blank")
-              | #{buoy.buoyid}: #{buoy.name} (Spectral Wave)
+              | #{buoy.buoyid}: #{buoy.name} (Wave)
 
           .table-wrap
 
@@ -28,7 +28,7 @@ block container
                   th Wind Wave
 
                 tr.units
-                  th
+                  th {{ moment.tz('#{location.timezone}').format('z') }}
                   th ft
                   th sec
                   th
@@ -36,7 +36,7 @@ block container
 
               tbody
                 tr(ng-repeat="row in table.rows")
-                  td {{ row.time }}
+                  td {{ row.time.tz('#{location.timezone}').format('M/D h:mm a') }}
                   td {{ row.swellHeight }}
                   td.swell-period {{ row.swellPeriod }}
                   td
@@ -74,7 +74,7 @@ block container
                   th WdD
 
                 tr.units
-                  th
+                  th {{ moment.tz('#{location.timezone}').format('z') }}
                   th ft
                   th sec
                   th
@@ -84,7 +84,7 @@ block container
 
               tbody
                 tr(ng-repeat="row in table.rows")
-                  td {{ row.time }}
+                  td {{ row.time.tz('#{location.timezone}').format('M/D h:mm a') }}
                   td {{ row.waveHeight }}
                   td {{ row.wavePeriod }}
                   td

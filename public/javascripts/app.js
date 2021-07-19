@@ -7,6 +7,8 @@
       window.$$scope = function(element){
         return angular.element(element).scope();
       };
+
+      $rootScope.moment = moment;
     }
   ]);
 })();
