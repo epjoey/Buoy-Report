@@ -19,8 +19,6 @@ router.get('/', async function(req, res, next) {
   })
 
   orderedLocations = _.union(orderedLocations, locations);
-  console.log('jellp')
-  console.log(orderedLocations)
   res.render('index', { locations: orderedLocations });
 });
 
