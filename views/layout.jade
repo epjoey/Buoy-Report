@@ -29,16 +29,23 @@ html
             block headerLink
               a.header-link(href='/') Buoy Report  
           div.header-right
-            div.right
-              a.header-menu-trigger
+            div.header-menu(ng-init="menuCtrl = { isOpen: false }")
+              a.header-menu-trigger(ng-click="menuCtrl.isOpen = !menuCtrl.isOpen")
                 img(src="/images/down-arrow.png", width="15", height="9")
-              ul.header-menu-inner
+              ul.header-menu-inner(
+                ng-class="menuCtrl.isOpen ? 'open' : ''"
+              )
+                block headerMenuItems
+
                 if isAuthenticated
                   li
-                    a(href="/user") My Reports
+                    a(href="/me") My profile
+                  li
+                    a(href="/logout") Logout
                 else
                   li
                     a(href="/login") Log in
+
       block container
         .container
             block content

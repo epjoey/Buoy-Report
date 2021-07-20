@@ -98,26 +98,10 @@ app.use((req, res, next) => {
   next();
 });
 
-const secured = (req, res, next) => {
-  if (req.user) {
-    return next();
-  }
-  req.session.returnTo = req.originalUrl;
-  res.redirect("/login");
-};
-
 
 /**
  * Routes Definitions
  */
-
-app.get("/user", secured, (req, res, next) => {
-  const { _raw, _json, ...userProfile } = req.user;
-  res.render("user", {
-    title: "Profile",
-    userProfile: userProfile
-  });
-});
 
 app.use('/', indexRouter);
 app.use('/', authRouter);

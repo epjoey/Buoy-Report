@@ -3,5 +3,5 @@ extends layout
 block content
   ul.block-list
     for buoy in buoys
-        li
-            a(href="/buoys/#{buoy.buoyid}") #{buoy.buoyid}: #{buoy.name}
+      li
+        a(href="/buoys/#{buoy.buoyid}") #{buoy.buoyid}: #{buoy.name}

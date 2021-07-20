@@ -15,6 +15,7 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+ul { list-style: none outside; }
 
 /*================================*/
 /* BASIC */
@@ -57,6 +58,7 @@ input[type="email"], textarea, select {
 /*================================*/
 .left { float: left; }
 .right { float: right; }
+.mb-10 { margin-bottom: 10px; }
 .mb-20 { margin-bottom: 20px; }
 
 /*================================*/
@@ -120,8 +122,11 @@ input[type="email"], textarea, select {
   position: absolute;
   overflow: hidden;
 }
-.header-menu-inner {display: none;}
-.header-menu-inner.show {display: block;}
+.header-menu {
+  float: right;
+  position: relative;
+  z-index: 2;
+}
 .header-menu-trigger {
   cursor: pointer;
   background: #adb9c4;
@@ -129,6 +134,43 @@ input[type="email"], textarea, select {
   height: 32px;
   width: 40px;
   text-align: center;
+}
+@media only screen and (min-width: 768px){
+  .header-menu-trigger:hover {
+    background: #cc09d6;
+    text-decoration: none;
+  }
+}
+.header-menu-inner {
+  background: #adb9c4;
+  position: absolute;
+  top: 32px;
+  right: 0;  
+  display: none;
+  min-width: 140px;
+}
+.header-menu-inner.open {display: block;}
+.header-menu-inner > li {
+  margin: 0;
+  border-bottom: 1px solid #8fa0af;
+}
+.header-menu-inner > li > a {
+  margin: 0;
+  display: block;
+  padding: 8px 16px;
+  border-top: 1px dotted #e8ecef;
+  font-size: 16px;
+  color: #06223c;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 0px rgb(255 255 255 / 40%);
+  text-align: right;
+  white-space: nowrap;
+}
+@media only screen and (min-width: 768px){
+  .header-menu-inner > li > a:hover {
+    background: #cc09d6;
+    text-decoration: none;
+  }
 }
 
 
@@ -234,7 +276,7 @@ input[type="email"], textarea, select {
 
 
 /*================================*/
-/* LOCATION PAGE PAGE */
+/* LOCATION PAGE */
 /*================================*/
 /*================================*/
 .location-page .header > .container { width: auto; } /* header full-width cause it looks cool */
@@ -348,4 +390,70 @@ input[type="email"], textarea, select {
   padding: 6px 0;
   width: 100%;
   text-align: center;
+}
+
+/*================================*/
+/* Snapshots */
+/*================================*/
+/*================================*/
+.snapshot {
+  background: #e8ecef;
+  padding: 10px 12px 16px;
+  font: normal 18px / 1.3em 'Helvetica Neue', arial, sans-serif;
+  color: #06223c;
+  position: relative;
+  -webkit-font-smoothing: subpixel-antialiased;
+  margin-bottom: 6px;
+  overflow: hidden;
+  border-top: 1px solid #ffffff;
+}
+.snapshot a {
+  font-weight: bold;
+  color: #06223c;
+  text-decoration: underline;  
+}
+.snapshot .obs-time {
+  display: inline-block;
+  margin-left: 12px;
+  font: 16px georgia;  
+}
+.snapshot .obs-time .tz {
+  display: inline-block;
+  margin-left: 8px;
+  font: 12px georgia;
+  color: #637789;
+}
+.snapshot .quality {
+  overflow: hidden;
+}
+.snapshot .quality .level {
+  float: left;
+  height: 4px;
+  margin: 7px 2px 0 0;
+  width: 26px;
+  background-color: #8fa0af;
+}
+.snapshot .quality.quality-1 .level-1,
+.snapshot .quality.quality-2 .level-1,
+.snapshot .quality.quality-2 .level-2,
+.snapshot .quality.quality-3 .level-1,
+.snapshot .quality.quality-3 .level-2,
+.snapshot .quality.quality-3 .level-3,
+.snapshot .quality.quality-4 .level-1,
+.snapshot .quality.quality-4 .level-2,
+.snapshot .quality.quality-4 .level-3,
+.snapshot .quality.quality-4 .level-4,
+.snapshot .quality.quality-5 .level-1,
+.snapshot .quality.quality-5 .level-2,
+.snapshot .quality.quality-5 .level-3,
+.snapshot .quality.quality-5 .level-4,
+.snapshot .quality.quality-5 .level-5 {
+  background-color: #0a3660;
+}
+.snapshot .image {
+  overflow: hidden;
+  text-align: center;
+}
+.snapshot .report-details {
+  font: italic 13px georgia;
 }

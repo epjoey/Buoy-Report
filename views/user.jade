@@ -1,1 +1,6 @@
 extends layout
+
+block content
+  div
+    for snapshot in snapshots.rows
+      include ./includes/snapshot.jade

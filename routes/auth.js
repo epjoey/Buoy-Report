@@ -7,6 +7,8 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const querystring = require("querystring");
+const reporterService = require('../services/reporters');
+const snapshotService = require('../services/snapshots');
 
 require("dotenv").config();
 
@@ -19,7 +21,7 @@ router.get(
     scope: "openid email profile"
   }),
   (req, res) => {
-    res.redirect("/");
+    res.redirect("/me");
   }
 );
 
@@ -67,6 +69,32 @@ router.get("/logout", (req, res) => {
 
   res.redirect(logoutURL);
 });
+
+
+const secured = (req, res, next) => {
+  if (req.user) {
+    return next();
+  }
+  req.session.returnTo = req.originalUrl;
+  res.redirect("/login");
+};
+
+
+router.get("/me", secured, async function(req, res, next){
+  const { _raw, _json, ...userProfile } = req.user;
+  const email = userProfile.emails[0].value;
+  const legacyReporter = await reporterService.getSingle(email);
+  console.log(legacyReporter)
+  let snapshots = {};
+  if(legacyReporter){
+    snapshots = await snapshotService.forReporter(legacyReporter.id);
+  }
+  res.render("user", {
+    userProfile: userProfile,
+    snapshots: snapshots
+  });
+});
+
 
 /**
  * Module Exports

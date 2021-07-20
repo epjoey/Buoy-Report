@@ -1,6 +1,6 @@
 (function(){
 
-  var directives = angular.module('app.directives', []);
+  var directives = angular.module('directives', []);
 
   var ROWS_PER_TABLE = 24;
 

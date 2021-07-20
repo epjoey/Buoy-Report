@@ -1,5 +1,6 @@
 (function() {
-  var controllers = angular.module('app.controllers', []);
+  var controllers = angular.module('controllers', []);
+
   controllers.controller('LocationsCtrl', [
     '$scope',
     function($scope){

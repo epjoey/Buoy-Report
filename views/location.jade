@@ -5,6 +5,10 @@ block vars
 block headerLink
   a.header-link(href="/locations/#{location.id}")= location.locname
 
+block headerMenuItems
+  li
+    a(href="/locations/#{location.id}/snapshots") Location snapshots
+
 block container
   div.buoy-view-wrap
     div.buoy-view-inner-wrap
