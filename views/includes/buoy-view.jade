@@ -16,7 +16,10 @@ div.buoy-view(ng-buoy-wave-data="#{buoy.buoyid}")
           th Wind Wave
 
         tr.units
-          th UTC
+          if location
+            th {{ moment.tz('#{location.timezone}').format('z') }}
+          else
+            th UTC
           th ft
           th sec
           th
@@ -24,7 +27,10 @@ div.buoy-view(ng-buoy-wave-data="#{buoy.buoyid}")
 
       tbody
         tr(ng-repeat="row in table.rows")
-          td {{ row.time.format('M/D h:mm a') }}
+          if location
+            td {{ row.time.tz('#{location.timezone}').format('M/D h:mm a') }}
+          else
+            td {{ row.time.tz('UTC').format('M/D h:mm a') }}
           td {{ row.swellHeight }}
           td.swell-period {{ row.swellPeriod }}
           td
@@ -62,7 +68,10 @@ div.buoy-view(ng-buoy-standard-data="#{buoy.buoyid}")
           th WdD
 
         tr.units
-          th UTC
+          if location
+            th {{ moment.tz('#{location.timezone}').format('z') }}
+          else
+            th UTC
           th ft
           th sec
           th
@@ -72,7 +81,10 @@ div.buoy-view(ng-buoy-standard-data="#{buoy.buoyid}")
 
       tbody
         tr(ng-repeat="row in table.rows")
-          td {{ row.time.format('M/D h:mm a') }}
+          if location
+            td {{ row.time.tz('#{location.timezone}').format('M/D h:mm a') }}
+          else
+            td {{ row.time.tz('UTC').format('M/D h:mm a') }}
           td {{ row.waveHeight }}
           td {{ row.wavePeriod }}
           td
