@@ -1,0 +1,29 @@
+form.form(ng-add-location-form)
+  .field
+    label
+      span Name
+      input(type='text', ng-model='req.name')
+
+  .field
+    label
+      span Latitude
+      input(type='text', ng-model='req.latitude')
+
+  .field
+    label
+      span Longitude
+      input(type='text', ng-model='req.longitude')
+
+  .field.errors(ng-if="error")
+    li {{ error }}         
+
+  .field.text-center
+    span.btn.cancel(ng-click="addLocation.isOpen = false") Cancel
+    &nbsp;
+    input.btn.submit(
+      type="submit",
+      ng-click="submit()",
+      ng-disabled="loading"
+      value="Submit"
+    )
+  .clear

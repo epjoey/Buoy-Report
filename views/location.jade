@@ -3,7 +3,7 @@ block vars
   - var bodyClass = 'location-page';
 
 block headerLink
-  a.header-link(href="/locations/#{location.id}")= location.locname
+  a.header-link(href="/locations/#{location.id}")= location.name
 
 block headerMenuItems
   li
@@ -30,7 +30,7 @@ block container
         .field
           label
             span Name
-            input(type='text', ng-model='req.locname')
+            input(type='text', ng-model='req.name')
 
         .field
           label

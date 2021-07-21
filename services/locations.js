@@ -4,7 +4,7 @@ const helper = require('../helper');
 
 
 async function create(reqBody, user){
-  let params = _.pick(reqBody, ['locname']);
+  let params = _.pick(reqBody, ['name']);
   if(reqBody.latitude){
     params.latitude = parseFloat(reqBody.latitude).toFixed(3);
   }
@@ -19,7 +19,7 @@ async function create(reqBody, user){
 
 
 async function update(location, reqBody, user){
-  let params = _.pick(reqBody, ['locname']);
+  let params = _.pick(reqBody, ['name']);
   if(reqBody.latitude){
     params.latitude = parseFloat(reqBody.latitude).toFixed(3);
   }
@@ -44,7 +44,7 @@ async function getMultiple(page = 1){
   const LIMIT = 1000;
   const offset = helper.getOffset(page, LIMIT);
   let [rows, fields] = await db.query(
-    'SELECT id, locname, timezone FROM `location` LIMIT ?,?', 
+    'SELECT id, name, timezone FROM `location` LIMIT ?,?', 
     [offset, LIMIT]
   );
   rows = helper.emptyOrRows(rows);
@@ -58,7 +58,7 @@ async function getMultiple(page = 1){
 
 async function getSingle(id){
   let [rows, fields] = await db.query(
-    'SELECT id, locname, timezone, latitude, longitude, email \
+    'SELECT id, name, timezone, latitude, longitude, email \
      FROM `location` WHERE id = ?', 
     [id]
   );
@@ -96,13 +96,15 @@ function setFavorites(res, favorites){
 
 
 // Keep your favorite locations at the top of the list.
-function updateFavorites(req, res, locationId){
+function updateFavorites(req, res, locationId, isDeleting){
   let favorites = getFavorites(req);
   let index = favorites.indexOf(locationId);
   if(index >= 0){
     favorites.splice(index, 1);
   }
-  favorites.unshift(locationId);
+  if(!isDeleting){
+    favorites.unshift(locationId);
+  }
   setFavorites(res, favorites);
 }
 

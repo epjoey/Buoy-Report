@@ -9,7 +9,7 @@ async function forLocation(locationId, page = 1){
     'SELECT r.id, r.text, r.quality, r.imagepath, \
     r.obsdate, r.waveheight, \
     u.id as reporterId, u.name as reporterName, u.email, \
-    l.id as locationId, l.locname, l.timezone \
+    l.id as locationId, l.name as locationName, l.timezone \
     FROM `report` r \
     LEFT JOIN `reporter` u ON r.reporterid = u.id \
     LEFT JOIN `location` l ON r.locationid = l.id \
@@ -35,7 +35,7 @@ async function forReporter(reporterId, page = 1){
     'SELECT r.id, r.text, r.quality, r.imagepath, \
     r.obsdate, r.waveheight, \
     u.id as reporterId, u.name as reporterName, u.email, \
-    l.id as locationId, l.locname, l.timezone \
+    l.id as locationId, l.name as locationName, l.timezone \
     FROM `report` r \
     LEFT JOIN `reporter` u ON r.reporterid = u.id \
     LEFT JOIN `location` l ON r.locationid = l.id \

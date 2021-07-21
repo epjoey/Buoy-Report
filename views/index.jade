@@ -28,6 +28,6 @@ block content
     ul.block-list
       for location in locations
         li(
-          ng-if='!locationSearchText || locationMatchesSearch("#{location.locname}")'
+          ng-if='!locationSearchText || locationMatchesSearch("#{location.name}")'
         )
-          a(href="/locations/#{location.id}")= location.locname
+          a(href="/locations/#{location.id}")= location.name

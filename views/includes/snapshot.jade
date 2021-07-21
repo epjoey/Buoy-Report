@@ -1,6 +1,6 @@
 div.snapshot
   div.mb-10
-    a(href="/locations/#{snapshot.locationId}")= snapshot.locname
+    a(href="/locations/#{snapshot.locationId}")= snapshot.locationName
     span.obs-time
       {{ moment.unix(#{snapshot.obsdate}).tz('#{snapshot.timezone}').format('M/D/YY h:mm a') }}
       span.tz

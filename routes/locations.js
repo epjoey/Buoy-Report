@@ -64,6 +64,7 @@ router.delete('/:locationId', helper.secured, async function(req, res, next){
   let success, error;
   try{
     success = await locationService.del(location);
+    locationService.updateFavorites(req, res, locationId, true);
   }
   catch(err){
     error = err.message;
