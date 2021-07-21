@@ -14,7 +14,7 @@ async function forLocation(locationId, page = 1){
     LEFT JOIN `reporter` u ON r.reporterid = u.id \
     LEFT JOIN `location` l ON r.locationid = l.id \
     WHERE r.locationid = ? AND r.public = 1 \
-    ORDER BY r.obsdate \
+    ORDER BY r.obsdate desc \
     LIMIT ?,?;', 
     [locationId, offset, LIMIT]
   );
@@ -40,7 +40,7 @@ async function forReporter(reporterId, page = 1){
     LEFT JOIN `reporter` u ON r.reporterid = u.id \
     LEFT JOIN `location` l ON r.locationid = l.id \
     WHERE r.reporterid = ? \
-    ORDER BY r.obsdate \
+    ORDER BY r.obsdate desc \
     LIMIT ?,?;', 
     [reporterId, offset, LIMIT]
   );
