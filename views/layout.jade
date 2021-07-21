@@ -36,15 +36,11 @@ html
                 ng-class="menuCtrl.isOpen ? 'open' : ''"
               )
                 block headerMenuItems
-
+                li
+                  a(href="/me") Account
                 if isAuthenticated
                   li
-                    a(href="/me") My profile
-                  li
                     a(href="/logout") Logout
-                else
-                  li
-                    a(href="/login") Log in
 
       block container
         .container

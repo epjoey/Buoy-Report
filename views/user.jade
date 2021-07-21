@@ -1,6 +1,10 @@
 extends layout
 
 block content
-  div
+  .info
+    p
+      | Dear Buoy Reporter, snapshotting of buoy reports is currently unavailable until further notice. We are sorry for the inconvenience. Past snapshots are rendered below. Email joey (jhodara at gmail.com) to request access to snapshotting.
+
+  .snapshots
     for snapshot in snapshots.rows
       include ./includes/snapshot.jade

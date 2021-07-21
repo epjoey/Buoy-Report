@@ -83,14 +83,14 @@ const secured = (req, res, next) => {
 router.get("/me", secured, async function(req, res, next){
   const { _raw, _json, ...userProfile } = req.user;
   const email = userProfile.emails[0].value;
-  const legacyReporter = await reporterService.getSingle(email);
-  console.log(legacyReporter)
+  const reporter = await reporterService.getSingle(email);
   let snapshots = {};
-  if(legacyReporter){
-    snapshots = await snapshotService.forReporter(legacyReporter.id);
+  if(reporter){
+    snapshots = await snapshotService.forReporter(reporter.id);
   }
   res.render("user", {
     userProfile: userProfile,
+    reporter: reporter, 
     snapshots: snapshots
   });
 });

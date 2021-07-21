@@ -279,7 +279,6 @@ input[type="email"], textarea, select {
 /* LOCATION PAGE */
 /*================================*/
 /*================================*/
-.location-page .header > .container { width: auto; } /* header full-width cause it looks cool */
 
 
 /*================================*/
@@ -396,16 +395,22 @@ input[type="email"], textarea, select {
 /* Snapshots */
 /*================================*/
 /*================================*/
+.snapshots {
+  overflow: hidden
+}
 .snapshot {
   background: #e8ecef;
   padding: 10px 12px 16px;
-  font: normal 18px / 1.3em 'Helvetica Neue', arial, sans-serif;
+  font: normal 18px / 1.4em 'Helvetica Neue', arial, sans-serif;
   color: #06223c;
   position: relative;
-  -webkit-font-smoothing: subpixel-antialiased;
-  margin-bottom: 6px;
+  font-smoothing: subpixel-antialiased;
+  margin:0 auto 6px;
   overflow: hidden;
-  border-top: 1px solid #ffffff;
+  border-top: 2px solid #ffffff;
+  max-width: 680px;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 .snapshot a {
   font-weight: bold;
@@ -456,4 +461,19 @@ input[type="email"], textarea, select {
 }
 .snapshot .report-details {
   font: italic 13px georgia;
+}
+
+
+/*------=- INFO -=---------*/
+.info {
+  background: #e8ecef;
+  padding: 20px;
+  font: normal 18px / 1.3em 'Helvetica Neue', arial, sans-serif;
+  color: #06223c;
+  margin: 0 auto 12px;
+  font-smoothing: subpixel-antialiased;
+  max-width: 680px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 2px solid darkorange;
 }

@@ -7,9 +7,9 @@ block headerLink
 
 block headerMenuItems
   li
-    a(href="/locations/#{location.id}") Back to buoys
+    a(href="/locations/#{location.id}") Buoy reports
 
 block content
-  div
+  .snapshots
     for snapshot in snapshots.rows
       include ./includes/snapshot.jade
