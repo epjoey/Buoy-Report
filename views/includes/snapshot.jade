@@ -24,7 +24,7 @@ div.snapshot
 
   if snapshot.imagepath
     div.image.mb-20
-      img(ng-src="{{ '#{snapshot.imagepath}'|snapshotImagePath }}")
+      img(width="680px" ng-src="{{ '#{snapshot.imagepath}'|snapshotImagePath }}")
 
   div.report-details
     |report ##{snapshot.id} by #{snapshot.reporterName}
