@@ -296,16 +296,16 @@ input[type="email"], textarea, select {
 /* LOCATION PAGE */
 /*================================*/
 /*================================*/
-
+.location-page .header {margin-bottom: 40px;}
 
 /*================================*/
 /* Buoy View */
 /*================================*/
 /*================================*/
 .buoy-view-wrap {
-  max-width: 96%;
+  max-width: 100%;
   overflow-x: auto;
-  margin: 0 2%;
+  margin: 0 auto;
 }
 .buoy-view-inner-wrap {
   margin: 0 auto;
@@ -315,6 +315,8 @@ input[type="email"], textarea, select {
 .buoy-view {
   font-family: helvetica, arial;
   width: 320px;
+  box-sizing: border-box;
+  margin: 0 10px 20px;
   display: inline-block;
   vertical-align: top;
 }
