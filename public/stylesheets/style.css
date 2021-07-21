@@ -467,13 +467,39 @@ input[type="email"], textarea, select {
 /*------=- INFO -=---------*/
 .info {
   background: #e8ecef;
-  padding: 20px;
-  font: normal 18px / 1.3em 'Helvetica Neue', arial, sans-serif;
+  padding: 12px;
+  font: normal 16px / 1.4em 'Helvetica Neue', arial, sans-serif;
   color: #06223c;
-  margin: 0 auto 12px;
+  margin: 0 auto 32px;
   font-smoothing: subpixel-antialiased;
-  max-width: 680px;
+  max-width: 600px;
   box-sizing: border-box;
   border-radius: 5px;
   border: 2px solid darkorange;
+}
+
+
+/*------=- ABOUT PAGE -=---------*/
+.about {
+  max-width: 600px;
+  margin: 32px auto 0;
+}
+.about h1 {
+  text-align: center;
+  font-size: 42px;
+  color: white;
+}
+.about p {
+  color: #adb9c4;
+  line-height: 1.5em;
+  text-shadow: 0 1px 1px rgb(0 0 0 / 20%);
+  margin-top: 8px;
+}
+.about p > a { font-weight: 500; color: white; }
+.about .border {
+  border-top: 2px dotted #06223c;
+  width: 30%;
+  margin: 16px auto;
+  height: 0;
+  display: block;
 }

@@ -22,4 +22,8 @@ router.get('/', async function(req, res, next) {
   res.render('index', { locations: orderedLocations });
 });
 
+router.get('/about', function(req, res, next) {
+  res.render('about', {});
+});
+
 module.exports = router;
