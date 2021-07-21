@@ -321,7 +321,10 @@ input[type="email"], textarea, select {
   vertical-align: top;
 }
 @media only screen and (min-width: 400px){
-  .buoy-view { padding-right: 40px; }
+  .buoy-view {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
 }
 .buoy-view h3 a {
   display: block;
@@ -336,7 +339,9 @@ input[type="email"], textarea, select {
 .buoy-view .table-wrap {
   max-height: 600px;
   overflow-y: auto;
+  overflow-x: auto;
   margin-bottom: 45px;
+  width: 320px;
 }
 .buoy-view table {
   max-width: 320px;
