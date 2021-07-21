@@ -15,7 +15,7 @@ async function getMultiple(page = 1){
     'SELECT id, name FROM `reporter` LIMIT ?,?', 
     [offset, LIMIT]
   );
-  rows = helper.emptyOrRows(rows);
+  rows = helper.rows(rows);
   const meta = {page};
 
   return {

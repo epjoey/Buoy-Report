@@ -589,4 +589,7 @@ input[type="email"], textarea, select {
 .btn.delete {
   color: darkred;
 }
+.btn[disabled] {
+  color: grey;
+}
 

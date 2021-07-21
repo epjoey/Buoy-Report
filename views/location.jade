@@ -12,7 +12,7 @@ block headerMenuItems
 block container
   .buoy-view-wrap
     .buoy-view-inner-wrap
-      for buoy in buoys.rows
+      for buoy in buoys
         include ./includes/buoy-view.jade
 
       .buoy-view
@@ -25,40 +25,4 @@ block container
 
 
   if isAuthenticated
-    .container
-      form.form(ng-update-location-form="#{JSON.stringify(location)}")
-        .field
-          label
-            span Name
-            input(type='text', ng-model='req.name')
-
-        .field
-          label
-            span Latitude
-            input(type='text', ng-model='req.latitude')
-
-        .field
-          label
-            span Longitude
-            input(type='text', ng-model='req.longitude')
-
-        .field.errors(ng-if="error")
-          li {{ error }}
-
-        .field.text-center
-          &nbsp;
-          input.btn.submit(
-            type="submit",
-            ng-click="submit()",
-            ng-disabled="loading"
-            value="Submit"
-          )
-
-          if user.email == location.email || user.email == 'jhodara@gmail.com'
-            div
-              button.btn.delete.right(
-                ng-click="deleteLocation()",
-                ng-disabled="loading"
-              ) Delete Location
-        .clear
-
+    include ./includes/update-location.jade

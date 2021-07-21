@@ -4,7 +4,7 @@ function getOffset(currentPage = 1, listPerPage = 1000){
   return (currentPage - 1) * [listPerPage];
 }
 
-function emptyOrRows(rows){
+function rows(rows){
   if(!rows){
     return [];
   }
@@ -53,7 +53,7 @@ function makeRequest(url){
 
 module.exports = {
   getOffset,
-  emptyOrRows,
+  rows,
   first,
   makeRequest,
   secured

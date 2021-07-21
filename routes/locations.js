@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const router = express.Router();
 const locationService = require('../services/locations');
 const snapshotService = require('../services/snapshots');
+const buoyService = require('../services/buoys');
 const helper = require('../helper');
 
 
@@ -29,7 +30,7 @@ router.get('/:locationId', async function(req, res, next){
   }
   // Make it show up first in the index page.
   locationService.updateFavorites(req, res, locationId);
-  const buoys = await locationService.getBuoys(location);
+  const buoys = await buoyService.forLocation(location);
   res.render('location', {
     location: location,
     buoys: buoys

@@ -171,7 +171,7 @@
     }
   ]);
 
-  directives.directive('ngAddLocationForm', [
+  directives.directive('ngAddLocation', [
     '$http',
     function($http){
       return {
@@ -197,25 +197,27 @@
   ]);
 
 
-  directives.directive('ngUpdateLocationForm', [
+  directives.directive('ngUpdateLocation', [
     '$http',
     function($http){
       return {
         scope: true,
         link: function($scope, $el, $attrs){
-          var location = JSON.parse($attrs.ngUpdateLocationForm);
+          var location = JSON.parse($attrs.ngUpdateLocation);
+          var buoys = JSON.parse($attrs.ngUpdateLocationBuoys);
           $scope.req = _.clone(location);
+          $scope.req.buoys = _.join(_.map(buoys, 'buoyid'), ', ');
           $scope.submit = function(){
             $scope.loading = true;
             $http.put('/locations/' + location.id, $scope.req).success(function(res){
               $scope.loading = false;
               $scope.error = res.error;
               if(!$scope.error){
-                window.location.href = '/locations/' + res.location.id;
+                window.location.reload();
               }
             }).error(function(res){
               $scope.loading = false;
-              $scope.error = 'Error adding location';
+              $scope.error = 'Error updating location';
             });
           };
 

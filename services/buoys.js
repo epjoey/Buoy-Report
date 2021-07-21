@@ -32,6 +32,16 @@ async function getBuoyWaveData(id, offset = 0){
   });
 }
 
+
+async function forLocation(location){
+  let [rows, fields] = await db.query(
+    'SELECT b.buoyid, b.name FROM `buoy` b JOIN `buoy_location` bl ON b.buoyid = bl.buoyid WHERE bl.locationid = ?', 
+    location.id
+  );
+  return helper.rows(rows);
+}
+
+
 async function getMultiple(page = 1){
   const LIMIT = 1000;
   const offset = helper.getOffset(page, LIMIT);
@@ -39,7 +49,7 @@ async function getMultiple(page = 1){
     'SELECT buoyid, name FROM `buoy` LIMIT ?,?', 
     [offset, LIMIT]
   );
-  rows = helper.emptyOrRows(rows);
+  rows = helper.rows(rows);
   const meta = {page};
 
   return {
@@ -60,6 +70,7 @@ async function getSingle(id){
 module.exports = {
   getBuoyStandardData,
   getBuoyWaveData,
+  forLocation,
   getMultiple,
   getSingle
 }

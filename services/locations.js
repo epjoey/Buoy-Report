@@ -4,7 +4,7 @@ const helper = require('../helper');
 
 
 async function create(reqBody, user){
-  let params = _.pick(reqBody, ['name']);
+  let params = _.pick(reqBody, ['name', 'timezone']);
   if(reqBody.latitude){
     params.latitude = parseFloat(reqBody.latitude).toFixed(3);
   }
@@ -12,14 +12,13 @@ async function create(reqBody, user){
     params.longitude = parseFloat(reqBody.longitude).toFixed(3);
   }
   params.email = user._json.email;
-  console.log(params)
   const [result, fields] = await db.query('INSERT INTO `location` SET ?', params);
   return result.insertId ? getSingle(result.insertId) : null;
 }
 
 
 async function update(location, reqBody, user){
-  let params = _.pick(reqBody, ['name']);
+  let params = _.pick(reqBody, ['name', 'timezone']);
   if(reqBody.latitude){
     params.latitude = parseFloat(reqBody.latitude).toFixed(3);
   }
@@ -29,6 +28,22 @@ async function update(location, reqBody, user){
   const [result, fields] = await db.query(
     'UPDATE `location` SET ? WHERE id = ?', [params, location.id]
   );
+
+  // Update buoys
+  await db.query('DELETE FROM `buoy_location` WHERE locationid = ?', location.id);
+  let buoyIds = _.map(_.split(reqBody.buoys, /[ ,]+/), _.trim);
+  _.forEach(buoyIds, async function(buoyId){
+    let params = {buoyid: buoyId, locationid: location.id};
+    try {
+      await db.query(
+        'INSERT INTO `buoy_location` SET ?', params
+      );
+    } catch {
+      return;
+      // Duplicate entry, pass.
+    }
+  });
+
   return result.changedRows ? getSingle(location.id) : null;
 }
 
@@ -47,7 +62,7 @@ async function getMultiple(page = 1){
     'SELECT id, name, timezone FROM `location` LIMIT ?,?', 
     [offset, LIMIT]
   );
-  rows = helper.emptyOrRows(rows);
+  rows = helper.rows(rows);
   const meta = {page};
   return {
     rows,
@@ -66,22 +81,6 @@ async function getSingle(id){
 }
 
 
-async function getBuoys(location, page = 1){
-  const LIMIT = 1000;
-  const offset = helper.getOffset(page, LIMIT);
-  let [rows, fields] = await db.query(
-    'SELECT * FROM `buoy` b JOIN `buoy_location` bl ON b.buoyid = bl.buoyid WHERE bl.locationid = ? LIMIT ?,?', 
-    [location.id, offset, LIMIT]
-  );
-  rows = helper.emptyOrRows(rows);
-  const meta = {page};
-  return {
-    rows,
-    meta
-  }
-}
-
-
 function getFavorites(req){
   let favorites = req.cookies.favorites;
   favorites = favorites ? favorites.split('-') : [];
@@ -91,7 +90,7 @@ function getFavorites(req){
 
 function setFavorites(res, favorites){
   favorites = (favorites || []).join('-');
-  res.cookie('favorites', favorites);
+  res.cookie('favorites', favorites, { maxAge: 900000, secure: true, sameSite: 'strict' });
 }
 
 
@@ -113,9 +112,9 @@ module.exports = {
   create,
   update,
   del,
+
   getSingle,
   getMultiple,
-  getBuoys,
 
   getFavorites,
   setFavorites,

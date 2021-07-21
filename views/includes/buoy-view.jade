@@ -16,7 +16,7 @@ div.buoy-view(ng-buoy-wave-data="#{buoy.buoyid}")
           th Wind Wave
 
         tr.units
-          if location
+          if location && location.timezone
             th {{ moment.tz('#{location.timezone}').format('z') }}
           else
             th UTC
@@ -27,7 +27,7 @@ div.buoy-view(ng-buoy-wave-data="#{buoy.buoyid}")
 
       tbody
         tr(ng-repeat="row in table.rows")
-          if location
+          if location && location.timezone
             td {{ row.time.tz('#{location.timezone}').format('M/D h:mm a') }}
           else
             td {{ row.time.tz('UTC').format('M/D h:mm a') }}
@@ -68,7 +68,7 @@ div.buoy-view(ng-buoy-standard-data="#{buoy.buoyid}")
           th WdD
 
         tr.units
-          if location
+          if location && location.timezone
             th {{ moment.tz('#{location.timezone}').format('z') }}
           else
             th UTC
@@ -81,7 +81,7 @@ div.buoy-view(ng-buoy-standard-data="#{buoy.buoyid}")
 
       tbody
         tr(ng-repeat="row in table.rows")
-          if location
+          if location && location.timezone
             td {{ row.time.tz('#{location.timezone}').format('M/D h:mm a') }}
           else
             td {{ row.time.tz('UTC').format('M/D h:mm a') }}

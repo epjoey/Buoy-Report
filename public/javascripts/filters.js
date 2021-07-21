@@ -1,6 +1,6 @@
 (function() {
-  var filters = angular.module('filters', []);
-  filters.filter('snapshotWaveHeight', function(){
+  angular.module('filters', [])
+  .filter('snapshotWaveHeight', function(){
     // `snapshot.waveheight` is stored as an number representing a range.
     // So 17.5 means the waves were 15-20.
     var map = {
@@ -20,7 +20,7 @@
     }
   })
 
-  filters.filter('snapshotImagePath', function(){
+  .filter('snapshotImagePath', function(){
     return function(path){
       if(path && !path.startsWith('http')){
         return 'https://www.buoyreport.com/uploads/' + path;

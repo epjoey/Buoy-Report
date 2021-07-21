@@ -1,8 +1,20 @@
-form.form(ng-add-location-form)
+form.form(
+  ng-add-location,
+  name="addLocationForm"
+)
   .field
     label
       span Name
-      input(type='text', ng-model='req.name')
+      input(type='text', ng-model='req.name', ng-required="true")
+
+  .field
+    label
+      span 
+        a(
+          href="https://github.com/moment/moment-timezone/blob/develop/data/packed/latest.json"
+          target="_blank"
+        ) Timezone
+      input(type='text', ng-model='req.timezone')
 
   .field
     label
@@ -23,7 +35,6 @@ form.form(ng-add-location-form)
     input.btn.submit(
       type="submit",
       ng-click="submit()",
-      ng-disabled="loading"
+      ng-disabled="loading || addLocationForm.$invalid || addLocationForm.$pristine"
       value="Submit"
     )
-  .clear

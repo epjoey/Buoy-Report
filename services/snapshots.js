@@ -18,7 +18,7 @@ async function forLocation(locationId, page = 1){
     LIMIT ?,?;', 
     [locationId, offset, LIMIT]
   );
-  rows = helper.emptyOrRows(rows);
+  rows = helper.rows(rows);
   const meta = {page};
 
   return {
@@ -44,7 +44,7 @@ async function forReporter(reporterId, page = 1){
     LIMIT ?,?;', 
     [reporterId, offset, LIMIT]
   );
-  rows = helper.emptyOrRows(rows);
+  rows = helper.rows(rows);
   const meta = {page};
 
   return {
