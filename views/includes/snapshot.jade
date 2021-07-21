@@ -1,0 +1,31 @@
+div.snapshot
+  div.mb-10
+    a(href="/locations/#{snapshot.locationId}")= snapshot.locname
+    span.obs-time
+      {{ moment.unix(#{snapshot.obsdate}).tz('#{snapshot.timezone}').format('M/D/YY h:mm a') }}
+      span.tz
+        {{ moment.tz('#{snapshot.timezone}').format('z') }}
+
+  if snapshot.quality
+    ul.quality.mb-10(class="quality-#{snapshot.quality}")
+      li.level.level-1
+      li.level.level-2
+      li.level.level-3
+      li.level.level-4
+      li.level.level-5
+
+  if snapshot.waveheight
+    div.mb-10
+      | {{ #{ snapshot.waveheight }|snapshotWaveHeight }}
+
+  if snapshot.text
+    div.mb-20
+      | #{ snapshot.text }
+
+  if snapshot.imagepath
+    div.image.mb-20
+      img(src="{{ '#{snapshot.imagepath}'|snapshotImagePath }}")
+
+  div.report-details
+    |report ##{snapshot.id} by #{snapshot.reporterName}
+

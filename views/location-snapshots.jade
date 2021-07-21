@@ -1,0 +1,15 @@
+extends layout
+block vars
+  - var bodyClass = 'snapshot-page';
+
+block headerLink
+  a.header-link(href="/locations/#{location.id}")= location.locname
+
+block headerMenuItems
+  li
+    a(href="/locations/#{location.id}") Back to buoys
+
+block content
+  div
+    for snapshot in snapshots.rows
+      include ./includes/snapshot.jade
