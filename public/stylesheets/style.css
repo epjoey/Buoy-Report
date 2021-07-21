@@ -58,8 +58,13 @@ input[type="email"], textarea, select {
 /*================================*/
 .left { float: left; }
 .right { float: right; }
+.clear { clear: both; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
 .mb-10 { margin-bottom: 10px; }
 .mb-20 { margin-bottom: 20px; }
+.link { cursor: pointer; }
+.link:hover { text-decoration: underline; }
 
 /*================================*/
 /* Wrapper/container */
@@ -251,6 +256,18 @@ input[type="email"], textarea, select {
 /*================================*/
 .index-page .header .logo-large { display: none; }
 .index-page .banner { display: none; }
+.index-page .search-locations { float: left; width: 50%; }
+.index-page .add-location {
+  color: #ffffff;
+  font-size: 20px;
+  font-family: 'Museo500', 'Helvetica Neue', sans-serif;
+  display: inline-block;
+  padding: 4px;
+  float: right;
+}
+@media only screen and (max-width: 480px){
+  .index-page .add-location { font-size: 16px }
+}
 @media only screen and (min-width: 960px){
   .index-page .header { margin-bottom: 46px; }
   .index-page .header .logo { display: none; }
@@ -503,3 +520,73 @@ input[type="email"], textarea, select {
   height: 0;
   display: block;
 }
+
+
+/*-------- FORMS ---------*/
+.form-title {
+  max-width: 680px;
+  color: #e8ecef;
+  font: 24px / 32px 'Museo300', 'Helvetica Neue', sans-serif;
+  margin:0 auto 20px;
+}
+.form {
+  background: #e8ecef;
+  padding: 16px;
+  font: normal 18px / 1.4em 'Helvetica Neue', arial, sans-serif;
+  color: #06223c;
+  font-smoothing: subpixel-antialiased;
+  margin:0 auto;
+  border-top: 2px solid #ffffff;
+  max-width: 680px;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+.form .field {margin-bottom: 8px;}
+.form .field > label > span {
+  display: inline-block;
+  float: left;
+  line-height: 35px;
+  margin-right: 20px;
+}
+@media only screen and (min-width: 620px){
+  .form .field > label > span {
+    text-align: right;
+    min-width: 200px;
+  }
+}
+.form .errors {
+  list-style: none;
+  color: darkred;
+  text-align: center;
+  background: white;
+  border-radius: 5px;
+  padding: 6px;
+  border: 1px solid darkred;  
+}
+
+/*---------------  Buttons ------------*/
+.btn {
+  font: 18px / 30px 'Museo500', 'Helvetica Neue', sans-serif;
+  padding: 0px 22px;
+  border: 1px solid #8698a8;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  margin: 0 0 4px 0;
+  text-shadow: 0 1px 0px rgb(255 255 255 / 80%);
+  border-radius: 3px;
+  background-clip: padding-box;
+  background: #ffffff;
+  background: linear-gradient(bottom,#adb9c4 0%,#ffffff 100%);
+  box-shadow: inset 0 0 3px rgb(255 255 255 / 40%);
+}
+.btn.submit {
+  color: #cc09d6;
+}
+.btn.cancel {
+  color: #06223c;
+}
+.btn.delete {
+  color: darkred;
+}
+

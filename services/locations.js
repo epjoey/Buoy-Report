@@ -1,5 +1,44 @@
+const _ = require('lodash');
 const db = require('../db');
 const helper = require('../helper');
+
+
+async function create(reqBody, user){
+  let params = _.pick(reqBody, ['locname']);
+  if(reqBody.latitude){
+    params.latitude = parseFloat(reqBody.latitude).toFixed(3);
+  }
+  if(reqBody.longitude){
+    params.longitude = parseFloat(reqBody.longitude).toFixed(3);
+  }
+  params.email = user._json.email;
+  console.log(params)
+  const [result, fields] = await db.query('INSERT INTO `location` SET ?', params);
+  return result.insertId ? getSingle(result.insertId) : null;
+}
+
+
+async function update(location, reqBody, user){
+  let params = _.pick(reqBody, ['locname']);
+  if(reqBody.latitude){
+    params.latitude = parseFloat(reqBody.latitude).toFixed(3);
+  }
+  if(reqBody.longitude){
+    params.longitude = parseFloat(reqBody.longitude).toFixed(3);
+  }
+  const [result, fields] = await db.query(
+    'UPDATE `location` SET ? WHERE id = ?', [params, location.id]
+  );
+  return result.changedRows ? getSingle(location.id) : null;
+}
+
+
+async function del(location){
+  const [result, fields] = await db.query(
+    'DELETE FROM `location` WHERE id = ?', location.id
+  );
+  return result.affectedRows ? true : false;
+}
 
 async function getMultiple(page = 1){
   const LIMIT = 1000;
@@ -10,20 +49,20 @@ async function getMultiple(page = 1){
   );
   rows = helper.emptyOrRows(rows);
   const meta = {page};
-
   return {
     rows,
     meta
   }
 }
 
+
 async function getSingle(id){
   let [rows, fields] = await db.query(
-    'SELECT id, locname, timezone, latitude, longitude FROM `location` WHERE id = ?', 
+    'SELECT id, locname, timezone, latitude, longitude, email \
+     FROM `location` WHERE id = ?', 
     [id]
   );
-  let row = rows[0];
-  return row;
+  return helper.first(rows);
 }
 
 
@@ -36,7 +75,6 @@ async function getBuoys(location, page = 1){
   );
   rows = helper.emptyOrRows(rows);
   const meta = {page};
-
   return {
     rows,
     meta
@@ -70,6 +108,9 @@ function updateFavorites(req, res, locationId){
 
 
 module.exports = {
+  create,
+  update,
+  del,
   getSingle,
   getMultiple,
   getBuoys,

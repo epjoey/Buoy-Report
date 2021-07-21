@@ -170,4 +170,69 @@
       };
     }
   ]);
+
+  directives.directive('ngAddLocationForm', [
+    '$http',
+    function($http){
+      return {
+        scope: true,
+        link: function($scope, $el, $attrs){
+          $scope.req = {};
+          $scope.submit = function(){
+            $scope.loading = true;
+            $http.post('/locations', $scope.req).success(function(res){
+              $scope.loading = false;
+              $scope.error = res.error;
+              if(res.location){
+                window.location.href = '/locations/' + res.location.id;
+              }
+            }).error(function(res){
+              $scope.loading = false;
+              $scope.error = 'Error adding location';
+            });
+          };
+        }
+      };
+    }
+  ]);
+
+
+  directives.directive('ngUpdateLocationForm', [
+    '$http',
+    function($http){
+      return {
+        scope: true,
+        link: function($scope, $el, $attrs){
+          var location = JSON.parse($attrs.ngUpdateLocationForm);
+          $scope.req = _.clone(location);
+          $scope.submit = function(){
+            $scope.loading = true;
+            $http.put('/locations/' + location.id, $scope.req).success(function(res){
+              $scope.loading = false;
+              $scope.error = res.error;
+              if(!$scope.error){
+                window.location.href = '/locations/' + res.location.id;
+              }
+            }).error(function(res){
+              $scope.loading = false;
+              $scope.error = 'Error adding location';
+            });
+          };
+
+          $scope.deleteLocation = function(){
+            $http.delete('/locations/' + location.id).success(function(res){
+              $scope.loading = false;
+              $scope.error = res.error;
+              if(res.success){
+                window.location.href = '/';
+              }
+            }).error(function(res){
+              $scope.loading = false;
+              $scope.error = 'Error deleting location';
+            });
+          };
+        }
+      };
+    }
+  ]);
 })();

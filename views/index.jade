@@ -7,7 +7,23 @@ block content
 
   div(ng-controller="LocationsCtrl")
     div.mb-20
-      input(type="text" ng-model="locationSearchText" placeholder="Search Locations")
+      input.search-locations(
+        type="text",
+        ng-model="locationSearchText",
+        placeholder="Search Locations"
+      )
+
+      if isAuthenticated
+        span.link.add-location(ng-click="addLocation.isOpen = !addLocation.isOpen")
+          |+ Add Location
+      else
+        a.add-location.link(href="/login")
+          |+ Add Location
+      .clear
+
+    if isAuthenticated
+      .mb-20(ng-if="addLocation.isOpen")
+        include ./includes/add-location.jade
 
     ul.block-list
       for location in locations

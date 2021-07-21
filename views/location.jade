@@ -10,15 +10,55 @@ block headerMenuItems
     a(href="/locations/#{location.id}/snapshots") Snapshots
 
 block container
-  div.buoy-view-wrap
-    div.buoy-view-inner-wrap
+  .buoy-view-wrap
+    .buoy-view-inner-wrap
       for buoy in buoys.rows
         include ./includes/buoy-view.jade
 
-      div.buoy-view
+      .buoy-view
         iframe(
           width="320",
           height="566",
           src="https://embed.windy.com/embed2.html?lat=#{location.latitude}&lon#{location.longitude}&detailLat=#{location.latitude}&detailLon=#{location.longitude}&width=320&height=450&zoom=5&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1",
           frameborder="0"
         )
+
+
+  if isAuthenticated
+    .container
+      form.form(ng-update-location-form="#{JSON.stringify(location)}")
+        .field
+          label
+            span Name
+            input(type='text', ng-model='req.locname')
+
+        .field
+          label
+            span Latitude
+            input(type='text', ng-model='req.latitude')
+
+        .field
+          label
+            span Longitude
+            input(type='text', ng-model='req.longitude')
+
+        .field.errors(ng-if="error")
+          li {{ error }}
+
+        .field.text-center
+          &nbsp;
+          input.btn.submit(
+            type="submit",
+            ng-click="submit()",
+            ng-disabled="loading"
+            value="Submit"
+          )
+
+          if user.email == location.email || user.email == 'jhodara@gmail.com'
+            div
+              button.btn.delete.right(
+                ng-click="deleteLocation()",
+                ng-disabled="loading"
+              ) Delete Location
+        .clear
+

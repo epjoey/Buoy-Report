@@ -18,6 +18,14 @@ function first(rows){
   return rows[0];
 }
 
+function secured(req, res, next){
+  if(req.user){
+    return next();
+  }
+  req.session.returnTo = req.originalUrl;
+  res.redirect("/login");
+}
+
 function makeRequest(url){
   return new Promise((resolve, reject) => {
     const req = https.get(url, res => {
@@ -47,5 +55,6 @@ module.exports = {
   getOffset,
   emptyOrRows,
   first,
-  makeRequest
+  makeRequest,
+  secured
 }

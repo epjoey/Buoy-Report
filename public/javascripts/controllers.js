@@ -5,6 +5,7 @@
     '$scope',
     function($scope){
       $scope.locationSearchText = '';
+      $scope.addLocation = {isOpen: false};
       $scope.locationMatchesSearch = function(locationName){
         if(!$scope.locationSearchText.length){
           return true;

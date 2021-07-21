@@ -9,6 +9,7 @@ const passport = require("passport");
 const querystring = require("querystring");
 const reporterService = require('../services/reporters');
 const snapshotService = require('../services/snapshots');
+const helper = require('../helper');
 
 require("dotenv").config();
 
@@ -71,19 +72,9 @@ router.get("/logout", (req, res) => {
 });
 
 
-const secured = (req, res, next) => {
-  if (req.user) {
-    return next();
-  }
-  req.session.returnTo = req.originalUrl;
-  res.redirect("/login");
-};
-
-
-router.get("/me", secured, async function(req, res, next){
+router.get("/me", helper.secured, async function(req, res, next){
   const { _raw, _json, ...userProfile } = req.user;
-  const email = userProfile.emails[0].value;
-  const reporter = await reporterService.getSingle(email);
+  const reporter = await reporterService.getSingle(_json.email);
   let snapshots = {};
   if(reporter){
     snapshots = await snapshotService.forReporter(reporter.id);
