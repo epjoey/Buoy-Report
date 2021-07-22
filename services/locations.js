@@ -33,14 +33,15 @@ async function update(location, reqBody, user){
   await db.query('DELETE FROM `buoy_location` WHERE locationid = ?', location.id);
   let buoyIds = _.map(_.split(reqBody.buoys, /[ ,]+/), _.trim);
   _.forEach(buoyIds, async function(buoyId){
-    let params = {buoyid: buoyId, locationid: location.id};
+    let params = {buoyid: buoyId, locationid: location.id, created: Date.now()};
+    console.log(params)
     try {
       await db.query(
         'INSERT INTO `buoy_location` SET ?', params
       );
-    } catch {
-      return;
-      // Duplicate entry, pass.
+    } catch(err) {
+      console.log('error inserting buoy location:', err);
+      return; // Duplicate entry, pass.
     }
   });
 

@@ -35,7 +35,11 @@ async function getBuoyWaveData(id, offset = 0){
 
 async function forLocation(location){
   let [rows, fields] = await db.query(
-    'SELECT b.buoyid, b.name FROM `buoy` b JOIN `buoy_location` bl ON b.buoyid = bl.buoyid WHERE bl.locationid = ?', 
+    'SELECT bl.buoyid, b.name \
+    FROM `buoy_location` bl \
+    LEFT JOIN `buoy` b ON bl.buoyid = b.buoyid \
+    WHERE bl.locationid = ? \
+    ORDER BY bl.created asc',
     location.id
   );
   return helper.rows(rows);
@@ -46,7 +50,7 @@ async function getMultiple(page = 1){
   const LIMIT = 1000;
   const offset = helper.getOffset(page, LIMIT);
   let [rows, fields] = await db.query(
-    'SELECT buoyid, name FROM `buoy` LIMIT ?,?', 
+    'SELECT buoyid, name FROM `buoy` LIMIT ?,?',
     [offset, LIMIT]
   );
   rows = helper.rows(rows);
@@ -60,7 +64,7 @@ async function getMultiple(page = 1){
 
 async function getSingle(id){
   let [rows, fields] = await db.query(
-    'SELECT buoyid, name FROM `buoy` WHERE buoyid = ?', 
+    'SELECT buoyid, name FROM `buoy` WHERE buoyid = ?',
     [id]
   );
   return helper.first(rows);
