@@ -228,6 +228,7 @@ input[type="email"], textarea, select {
   .block-list > li {
     float: left;
     width: 33%;
+    margin-right: 2px;
   }
 }
 
@@ -297,6 +298,7 @@ input[type="email"], textarea, select {
 /*================================*/
 /*================================*/
 .location-page .header {margin-bottom: 40px;}
+.location-page .snapshots {margin-top: 20px;}
 
 /*================================*/
 /* Buoy View */
@@ -435,14 +437,14 @@ input[type="email"], textarea, select {
   border-radius: 5px;
   box-sizing: border-box;
 }
-.snapshot a {
+.snapshot .location-name {
   font-weight: bold;
   color: #06223c;
-  text-decoration: underline;  
+  text-decoration: underline;
+  margin-right: 12px;
 }
 .snapshot .obs-time {
   display: inline-block;
-  margin-left: 12px;
   font: 16px georgia;  
 }
 .snapshot .obs-time .tz {
@@ -555,7 +557,7 @@ input[type="email"], textarea, select {
   line-height: 35px;
   margin-right: 20px;
 }
-.form .btns { margin-top: 20px; }
+
 @media only screen and (min-width: 620px){
   .form .field > label > span {
     text-align: right;
@@ -574,6 +576,7 @@ input[type="email"], textarea, select {
 }
 
 /*---------------  Buttons ------------*/
+.btns { margin-top: 20px; }
 .btn {
   font: 18px / 30px 'Museo500', 'Helvetica Neue', sans-serif;
   padding: 0px 18px;

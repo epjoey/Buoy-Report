@@ -1,31 +1,30 @@
-div.snapshot
-  div.mb-10
-    a(href="/locations/#{snapshot.locationId}")= snapshot.locationName
+.snapshot
+  .mb-10
+    a.location-name(ng-href="{{ '/locations/' + snapshot.locationId }}") {{ snapshot.locationName }}
     span.obs-time
-      | {{ moment.unix(#{snapshot.obsdate}).tz('#{snapshot.timezone}').format('M/D/YY h:mm a') }}
+      | {{ moment.unix(snapshot.obsdate).tz(snapshot.timezone).format('M/D/YY h:mm a') }}
       span.tz
-        | {{ moment.tz('#{snapshot.timezone}').format('z') }}
+        | {{ moment.tz(snapshot.timezone).format('z') }}
 
-  if snapshot.quality
-    ul.quality.mb-10(class="quality-#{snapshot.quality}")
-      li.level.level-1
-      li.level.level-2
-      li.level.level-3
-      li.level.level-4
-      li.level.level-5
+  ul.quality.mb-10(
+    ng-if="snapshot.quality",
+    ng-class="'quality-' + snapshot.quality"
+  )
+    li.level.level-1
+    li.level.level-2
+    li.level.level-3
+    li.level.level-4
+    li.level.level-5
 
-  if snapshot.waveheight
-    div.mb-10
-      | {{ #{ snapshot.waveheight }|snapshotWaveHeight }}
+  .mb-10(ng-if="snapshot.waveheight")
+    | {{ snapshot.waveheight|snapshotWaveHeight }}
 
-  if snapshot.text
-    div.mb-20
-      | #{ snapshot.text }
+  .mb-20(ng-if="snapshot.text")
+    | {{ snapshot.text }}
 
-  if snapshot.imagepath
-    div.image.mb-20
-      img(width="680px" ng-src="{{ '#{snapshot.imagepath}'|snapshotImagePath }}")
+  .image.mb-20(ng-if="snapshot.imagepath")
+    img(width="680px" ng-src="{{ snapshot.imagepath|snapshotImagePath }}")
 
-  div.report-details
-    |report ##{snapshot.id} by #{snapshot.reporterName}
+  .report-details
+    |report {{ snapshot.id }} by {{ snapshot.reporterName }}
 

@@ -25,3 +25,12 @@ block container
 
   if isAuthenticated
     include ./includes/update-location.jade
+
+  .container.snapshots(ng-snapshots="#{location.id}")
+    div(ng-repeat="snapshot in snapshots")
+      include ./includes/snapshot.jade
+
+    .text-center.btns
+      a.btn(ng-click="load()") Load {{ page > 0 ? 'more' : 'snapshots' }}
+
+

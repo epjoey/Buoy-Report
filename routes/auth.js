@@ -76,15 +76,16 @@ router.get("/logout", (req, res) => {
 
 
 router.get("/me", helper.secured, async function(req, res, next){
-  const { _raw, _json, ...userProfile } = req.user;
-  const reporter = await reporterService.getSingle(_json.email);
-  let snapshots = {};
-  if(reporter){
-    snapshots = await snapshotService.forReporter(reporter.id);
-  }
-  res.render("user", {
-    userProfile: userProfile,
-    reporter: reporter,
+  const reporter = await reporterService.getSingle(req.user._json.email);
+  res.render("reporter", {
+    reporter: reporter
+  });
+});
+
+
+router.get("/snapshots", helper.secured, async function(req, res, next){
+  const snapshots = await snapshotService.forReporter(req.user._json.email, req.query.page);
+  res.json({
     snapshots: snapshots
   });
 });

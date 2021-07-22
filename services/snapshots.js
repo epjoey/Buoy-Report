@@ -3,7 +3,7 @@ const helper = require('../helper');
 
 
 async function forLocation(locationId, page = 1){
-  const LIMIT = 1000;
+  const LIMIT = 10;
   const offset = helper.getOffset(page, LIMIT);
   let [rows, fields] = await db.query(
     'SELECT r.id, r.text, r.quality, r.imagepath, \
@@ -15,7 +15,7 @@ async function forLocation(locationId, page = 1){
     LEFT JOIN `location` l ON r.locationid = l.id \
     WHERE r.locationid = ? AND r.public = 1 \
     ORDER BY r.obsdate desc \
-    LIMIT ?,?;', 
+    LIMIT ?,?', 
     [locationId, offset, LIMIT]
   );
   rows = helper.rows(rows);
@@ -28,8 +28,8 @@ async function forLocation(locationId, page = 1){
 }
 
 
-async function forReporter(reporterId, page = 1){
-  const LIMIT = 1000;
+async function forReporter(reporterEmail, page = 1){
+  const LIMIT = 10;
   const offset = helper.getOffset(page, LIMIT);
   let [rows, fields] = await db.query(
     'SELECT r.id, r.text, r.quality, r.imagepath, \
@@ -39,10 +39,10 @@ async function forReporter(reporterId, page = 1){
     FROM `report` r \
     LEFT JOIN `reporter` u ON r.reporterid = u.id \
     LEFT JOIN `location` l ON r.locationid = l.id \
-    WHERE r.reporterid = ? \
+    WHERE u.email = ? \
     ORDER BY r.obsdate desc \
-    LIMIT ?,?;', 
-    [reporterId, offset, LIMIT]
+    LIMIT ?,?', 
+    [reporterEmail, offset, LIMIT]
   );
   rows = helper.rows(rows);
   const meta = {page};

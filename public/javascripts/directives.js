@@ -237,4 +237,34 @@
       };
     }
   ]);
+
+
+  directives.directive('ngSnapshots', [
+    '$http',
+    function($http){
+      return {
+        scope: true,
+        link: function($scope, $el, $attrs){
+          var locationId = $attrs.ngSnapshots;
+          $scope.page = 0;
+          $scope.snapshots = [];
+          var url = (locationId ? '/locations/' + locationId : '') + '/snapshots?page=';
+          $scope.load = function(){
+            $scope.loading = true;
+            $scope.page += 1;
+            $http.get(url + $scope.page).success(function(res){
+              $scope.loading = false;
+              $scope.snapshots = _.concat($scope.snapshots, res.snapshots.rows);
+            }).error(function(res){
+              $scope.loading = false;
+            });
+          };
+          // Location snapshots feed starts off blank.
+          if(!locationId){
+            $scope.load();
+          }
+        }
+      };
+    }
+  ]);
 })();

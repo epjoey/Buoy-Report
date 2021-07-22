@@ -5,6 +5,10 @@ block content
     p
       | Dear Buoy Reporter, snapshotting of buoy data is currently unavailable until further notice. &#128580; We are sorry for the inconvenience. Past snapshots are available below. Email joey (jhodara at gmail.com) to request the feature back.
 
-  .snapshots
-    for snapshot in snapshots.rows
+  .snapshots(ng-snapshots)
+    div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade
+
+    .text-center.btns
+      a.btn(ng-click="load()") Load more
+
