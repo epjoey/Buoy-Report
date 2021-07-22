@@ -19,10 +19,9 @@ block container
         iframe(
           width="300",
           height="566",
-          src="https://embed.windy.com/embed2.html?lat=#{location.latitude}&lon#{location.longitude}&detailLat=#{location.latitude}&detailLon=#{location.longitude}&width=320&height=450&zoom=5&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1",
+          src="https://embed.windy.com/embed2.html?#{location.latitude},#{location.longitude},8"
           frameborder="0"
         )
-
 
   if isAuthenticated
     include ./includes/update-location.jade

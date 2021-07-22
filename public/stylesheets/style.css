@@ -542,9 +542,10 @@ input[type="email"], textarea, select {
   font: normal 18px / 1.4em 'Helvetica Neue', arial, sans-serif;
   color: #06223c;
   font-smoothing: subpixel-antialiased;
-  margin:0 auto;
   border-top: 2px solid #ffffff;
+  width: 98%;
   max-width: 680px;
+  margin: 0 auto;
   border-radius: 5px;
   box-sizing: border-box;
 }
@@ -555,11 +556,13 @@ input[type="email"], textarea, select {
   line-height: 35px;
   margin-right: 20px;
 }
+.form .btns { margin-top: 20px; }
 @media only screen and (min-width: 620px){
   .form .field > label > span {
     text-align: right;
     min-width: 200px;
   }
+  .form .btns { text-align: center; }
 }
 .form .errors {
   list-style: none;
@@ -574,7 +577,7 @@ input[type="email"], textarea, select {
 /*---------------  Buttons ------------*/
 .btn {
   font: 18px / 30px 'Museo500', 'Helvetica Neue', sans-serif;
-  padding: 0px 22px;
+  padding: 0px 18px;
   border: 1px solid #8698a8;
   cursor: pointer;
   display: inline-block;

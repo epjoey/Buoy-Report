@@ -35,8 +35,7 @@ form.form(
   .field.errors(ng-if="error")
     li {{ error }}
 
-  .field.text-center
-    &nbsp;
+  .btns
     input.btn.submit(
       type="submit",
       ng-click="submit()",
@@ -45,10 +44,9 @@ form.form(
     )
 
     if user.email == location.email || user.email == 'jhodara@gmail.com'
-      div
-        button.btn.delete.right(
-          ng-click="deleteLocation()",
-          ng-disabled="loading"
-        ) Delete Location
+      button.btn.delete.right(
+        ng-click="deleteLocation()",
+        ng-disabled="loading"
+      ) Delete Location
   .clear
 
