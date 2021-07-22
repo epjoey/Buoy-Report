@@ -38,10 +38,10 @@ const session = {
   saveUninitialized: false
 };
 
-if(process.env.NODE_ENV === "production"){
-  // Serve secure cookies, requires HTTPS
-  session.cookie.secure = true;
-}
+// if(process.env.NODE_ENV === "production"){
+//   // Serve secure cookies, requires HTTPS
+//   session.cookie.secure = true;
+// }
 
 /**
  * Passport Configuration (New!)
