@@ -51,7 +51,6 @@ router.get("/logout", (req, res) => {
   // req.protocol is always http because of the reverse proxy, and 'trust proxy' is not working for some reason,
   // so hardcode https for production.
   let returnTo = (process.env.NODE_ENV === "production" ? "https" : "http") + "://" + req.hostname;
-  console.log(returnTo)
   const port = req.connection.localPort;
 
   if (port !== undefined && port !== 80 && port !== 443) {

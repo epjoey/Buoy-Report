@@ -7,8 +7,8 @@ html
     link(rel="apple-touch-icon", sizes="57x57", href="/images/apple-touch-icon.png")
     link(rel="apple-touch-icon", sizes="72x72", href="/images/apple-touch-icon-72x72.png")
     link(rel="apple-touch-icon", sizes="114x114", href="/images/apple-touch-icon-114x114.png")
-    link(rel='stylesheet', href='/stylesheets/fonts.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel="stylesheet", href="/stylesheets/fonts.css")
+    link(rel="stylesheet", href="/stylesheets/style.css")
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 
     script(src="https://code.jquery.com/jquery-2.1.4.min.js")
@@ -26,17 +26,17 @@ html
   block vars
 
   body(class='#{bodyClass}', ng-app='app')
-    div.wrapper
-      div.header
-        div.container
-          div.header-left
+    .wrapper
+      .header
+        .container
+          .header-left
             a(href='/')
               img.logo(src="/images/logo-lrg.png", width="46", height="46")
               img.logo-large(src="/images/logo-lrg.png", width="101", height="101")
             block headerLink
               a.header-link(href='/') Buoy Report  
-          div.header-right
-            div.header-menu(ng-init="menuCtrl = { isOpen: false }")
+          .header-right
+            .header-menu(ng-init="menuCtrl = { isOpen: false }")
               a.header-menu-trigger(ng-click="menuCtrl.isOpen = !menuCtrl.isOpen")
                 img(src="/images/down-arrow.png", width="15", height="9")
               ul.header-menu-inner(
