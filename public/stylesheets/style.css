@@ -316,7 +316,7 @@ input[type="email"], textarea, select {
   font-family: helvetica, arial;
   width: 320px;
   box-sizing: border-box;
-  margin: 0 10px 20px;
+  margin: 0 auto 20px;
   display: inline-block;
   vertical-align: top;
 }
