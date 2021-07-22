@@ -69,6 +69,8 @@ const strategy = new Auth0Strategy(
 /**
  *  App Configuration
  */
+// https://stackoverflow.com/questions/39930070/nodejs-express-why-should-i-use-app-enabletrust-proxy
+app.enable('trust proxy');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -84,8 +86,6 @@ passport.use(strategy);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// https://stackoverflow.com/questions/39930070/nodejs-express-why-should-i-use-app-enabletrust-proxy
-app.enable('trust proxy');
 
 passport.serializeUser((user, done) => {
   done(null, user);
