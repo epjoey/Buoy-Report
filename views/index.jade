@@ -22,7 +22,7 @@ block content
       .clear
 
     if isAuthenticated
-      .mb-20(ng-if="addLocation.isOpen")
+      .container.mb-20(ng-if="addLocation.isOpen")
         include ./includes/add-location.jade
 
     ul.block-list

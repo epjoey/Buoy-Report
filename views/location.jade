@@ -24,7 +24,8 @@ block container
         )
 
   if isAuthenticated
-    include ./includes/update-location.jade
+    .container
+      include ./includes/update-location.jade
 
   .container.snapshots(ng-snapshots="#{location.id}")
     div(ng-repeat="snapshot in snapshots")

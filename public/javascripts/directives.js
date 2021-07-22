@@ -222,16 +222,18 @@
           };
 
           $scope.deleteLocation = function(){
-            $http.delete('/locations/' + location.id).success(function(res){
-              $scope.loading = false;
-              $scope.error = res.error;
-              if(res.success){
-                window.location.href = '/';
-              }
-            }).error(function(res){
-              $scope.loading = false;
-              $scope.error = 'Error deleting location';
-            });
+            if(window.confirm('Are you sure you want to delete ' + location.name + '?')){
+              $http.delete('/locations/' + location.id).success(function(res){
+                $scope.loading = false;
+                $scope.error = res.error;
+                if(res.success){
+                  window.location.href = '/';
+                }
+              }).error(function(res){
+                $scope.loading = false;
+                $scope.error = 'Error deleting location';
+              });
+            }
           };
         }
       };
