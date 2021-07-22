@@ -84,7 +84,9 @@ passport.use(strategy);
 app.use(passport.initialize());
 app.use(passport.session());
 // This is supposed to fix auth0;
-app.set("trust proxy", 1)
+// app.set("trust proxy", 1)
+// Try this to get auth0 working.
+app.enable('trust proxy');
 
 passport.serializeUser((user, done) => {
   done(null, user);
