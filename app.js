@@ -83,7 +83,8 @@ app.use(expressSession(session));
 passport.use(strategy);
 app.use(passport.initialize());
 app.use(passport.session());
-
+// This is supposed to fix auth0;
+app.set("trust proxy", 1)
 
 passport.serializeUser((user, done) => {
   done(null, user);
