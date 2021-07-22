@@ -83,9 +83,8 @@ app.use(expressSession(session));
 passport.use(strategy);
 app.use(passport.initialize());
 app.use(passport.session());
-// This is supposed to fix auth0;
-// app.set("trust proxy", 1)
-// Try this to get auth0 working.
+
+// https://stackoverflow.com/questions/39930070/nodejs-express-why-should-i-use-app-enabletrust-proxy
 app.enable('trust proxy');
 
 passport.serializeUser((user, done) => {

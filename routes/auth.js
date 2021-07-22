@@ -48,8 +48,8 @@ router.get("/callback", (req, res, next) => {
 router.get("/logout", (req, res) => {
   req.logOut();
 
-  console.log(req.protocol)
-  let returnTo = req.protocol + "://" + req.hostname;
+  console.log(req.secure)
+  let returnTo = (req.secure ? 'https' : 'http') + "://" + req.hostname;
   console.log(returnTo)
   const port = req.connection.localPort;
 
