@@ -325,10 +325,19 @@ input[type="email"], textarea, select {
   display: inline-block;
   vertical-align: top;
 }
-@media only screen and (min-width: 400px){
+.windy-view {
+  height: 320px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+@media only screen and (min-width: 680px){
   .buoy-view {
     margin-right: 10px;
     margin-left: 10px;
+  }
+  .windy-view {
+    height: auto;
   }
 }
 .buoy-view h3 a {

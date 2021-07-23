@@ -8,16 +8,16 @@ block headerLink
 block container
   .buoy-view-wrap
     .buoy-view-inner-wrap
-      for buoy in buoys
-        include ./includes/buoy-view.jade
-
-      .buoy-view
+      .buoy-view.windy-view
         iframe(
           width="300",
           height="566",
           src="https://embed.windy.com/embed2.html?#{location.latitude},#{location.longitude},8"
           frameborder="0"
         )
+
+      for buoy in buoys
+        include ./includes/buoy-view.jade
 
   if isAuthenticated
     .container
