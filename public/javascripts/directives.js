@@ -296,6 +296,7 @@
               $scope.loading = false;
               $scope.snapshots = _.concat($scope.snapshots, _.map(res.snapshots.rows, parseSnapshot));
               $scope.page += 1;
+              $scope.isLastPage = res.snapshots.rows.length < 10;
             }).error(function(res){
               $scope.loading = false;
             });

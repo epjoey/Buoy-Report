@@ -52,6 +52,9 @@ async function forReporter(reporterEmail, page = 1){
 
 
 async function buoyDataByReport(reportIds){
+  if(!reportIds.length){
+    return {};
+  }
   let [rows, fields] = await db.query(
     'SELECT bd.*, b.name from `buoydata` bd LEFT JOIN `buoy` b ON bd.buoy = b.buoyid WHERE reportid IN (?)',
     reportIds

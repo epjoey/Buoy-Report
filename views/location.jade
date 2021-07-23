@@ -27,7 +27,11 @@ block container
     div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade
 
+    .info(ng-if="page && !snapshots.length") No snapshots exist &#128546;
     .text-center.btns
-      a.btn(ng-click="load()") Load {{ page > 0 ? 'more' : 'snapshots' }}
+      a.btn(
+        ng-disabled="loading || isLastPage"
+        ng-click="load()"
+      ) Load {{ page > 0 ? 'more' : 'snapshots' }}
 
 

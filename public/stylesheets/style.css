@@ -484,15 +484,8 @@ input[type="email"], textarea, select {
   overflow: hidden;
   text-align: center;
 }
-.snapshot .buoy-data thead {
-  border-bottom: 2px solid #06223c;  
-}
-.snapshot .buoy-data  tr {
-  border-left: 2px solid #06223c;
-}
-.snapshot .buoy-data thead tr:first-child th {
-  padding-top: 4px;
-}
+.snapshot .buoy-data thead { border-bottom: 2px solid #06223c; }
+.snapshot .buoy-data thead tr:first-child th { padding-top: 4px; }
 .snapshot .buoy-data th {
   text-align: left;
   color: black;
@@ -502,10 +495,8 @@ input[type="email"], textarea, select {
   padding-left: 8px;
   padding-right: 2px;
 }
-/*.snapshot .buoy-data td:first-child,
-.snapshot .buoy-data th:first-child {
-  width: 96px;
-}*/
+.snapshot .buoy-data tr { border-left: 2px solid #06223c; width: 100%; }
+.snapshot .buoy-data tbody tr { background: #e8ecef; }
 .snapshot .buoy-data .units th {
   font-size: 8px;
   line-height: 12px;
@@ -515,14 +506,14 @@ input[type="email"], textarea, select {
   font-size: 14px;
   line-height: 22px;
   text-align: left;
-  padding-left: 8px;
-  padding-right: 2px;
+  padding: 2px 2px 0px 8px;
   white-space: nowrap
 }
 
 
 /*------=- INFO -=---------*/
 .info {
+  text-align: center;
   background: #e8ecef;
   padding: 12px;
   font: normal 16px / 1.4em 'Helvetica Neue', arial, sans-serif;
