@@ -9,6 +9,9 @@ block content
     div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade
 
+    .info(ng-if="page && !snapshots.length") You have no snapshots :(
     .text-center.btns
-      a.btn(ng-click="load()") Load more
-
+      a.btn(
+        ng-disabled="loading || isLastPage"
+        ng-click="load()"
+      ) Load {{ page > 0 ? 'more' : 'snapshots' }}
