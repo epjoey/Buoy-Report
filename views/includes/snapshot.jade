@@ -24,37 +24,38 @@
   .image.mb-20(ng-if="snapshot.imagepath")
     img(width="680px" ng-src="{{ snapshot.imagepath }}")
 
-  table.buoy-data.mb-20
-    thead
-      tr
-        th Buoy
-        th Time
-        th SwH
-        th SwP
-        th MWD
-        th WdDir
-        th WdSp
+  .buoy-data.mb-20
+    table
+      thead
+        tr
+          th Buoy
+          th Time
+          th SwH
+          th SwP
+          th MWD
+          th WdDir
+          th WdSp
 
-      tr.units
-        th
-        th {{ moment.tz(snapshot.timezone).format('z') }}
-        th ft
-        th sec
-        th
-        th
+        tr.units
+          th
+          th {{ moment.tz(snapshot.timezone).format('z') }}
+          th ft
+          th sec
+          th
+          th
 
-    tbody
-      tr(ng-if="!snapshot.buoyData.length")
-        td no data
-      tr(ng-repeat="buoy in snapshot.buoyData")
-        td
-          a(ng-href="{{ '/buoys/' + buoy.buoy }}") {{ buoy.buoy }}: 
-        td {{ moment.utc(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mm a') }}
-        td {{ buoy.swellheight }}
-        td {{ buoy.swellperiod }}
-        td {{ buoy.swelldir }}
-        td {{ buoy.winddir }}
-        td {{ buoy.windspeed }}
+      tbody
+        tr(ng-if="!snapshot.buoyData.length")
+          td no data
+        tr(ng-repeat="buoy in snapshot.buoyData")
+          td
+            a(ng-href="{{ '/buoys/' + buoy.buoy }}") {{ buoy.buoy }}:
+          td {{ moment.utc(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mm a') }}
+          td {{ buoy.swellheight }}
+          td {{ buoy.swellperiod }}
+          td {{ buoy.swelldir }}
+          td {{ buoy.winddir }}
+          td {{ buoy.windspeed }}
 
 
   .text-meta
