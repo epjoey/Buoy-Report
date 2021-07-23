@@ -300,7 +300,7 @@ input[type="email"], textarea, select {
 /* LOCATION PAGE */
 /*================================*/
 /*================================*/
-.location-page .header {margin-bottom: 40px;}
+.location-page .header {margin-bottom: 30px;}
 .location-page .snapshots {margin-top: 20px;}
 
 /*================================*/
@@ -325,19 +325,11 @@ input[type="email"], textarea, select {
   display: inline-block;
   vertical-align: top;
 }
-.windy-view {
-  height: 320px;
-  overflow: hidden;
-  margin-bottom: 40px;
-}
 
 @media only screen and (min-width: 680px){
   .buoy-view {
     margin-right: 10px;
     margin-left: 10px;
-  }
-  .windy-view {
-    height: auto;
   }
 }
 .buoy-view h3 a {
