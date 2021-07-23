@@ -1,5 +1,5 @@
 (function() {
-  angular.module('app', ['directives', 'controllers', 'filters'])
+  angular.module('app', ['directives', 'controllers'])
 
   .run([
     '$rootScope',

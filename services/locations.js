@@ -13,7 +13,11 @@ async function create(reqBody, user){
   }
   params.email = user._json.email;
   const [result, fields] = await db.query('INSERT INTO `location` SET ?', params);
-  return result.insertId ? getSingle(result.insertId) : null;
+  if(result.insertId){
+    await addBuoysToLocation(reqBody.buoys, result.insertId);
+    return result.insertId;
+  }
+  return null;
 }
 
 
@@ -31,20 +35,8 @@ async function update(location, reqBody, user){
 
   // Update buoys
   await db.query('DELETE FROM `buoy_location` WHERE locationid = ?', location.id);
-  let buoyIds = _.map(_.split(reqBody.buoys, /[ ,]+/), _.trim);
-  _.forEach(buoyIds, async function(buoyId){
-    let params = {buoyid: buoyId, locationid: location.id, created: Date.now()};
-    console.log(params)
-    try {
-      await db.query(
-        'INSERT INTO `buoy_location` SET ?', params
-      );
-    } catch(err) {
-      console.log('error inserting buoy location:', err);
-      return; // Duplicate entry, pass.
-    }
-  });
-
+  await addBuoysToLocation(reqBody.buoys, location.id);
+  
   return result.changedRows ? getSingle(location.id) : null;
 }
 
@@ -81,6 +73,22 @@ async function getSingle(id){
   return helper.first(rows);
 }
 
+
+async function addBuoysToLocation(buoyIds, locationId){
+  // `buoyIds` is a list of buoy ids seperated by comma or space.
+  buoyIds = _.map(_.split(buoyIds, /[ ,]+/), _.trim);
+  _.forEach(buoyIds, async function(buoyId){
+    let params = {buoyid: buoyId, locationid: locationId, created: Date.now()};
+    try {
+      await db.query(
+        'INSERT INTO `buoy_location` SET ?', params
+      );
+    } catch(err) {
+      console.log('error inserting buoy location:', err);
+      return; // Duplicate entry, pass.
+    }
+  });  
+}
 
 function getFavorites(req){
   let favorites = req.cookies.favorites;

@@ -62,6 +62,7 @@ input[type="email"], textarea, select {
 .clear { clear: both; }
 .text-center { text-align: center; }
 .text-right { text-align: right; }
+.text-meta { font: italic 13px georgia; }
 .mb-10 { margin-bottom: 10px; }
 .mb-20 { margin-bottom: 20px; }
 .link { cursor: pointer; }
@@ -80,7 +81,8 @@ input[type="email"], textarea, select {
 .container {
   position: relative;
   width: 92%;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0;
 }
 
@@ -438,22 +440,19 @@ input[type="email"], textarea, select {
   border-radius: 5px;
   box-sizing: border-box;
 }
-.snapshot .location-name {
+.snapshot a {
   font-weight: bold;
   color: #06223c;
-  text-decoration: underline;
+}
+.snapshot .obs-date {
+  display: inline-block;
+  font-size: 16px;
+}
+.snapshot .obs-date .tz { font-size: 12px; }
+.snapshot .location-name {
   margin-right: 12px;
 }
-.snapshot .obs-time {
-  display: inline-block;
-  font: 16px georgia;  
-}
-.snapshot .obs-time .tz {
-  display: inline-block;
-  margin-left: 8px;
-  font: 12px georgia;
-  color: #637789;
-}
+
 .snapshot .quality {
   overflow: hidden;
 }
@@ -485,8 +484,40 @@ input[type="email"], textarea, select {
   overflow: hidden;
   text-align: center;
 }
-.snapshot .report-details {
-  font: italic 13px georgia;
+.snapshot .buoy-data thead {
+  border-bottom: 2px solid #06223c;  
+}
+.snapshot .buoy-data  tr {
+  border-left: 2px solid #06223c;
+}
+.snapshot .buoy-data thead tr:first-child th {
+  padding-top: 4px;
+}
+.snapshot .buoy-data th {
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  padding-left: 8px;
+  padding-right: 2px;
+}
+/*.snapshot .buoy-data td:first-child,
+.snapshot .buoy-data th:first-child {
+  width: 96px;
+}*/
+.snapshot .buoy-data .units th {
+  font-size: 8px;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+.snapshot .buoy-data td {
+  font-size: 14px;
+  line-height: 22px;
+  text-align: left;
+  padding-left: 8px;
+  padding-right: 2px;
+  white-space: nowrap
 }
 
 

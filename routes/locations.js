@@ -10,13 +10,13 @@ const helper = require('../helper');
 router.post('/', helper.secured, async function(req, res, next){
   let error, location;
   try{
-    location = await locationService.create(req.body, req.user);
+    locationId = await locationService.create(req.body, req.user);
   }
   catch(err){
     error = err.message;
   }
   res.json({
-    location: location,
+    locationId: locationId,
     error: error
   })
 });

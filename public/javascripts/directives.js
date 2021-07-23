@@ -184,7 +184,7 @@
               $scope.loading = false;
               $scope.error = res.error;
               if(res.location){
-                window.location.href = '/locations/' + res.location.id;
+                window.location.href = '/locations/' + res.locationId;
               }
             }).error(function(res){
               $scope.loading = false;
@@ -241,6 +241,45 @@
   ]);
 
 
+  // Snapshots.
+  // `snapshot.waveheight` is stored as an number representing a range.
+  // So 17.5 means the waves were 15-20' (hawaiian).
+  var WAVE_HEIGHTS = {
+    1.5: "1-2'",
+    2.5: "2-3'",
+    3.5: "3-4'",
+    5: "4-6'",
+    7: "6-8'",
+    9: "8-10'",
+    11: "10-12'",
+    13.5: "12-15'",
+    17.5: "15-20'",
+    25: "20-30'"
+  };
+
+  var QUALITIES = {
+    1: 'Terrible',
+    2: 'Mediocre',
+    3: 'OK',
+    4: 'Fun',
+    5: 'Great'
+  };
+
+  var parseSnapshotBuoyData = function(buoy){
+    buoy.swellheight = meters2Feet(buoy.swellheight);
+    return buoy;
+  };
+
+  var parseSnapshot = function(snapshot){
+    snapshot.waveheight = snapshot.waveheight ? WAVE_HEIGHTS[snapshot.waveheight] : '';
+    snapshot.qualityText = snapshot.quality ? QUALITIES[snapshot.quality] : '';
+    snapshot.imagepath = snapshot.imagepath && !snapshot.imagepath.startsWith('http') ?
+        'https://www.buoyreport.com/uploads/' + snapshot.imagepath : snapshot.imagepath;
+    snapshot.buoyData = _.map(snapshot.buoyData, parseSnapshotBuoyData);
+    return snapshot;
+  };
+
+
   directives.directive('ngSnapshots', [
     '$http',
     function($http){
@@ -253,10 +292,10 @@
           var url = (locationId ? '/locations/' + locationId : '') + '/snapshots?page=';
           $scope.load = function(){
             $scope.loading = true;
-            $scope.page += 1;
-            $http.get(url + $scope.page).success(function(res){
+            $http.get(url + ($scope.page + 1)).success(function(res){
               $scope.loading = false;
-              $scope.snapshots = _.concat($scope.snapshots, res.snapshots.rows);
+              $scope.snapshots = _.concat($scope.snapshots, _.map(res.snapshots.rows, parseSnapshot));
+              $scope.page += 1;
             }).error(function(res){
               $scope.loading = false;
             });

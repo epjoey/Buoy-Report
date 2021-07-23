@@ -1,10 +1,8 @@
 .snapshot
   .mb-10
     a.location-name(ng-href="{{ '/locations/' + snapshot.locationId }}") {{ snapshot.locationName }}
-    span.obs-time
-      | {{ moment.unix(snapshot.obsdate).tz(snapshot.timezone).format('M/D/YY h:mm a') }}
-      span.tz
-        | {{ moment.tz(snapshot.timezone).format('z') }}
+    .obs-date
+      | {{ moment.unix(snapshot.obsdate).tz(snapshot.timezone).format('M/D/YY h:mma') }}
 
   ul.quality.mb-10(
     ng-if="snapshot.quality",
@@ -15,16 +13,50 @@
     li.level.level-3
     li.level.level-4
     li.level.level-5
+    li.text-meta &nbsp; {{ snapshot.qualityText }}
 
   .mb-10(ng-if="snapshot.waveheight")
-    | {{ snapshot.waveheight|snapshotWaveHeight }}
+    | {{ snapshot.waveheight }}
 
   .mb-20(ng-if="snapshot.text")
     | {{ snapshot.text }}
 
   .image.mb-20(ng-if="snapshot.imagepath")
-    img(width="680px" ng-src="{{ snapshot.imagepath|snapshotImagePath }}")
+    img(width="680px" ng-src="{{ snapshot.imagepath }}")
 
-  .report-details
+  .buoy-data.mb-20(ng-repeat="buoy in snapshot.buoyData")
+    table
+      thead
+        tr
+          th Buoy
+          th Time
+          th SwH
+          th SwP
+          th MWD
+          th WdDir
+          th WdSp
+
+        tr.units
+          th
+          th {{ moment.tz(snapshot.timezone).format('z') }}
+          th ft
+          th sec
+          th
+          th
+
+      tbody
+        tr
+          td
+            a(ng-href="{{ '/buoys/' + buoy.buoy }}") {{ buoy.buoy }}: 
+            span {{ buoy.name }}
+          td {{ moment.utc(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mm a') }}
+          td {{ buoy.swellheight }}
+          td {{ buoy.swellperiod }}
+          td {{ buoy.swelldir }}
+          td {{ buoy.winddir }}
+          td {{ buoy.windspeed }}
+
+
+  .text-meta
     |report {{ snapshot.id }} by {{ snapshot.reporterName }}
 
