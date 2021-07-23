@@ -46,10 +46,11 @@
 
       tbody
         tr(ng-if="!snapshot.buoyData.length")
-          td no data
+          td
+            small no data
         tr(ng-repeat="buoy in snapshot.buoyData")
           td
-            a(ng-href="{{ '/buoys/' + buoy.buoy }}") {{ buoy.buoy }}:
+            a(ng-href="{{ '/buoys/' + buoy.buoy }}") {{ buoy.buoy }}
           td {{ moment.utc(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mm a') }}
           td {{ buoy.swellheight }}
           td {{ buoy.swellperiod }}
