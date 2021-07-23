@@ -76,6 +76,9 @@ async function getSingle(id){
 
 async function addBuoysToLocation(buoyIds, locationId){
   // `buoyIds` is a list of buoy ids seperated by comma or space.
+  if(!buoyIds){
+    return;
+  }
   buoyIds = _.map(_.split(buoyIds, /[ ,]+/), _.trim);
   _.forEach(buoyIds, async function(buoyId){
     let params = {buoyid: buoyId, locationid: locationId, created: Date.now()};

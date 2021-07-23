@@ -7,8 +7,13 @@ const buoyService = require('../services/buoys');
 const helper = require('../helper');
 
 
+router.get('/', function(req, res){
+  res.redirect(301, '/'); // Redirect /locations to /
+});
+
+
 router.post('/', helper.secured, async function(req, res, next){
-  let error, location;
+  let error, locationId;
   try{
     locationId = await locationService.create(req.body, req.user);
   }

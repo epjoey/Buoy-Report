@@ -60,5 +60,6 @@
 
 
   .text-meta
-    |report {{ snapshot.id }} by {{ snapshot.reporterName }}
+    |report {{ snapshot.id }}
+    span(ng-if="snapshot.reporterName")  by {{ snapshot.reporterName }}
 

@@ -183,7 +183,7 @@
             $http.post('/locations', $scope.req).success(function(res){
               $scope.loading = false;
               $scope.error = res.error;
-              if(res.location){
+              if(res.locationId){
                 window.location.href = '/locations/' + res.locationId;
               }
             }).error(function(res){
