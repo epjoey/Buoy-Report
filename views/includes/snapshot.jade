@@ -51,7 +51,7 @@
         tr(ng-repeat="buoy in snapshot.buoyData")
           td
             a(ng-href="{{ '/buoys/' + buoy.buoy }}") {{ buoy.buoy }}
-          td {{ moment.utc(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mm a') }}
+          td {{ moment.unix(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mma') }}
           td {{ buoy.swellheight }}
           td {{ buoy.swellperiod }}
           td {{ buoy.swelldir }}
