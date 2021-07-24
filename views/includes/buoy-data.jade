@@ -1,0 +1,101 @@
+mixin timezone-unit()
+  if location && location.timezone
+    {{ moment.tz('#{location.timezone}').format('z') }}
+  else
+    | UTC
+
+mixin date-time()
+  if location && location.timezone
+    {{ row.time.tz('#{location.timezone}').format('M/D h:mm a') }}
+  else
+    {{ row.time.tz('UTC').format('M/D h:mm a') }}
+
+mixin buoy-data(type)
+  .buoy-data(
+    ng-buoy-data="#{buoy.buoyid}"
+    ng-buoy-data-type="#{type}"
+  )
+    h3
+      a(href="https://www.ndbc.noaa.gov/station_page.php?station=#{buoy.buoyid}" target="_blank")
+        | #{buoy.buoyid}: #{buoy.name} (#{type})
+
+    .table-wrap
+      table(ng-repeat="table in buoyCtrl.tables")
+        block
+
+      span.loading(ng-if="buoyCtrl.isLoading") Loading...
+      span.no-data(ng-if="!buoyCtrl.isLoading && !buoyCtrl.tables.length") Nothing to display.
+      a.paginate(
+        ng-click="buoyCtrl.load()"
+      )
+        | &darr;
+
+// Wave Data
++buoy-data('wave')
+  thead
+    tr
+      th Time
+      th SwH
+      th SwP
+      th MWD
+      th Wind Wave
+
+    tr.units
+      th
+        +timezone-unit()
+      th ft
+      th sec
+      th
+      th ft / sec dir
+
+  tbody
+    tr(ng-repeat="row in table.rows")
+      td 
+        +date-time()
+      td {{ row.swellHeight }}
+      td.swell-period {{ row.swellPeriod }}
+      td
+        | {{ row.meanWaveDirection }}
+        sub {{ row.swellDirection }}
+      td
+        | {{ row.windWaveSummary }}
+        | &nbsp;
+        sub {{ row.windWaveDirection }}
+
+
+// Standard Data
++buoy-data('standard')
+  thead
+    tr
+      th Time
+      th WvH
+      th WvP
+      th WvD
+      th WdS
+      th Gust
+      th WdD
+
+    tr.units
+      th
+        +timezone-unit()
+      th ft
+      th sec
+      th
+      th mph
+      th mph
+      th
+
+  tbody
+    tr(ng-repeat="row in table.rows")
+      td
+        +date-time()
+      td {{ row.waveHeight }}
+      td {{ row.wavePeriod }}
+      td
+        | {{ row.waveDirection }}
+        sub {{ row.waveDirectionAbbr }}
+      td {{ row.windSpeed }}
+      td {{ row.gust }}
+      td
+        | {{ row.windDirection }}
+        sub {{ row.windDirectionAbbr }}

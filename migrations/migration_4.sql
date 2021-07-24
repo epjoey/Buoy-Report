@@ -1,0 +1,1 @@
+ALTER TABLE `location` RENAME INDEX locname TO name;

@@ -9,6 +9,7 @@
       };
 
       $rootScope.moment = moment;
+      $rootScope.screen = screen;
     }
   ]);
 })();

@@ -92,15 +92,15 @@
     return row;
   };
 
-  var parseData = function(data, rowParser){
+  var parseBuoyData = function(data, type){
     // Both data sets have 2 rows of units.
     if(data[0][0] === "#YY" && data[1][0] === "#yr"){
       data = data.slice(2);
     }
-    return _.map(data, rowParser);
+    return _.map(data, type === 'wave' ? parseWaveData : parseStandardData);
   };
 
-  directives.directive('ngBuoyWaveData', [
+  directives.directive('ngBuoyData', [
     function(){
       return {
         scope: true,
@@ -108,22 +108,23 @@
         controller: ['$scope', '$http', '$attrs', function($scope, $http, $attrs){
           var ctrl = this;
 
-          ctrl.buoyId = parseInt($attrs.ngBuoyWaveData);
+          ctrl.buoyId = parseInt($attrs.ngBuoyData);
           ctrl.tables = [];
+          var type = $attrs.ngBuoyDataType;
 
           ctrl.load = function(){
             var offset = ctrl.tables.length * ROWS_PER_TABLE;
-            var url = '/buoys/' + ctrl.buoyId + '/wave?offset=' + offset;
+            var url = '/buoys/' + ctrl.buoyId + '/' + type + '?offset=' + offset;
             ctrl.isLoading = true;
             $http.get(url).success(function(res){
               ctrl.isLoading = false;
               if(res.data){
                 ctrl.tables.push({
-                  rows: parseData(res.data, parseWaveData)
+                  rows: parseBuoyData(res.data, type)
                 });
               }
               if(res.error){
-                console.error('error loading wave data for buoy ' + ctrl.buoyId + ': ' + res.error);
+                console.error('error loading buoy data:' + url + ': ' + res.error);
               }
             }).error(function(res){
               ctrl.isLoading = false;
@@ -136,40 +137,6 @@
     }
   ]);
 
-  directives.directive('ngBuoyStandardData', [
-    function(){
-      return {
-        scope: true,
-        controllerAs: 'buoyCtrl',
-        controller: ['$scope', '$http', '$attrs', function($scope, $http, $attrs){
-          var ctrl = this;
-
-          ctrl.buoyId = parseInt($attrs.ngBuoyStandardData);
-          ctrl.tables = [];
-
-          ctrl.load = function(){
-            var offset = ctrl.tables.length * ROWS_PER_TABLE;
-            var url = '/buoys/' + ctrl.buoyId + '/standard?offset=' + offset;
-            $http.get(url).success(function(res){
-              ctrl.isLoading = false;
-              if(res.data){
-                ctrl.tables.push({
-                  rows: parseData(res.data, parseStandardData)
-                });
-              }
-              if(res.error){
-                console.error('error loading standard data for buoy ' + ctrl.buoyId + ': ' + res.error);
-              }
-            }).error(function(res){
-              ctrl.isLoading = false;
-            });
-          };
-
-          ctrl.load();
-        }]
-      };
-    }
-  ]);
 
   directives.directive('ngAddLocation', [
     '$http',

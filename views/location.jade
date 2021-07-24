@@ -6,29 +6,29 @@ block headerLink
   a.header-link(href="/locations/#{location.id}")= location.name
 
 block container
-  .buoy-view-wrap
-    .buoy-view-inner-wrap
-      .buoy-view.windy-view.mb-20
+  .buoy-data-wrap
+    .buoy-data-inner-wrap
+      .buoy-data.windy-view.mb-20
         iframe(
           width="300",
-          height="320",
+          height="{{ screen.width > 680 ? 568 : 320 }}",
           src="https://embed.windy.com/embed2.html?#{location.latitude},#{location.longitude},8"
           frameborder="0"
         )
 
       for buoy in buoys
-        include ./includes/buoy-view.jade
+        include ./includes/buoy-data.jade
 
   if isAuthenticated
-    .container
+    .container.mb-20
       include ./includes/update-location.jade
 
   .container.snapshots(ng-snapshots="#{location.id}")
     div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade
 
-    .info(ng-if="page && !snapshots.length") No snapshots exist &#128546;
-    .text-center.btns
+    .info.mb-20(ng-if="page && !snapshots.length") No snapshots exist &#128546;
+    .text-center
       a.btn(
         ng-disabled="loading || isLastPage"
         ng-click="load()"
