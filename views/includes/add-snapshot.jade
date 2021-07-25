@@ -1,4 +1,5 @@
 form.form(
+  ng-add-snapshot
   name="addSnapshotForm"
 )
   .field
@@ -12,22 +13,44 @@ form.form(
   .field
     label
       span Quality
-      select(ng-model="req.quality")
-        option(ng-repeat="key in QUALITY_KEYS", ng-value="key") {{ QUALITIES[key] }}
+      select(
+        ng-model="req.quality"
+        ng-options="n as QUALITIES[n] for n in qualities"
+      )
+
   .field
     label
       span Waveheight (backs)
-      select(ng-model="req.waveheight")
-        option(ng-repeat="key in WAVE_HEIGHT_KEYS", ng-value="key") {{ WAVE_HEIGHT_KEYS[key] }
+      select(
+        ng-model="req.waveheight"
+        ng-options="n as WAVE_HEIGHTS[n] for n in waveHeights"
+      )
+
+  .field
+    label
+      span Description
+      input(
+        type="text"
+        ng-model="req.text"
+      )
+
+  .field
+    label
+      span Upload Image
+      input(
+        type="file",
+        accept="image/png, image/jpeg",
+        ng-model="req.image",
+        ng-file-upload
+      )
+
 
   .field.errors(ng-if="error") {{ error }}
 
-  .field.text-center
-    span.btn.cancel(ng-click="addSnapshot.isOpen = false") Cancel
-    | &nbsp;
+  .field.btns
     input.btn.submit(
       type="submit",
       ng-click="submit()",
-      ng-disabled="loading || addSnapshotForm.$invalid || addSnapshotForm.$pristine"
+      ng-disabled="loading || addSnapshotForm.$invalid"
       value="Submit"
     )

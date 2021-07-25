@@ -14,18 +14,22 @@ const SNAPSHOT_SELECT = '\
   LEFT JOIN `location` l ON r.locationid = l.id';
 
 
-async function create(reqBody, user){
-  let params = _.pick(reqBody);
+async function create(locationId, reqBody, user){
+  let params = _.pick(reqBody, ['waveheight', 'quality', 'imagepath', 'obsdate', 'text']);
+  params.locationid = locationId;
   params.email = user._json.email;
-  const [result, fields] = await db.query('INSERT INTO `report` SET ?', params);
-  if(result.insertId){
-    let [rows, fields] = await db.query(
-      'SELECT * FROM `report` WHERE id = ?',
+  params.reportdate = Date.now();
+  try {
+    let [result,] = await db.query('INSERT INTO `report` SET ?', params);
+    let [rows,] = await db.query(
+      SNAPSHOT_SELECT + ' WHERE r.id = ?',
       result.insertId
     );
-    return helper.first(rows);
+    return [null, helper.first(rows)];
   }
-  return null;
+  catch(err){
+    return [err.message, null];
+  }
 }
 
 
@@ -51,8 +55,8 @@ async function forLocation(locationId, page = 1){
 async function forReporter(reporterEmail, page = 1){
   const offset = helper.getOffset(page, SNAPSHOT_LIMIT);
   let [rows, fields] = await db.query(
-    SNAPSHOT_SELECT + ' WHERE u.email = ? ORDER BY r.id desc LIMIT ?,?', 
-    [reporterEmail, offset, SNAPSHOT_LIMIT]
+    SNAPSHOT_SELECT + ' WHERE u.email = ? OR r.email = ? ORDER BY r.id desc LIMIT ?,?', 
+    [reporterEmail, reporterEmail, offset, SNAPSHOT_LIMIT]
   );
 
   const buoyData = await buoyDataByReport(_.map(rows, 'id'));
@@ -80,6 +84,7 @@ async function buoyDataByReport(reportIds){
 
 
 module.exports = {
+  create,
   forLocation,
   forReporter
 }

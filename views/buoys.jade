@@ -13,31 +13,7 @@ block content
 
   if isAuthenticated
     .mb-20(ng-if="addBuoy.isOpen")
-        form.form(
-          ng-add-buoy,
-          name="addBuoyForm"
-        )
-          .field
-            label
-              span Buoy ID
-              input(type='text', ng-model='req.buoyid', ng-required="true")
-
-          .field
-            label
-              span Name
-              input(type='text', ng-model='req.name')
-
-          .field.errors(ng-if="error") {{ error }}
-
-          .field.text-center
-            span.btn.cancel(ng-click="addBuoy.isOpen = false") Cancel
-            | &nbsp;
-            input.btn.submit(
-              type="submit",
-              ng-click="submit()",
-              ng-disabled="loading || addBuoyForm.$invalid || addBuoyForm.$pristine"
-              value="Submit"
-            )
+      include ./includes/add-buoy.jade
 
   ul.block-list
     for buoy in buoys.rows

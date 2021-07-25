@@ -58,7 +58,8 @@ router.get('/:locationId/snapshots', async function(req, res, next){
 
 
 router.post('/:locationId/snapshots', async function(req, res, next){
-  const [error, snapshot] = await snapshotService.create(req.body, req.user);
+  const locationId = parseInt(req.params.locationId);
+  const [error, snapshot] = await snapshotService.create(locationId, req.body, req.user);
   res.json({ snapshot, error });
 });
 

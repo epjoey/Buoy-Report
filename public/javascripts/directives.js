@@ -272,10 +272,10 @@
       return {
         scope: true,
         link: function($scope, $el, $attrs){
-          var locationId = $attrs.ngSnapshots;
+          $scope.locationId = $attrs.ngSnapshots;
           $scope.page = 0;
           $scope.snapshots = [];
-          var url = (locationId ? '/locations/' + locationId : '') + '/snapshots?page=';
+          var url = ($scope.locationId ? '/locations/' + $scope.locationId : '') + '/snapshots?page=';
           $scope.load = function(){
             http.get($scope, url + ($scope.page + 1)).then(function(res){
               var snapshots = _.get(res.data.snapshots, 'rows', []);
@@ -285,17 +285,87 @@
             });
           };
           // Location snapshots feed starts off blank.
-          if(!locationId){
+          if(!$scope.locationId){
             $scope.load();
           }
+        }
+      };
+    }
+  ]);
 
-          // Form.
+  directives.directive('ngAddSnapshot', [
+    'http', '$http',
+    function(http, $http){
+      return {
+        link: function($scope, el, attrs){
           $scope.req = {};
           $scope.req.timeOffset = 0;
+
           $scope.timeOffsetRange = _.range(0, 240);
           $scope.timeOffsetStr = function(o){
             return o === 0 ? 'Now' : (o + (o > 1 ? ' hours ago': ' hour ago'));
           };
+
+          $scope.qualities = _.range(1, 6);
+          $scope.QUALITIES = QUALITIES;
+
+          $scope.waveHeights = _.keys(WAVE_HEIGHTS);
+          $scope.WAVE_HEIGHTS = WAVE_HEIGHTS;
+
+          var IMGUR_CLIENT_ID = 'edda62204c13785';
+
+          $scope.submit = function(){
+            if($scope.req.image){
+              submitImageFirst();
+            }
+            else {
+              submitSnapshot();
+            }
+          };
+
+          var submitImageFirst = function(){
+            var formData = new FormData();
+            formData.append("image", $scope.req.image);
+            return $http({
+              url: "https://api.imgur.com/3/image",
+              method: "POST",
+              params: formData,
+              datatype: "json",
+              headers: {
+                'Authorization': 'Client-ID ' + IMGUR_CLIENT_ID
+              },
+              success: function(result){
+                console.log(result);
+                submitSnapshot();
+              },
+              error: function() {
+                console.log("error uploading image");
+              }
+            });
+          };
+
+          var submitSnapshot = function(){
+            http.post($scope, '/locations/' + $scope.locationId + '/snapshots', $scope.req).then(function(res){
+              $scope.snapshots.unshift(parseSnapshot(res.data.snapshot));
+            });
+          };          
+        }
+      };
+    }
+  ]);
+
+
+  directives.directive('ngFileUpload', [
+    function(){
+      return {
+        require: 'ngModel',
+        link: function($scope, el, attrs, ngModel){
+          el.bind('change', function(event){
+            var files = event.target.files;
+            var file = files[0];
+            ngModel.$setViewValue(file);
+            $scope.$apply();
+          });
         }
       };
     }
