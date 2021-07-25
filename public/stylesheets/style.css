@@ -65,8 +65,6 @@ input[type="email"], textarea, select {
 .text-meta { font: italic 13px georgia; }
 .mb-10 { margin-bottom: 10px; }
 .mb-20 { margin-bottom: 20px; }
-.link { cursor: pointer; }
-.link:hover { text-decoration: underline; }
 
 /*======= COLORS =======*/
 .grey {color: #535458}
@@ -257,6 +255,23 @@ input[type="email"], textarea, select {
   text-decoration: none;
 }
 
+.block-list-add {
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 20px;
+  font-family: 'Museo500', 'Helvetica Neue', sans-serif;
+  display: inline-block;
+  padding: 4px 8px;
+  float: right;
+}
+.block-list-add:hover {
+  text-decoration: underline;
+}
+@media only screen and (max-width: 480px){
+  .block-list-add { font-size: 16px }
+}
+
+
 
 /*================================*/
 /* INDEX PAGE */
@@ -265,17 +280,6 @@ input[type="email"], textarea, select {
 .index-page .header .logo-large { display: none; }
 .index-page .banner { display: none; }
 .index-page .search-locations { float: left; width: 54%; }
-.index-page .add-location {
-  color: #ffffff;
-  font-size: 20px;
-  font-family: 'Museo500', 'Helvetica Neue', sans-serif;
-  display: inline-block;
-  padding: 4px 8px;
-  float: right;
-}
-@media only screen and (max-width: 480px){
-  .index-page .add-location { font-size: 16px }
-}
 @media only screen and (min-width: 960px){
   .index-page .header { margin-bottom: 46px; }
   .index-page .header .logo { display: none; }

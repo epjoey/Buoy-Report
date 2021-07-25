@@ -32,8 +32,7 @@ form.form(
       span Longitude
       input(type='text', ng-model='req.longitude')
 
-  .field.errors(ng-if="error")
-    li {{ error }}
+  .field.errors(ng-if="error") {{ error }}
 
   .btns
     input.btn.submit(
@@ -43,7 +42,7 @@ form.form(
       value="Submit"
     )
 
-    if user.email == location.email || user.email == 'jhodara@gmail.com'
+    if user.email == location.email || isAdmin
       button.btn.delete.right.btn-small(
         ng-click="deleteLocation()",
         ng-disabled="loading"

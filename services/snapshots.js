@@ -13,6 +13,22 @@ const SNAPSHOT_SELECT = '\
   LEFT JOIN `reporter` u ON r.reporterid = u.id \
   LEFT JOIN `location` l ON r.locationid = l.id';
 
+
+async function create(reqBody, user){
+  let params = _.pick(reqBody);
+  params.email = user._json.email;
+  const [result, fields] = await db.query('INSERT INTO `report` SET ?', params);
+  if(result.insertId){
+    let [rows, fields] = await db.query(
+      'SELECT * FROM `report` WHERE id = ?',
+      result.insertId
+    );
+    return helper.first(rows);
+  }
+  return null;
+}
+
+
 async function forLocation(locationId, page = 1){
   const offset = helper.getOffset(page, SNAPSHOT_LIMIT);
   let [rows, fields] = await db.query(

@@ -31,8 +31,7 @@ form.form(
       span Longitude
       input(type='text', ng-model='req.longitude')
 
-  .field.errors(ng-if="error")
-    li {{ error }}         
+  .field.errors(ng-if="error") {{ error }}
 
   .field.text-center
     span.btn.cancel(ng-click="addLocation.isOpen = false") Cancel

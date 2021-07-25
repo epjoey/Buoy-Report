@@ -101,7 +101,8 @@
   };
 
   directives.directive('ngBuoyData', [
-    function(){
+    'http',
+    function(http){
       return {
         scope: true,
         controllerAs: 'buoyCtrl',
@@ -114,20 +115,13 @@
 
           ctrl.load = function(){
             var offset = ctrl.tables.length * ROWS_PER_TABLE;
-            var url = '/buoys/' + ctrl.buoyId + '/' + type + '?offset=' + offset;
-            ctrl.isLoading = true;
-            $http.get(url).success(function(res){
-              ctrl.isLoading = false;
-              if(res.data){
+            var url = '/buoys/' + ctrl.buoyId + '/data?type=' + type + '&offset=' + offset;
+            http.get($scope, url).then(function(res){
+              if(res.data.data){
                 ctrl.tables.push({
-                  rows: parseBuoyData(res.data, type)
+                  rows: parseBuoyData(res.data.data, type)
                 });
               }
-              if(res.error){
-                console.error('error loading buoy data:' + url + ': ' + res.error);
-              }
-            }).error(function(res){
-              ctrl.isLoading = false;
             });
           };
 
@@ -139,23 +133,15 @@
 
 
   directives.directive('ngAddLocation', [
-    '$http',
-    function($http){
+    'http',
+    function(http){
       return {
         scope: true,
         link: function($scope, $el, $attrs){
           $scope.req = {};
           $scope.submit = function(){
-            $scope.loading = true;
-            $http.post('/locations', $scope.req).success(function(res){
-              $scope.loading = false;
-              $scope.error = res.error;
-              if(res.locationId){
-                window.location.href = '/locations/' + res.locationId;
-              }
-            }).error(function(res){
-              $scope.loading = false;
-              $scope.error = 'Error adding location';
+            http.post($scope, '/locations', $scope.req).then(function(res){
+              window.location.href = '/locations/' + res.data.locationId;
             });
           };
         }
@@ -165,8 +151,8 @@
 
 
   directives.directive('ngUpdateLocation', [
-    '$http',
-    function($http){
+    'http',
+    function(http){
       return {
         scope: true,
         link: function($scope, $el, $attrs){
@@ -174,31 +160,64 @@
           var buoys = JSON.parse($attrs.ngUpdateLocationBuoys);
           $scope.req = _.clone(location);
           $scope.req.buoys = _.join(_.map(buoys, 'buoyid'), ', ');
+          var url = '/locations/' + location.id;
+
           $scope.submit = function(){
-            $scope.loading = true;
-            $http.put('/locations/' + location.id, $scope.req).success(function(res){
-              $scope.loading = false;
-              $scope.error = res.error;
-              if(!$scope.error){
-                window.location.reload();
-              }
-            }).error(function(res){
-              $scope.loading = false;
-              $scope.error = 'Error updating location';
+            http.put($scope, url, $scope.req).then(function(res){
+              window.location.reload();
             });
           };
 
           $scope.deleteLocation = function(){
             if(window.confirm('Are you sure you want to delete ' + location.name + '?')){
-              $http.delete('/locations/' + location.id).success(function(res){
-                $scope.loading = false;
-                $scope.error = res.error;
-                if(res.success){
-                  window.location.href = '/';
-                }
-              }).error(function(res){
-                $scope.loading = false;
-                $scope.error = 'Error deleting location';
+              http.delete($scope, url).then(function(res){
+                window.location.href = '/';
+              });
+            }
+          };
+        }
+      };
+    }
+  ]);
+
+
+  // Buoys
+  directives.directive('ngAddBuoy', [
+    'http',
+    function(http){
+      return {
+        scope: true,
+        link: function($scope, $el, $attrs){
+          $scope.req = {};
+          $scope.submit = function(){
+            http.post($scope, '/buoys', $scope.req).then(function(res){
+              window.location.href = '/buoys/' + res.data.buoy.buoyid;
+            });
+          };
+        }
+      };
+    }
+  ]);
+
+  directives.directive('ngUpdateBuoy', [
+    'http',
+    function(http){
+      return {
+        scope: true,
+        link: function($scope, $el, $attrs){
+          var buoy = JSON.parse($attrs.ngUpdateBuoy);
+          $scope.req = _.clone(buoy);
+          var url = '/buoys/' + buoy.buoyid;
+          $scope.submit = function(){
+            http.put($scope, url, $scope.req).then(function(res){
+              return window.location.reload();
+            });
+          };
+
+          $scope.deleteBuoy = function(){
+            if(window.confirm('Are you sure you want to delete buoy #' + buoy.buoyid + '?')){
+              http.delete($scope, url).then(function(res){
+                window.location.href = '/buoys';
               });
             }
           };
@@ -248,8 +267,8 @@
 
 
   directives.directive('ngSnapshots', [
-    '$http',
-    function($http){
+    'http',
+    function(http){
       return {
         scope: true,
         link: function($scope, $el, $attrs){
@@ -258,14 +277,11 @@
           $scope.snapshots = [];
           var url = (locationId ? '/locations/' + locationId : '') + '/snapshots?page=';
           $scope.load = function(){
-            $scope.loading = true;
-            $http.get(url + ($scope.page + 1)).success(function(res){
-              $scope.loading = false;
-              $scope.snapshots = _.concat($scope.snapshots, _.map(res.snapshots.rows, parseSnapshot));
+            http.get($scope, url + ($scope.page + 1)).then(function(res){
+              var snapshots = _.get(res.data.snapshots, 'rows', []);
+              $scope.snapshots = _.concat($scope.snapshots, _.map(snapshots, parseSnapshot));
               $scope.page += 1;
-              $scope.isLastPage = res.snapshots.rows.length < 10;
-            }).error(function(res){
-              $scope.loading = false;
+              $scope.isLastPage = snapshots.length < 10;
             });
           };
           // Location snapshots feed starts off blank.

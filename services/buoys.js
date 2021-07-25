@@ -1,14 +1,59 @@
+var assert = require('assert');
 const https = require('https');
 const _ = require('lodash');
 const db = require('../db');
 const helper = require('../helper');
 
-const LIMIT = 24; // get 24 hours of data.
+
+async function create(reqBody){
+  try {
+    const buoyid = parseInt(reqBody.buoyid);
+    assert(buoyid > 0, 'Invalid buoy id');
+    const params = {buoyid, name: reqBody.name};
+    console.log(params)
+    const [result, fields] = await db.query('INSERT INTO `buoy` SET ?', params);
+    return [null, await getSingle(buoyid)];
+  }
+  catch(err){
+    console.log(err);
+    console.log(err.message)
+    return [err.message, null];
+  }
+}
+
+
+async function update(buoyId, reqBody){
+  try{
+    const params = _.pick(reqBody, ['name']);
+    const [result, fields] = await db.query(
+      'UPDATE `buoy` SET ? WHERE buoyid = ?', [params, buoyId]
+    );
+    return [null, await getSingle(buoyId)];
+  }
+  catch(err){
+    return [err.message, null];
+  }
+}
+
+
+async function del(buoyId){
+  try {
+    const [result, fields] = await db.query(
+      'DELETE FROM `buoy` WHERE buoyid = ?', buoyId
+    );
+    return [null, true];
+  }
+  catch(err){
+    return [err.message, null];
+  }
+}
+
 
 function splitRows(data, offset){
+  const limit = 24; // get 24 hours of data.
   let rows = data.split("\n");
   let result = [];
-  rows = _.slice(rows, offset, offset + LIMIT);
+  rows = _.slice(rows, offset, offset + limit);
   _.forEach(rows, function(row){
     row = _.compact(row.split(" "));
     result.push(row);
@@ -16,20 +61,18 @@ function splitRows(data, offset){
   return result;
 }
 
-async function getBuoyStandardData(id, offset = 0){
-  // Example: https://www.ndbc.noaa.gov/data/realtime2/46012.txt
-  const URL = 'https://www.ndbc.noaa.gov/data/realtime2/' + id + '.txt';
-  return helper.makeRequest(URL).then(function(data){
-    return splitRows(data, offset);
-  });
-}
 
-async function getBuoyWaveData(id, offset = 0){
-  // Example: https://www.ndbc.noaa.gov/data/realtime2/51205.spec
-  const URL = 'https://www.ndbc.noaa.gov/data/realtime2/' + id + '.spec';
-  return helper.makeRequest(URL).then(function(data){
-    return splitRows(data, offset);
-  });
+async function getData(id, type, offset = 0){
+  // Standard data: https://www.ndbc.noaa.gov/data/realtime2/46012.txt
+  // Wave data: https://www.ndbc.noaa.gov/data/realtime2/46012.spec
+  let url = 'https://www.ndbc.noaa.gov/data/realtime2/' + id + (type === 'wave' ? '.spec' : '.txt');
+  try {
+    let data = await helper.makeRequest(url);
+    data = splitRows(data, offset);
+    return [null, data];
+  } catch(err){
+    return [err.message, null];
+  }
 }
 
 
@@ -47,11 +90,11 @@ async function forLocation(location){
 
 
 async function getMultiple(page = 1){
-  const LIMIT = 1000;
-  const offset = helper.getOffset(page, LIMIT);
+  const limit = 1000;
+  const offset = helper.getOffset(page, limit);
   let [rows, fields] = await db.query(
-    'SELECT buoyid, name FROM `buoy` LIMIT ?,?',
-    [offset, LIMIT]
+    'SELECT buoyid, name FROM `buoy` ORDER BY buoyid LIMIT ?,?',
+    [offset, limit]
   );
   rows = helper.rows(rows);
   const meta = {page};
@@ -72,8 +115,10 @@ async function getSingle(id){
 
 
 module.exports = {
-  getBuoyStandardData,
-  getBuoyWaveData,
+  create,
+  update,
+  del,
+  getData,
   forLocation,
   getMultiple,
   getSingle

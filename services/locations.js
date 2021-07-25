@@ -12,16 +12,18 @@ async function create(reqBody, user){
     params.longitude = parseFloat(reqBody.longitude).toFixed(3);
   }
   params.email = user._json.email;
-  const [result, fields] = await db.query('INSERT INTO `location` SET ?', params);
-  if(result.insertId){
+  try {
+    const [result, fields] = await db.query('INSERT INTO `location` SET ?', params);
     await addBuoysToLocation(reqBody.buoys, result.insertId);
-    return result.insertId;
+    return [null, result.insertId];
   }
-  return null;
+  catch(err){
+    return [err.message, null];
+  }
 }
 
 
-async function update(location, reqBody, user){
+async function update(locationId, reqBody){
   let params = _.pick(reqBody, ['name', 'timezone']);
   if(reqBody.latitude){
     params.latitude = parseFloat(reqBody.latitude).toFixed(3);
@@ -29,24 +31,33 @@ async function update(location, reqBody, user){
   if(reqBody.longitude){
     params.longitude = parseFloat(reqBody.longitude).toFixed(3);
   }
-  const [result, fields] = await db.query(
-    'UPDATE `location` SET ? WHERE id = ?', [params, location.id]
-  );
-
-  // Update buoys
-  await db.query('DELETE FROM `buoy_location` WHERE locationid = ?', location.id);
-  await addBuoysToLocation(reqBody.buoys, location.id);
-  
-  return result.changedRows ? getSingle(location.id) : null;
+  try {
+    const [result, fields] = await db.query(
+      'UPDATE `location` SET ? WHERE id = ?', [params, locationId]
+    );
+    // Update buoys
+    await db.query('DELETE FROM `buoy_location` WHERE locationid = ?', locationId);
+    await addBuoysToLocation(reqBody.buoys, locationId);
+    return [null, getSingle(locationId)];
+  }
+  catch(err){
+    return [err.message, null];
+  }
 }
 
 
 async function del(location){
-  const [result, fields] = await db.query(
-    'DELETE FROM `location` WHERE id = ?', location.id
-  );
-  return result.affectedRows ? true : false;
+  try {
+    const [result, fields] = await db.query(
+      'DELETE FROM `location` WHERE id = ?', location.id
+    );
+    return [null, true];
+  }
+  catch(err){
+    return [err.message, null];
+  }
 }
+
 
 async function getMultiple(page = 1){
   const LIMIT = 1000;

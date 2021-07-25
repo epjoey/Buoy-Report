@@ -6,6 +6,35 @@ block headerLink
   a.header-link(href="/buoys/#{buoy.buoyid}") #{buoy.buoyid}: #{buoy.name}
 
 block container
-  div.buoy-data-wrap
-    div.buoy-data-inner-wrap
+  .buoy-data-wrap
+    .buoy-data-inner-wrap
       include ./includes/buoy-data.jade
+
+  if isAuthenticated
+    form.form(
+      ng-update-buoy="#{JSON.stringify(buoy)}",
+      name="updateBuoyForm"
+    )
+      .field
+        label
+          span Name
+          input(type='text', ng-model='req.name')
+
+      .field.errors(ng-if="error") {{ error }}
+
+      .btns
+        input.btn.submit(
+          type="submit",
+          ng-click="submit()",
+          ng-disabled="loading || updateBuoyForm.$invalid || updateBuoyForm.$pristine"
+          value="Submit"
+        )
+
+        if isAdmin
+          button.btn.delete.right.btn-small(
+            ng-click="deleteBuoy()",
+            ng-disabled="loading"
+          ) Delete Buoy
+      .clear
+
+

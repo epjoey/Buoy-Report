@@ -33,7 +33,7 @@ html
               img.logo(src="/images/logo-lrg.png", width="46", height="46")
               img.logo-large(src="/images/logo-lrg.png", width="101", height="101")
             block headerLink
-              a.header-link(href='/') Buoy Report  
+              a.header-link(href='/') Buoy Report
           .header-right
             .header-menu(ng-init="menuCtrl = { isOpen: false }")
               a.header-menu-trigger(ng-click="menuCtrl.isOpen = !menuCtrl.isOpen")
@@ -42,11 +42,14 @@ html
                 ng-class="menuCtrl.isOpen ? 'open' : ''"
               )
                 block headerMenuItems
-                li
-                  a(href="/me") Account
                 if isAuthenticated
                   li
+                    a(ng-href='/me') My profile
+                  li
                     a(href="/logout") Logout
+                else
+                  li
+                    a(ng-href='/login') Login
 
       block container
         .container
@@ -60,5 +63,5 @@ html
           a(href="/about") About Buoy Report &nbsp;|&nbsp;
           a(href="/buoys") Browse Buoys &nbsp;|&nbsp;
           a(href="/reporters") Browse Reporters
-        p All buoy and tide data from 
+        p All buoy and tide data from
           a(href="http://noaa.gov", target="_blank") NOAA

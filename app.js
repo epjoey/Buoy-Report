@@ -11,6 +11,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 
 require("dotenv").config(); // loads the vars from the .env file into process.env
+const ADMIN_EMAIL = "jhodara@gmail.com";
 
 /**
  * Required Internal Modules
@@ -98,6 +99,7 @@ passport.deserializeUser((user, done) => {
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
   res.locals.user = req.user ? req.user._json : null;
+  res.locals.isAdmin = req.user && req.user._json.email === ADMIN_EMAIL;
   next();
 });
 

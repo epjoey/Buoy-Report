@@ -24,6 +24,13 @@ block container
       include ./includes/update-location.jade
 
   .container.snapshots(ng-snapshots="#{location.id}")
+    if isAdmin
+      div(ng-init="addSnapshot = {isOpen: false}")
+        .text-center.mb-20
+          span.btn(ng-click="addSnapshot.isOpen = !addSnapshot.isOpen") Add Snapshot
+        .mb-20(ng-if="addSnapshot.isOpen")
+          include ./includes/add-snapshot.jade
+
     div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade
 
