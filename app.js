@@ -4,10 +4,10 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const expressSession = require("express-session");
 const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
 const logger = require('morgan');
-const cookieSession = require('cookie-session')
 const cookieParser = require('cookie-parser');
 
 require("dotenv").config(); // loads the vars from the .env file into process.env
@@ -79,15 +79,9 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
-app.use(cookieSession({
-  name: 'session',
-  keys: ['key1', 'key2']
-
-  // Cookie Options
-  // maxAge: 24 * 60 * 60 * 1000 // 24 hours
-}))
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressSession(session));
 
 passport.use(strategy);
 app.use(passport.initialize());
