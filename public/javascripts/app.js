@@ -1,6 +1,10 @@
 (function() {
   angular.module('app', ['directives', 'controllers'])
 
+  .filter('map', function(){
+    return _.map;
+  })
+
   .factory('http', ['$http', '$q', function($http, $q){
     var req = function(scope, method, url, data){
       var deferred = $q.defer();

@@ -288,6 +288,14 @@
           if(!locationId){
             $scope.load();
           }
+
+          // Form.
+          $scope.req = {};
+          $scope.req.timeOffset = 0;
+          $scope.timeOffsetRange = _.range(0, 240);
+          $scope.timeOffsetStr = function(o){
+            return o === 0 ? 'Now' : (o + (o > 1 ? ' hours ago': ' hour ago'));
+          };
         }
       };
     }

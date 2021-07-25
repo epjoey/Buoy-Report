@@ -2,20 +2,22 @@ form.form(
   name="addSnapshotForm"
 )
   .field
-    select(ng-model="timeOffset")
-      option(value="0") Now
-      option(ng-repeat="n in (1|range:240)", value="-{{n}}")
-        | {{ i + (i > 1 ? ' hours ago': ' hour ago') }}
+    label
+      span Time
+      select(
+        ng-model="req.timeOffset",
+        ng-options="n as timeOffsetStr(n) for n in timeOffsetRange"
+      )
 
   .field
     label
       span Quality
-      select(ng-model="quality")
+      select(ng-model="req.quality")
         option(ng-repeat="key in QUALITY_KEYS", ng-value="key") {{ QUALITIES[key] }}
   .field
     label
       span Waveheight (backs)
-      select(ng-model="waveheight")
+      select(ng-model="req.waveheight")
         option(ng-repeat="key in WAVE_HEIGHT_KEYS", ng-value="key") {{ WAVE_HEIGHT_KEYS[key] }
 
   .field.errors(ng-if="error") {{ error }}
