@@ -1,0 +1,31 @@
+form.form(
+  name="addSnapshotForm"
+)
+  .field
+    select(ng-model="timeOffset")
+      option(value="0") Now
+      option(ng-repeat="n in (1|range:240)", value="-{{n}}")
+        | {{ i + (i > 1 ? ' hours ago': ' hour ago') }}
+
+  .field
+    label
+      span Quality
+      select(ng-model="quality")
+        option(ng-repeat="key in QUALITY_KEYS", ng-value="key") {{ QUALITIES[key] }}
+  .field
+    label
+      span Waveheight (backs)
+      select(ng-model="waveheight")
+        option(ng-repeat="key in WAVE_HEIGHT_KEYS", ng-value="key") {{ WAVE_HEIGHT_KEYS[key] }
+
+  .field.errors(ng-if="error") {{ error }}
+
+  .field.text-center
+    span.btn.cancel(ng-click="addSnapshot.isOpen = false") Cancel
+    | &nbsp;
+    input.btn.submit(
+      type="submit",
+      ng-click="submit()",
+      ng-disabled="loading || addSnapshotForm.$invalid || addSnapshotForm.$pristine"
+      value="Submit"
+    )
