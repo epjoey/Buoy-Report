@@ -23,7 +23,7 @@ block container
     .container.mb-20
       include ./includes/update-location.jade
 
-  .container.snapshots(ng-snapshots="#{location.id}")
+  .container.snapshots(ng-snapshots, ng-snapshots-location="#{location.id}")
     if isAdmin
       .mb-20
         include ./includes/add-snapshot.jade
@@ -36,6 +36,6 @@ block container
       a.btn(
         ng-disabled="loading || isLastPage"
         ng-click="load()"
-      ) Load {{ page > 0 ? 'more' : 'snapshots' }}
+      ) Load {{ snapshots.length ? 'more' : 'snapshots' }}
 
 

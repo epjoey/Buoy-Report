@@ -20,7 +20,6 @@ const db = require('./db');
 const authRouter = require("./routes/auth");
 const indexRouter = require('./routes/index');
 const locationsRouter = require('./routes/locations');
-const reportersRouter = require('./routes/reporters');
 const buoysRouter = require('./routes/buoys');
 
 /**
@@ -118,7 +117,6 @@ app.use('/', indexRouter);
 app.use('/', authRouter);
 app.use('/l', locationsRouter); // support short legacy urls. TODO: redirect.
 app.use('/locations', locationsRouter);
-app.use('/reporters', reportersRouter);
 app.use('/buoys', buoysRouter);
 
 // catch 404 and forward to error handler

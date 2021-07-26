@@ -5,13 +5,20 @@ block content
     p
       | Dear Buoy Reporter, snapshotting of buoy data is currently unavailable until further notice. &#128580; We are sorry for the inconvenience. Past snapshots are available below. Email joey (jhodara at gmail.com) to request the feature back.
 
-  .snapshots(ng-snapshots)
+  .snapshots.mb-20(ng-snapshots, ng-snapshots-reporter="#{ reporter.id }")
     div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade
 
-    .info.mb-20(ng-if="page && !snapshots.length") You have no snapshots &#128546;
+    .info.mb-20(ng-if="page && !snapshots.length") No snapshots &#128546;
     .text-center
       a.btn(
         ng-disabled="loading || isLastPage"
         ng-click="load()"
       ) Load {{ page > 0 && !isLastPage ? 'more' : 'snapshots' }}
+
+  if user.email == reporter.email || isAdmin
+    .text-center(ng-update-reporter="#{JSON.stringify(reporter)}",)
+      button.btn.delete.btn-small(
+        ng-click="deleteReporter()",
+        ng-disabled="loading"
+      ) Delete Reporter

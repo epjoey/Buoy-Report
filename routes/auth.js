@@ -6,8 +6,9 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const db = require('../db');
 const querystring = require("querystring");
-const reporterService = require('../services/reporters');
+const reporterService = require('../services/reporter');
 const snapshotService = require('../services/snapshots');
 const helper = require('../helper');
 
@@ -74,19 +75,39 @@ router.get("/logout", (req, res) => {
 
 
 router.get("/me", helper.secured, async function(req, res, next){
-  const reporter = await reporterService.getSingle(req.user._json.email);
-  res.render("reporter", {
-    reporter: reporter
-  });
+  let [rows, fields] = await db.query(
+    'SELECT id, name FROM `reporter` WHERE email = ?', req.user._json.email
+  );
+  const reporter = helper.first(rows);
+  res.render("reporter", { reporter });
 });
 
 
-router.get("/snapshots", helper.secured, async function(req, res, next){
-  const snapshots = await snapshotService.forReporter(req.user._json.email, req.query.page);
-  res.json({
-    snapshots: snapshots
-  });
+router.get("/reporters", helper.secured, async function(req, res, next){
+  let [rows, fields] = await db.query('SELECT id, name FROM `reporter`');
+  rows = helper.rows(rows);
+  res.render('reporters', { reporters: rows });
+}) 
+
+
+router.get("/reporters/:reporterId", helper.secured, async function(req, res, next){
+  const reporter = await reporterService.getSingle(parseInt(req.params.reporterId));
+  res.render("reporter", { reporter });
+})
+
+
+router.get("/reporters/:reporterId/snapshots", helper.secured, async function(req, res, next){
+  const reporter = await reporterService.getSingle(parseInt(req.params.reporterId));
+  const snapshots = await snapshotService.forReporter(reporter, req.user, req.query.page);
+  res.json({ snapshots });
 });
+
+
+router.delete("/reporters/:reporterId", helper.secured, async function(req, res, next){
+  let reporterId = parseInt(req.params.reporterId);
+  const [error, success] = await reporterService.del(reporterId);
+  res.json({ success, error });
+})
 
 
 /**

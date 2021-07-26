@@ -52,7 +52,11 @@ router.delete('/:locationId', helper.secured, async function(req, res, next){
 
 
 router.get('/:locationId/snapshots', async function(req, res, next){
-  const snapshots = await snapshotService.forLocation(req.params.locationId, req.query.page);
+  const snapshots = await snapshotService.forLocation(
+    req.params.locationId,
+    req.user,
+    req.query.page
+  );
   res.json({ snapshots });
 });
 

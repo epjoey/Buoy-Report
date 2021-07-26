@@ -2,6 +2,6 @@ extends layout
 
 block content
   ul.block-list
-    for row in reporters.rows
+    for row in reporters
       li
-        span= row.name
+        a(href="/reporters/#{row.id}")=row.name

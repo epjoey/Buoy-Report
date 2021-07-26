@@ -563,16 +563,10 @@ input[type="file"] {
 
 
 /*-------- FORMS ---------*/
-.form-title {
-  max-width: 680px;
-  color: #e8ecef;
-  font: 24px / 32px 'Museo300', 'Helvetica Neue', sans-serif;
-  margin:0 auto 20px;
-}
 .form {
   background: #e8ecef;
   padding: 16px;
-  font: normal 18px / 1.4em 'Helvetica Neue', arial, sans-serif;
+  line-height: 1.4em;
   color: #06223c;
   font-smoothing: subpixel-antialiased;
   border-top: 2px solid #ffffff;
@@ -583,6 +577,7 @@ input[type="file"] {
   box-sizing: border-box;
 }
 .form .field {margin-bottom: 8px;}
+
 .form .field > label > span {
   display: inline-block;
   float: left;

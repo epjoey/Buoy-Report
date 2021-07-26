@@ -181,6 +181,27 @@
   ]);
 
 
+  directives.directive('ngUpdateReporter', [
+    'http',
+    function(http){
+      return {
+        scope: true,
+        link: function($scope, $el, $attrs){
+          var reporter = JSON.parse($attrs.ngUpdateReporter);
+          var url = '/reporters/' + reporter.id;
+          $scope.deleteReporter = function(){
+            if(window.confirm('Are you sure you want to delete ' + reporter.name + '?')){
+              http.delete($scope, url).then(function(res){
+                window.location.href = '/reporters';
+              });
+            }
+          };
+        }
+      };
+    }
+  ]);
+
+
   // Buoys
   directives.directive('ngAddBuoy', [
     'http',
@@ -272,10 +293,14 @@
       return {
         scope: true,
         link: function($scope, $el, $attrs){
-          $scope.locationId = $attrs.ngSnapshots;
+          $scope.locationId = $attrs.ngSnapshotsLocation;
+          $scope.reporterId = $attrs.ngSnapshotsReporter;
           $scope.page = 0;
           $scope.snapshots = [];
-          var url = ($scope.locationId ? '/locations/' + $scope.locationId : '') + '/snapshots?page=';
+          var url = ( $scope.locationId ?
+            '/locations/' + $scope.locationId :
+            '/reporters/' + $scope.reporterId
+          ) + '/snapshots?page=';
           $scope.load = function(){
             http.get($scope, url + ($scope.page + 1)).then(function(res){
               var snapshots = _.get(res.data.snapshots, 'rows', []);
@@ -285,7 +310,7 @@
             });
           };
           // Location snapshots feed starts off blank.
-          if(!$scope.locationId){
+          if($scope.reporterId){
             $scope.load();
           }
         }
