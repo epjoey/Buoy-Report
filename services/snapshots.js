@@ -37,7 +37,7 @@ async function forLocation(locationId, user, page = 1){
   const offset = helper.getOffset(page, SNAPSHOT_LIMIT);
   let [rows, fields] = await db.query(
     SNAPSHOT_SELECT + ' WHERE s.locationid = ? AND (s.public = 1 OR r.email = ?) ORDER BY s.id desc LIMIT ?,?',
-    [locationId, user._json.email, offset, SNAPSHOT_LIMIT]
+    [locationId, user ? user._json.email : null, offset, SNAPSHOT_LIMIT]
   );
 
   const buoyData = await buoyDataByReport(_.map(rows, 'id'));
@@ -56,7 +56,7 @@ async function forReporter(reporter, user, page = 1){
   const offset = helper.getOffset(page, SNAPSHOT_LIMIT);
   let [rows, fields] = await db.query(
     SNAPSHOT_SELECT + ' WHERE (r.email = ? OR s.email = ?) AND (s.public = 1 OR r.email = ?) ORDER BY s.id desc LIMIT ?,?', 
-    [reporter.email, reporter.email, user._json.email, offset, SNAPSHOT_LIMIT]
+    [reporter.email, reporter.email, user ? user._json.email : null, offset, SNAPSHOT_LIMIT]
   );
 
   const buoyData = await buoyDataByReport(_.map(rows, 'id'));
