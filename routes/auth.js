@@ -96,14 +96,14 @@ router.get("/reporters/:reporterId", helper.secured, async function(req, res, ne
 })
 
 
-router.get("/reporters/:reporterId/snapshots", async function(req, res, next){
+router.get("/reporters/:reporterId/snapshots", helper.secured, async function(req, res, next){
   const reporter = await reporterService.getSingle(parseInt(req.params.reporterId));
   const snapshots = await snapshotService.forReporter(reporter, req.user, req.query.page);
   res.json({ snapshots });
 });
 
 
-router.delete("/reporters/:reporterId", async function(req, res, next){
+router.delete("/reporters/:reporterId", helper.secured, async function(req, res, next){
   let reporterId = parseInt(req.params.reporterId);
   const [error, success] = await reporterService.del(reporterId);
   res.json({ success, error });
