@@ -32,7 +32,7 @@ router.get('/:locationId', async function(req, res, next){
 
 
 router.put('/:locationId', helper.secured, async function(req, res, next){
-  let locationId = parseInt(req.params.locationId);
+  const locationId = parseInt(req.params.locationId);
   const [error, location] = await locationService.update(locationId, req.body);
   res.json({ location, error });
 });

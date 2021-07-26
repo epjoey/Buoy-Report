@@ -4,7 +4,7 @@ const helper = require('../helper');
 
 
 async function create(reqBody, user){
-  let params = _.pick(reqBody, ['name', 'timezone']);
+  let params = _.pick(reqBody, ['name', 'timezone', 'stormsurfingurl']);
   if(reqBody.latitude){
     params.latitude = parseFloat(reqBody.latitude).toFixed(3);
   }
@@ -24,7 +24,7 @@ async function create(reqBody, user){
 
 
 async function update(locationId, reqBody){
-  let params = _.pick(reqBody, ['name', 'timezone']);
+  let params = _.pick(reqBody, ['name', 'timezone', 'stormsurfingurl']);
   if(reqBody.latitude){
     params.latitude = parseFloat(reqBody.latitude).toFixed(3);
   }
@@ -77,7 +77,7 @@ async function getMultiple(page = 1){
 
 async function getSingle(id){
   let [rows, fields] = await db.query(
-    'SELECT id, name, timezone, latitude, longitude, email \
+    'SELECT id, name, timezone, latitude, longitude, stormsurfingurl, email \
      FROM `location` WHERE id = ?', 
     [id]
   );

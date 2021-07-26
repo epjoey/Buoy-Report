@@ -40,6 +40,15 @@ form.form(
         ) Longitude
       input(type='text', ng-model='req.longitude')
 
+  .field
+    label
+      span 
+        a(
+          href="http://www.stormsurfing.com/cgi/display1.cgi?a=hi_sea"
+          target="_blank"
+        ) Stormsurfing URL
+      input(type='text', ng-model='req.stormsurfingurl')
+
   .field.errors(ng-if="error") {{ error }}
 
   .field.text-center
