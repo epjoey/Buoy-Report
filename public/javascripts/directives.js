@@ -181,27 +181,6 @@
   ]);
 
 
-  directives.directive('ngUpdateReporter', [
-    'http',
-    function(http){
-      return {
-        scope: true,
-        link: function($scope, $el, $attrs){
-          var reporter = JSON.parse($attrs.ngUpdateReporter);
-          var url = '/reporters/' + reporter.id;
-          $scope.deleteReporter = function(){
-            if(window.confirm('Are you sure you want to delete ' + reporter.name + '?')){
-              http.delete($scope, url).then(function(res){
-                window.location.href = '/reporters';
-              });
-            }
-          };
-        }
-      };
-    }
-  ]);
-
-
   // Buoys
   directives.directive('ngAddBuoy', [
     'http',
@@ -283,6 +262,7 @@
     snapshot.imagepath = snapshot.imagepath && !snapshot.imagepath.startsWith('http') ?
         'https://www.buoyreport.com/uploads/' + snapshot.imagepath : snapshot.imagepath;
     snapshot.buoyData = _.map(snapshot.buoyData, parseSnapshotBuoyData);
+    snapshot.by = snapshot.email ? snapshot.email.split('@')[0] : 0;
     return snapshot;
   };
 
@@ -294,25 +274,23 @@
         scope: true,
         link: function($scope, $el, $attrs){
           $scope.locationId = $attrs.ngSnapshotsLocation;
-          $scope.reporterId = $attrs.ngSnapshotsReporter;
           $scope.page = 0;
           $scope.snapshots = [];
-          var url = ( $scope.locationId ?
-            '/locations/' + $scope.locationId :
-            '/reporters/' + $scope.reporterId
-          ) + '/snapshots?page=';
+
+          var url = $scope.locationId ?
+            '/locations/' + $scope.locationId + '/snapshots' :
+            '/snapshots'; // My snapshots.
+
           $scope.load = function(){
-            http.get($scope, url + ($scope.page + 1)).then(function(res){
+            http.get($scope, url + '?page=' + ($scope.page + 1)).then(function(res){
               var snapshots = _.get(res.data.snapshots, 'rows', []);
               $scope.snapshots = _.concat($scope.snapshots, _.map(snapshots, parseSnapshot));
               $scope.page += 1;
               $scope.isLastPage = snapshots.length < 10;
             });
           };
-          // Location snapshots feed starts off blank.
-          if($scope.reporterId){
-            $scope.load();
-          }
+
+          $scope.load();
         }
       };
     }

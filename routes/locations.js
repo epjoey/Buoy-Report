@@ -41,8 +41,7 @@ router.put('/:locationId', helper.secured, async function(req, res, next){
 router.delete('/:locationId', helper.secured, async function(req, res, next){
   let locationId = parseInt(req.params.locationId);
   let location = await locationService.getSingle(locationId);
-  let userEmail = req.user._json.email;
-  if(userEmail !== location.email && userEmail !== 'jhodara@gmail.com'){
+  if(!req.user.isAdmin && req.user._json.email !== location.email){
     return res.sendStatus(404);
   }
   const [error, success] = await locationService.del(location);

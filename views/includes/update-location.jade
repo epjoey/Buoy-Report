@@ -3,6 +3,7 @@ form.form(
   ng-update-location-buoys="#{JSON.stringify(buoys)}",
   name="updateLocationForm"
 )
+  .text-center.mb-20 Configure location
   .field
     label
       span Name
@@ -31,15 +32,6 @@ form.form(
     label
       span Longitude
       input(type='text', ng-model='req.longitude')
-
-  .field
-    label
-      span 
-        a(
-          href="http://www.stormsurfing.com/cgi/display1.cgi?a=hi_sea"
-          target="_blank"
-        ) Stormsurfing URL
-      input(type='text', ng-model='req.stormsurfingurl')
 
   .field.errors(ng-if="error") {{ error }}
 

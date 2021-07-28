@@ -102,6 +102,9 @@ passport.deserializeUser((user, done) => {
 });
 
 app.use((req, res, next) => {
+  if(req.user){
+    req.user.isAdmin = req.user._json.email === ADMIN_EMAIL;
+  }
   res.locals.isAuthenticated = req.isAuthenticated();
   res.locals.user = req.user ? req.user._json : null;
   res.locals.isAdmin = req.user && req.user._json.email === ADMIN_EMAIL;

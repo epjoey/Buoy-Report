@@ -7,10 +7,9 @@ const SNAPSHOT_SELECT = '\
   SELECT s.id, s.text, \
     s.quality, s.imagepath, \
     s.obsdate, s.waveheight, \
-    r.id as reporterId, r.name as reporterName, r.email, \
+    s.email, \
     l.id as locationId, l.name as locationName, l.timezone \
   FROM `report` s \
-  LEFT JOIN `reporter` r ON s.reporterid = r.id \
   LEFT JOIN `location` l ON s.locationid = l.id';
 
 
@@ -36,7 +35,7 @@ async function create(locationId, reqBody, user){
 async function forLocation(locationId, user, page = 1){
   const offset = helper.getOffset(page, SNAPSHOT_LIMIT);
   let [rows, fields] = await db.query(
-    SNAPSHOT_SELECT + ' WHERE s.locationid = ? AND (s.public = 1 OR r.email = ?) ORDER BY s.id desc LIMIT ?,?',
+    SNAPSHOT_SELECT + ' WHERE s.locationid = ? AND (s.public = 1 OR s.email = ?) ORDER BY s.id desc LIMIT ?,?',
     [locationId, user ? user._json.email : null, offset, SNAPSHOT_LIMIT]
   );
 
@@ -52,13 +51,16 @@ async function forLocation(locationId, user, page = 1){
 }
 
 
-async function forReporter(reporter, user, page = 1){
-  const offset = helper.getOffset(page, SNAPSHOT_LIMIT);
-  let [rows, fields] = await db.query(
-    SNAPSHOT_SELECT + ' WHERE (r.email = ? OR s.email = ?) AND (s.public = 1 OR r.email = ?) ORDER BY s.id desc LIMIT ?,?', 
-    [reporter.email, reporter.email, user ? user._json.email : null, offset, SNAPSHOT_LIMIT]
-  );
-
+async function forUser(user, page = 1){
+  const offset = helper.getOffset(page, 100);
+  const sqlEnd = ' ORDER BY s.id desc LIMIT ?,?';
+  let rows;
+  if(user.isAdmin){
+    [rows,] = await db.query(SNAPSHOT_SELECT + sqlEnd, [offset, 100]);
+  }
+  else {
+    [rows,] = await db.query(SNAPSHOT_SELECT + ' WHERE s.email = ? ' + sqlEnd, [user._json.email, offset, 100]);
+  }
   const buoyData = await buoyDataByReport(_.map(rows, 'id'));
   _.forEach(rows, function(row){
     row.buoyData = buoyData[row.id];
@@ -86,5 +88,5 @@ async function buoyDataByReport(reportIds){
 module.exports = {
   create,
   forLocation,
-  forReporter
+  forUser
 }

@@ -73,6 +73,7 @@ input[type="file"] {
 .text-meta { font: italic 13px georgia; }
 .mb-10 { margin-bottom: 10px; }
 .mb-20 { margin-bottom: 20px; }
+.mt-20 { margin-top: 20px; }
 
 /*======= COLORS =======*/
 .grey {color: #535458}

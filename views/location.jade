@@ -24,12 +24,8 @@ block container
           iframe(
             width="300",
             height="{{ screen.width > 680 ? 568 : 320 }}",
-            src="#{location.stormsurfingurl}"
+            src="https://www.google.com/search?q=%#{location.stormsurfingurl}"
           )
-
-  if isAuthenticated
-    .container.mb-20
-      include ./includes/update-location.jade
 
   .container.snapshots(ng-snapshots, ng-snapshots-location="#{location.id}")
     if isAdmin
@@ -46,4 +42,8 @@ block container
         ng-click="load()"
       ) Load {{ snapshots.length ? 'more' : 'snapshots' }}
 
+
+  if isAuthenticated
+    .container.mt-20
+      include ./includes/update-location.jade
 
