@@ -63,7 +63,7 @@ async function getMultiple(page = 1){
   const LIMIT = 1000;
   const offset = helper.getOffset(page, LIMIT);
   let [rows, fields] = await db.query(
-    'SELECT id, name, timezone FROM `location` LIMIT ?,?', 
+    'SELECT id, name, timezone FROM `location` ORDER BY name LIMIT ?,?',
     [offset, LIMIT]
   );
   rows = helper.rows(rows);
@@ -78,7 +78,7 @@ async function getMultiple(page = 1){
 async function getSingle(id){
   let [rows, fields] = await db.query(
     'SELECT id, name, timezone, latitude, longitude, stormsurfingurl, email \
-     FROM `location` WHERE id = ?', 
+     FROM `location` WHERE id = ?',
     [id]
   );
   return helper.first(rows);
@@ -101,13 +101,13 @@ async function addBuoysToLocation(buoyIds, locationId){
       console.log('error inserting buoy location:', err);
       return; // Duplicate entry, pass.
     }
-  });  
+  });
 }
 
 function getFavorites(req){
   let favorites = req.cookies.favorites;
   favorites = favorites ? favorites.split('-') : [];
-  return favorites.map(f => parseInt(f));  
+  return favorites.map(f => parseInt(f));
 }
 
 
