@@ -26,7 +26,7 @@ router.get('/:locationId', async function(req, res, next){
   }
   // Make it show up first in the index page.
   locationService.updateFavorites(req, res, locationId);
-  const buoys = await buoyService.forLocation(location);
+  const buoys = await buoyService.forLocation(locationId);
   res.render('location', { location, buoys });
 });
 

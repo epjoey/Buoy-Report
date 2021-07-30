@@ -8,17 +8,20 @@ form.form(
     label
       span Time
       select(
-        ng-model="req.timeOffset",
-        ng-options="n as timeOffsetStr(n) for n in timeOffsetRange"
+        ng-model="req.hourOffset",
+        ng-options="n as hourOffsetStr(n) for n in hourOffsetRange"
       )
 
   .field
     label
       span Quality
-      select(
-        ng-model="req.quality"
-        ng-options="n as QUALITIES[n] for n in qualities"
-      )
+      label.radio-label(ng-repeat="n in qualities")
+        input(
+          type="radio",
+          ng-model="req.quality",
+          ng-value="n"
+        )
+        {{ QUALITIES[n] }}
 
   .field
     label

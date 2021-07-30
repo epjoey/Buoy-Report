@@ -10,13 +10,10 @@ async function create(reqBody){
     const buoyid = parseInt(reqBody.buoyid);
     assert(buoyid > 0, 'Invalid buoy id');
     const params = {buoyid, name: reqBody.name};
-    console.log(params)
     const [result, fields] = await db.query('INSERT INTO `buoy` SET ?', params);
     return [null, await getSingle(buoyid)];
   }
   catch(err){
-    console.log(err);
-    console.log(err.message)
     return [err.message, null];
   }
 }
@@ -49,8 +46,7 @@ async function del(buoyId){
 }
 
 
-function splitRows(data, offset){
-  const limit = 24; // get 24 hours of data.
+function splitRows(data, offset, limit){
   let rows = data.split("\n");
   let result = [];
   rows = _.slice(rows, offset, offset + limit);
@@ -62,13 +58,14 @@ function splitRows(data, offset){
 }
 
 
-async function getData(id, type, offset = 0){
+async function getData(id, type, offset=0, limit=24){ // get 24 hours of data
   // Standard data: https://www.ndbc.noaa.gov/data/realtime2/46012.txt
   // Wave data: https://www.ndbc.noaa.gov/data/realtime2/46012.spec
   let url = 'https://www.ndbc.noaa.gov/data/realtime2/' + id + (type === 'wave' ? '.spec' : '.txt');
+  console.log('fetching buoy data from', url);
   try {
     let data = await helper.makeRequest(url);
-    data = splitRows(data, offset);
+    data = splitRows(data, offset, limit);
     return [null, data];
   } catch(err){
     return [err.message, null];
@@ -76,14 +73,14 @@ async function getData(id, type, offset = 0){
 }
 
 
-async function forLocation(location){
+async function forLocation(locationId){
   let [rows, fields] = await db.query(
     'SELECT bl.buoyid, b.name \
     FROM `buoy_location` bl \
     LEFT JOIN `buoy` b ON bl.buoyid = b.buoyid \
     WHERE bl.locationid = ? \
     ORDER BY bl.created asc',
-    location.id
+    locationId
   );
   return helper.rows(rows);
 }

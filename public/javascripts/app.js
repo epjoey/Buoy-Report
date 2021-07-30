@@ -20,6 +20,7 @@
         url: url,
         data: data
       }).then(function(res){
+        scope.error = '';
         scope.loading = false;
         if(res.data.error){
           _error(res);

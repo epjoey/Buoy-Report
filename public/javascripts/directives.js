@@ -302,17 +302,17 @@
       return {
         link: function($scope, el, attrs){
           $scope.req = {};
-          $scope.req.timeOffset = 0;
+          $scope.req.hourOffset = 0;
 
-          $scope.timeOffsetRange = _.range(0, 240);
-          $scope.timeOffsetStr = function(o){
+          $scope.hourOffsetRange = _.range(0, 240);
+          $scope.hourOffsetStr = function(o){
             return o === 0 ? 'Now' : (o + (o > 1 ? ' hours ago': ' hour ago'));
           };
 
           $scope.qualities = _.range(1, 6);
           $scope.QUALITIES = QUALITIES;
 
-          $scope.waveHeights = _.keys(WAVE_HEIGHTS);
+          $scope.waveHeights = _.sortBy(_.keys(WAVE_HEIGHTS), parseFloat);
           $scope.WAVE_HEIGHTS = WAVE_HEIGHTS;
 
           var IMGUR_CLIENT_ID = 'edda62204c13785';
