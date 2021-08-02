@@ -112,8 +112,11 @@ function getFavorites(req){
 
 
 function setFavorites(res, favorites){
+  // DB storage.
   favorites = (favorites || []).join('-');
-  res.cookie('favorites', favorites, { maxAge: 900000, secure: true, sameSite: 'strict' });
+  res.cookie('favorites', favorites, {
+    maxAge: 14 * 24 * 3600000 //2 week
+  });
 }
 
 

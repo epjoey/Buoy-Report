@@ -82,10 +82,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(cookieSession({
   name: 'session',
-  keys: ['key1', 'key2']
+  keys: ['key1', 'key2'],
 
   // Cookie Options
-  // maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  maxAge: 14 * 24 * 3600000 //2 week
 }))
 
 passport.use(strategy);
