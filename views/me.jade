@@ -1,10 +1,6 @@
 extends layout
 
 block content
-  .info.mb-20
-    p
-      | Dear Buoy Reporter, snapshotting of buoy data is currently unavailable until further notice. &#128580; We are sorry for the inconvenience. Past snapshots are available below. Email joey (jhodara at gmail.com) to request the feature back.
-
   .snapshots(ng-snapshots)
     div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade
