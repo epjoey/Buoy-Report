@@ -293,6 +293,14 @@
           };
 
           $scope.load();
+
+          $scope.deleteSnapshot = function(snapshot){
+            if(window.confirm('Are you sure you want to delete this snapshot?')){
+              http.delete($scope, '/snapshots/' + snapshot.id).then(function(res){
+                _.remove($scope.snapshots, snapshot);
+              });
+            }
+          };
         }
       };
     }

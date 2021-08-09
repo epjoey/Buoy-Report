@@ -65,7 +65,12 @@
             | &nbsp;
             sub {{ buoy.windwavedir }}
 
-  .text-meta
-    |report {{ snapshot.id }}
-    span(ng-if="snapshot.by")  by {{ snapshot.by }}
-
+  div
+    span.text-meta
+      |report {{ snapshot.id }}
+      span(ng-if="snapshot.by")  by {{ snapshot.by }}
+    .btn.btn-small.btn-clear.delete(
+      ng-if="#{ isAdmin } || snapshot.email === '#{user.email}'",
+      ng-click="deleteSnapshot(snapshot)",
+      ng-disabled="loading"
+    ) Delete

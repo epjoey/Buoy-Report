@@ -21,6 +21,7 @@ const authRouter = require("./routes/auth");
 const indexRouter = require('./routes/index');
 const locationsRouter = require('./routes/locations');
 const buoysRouter = require('./routes/buoys');
+const snapshotsRouter = require('./routes/snapshots');
 
 /**
  * App Variables
@@ -121,6 +122,7 @@ app.use('/', authRouter);
 app.use('/l', locationsRouter); // support short legacy urls. TODO: redirect.
 app.use('/locations', locationsRouter);
 app.use('/buoys', buoysRouter);
+app.use('/snapshots', snapshotsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

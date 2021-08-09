@@ -171,6 +171,7 @@ async function buoyDataByReport(reportIds){
 
 module.exports = {
   create,
+  getSingle,
   forLocation,
   forUser
 }
