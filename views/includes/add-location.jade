@@ -35,10 +35,10 @@ form.form(
     label
       span 
         a(
-          href="http://www.stormsurfing.com/cgi/display1.cgi?a=hi_sea"
+          ng-href="{{ 'https://www.google.com/search?q=' + req.name + '+longitude' }}"
           target="_blank"
-        ) Stormsurfing URL
-      input(type='text', ng-model='req.stormsurfingurl')
+        ) Longitude
+      input(type='text', ng-model='req.longitude')
 
   .field.errors(ng-if="error") {{ error }}
 

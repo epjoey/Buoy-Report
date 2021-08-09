@@ -3,11 +3,17 @@ form.form(
   ng-update-location-buoys="#{JSON.stringify(buoys)}",
   name="updateLocationForm"
 )
-  .text-center.mb-20 Configure location
+  .text-center.mb-20.form-title Configure location
   .field
     label
       span Name
       input(type='text', ng-model='req.name', ng-required='true')
+
+  .field
+    label
+      span
+        a(href="http://www.ndbc.noaa.gov/rmd.shtml", target="_blank") Buoys
+      input(type='text', ng-model='req.buoys')
 
   .field
     label
@@ -20,17 +26,20 @@ form.form(
 
   .field
     label
-      span Buoys
-      input(type='text', ng-model='req.buoys')
-
-  .field
-    label
-      span Latitude
+      span
+        a(
+          ng-href="{{ 'https://www.google.com/search?q=' + req.name + '+latitude' }}"
+          target="_blank"
+        ) Latitude
       input(type='text', ng-model='req.latitude')
 
   .field
     label
-      span Longitude
+      span
+        a(
+          ng-href="{{ 'https://www.google.com/search?q=' + req.name + '+longitude' }}"
+          target="_blank"
+        ) Longitude
       input(type='text', ng-model='req.longitude')
 
   .field.errors(ng-if="error") {{ error }}

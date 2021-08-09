@@ -58,9 +58,29 @@ function closestRow(data, observationDate){
   return null;
 }
 
+function parseRow(rawRow){
+  // Spectral Wave Data from NOAA looks like:
+  // #YY  MM DD hh mm WVHT  SwH  SwP  WWH  WWP SwD WWD  STEEPNESS  APD MWD
+  // #yr  mo dy hr mn    m    m  sec    m  sec  -  degT     -      sec degT
+  // 2021 07 14 21 40  2.2  2.1  9.1  0.4  3.3  NW   W    AVERAGE  7.4 316
+  // 2021 07 14 20 40  2.1  2.1 10.0  0.4  3.3  NW WNW    AVERAGE  7.3 315
+  // 2021 07 14 19 40  2.0  2.0 10.0  0.4  4.0  NW   W    AVERAGE  7.4 312
+  let row = {};
+  row.waveheight = rawRow[5];
+  row.swellheight = rawRow[6];
+  row.swellperiod = rawRow[7];
+  row.swelldir = rawRow[10];
+  row.windwaveheight = rawRow[8];
+  row.windwaveperiod = rawRow[9];
+  row.windwavedir = rawRow[11];
+  // We already have `date` from `closestRow`.
+  row.gmttime = rawRow.date;
+  return row;
+}
+
 
 async function snapshotBuoyData(buoy, snapshotId, observationDate){
-  let [err, data] = await buoyService.getData(buoy.buoyid, 'standard', 2, 240);
+  let [err, data] = await buoyService.getData(buoy.buoyid, 'wave', 2, 240);
   if(err){
     console.log('error fetching buoy data for', buoy.buoyid, err);
     return;
@@ -70,15 +90,10 @@ async function snapshotBuoyData(buoy, snapshotId, observationDate){
     console.log('historical buoy data not found for buoy', buoy.buoyid, 'at date', observationDate);
     return;
   }
-  let params = {};
-  params.buoy = buoy.buoyid;
-  params.reportid = snapshotId;
-  params.winddir = row.winddir;
-  params.windspeed = row.windspeed;
-  params.swellheight = row.swellheight;
-  params.swellperiod = row.swellperiod;
-  params.swelldir = row.swelldir;
-  params.gmttime = row.date;
+  let params = _.extend({
+    buoy: buoy.buoyid,
+    reportid: snapshotId
+  }, parseRow(row));
   await db.query('INSERT INTO `buoydata` SET ?', params);
 }
 

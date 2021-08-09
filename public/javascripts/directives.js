@@ -87,7 +87,6 @@
     row.meanWaveDirection = parseInt(dataRow[14]);
     row.swellDirection = dataRow[10];
     row.windWaveSummary = meters2Feet(dataRow[8]) + ' / ' + parseSeconds(dataRow[9]);
-    row.windWavePeriod = parseSeconds(dataRow[9]);
     row.windWaveDirection = dataRow[11];
     return row;
   };
@@ -252,7 +251,10 @@
   };
 
   var parseSnapshotBuoyData = function(buoy){
+    buoy.waveheight = meters2Feet(buoy.waveheight);
     buoy.swellheight = meters2Feet(buoy.swellheight);
+    buoy.swellperiod = parseSeconds(buoy.swellperiod);
+    buoy.windWaveSummary = meters2Feet(buoy.windwaveheight) + ' / ' + parseSeconds(buoy.windwaveperiod);
     return buoy;
   };
 

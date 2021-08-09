@@ -43,7 +43,7 @@ input[type="email"], textarea, select {
   border-radius: 4px;
   background-clip: padding-box;
   font-size: 18px;
-  font-family: 'Lucida Grande';
+  font-family: 'Helvetica Neue', helvetica, arial;
   margin: 0;
   width: 100%;
   box-sizing: border-box;
@@ -327,7 +327,7 @@ input[type="email"], textarea, select {
   text-align: center;
 }
 .buoy-data {
-  font-family: helvetica, arial;
+  font-family: 'Helvetica Neue', helvetica, arial;
   width: 320px;
   box-sizing: border-box;
   margin: 0 auto 20px;
@@ -560,8 +560,10 @@ input[type="email"], textarea, select {
 .form {
   background: #e8ecef;
   padding: 16px;
+  font-size: 16px;
   line-height: 1.4em;
   color: #06223c;
+  font-family: 'Helvetica Neue', helvetica, arial;
   font-smoothing: subpixel-antialiased;
   border-top: 2px solid #ffffff;
   width: 98%;
@@ -569,6 +571,9 @@ input[type="email"], textarea, select {
   margin: 0 auto;
   border-radius: 5px;
   box-sizing: border-box;
+}
+.form .form-title {
+  font: 18px / 30px 'Museo500', 'Helvetica Neue', sans-serif;
 }
 .form .field {
   margin-bottom: 8px;

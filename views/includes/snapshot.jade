@@ -30,19 +30,20 @@
         tr
           th Buoy
           th Time
+          th WVHT
           th SwH
           th SwP
           th MWD
-          th WdDir
-          th WdSp
+          th Wind Wave
 
         tr.units
           th
           th {{ moment.tz(snapshot.timezone).format('z') }}
           th ft
+          th ft
           th sec
           th
-          th
+          th ft / sec dir
 
       tbody
         tr(ng-if="!snapshot.buoyData.length")
@@ -50,14 +51,19 @@
             small no data
         tr(ng-repeat="buoy in snapshot.buoyData")
           td
-            a(ng-href="{{ '/buoys/' + buoy.buoy }}") {{ buoy.buoy }}
+            a(
+              ng-href="{{ 'https://www.ndbc.noaa.gov/station_page.php?station=' + buoy.buoy }}",
+              target="_blank"
+            ) {{ buoy.buoy }}
           td {{ moment.unix(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mma') }}
+          td {{ buoy.waveheight }}
           td {{ buoy.swellheight }}
           td {{ buoy.swellperiod }}
           td {{ buoy.swelldir }}
-          td {{ buoy.winddir }}
-          td {{ buoy.windspeed }}
-
+          td
+            | {{ buoy.windWaveSummary }}
+            | &nbsp;
+            sub {{ buoy.windwavedir }}
 
   .text-meta
     |report {{ snapshot.id }}

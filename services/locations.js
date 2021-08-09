@@ -115,7 +115,7 @@ function setFavorites(res, favorites){
   // DB storage.
   favorites = (favorites || []).join('-');
   res.cookie('favorites', favorites, {
-    maxAge: 14 * 24 * 3600000 //2 week
+    maxAge: 28 * 24 * 3600000 //4 weeks
   });
 }
 
