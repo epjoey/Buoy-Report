@@ -5,6 +5,12 @@ block vars
 block headerLink
   a.header-link(href="/locations/#{location.id}")= location.name
 
+block headerMenuItems
+  if isAuthenticated
+    li
+      a(ng-href='#add-snapshot') Take snapshot
+
+
 block container
   .buoy-data-wrap
     .buoy-data-inner-wrap
@@ -29,7 +35,7 @@ block container
 
   .container.snapshots(ng-snapshots, ng-snapshots-location="#{location.id}")
     if isAuthenticated
-      .mb-20
+      .mb-20#add-snapshot
         include ./includes/add-snapshot.jade
 
     div(ng-repeat="snapshot in snapshots")

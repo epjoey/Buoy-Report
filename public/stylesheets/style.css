@@ -349,7 +349,7 @@ input[type="email"], textarea, select {
   font-weight: bold;
   line-height: 13px;
   min-height: 26px;
-  margin-bottom: 4px;
+  margin: 0 4px 4px;
 }
 .buoy-data .table-wrap {
   max-height: 600px;
