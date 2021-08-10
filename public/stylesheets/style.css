@@ -52,6 +52,10 @@ input[type="email"], textarea, select {
   background: #ffffff;
   box-shadow: inset 0 1px 2px rgb(0 0 0 / 40%);
 }
+input[type="file"]{
+  font-size: 16px;
+  line-height: 35px;  
+}
 
 
 /*================================*/
