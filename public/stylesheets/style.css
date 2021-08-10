@@ -55,25 +55,6 @@ input[type="email"], textarea, select {
 
 
 /*================================*/
-/* HELPERS */
-/*================================*/
-/*================================*/
-.left { float: left; }
-.right { float: right; }
-.clear { clear: both; }
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.text-meta { font: italic 13px georgia; }
-.mb-10 { margin-bottom: 10px; }
-.mb-20 { margin-bottom: 20px; }
-.mt-10 { margin-top: 10px; }
-.mt-20 { margin-top: 20px; }
-
-/*======= COLORS =======*/
-.grey {color: #535458}
-.grey-dark {color: #323336}
-
-/*================================*/
 /* Wrapper/container */
 /*================================*/
 /*================================*/
@@ -642,3 +623,24 @@ input[type="email"], textarea, select {
   box-shadow: none;
   border: none;
 }
+
+
+/* THESE STAY AT BOTTOM */
+/*================================*/
+/* HELPERS */
+/*================================*/
+/*================================*/
+.left { float: left; }
+.right { float: right; }
+.clear { clear: both; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-meta { font: italic 13px georgia; }
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+
+/*======= COLORS =======*/
+.grey {color: #535458}
+.grey-dark {color: #323336}

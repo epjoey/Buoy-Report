@@ -10,7 +10,10 @@ const helper = require('../helper');
 
 router.get('/', async function(req, res){
   let locations = await locationService.getMultiple(req.query.page);
-  locations = locations.rows;
+  locations = locations.rows || [];
+  locations.forEach(location => {
+    location.$isFavorite = false;
+  });
 
   let favorites = locationService.getFavorites(req);
   let orderedLocations = [];

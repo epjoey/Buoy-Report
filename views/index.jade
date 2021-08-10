@@ -25,9 +25,17 @@ block content
       .mb-20(ng-if="addLocation.isOpen")
         include ./includes/add-location.jade
 
-    ul.block-list
+    if isAuthenticated
+      ul.block-list
+        li(
+          ng-repeat="location in locations|filter:{$isFavorite: true}"
+          ng-if='locationMatchesSearch(location.name)'
+        )
+          a(ng-href="{{ '/locations/' + location.id }}") {{ location.name }}
+
+    ul.block-list.mt-10
       li(
         ng-repeat="location in locations"
-        ng-if='!locationSearchText || locationMatchesSearch(location.name)'
+        ng-if='locationMatchesSearch(location.name)'
       )
         a(ng-href="{{ '/locations/' + location.id }}") {{ location.name }}
