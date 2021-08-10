@@ -12,7 +12,7 @@ form.form(
         ng-options="n as hourOffsetStr(n) for n in hourOffsetRange"
       )
 
-  .field
+  .field.no-label
     label
       label.radio-label(ng-repeat="n in qualities")
         input(
@@ -30,7 +30,7 @@ form.form(
         ng-options="n as WAVE_HEIGHTS[n] for n in waveHeights"
       )
 
-  .field
+  .field.no-label
     label
       textarea(
         placeholder="Description"

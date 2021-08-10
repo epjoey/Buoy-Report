@@ -582,6 +582,9 @@ input[type="email"], textarea, select {
     float: left;
     margin-right: 20px;    
   }
+  .form .field.no-label {
+    padding-left: 220px;
+  }
   .form .btns { text-align: center; }
 }
 .form .errors {
@@ -593,6 +596,7 @@ input[type="email"], textarea, select {
   padding: 6px;
   border: 1px solid darkred;  
 }
+
 
 /*---------------  Buttons ------------*/
 .btns { margin-top: 30px; }
