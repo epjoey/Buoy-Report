@@ -6,7 +6,7 @@ form.form(
 
   .field
     label
-      span Time
+      span Session was...
       select(
         ng-model="req.hourOffset",
         ng-options="n as hourOffsetStr(n) for n in hourOffsetRange"
@@ -14,7 +14,6 @@ form.form(
 
   .field
     label
-      span Quality
       label.radio-label(ng-repeat="n in qualities")
         input(
           type="radio",
@@ -33,9 +32,8 @@ form.form(
 
   .field
     label
-      span Description
-      input(
-        type="text"
+      textarea(
+        placeholder="Description"
         ng-model="req.text"
       )
 

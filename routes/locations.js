@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const createError = require('http-errors');
 const router = express.Router();
@@ -7,8 +8,23 @@ const buoyService = require('../services/buoys');
 const helper = require('../helper');
 
 
-router.get('/', function(req, res){
-  res.redirect(301, '/'); // Redirect /locations to /
+router.get('/', async function(req, res){
+  let locations = await locationService.getMultiple(req.query.page);
+  locations = locations.rows;
+
+  let favorites = locationService.getFavorites(req);
+  let orderedLocations = [];
+
+  favorites.forEach(id => {
+    location = locations.find(loc => loc.id === id);
+    location.$isFavorite = true;
+    if(location){
+      orderedLocations.push(location);
+    }
+  })
+
+  locations = _.union(orderedLocations, locations);  
+  res.json({ locations });
 });
 
 

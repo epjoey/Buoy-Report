@@ -26,8 +26,8 @@ block content
         include ./includes/add-location.jade
 
     ul.block-list
-      for location in locations
-        li(
-          ng-if='!locationSearchText || locationMatchesSearch("#{location.name}")'
-        )
-          a(href="/locations/#{location.id}")= location.name
+      li(
+        ng-repeat="location in locations"
+        ng-if='!locationSearchText || locationMatchesSearch(location.name)'
+      )
+        a(ng-href="{{ '/locations/' + location.id }}") {{ location.name }}

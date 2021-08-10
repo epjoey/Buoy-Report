@@ -66,6 +66,7 @@ input[type="email"], textarea, select {
 .text-meta { font: italic 13px georgia; }
 .mb-10 { margin-bottom: 10px; }
 .mb-20 { margin-bottom: 20px; }
+.mt-10 { margin-top: 10px; }
 .mt-20 { margin-top: 20px; }
 
 /*======= COLORS =======*/
@@ -231,6 +232,7 @@ input[type="email"], textarea, select {
   line-height: 18px;
   display: block;
 }
+.block-list > li.clear { margin-top: 10px; }
 @media only screen and (min-width: 768px){
   .block-list > li {
     float: left;
@@ -627,7 +629,7 @@ input[type="email"], textarea, select {
   background: linear-gradient(bottom,#adb9c4 0%,#ffffff 100%);
   box-shadow: inset 0 0 3px rgb(255 255 255 / 40%);
 }
-.btn.submit { color: #cc09d6; }
+.btn.submit { color: #045206; }
 .btn.cancel { color: #06223c; }
 .btn.delete { color: darkred; }
 .btn[disabled] { color: grey; }
