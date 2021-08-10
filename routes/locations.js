@@ -15,18 +15,12 @@ router.get('/', async function(req, res){
     location.$isFavorite = false;
   });
 
-  let favorites = locationService.getFavorites(req);
-  let orderedLocations = [];
-
-  favorites.forEach(id => {
-    location = locations.find(loc => loc.id === id);
+  let favoriteIds = locationService.getFavorites(req);
+  favoriteIds.forEach(id => {
+    let location = locations.find(loc => loc.id === id);
     location.$isFavorite = true;
-    if(location){
-      orderedLocations.push(location);
-    }
   })
 
-  locations = _.union(orderedLocations, locations);  
   res.json({ locations });
 });
 
