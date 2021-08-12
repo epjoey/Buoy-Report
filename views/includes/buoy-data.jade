@@ -35,14 +35,16 @@ mixin buoy-data(type)
   thead
     tr
       th Time
+      th WVHT
       th SwH
       th SwP
-      th MWD
+      th SwD
       th Wind Wave
 
     tr.units
       th
         +timezone-unit()
+      th ft
       th ft
       th sec
       th
@@ -52,14 +54,12 @@ mixin buoy-data(type)
     tr(ng-repeat="row in table.rows")
       td 
         +date-time()
+      td {{ row.waveHeight }}
       td {{ row.swellHeight }}
       td.swell-period {{ row.swellPeriod }}
-      td
-        | {{ row.meanWaveDirection }}
-        sub {{ row.swellDirection }}
+      td {{ row.swellDirection }}
       td
         | {{ row.windWaveSummary }}
-        | &nbsp;
         sub {{ row.windWaveDirection }}
 
 
@@ -68,12 +68,12 @@ mixin buoy-data(type)
   thead
     tr
       th Time
-      th WvH
-      th WvP
-      th WvD
-      th WdS
-      th Gust
-      th WdD
+      th WVHT
+      th DPD
+      th MWD
+      th WSPD
+      th GST
+      th WDIR
 
     tr.units
       th

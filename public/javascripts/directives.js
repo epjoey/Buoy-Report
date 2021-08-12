@@ -82,6 +82,7 @@
   var parseWaveData = function(dataRow){
     var row = {};
     row.time = parseDateTime(dataRow[0], dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
+    row.waveHeight = meters2Feet(dataRow[5]);
     row.swellHeight = meters2Feet(dataRow[6]);
     row.swellPeriod = parseSeconds(dataRow[7]);
     row.meanWaveDirection = parseInt(dataRow[14]);

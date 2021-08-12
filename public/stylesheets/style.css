@@ -366,7 +366,6 @@ input[type="file"]{
   font-size: 11px;
   line-height: 12px;
   padding-right: 2px;
-  padding-left: 4px;
 }
 .buoy-data .units th {
   font-size: 8px;
@@ -395,7 +394,6 @@ input[type="file"]{
 .buoy-data td:first-child,
 .buoy-data th:first-child {
   padding-left: 4px;
-  width: 96px;
 }
 .buoy-data .paginate {
   color: white;
