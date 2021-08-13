@@ -70,6 +70,7 @@ function parseRow(rawRow){
   row.swellheight = rawRow[6];
   row.swellperiod = rawRow[7];
   row.swelldir = rawRow[10];
+  // row.meanwavedir = rawRow[14];
   row.windwaveheight = rawRow[8];
   row.windwaveperiod = rawRow[9];
   row.windwavedir = rawRow[11];
