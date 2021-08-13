@@ -24,7 +24,7 @@ html
   - var bodyClass = '';
   block vars
 
-  body(class='#{bodyClass}', ng-app='app')
+  body(class='#{bodyClass}', ng-app='app', ng-init="nodeEnv = '#{ NODE_ENV }'")
     .wrapper
       .header
         .container

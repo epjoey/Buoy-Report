@@ -5,6 +5,16 @@
     return _.map;
   })
 
+  // Cloudinary url parameters.
+  .filter('addImageParameters', function(){
+    return function(url){
+      if(url){
+        url = url.replace("/image/upload/", "/image/upload/c_scale,w_680/");
+      }
+      return url;
+    };
+  })
+
   .factory('http', ['$http', '$q', function($http, $q){
     var req = function(scope, method, url, data){
       var deferred = $q.defer();

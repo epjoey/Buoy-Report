@@ -471,6 +471,9 @@ input[type="file"]{
   overflow: hidden;
   text-align: center;
 }
+.snapshot .image img {
+  width: 100%;
+}
 .snapshot .buoy-snap { overflow-x: auto; }
 .snapshot .buoy-snap thead { border-bottom: 2px solid #06223c; }
 .snapshot .buoy-snap thead tr:first-child th { padding-top: 4px; }
@@ -482,6 +485,7 @@ input[type="file"]{
   line-height: 14px;
   padding-left: 8px;
   padding-right: 2px;
+  white-space: nowrap;
 }
 .snapshot .buoy-snap tr { border-left: 2px solid #06223c; width: 100%; }
 .snapshot .buoy-snap tbody tr { background: #e8ecef; }

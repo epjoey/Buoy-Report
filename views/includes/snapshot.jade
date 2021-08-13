@@ -22,7 +22,7 @@
     | {{ snapshot.text }}
 
   .image.mb-20(ng-if="snapshot.imagepath")
-    img(width="680px" ng-src="{{ snapshot.imagepath }}")
+    img(ng-src="{{ snapshot.imagepath|addImageParameters }}")
 
   .buoy-snap.mb-20
     table

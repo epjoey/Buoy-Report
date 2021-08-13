@@ -326,9 +326,10 @@
           $scope.waveHeights = _.sortBy(_.keys(WAVE_HEIGHTS), parseFloat);
           $scope.WAVE_HEIGHTS = WAVE_HEIGHTS;
 
-          var IMGUR_CLIENT_ID = 'edda62204c13785';
-          var CLOUDINARY_CLOUD_NAME = 'duq2wnb9p';
-          var CLOUDINARY_UPLOAD_PRESET = 'sfnxtz8v';
+          $scope.clearImage = function(){
+            $scope.req.image = null;
+            el.find('input[type="file"]').val('');
+          };
 
           $scope.submit = function(){
             if($scope.req.image){
@@ -339,14 +340,14 @@
             }
           };
 
+          var CLOUDINARY_CLOUD_NAME = 'duq2wnb9p';
           var submitImage = function(){
             $scope.loading = true;
 
             var formData = new FormData();
             formData.append("file", $scope.req.image);
-            formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-            // formData.append("signature", "");
-            // formData.append("api_key", "");
+            formData.append("upload_preset", $scope.nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
+            formData.append("folder", $scope.nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
             var xhr = new XMLHttpRequest();
             xhr.onload = function(){
               $scope.loading = false;

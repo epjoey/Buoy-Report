@@ -43,10 +43,11 @@ form.form(
       span Upload Image
       input(
         type="file",
-        accept="image/png, image/jpeg",
+        accept="image/*",
         ng-model="req.image",
         ng-file-upload
       )
+    span.btn.delete.btn-small(ng-if="req.image" ng-click="clearImage()") Clear
 
 
   .field.errors(ng-if="error") {{ error }}

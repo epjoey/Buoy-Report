@@ -109,6 +109,7 @@ app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
   res.locals.user = req.user ? req.user._json : null;
   res.locals.isAdmin = req.user && req.user._json.email === ADMIN_EMAIL;
+  res.locals.NODE_ENV = process.env.NODE_ENV;
   next();
 });
 
