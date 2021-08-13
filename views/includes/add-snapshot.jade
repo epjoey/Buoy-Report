@@ -1,6 +1,7 @@
 form.form(
   ng-add-snapshot
   name="addSnapshotForm"
+  ng-submit="submit()"
 )
   .text-center.mb-20.form-title Take a snapshot
 
@@ -53,7 +54,6 @@ form.form(
   .field.btns
     input.btn.submit(
       type="submit",
-      ng-click="submit()",
       ng-disabled="loading || addSnapshotForm.$invalid"
       value="Submit"
     )

@@ -327,35 +327,39 @@
           $scope.WAVE_HEIGHTS = WAVE_HEIGHTS;
 
           var IMGUR_CLIENT_ID = 'edda62204c13785';
+          var CLOUDINARY_CLOUD_NAME = 'duq2wnb9p';
+          var CLOUDINARY_UPLOAD_PRESET = 'sfnxtz8v';
 
           $scope.submit = function(){
             if($scope.req.image){
-              submitImageThenSnapshot();
+              submitImage();
             }
             else {
               submitSnapshot();
             }
           };
 
-          var submitImageThenSnapshot = function(){
+          var submitImage = function(){
             var formData = new FormData();
-            formData.append("image", $scope.req.image);
-            return $http({
-              url: "https://api.imgur.com/3/upload",
-              method: "POST",
-              params: formData,
-              datatype: "json",
-              headers: {
-                'Authorization': 'Client-ID ' + IMGUR_CLIENT_ID
-              },
-              success: function(result){
-                console.log(result);
+            formData.append("file", $scope.req.image);
+            formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+            // formData.append("signature", "");
+            // formData.append("api_key", "");
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function(){
+              var response = JSON.parse(xhr.responseText);
+              if(response.secure_url){
+                $scope.req.imagepath = response.secure_url;  
                 submitSnapshot();
-              },
-              error: function() {
-                console.log("error uploading image");
               }
-            });
+              else {
+                $scope.error = 'Error uploading image';
+                $scope.$digest();
+                console.warn(response);
+              }
+            };
+            xhr.open("post", "https://api.cloudinary.com/v1_1/duq2wnb9p/image/upload");
+            xhr.send(formData);
           };
 
           var submitSnapshot = function(){
