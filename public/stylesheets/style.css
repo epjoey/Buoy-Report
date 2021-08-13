@@ -238,6 +238,7 @@ input[type="file"]{
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  position: relative;
 }
 .block-list > li > a:hover {
   background: #000;
@@ -259,6 +260,17 @@ input[type="file"]{
 @media only screen and (max-width: 480px){
   .block-list-add { font-size: 16px }
 }
+.block-list .star {
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  display: block;
+  opacity: 0;
+}
+.block-list > li.favorite .star { opacity: 0.25; }
+.block-list > li.favorite .star:hover { opacity: 1; color: darkred; }
+.block-list > li:not(.favorite):hover .star { opacity: 0.25; }
+.block-list > li:not(.favorite):hover .star:hover { opacity: 1; }
 
 
 

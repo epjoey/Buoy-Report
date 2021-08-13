@@ -30,12 +30,16 @@ block content
         li(
           ng-repeat="location in locations|filter:{$isFavorite: true}"
           ng-if='locationMatchesSearch(location.name)'
-        )
-          a(ng-href="{{ '/locations/' + location.id }}") {{ location.name }}
+        ).favorite
+          a(ng-href="{{ '/locations/' + location.id }}")
+            {{ location.name }}
+            span.star(ng-click="toggleFavorite(location, $event)") &starf;
 
     ul.block-list.mt-10
       li(
         ng-repeat="location in locations"
         ng-if='locationMatchesSearch(location.name)'
       )
-        a(ng-href="{{ '/locations/' + location.id }}") {{ location.name }}
+        a(ng-href="{{ '/locations/' + location.id }}")
+          {{ location.name }}
+          span.star(ng-click="toggleFavorite(location, $event)") &starf;

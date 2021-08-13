@@ -84,6 +84,20 @@ router.get("/snapshots", helper.secured, async function(req, res, next){
 });
 
 
+router.post("/favorites/:locationId", helper.secured, async function(req, res, next){
+  let params = {email: req.user._json.email, locationid: req.params.locationId};
+  await db.query('INSERT INTO `favorites` SET ?', params);
+  res.json({});
+});
+
+router.delete("/favorites/:locationId", helper.secured, async function(req, res, next){
+  await db.query(
+    'DELETE FROM `favorites` WHERE email = ? AND locationId = ?',
+    [req.user._json.email, req.params.locationId]
+  );
+  res.json({});
+});
+
 
 /**
  * Module Exports

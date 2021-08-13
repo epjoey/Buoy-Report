@@ -9,19 +9,8 @@ const helper = require('../helper');
 
 
 router.get('/', async function(req, res){
-  let locations = await locationService.getMultiple(req.query.page);
-  locations = locations.rows || [];
-  locations.forEach(location => {
-    location.$isFavorite = false;
-  });
-
-  let favoriteIds = locationService.getFavorites(req);
-  favoriteIds.forEach(id => {
-    let location = locations.find(loc => loc.id === id);
-    location.$isFavorite = true;
-  })
-
-  res.json({ locations });
+  let locations = await locationService.getMultiple(req.query.page, req.user);
+  res.json({ locations: locations.rows || [] });
 });
 
 
@@ -37,8 +26,6 @@ router.get('/:locationId', async function(req, res, next){
   if(!location){
     return next(createError(404));
   }
-  // Make it show up first in the index page.
-  locationService.updateFavorites(req, res, locationId);
   const buoys = await buoyService.forLocation(locationId);
   res.render('location', { location, buoys });
 });
@@ -58,7 +45,6 @@ router.delete('/:locationId', helper.secured, async function(req, res, next){
     return res.sendStatus(404);
   }
   const [error, success] = await locationService.del(location);
-  locationService.updateFavorites(req, res, locationId, true);
   res.json({ success, error });
 });
 

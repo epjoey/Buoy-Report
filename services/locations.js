@@ -59,14 +59,21 @@ async function del(location){
 }
 
 
-async function getMultiple(page = 1){
+async function getMultiple(page = 1, user){
   const LIMIT = 1000;
   const offset = helper.getOffset(page, LIMIT);
   let [rows, fields] = await db.query(
-    'SELECT id, name, timezone FROM `location` ORDER BY name LIMIT ?,?',
-    [offset, LIMIT]
+    'SELECT id, name, timezone, f.email AS favorite \
+    FROM `location` \
+    LEFT JOIN `favorites` f ON f.locationid = id AND f.email = ? \
+    ORDER BY name LIMIT ?,?',
+    [user._json.email, offset, LIMIT]
   );
   rows = helper.rows(rows);
+  rows.forEach(function(row){
+    row.$isFavorite = !!row.favorite;
+    delete row.favorite;
+  });
   const meta = {page};
   return {
     rows,
@@ -77,7 +84,7 @@ async function getMultiple(page = 1){
 
 async function getSingle(id){
   let [rows, fields] = await db.query(
-    'SELECT id, name, timezone, latitude, longitude, stormsurfingurl, email \
+    'SELECT id, name, timezone, latitude, longitude, email \
      FROM `location` WHERE id = ?',
     [id]
   );
@@ -104,35 +111,6 @@ async function addBuoysToLocation(buoyIds, locationId){
   });
 }
 
-function getFavorites(req){
-  let favorites = req.cookies.favorites;
-  favorites = favorites ? favorites.split('-') : [];
-  return favorites.map(f => parseInt(f));
-}
-
-
-function setFavorites(res, favorites){
-  // DB storage.
-  favorites = (favorites || []).join('-');
-  res.cookie('favorites', favorites, {
-    maxAge: 28 * 24 * 3600000 //4 weeks
-  });
-}
-
-
-// Keep your favorite locations at the top of the list.
-function updateFavorites(req, res, locationId, isDeleting){
-  let favorites = getFavorites(req);
-  let index = favorites.indexOf(locationId);
-  if(index >= 0){
-    favorites.splice(index, 1);
-  }
-  if(!isDeleting){
-    favorites.unshift(locationId);
-  }
-  setFavorites(res, favorites);
-}
-
 
 module.exports = {
   create,
@@ -141,8 +119,4 @@ module.exports = {
 
   getSingle,
   getMultiple,
-
-  getFavorites,
-  setFavorites,
-  updateFavorites
 }
