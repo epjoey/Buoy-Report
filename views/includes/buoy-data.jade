@@ -39,6 +39,7 @@ mixin buoy-data(type)
       th SwH
       th SwP
       th SwD
+      th MWD
       th Wind Wave
 
     tr.units
@@ -46,6 +47,7 @@ mixin buoy-data(type)
         +timezone-unit()
       th ft
       th ft
+      th sec
       th sec
       th
       th ft / sec dir
@@ -58,6 +60,7 @@ mixin buoy-data(type)
       td {{ row.swellHeight }}
       td.swell-period {{ row.swellPeriod }}
       td {{ row.swellDirection }}
+      td {{ row.meanWaveDirection }}
       td
         | {{ row.windWaveSummary }}
         sub {{ row.windWaveDirection }}

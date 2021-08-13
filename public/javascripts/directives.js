@@ -330,18 +330,18 @@
 
           $scope.submit = function(){
             if($scope.req.image){
-              submitImageFirst();
+              submitImageThenSnapshot();
             }
             else {
               submitSnapshot();
             }
           };
 
-          var submitImageFirst = function(){
+          var submitImageThenSnapshot = function(){
             var formData = new FormData();
             formData.append("image", $scope.req.image);
             return $http({
-              url: "https://api.imgur.com/3/image",
+              url: "https://api.imgur.com/3/upload",
               method: "POST",
               params: formData,
               datatype: "json",
