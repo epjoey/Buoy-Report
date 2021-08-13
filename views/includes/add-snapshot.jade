@@ -55,5 +55,5 @@ form.form(
     input.btn.submit(
       type="submit",
       ng-disabled="loading || addSnapshotForm.$invalid"
-      value="Submit"
+      value="{{ loading ? 'Submitting...' : 'Submit' }}"
     )

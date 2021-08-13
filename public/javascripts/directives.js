@@ -340,6 +340,8 @@
           };
 
           var submitImage = function(){
+            $scope.loading = true;
+
             var formData = new FormData();
             formData.append("file", $scope.req.image);
             formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
@@ -347,6 +349,7 @@
             // formData.append("api_key", "");
             var xhr = new XMLHttpRequest();
             xhr.onload = function(){
+              $scope.loading = false;
               var response = JSON.parse(xhr.responseText);
               if(response.secure_url){
                 $scope.req.imagepath = response.secure_url;  
@@ -354,8 +357,8 @@
               }
               else {
                 $scope.error = 'Error uploading image';
-                $scope.$digest();
                 console.warn(response);
+                $scope.$digest();
               }
             };
             xhr.open("post", "https://api.cloudinary.com/v1_1/duq2wnb9p/image/upload");
