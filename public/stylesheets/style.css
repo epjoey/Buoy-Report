@@ -413,6 +413,8 @@ input[type="file"]{
   width: 100%;
   text-align: center;
 }
+/* Windy - margin so you can scroll on the sides */
+.windy-view iframe { max-width: 90vw; }
 
 /*================================*/
 /* Snapshots */
