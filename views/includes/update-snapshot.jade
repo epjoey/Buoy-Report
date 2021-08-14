@@ -1,18 +1,8 @@
-form.form(
-  ng-add-snapshot
-  name="addSnapshotForm"
+form.form.mb-20(
+  ng-update-snapshot
+  name="updateSnapshotForm"
   ng-submit="submit()"
 )
-  .text-center.mb-20.form-title Take a snapshot
-
-  .field
-    label
-      span Session was...
-      select(
-        ng-model="req.hourOffset",
-        ng-options="n as hourOffsetStr(n) for n in hourOffsetRange"
-      )
-
   .field.no-label
     label
       label.radio-label(ng-repeat="n in qualities")
@@ -51,13 +41,13 @@ form.form(
   .field.no-label(ng-if="req.imagepath")
     span.btn.delete.btn-small(ng-click="clearImage()") Clear image
 
-
-
   .field.errors(ng-if="error") {{ error }}
 
-  .field.btns
+  .field.btns.text-center
+    span.btn.cancel(ng-click="isEditing[snapshot.id] = false") Cancel
+    | &nbsp; &nbsp;
     input.btn.submit(
       type="submit",
-      ng-disabled="loading || addSnapshotForm.$invalid"
+      ng-disabled="loading || updateSnapshotForm.$invalid"
       value="{{ loading ? 'Submitting...' : 'Submit' }}"
     )

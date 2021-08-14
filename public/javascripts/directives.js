@@ -231,16 +231,16 @@
   // `snapshot.waveheight` is stored as an number representing a range.
   // So 17.5 means the waves were 15-20' (hawaiian).
   var WAVE_HEIGHTS = {
-    1.5: "1-2'",
-    2.5: "2-3'",
-    3.5: "3-4'",
-    5: "4-6'",
-    7: "6-8'",
-    9: "8-10'",
-    11: "10-12'",
-    13.5: "12-15'",
-    17.5: "15-20'",
-    25: "20-30'"
+    '1.5': "1-2'",
+    '2.5': "2-3'",
+    '3.5': "3-4'",
+    '5': "4-6'",
+    '7': "6-8'",
+    '9': "8-10'",
+    '11': "10-12'",
+    '13.5': "12-15'",
+    '17.5': "15-20'",
+    '25': "20-30'"
   };
 
   var QUALITIES = {
@@ -260,15 +260,14 @@
   };
 
   var parseSnapshot = function(snapshot){
-    snapshot.waveheight = snapshot.waveheight ? WAVE_HEIGHTS[snapshot.waveheight] : '';
-    snapshot.qualityText = snapshot.quality ? QUALITIES[snapshot.quality] : '';
-    snapshot.imagepath = snapshot.imagepath && !snapshot.imagepath.startsWith('http') ?
+    snapshot.$waveHeight = snapshot.waveheight ? WAVE_HEIGHTS[snapshot.waveheight] : '';
+    snapshot.$qualityText = snapshot.quality ? QUALITIES[snapshot.quality] : '';
+    snapshot.$imagePath = snapshot.imagepath && !snapshot.imagepath.startsWith('http') ?
         'https://www.buoyreport.com/uploads/' + snapshot.imagepath : snapshot.imagepath;
-    snapshot.buoyData = _.map(snapshot.buoyData, parseSnapshotBuoyData);
-    snapshot.by = snapshot.email ? snapshot.email.split('@')[0] : 0;
+    snapshot.$buoyData = _.map(snapshot.buoyData, parseSnapshotBuoyData);
+    snapshot.$by = snapshot.email ? snapshot.email.split('@')[0] : 0;
     return snapshot;
   };
-
 
   directives.directive('ngSnapshots', [
     'http',
@@ -302,14 +301,82 @@
               });
             }
           };
+
+          // These are for both adding and editing snapshots.
+          $scope.qualities = _.range(1, 6);
+          $scope.QUALITIES = QUALITIES;
+
+          $scope.waveHeights = _.sortBy(_.keys(WAVE_HEIGHTS), parseFloat);
+          $scope.WAVE_HEIGHTS = WAVE_HEIGHTS;
+
+          $scope.isEditing = {};
+        }
+      };
+    }
+  ]);
+
+  var CLOUDINARY_CLOUD_NAME = 'duq2wnb9p';
+  var submitImage = function($scope, imagePath, onSuccess){
+    $scope.loading = true;
+
+    var formData = new FormData();
+    formData.append("file", imagePath);
+    formData.append("upload_preset", $scope.nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
+    formData.append("folder", $scope.nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function(){
+      $scope.loading = false;
+      var response = JSON.parse(xhr.responseText);
+      if(response.secure_url){
+        onSuccess(response.secure_url);
+      }
+      else {
+        $scope.error = 'Error uploading image';
+        console.warn(response);
+        $scope.$digest();
+      }
+    };
+    xhr.open("post", "https://api.cloudinary.com/v1_1/duq2wnb9p/image/upload");
+    xhr.send(formData);
+  };
+
+  directives.directive('ngUpdateSnapshot', [
+    'http',
+    function(http){
+      return {
+        link: function($scope, el, attrs){
+          $scope.req = _.pick($scope.snapshot, ['quality', 'waveheight', 'text', 'imagepath']);
+          $scope.req.waveheight = String($scope.req.waveheight);
+
+          $scope.clearImage = function(){
+            $scope.req.imagepath = '';
+            el.find('input[type="file"]').val('');
+          };
+
+          $scope.submit = function(){
+            if($scope.req.imagepath){
+              submitImage($scope, $scope.req.imagepath, submit);
+            }
+            else {
+              submit();
+            }
+          };
+
+          var submit = function(imagePath){
+            $scope.req.imagepath = imagePath || '';
+            http.put($scope, '/snapshots/' + $scope.snapshot.id, $scope.req).then(function(res){
+              _.extend($scope.snapshot, parseSnapshot(res.data.snapshot));
+              $scope.isEditing[$scope.snapshot.id] = false;
+            });
+          };
         }
       };
     }
   ]);
 
   directives.directive('ngAddSnapshot', [
-    'http', '$http',
-    function(http, $http){
+    'http',
+    function(http){
       return {
         link: function($scope, el, attrs){
           $scope.req = {};
@@ -320,57 +387,26 @@
             return o === 0 ? 'Now' : (o + (o > 1 ? ' hours ago': ' hour ago'));
           };
 
-          $scope.qualities = _.range(1, 6);
-          $scope.QUALITIES = QUALITIES;
-
-          $scope.waveHeights = _.sortBy(_.keys(WAVE_HEIGHTS), parseFloat);
-          $scope.WAVE_HEIGHTS = WAVE_HEIGHTS;
-
           $scope.clearImage = function(){
-            $scope.req.image = null;
+            $scope.req.imagepath = '';
             el.find('input[type="file"]').val('');
           };
 
           $scope.submit = function(){
-            if($scope.req.image){
-              submitImage();
+            if($scope.req.imagepath){
+              submitImage($scope, $scope.req.imagepath, submit);
             }
             else {
-              submitSnapshot();
+              submit();
             }
           };
 
-          var CLOUDINARY_CLOUD_NAME = 'duq2wnb9p';
-          var submitImage = function(){
-            $scope.loading = true;
-
-            var formData = new FormData();
-            formData.append("file", $scope.req.image);
-            formData.append("upload_preset", $scope.nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
-            formData.append("folder", $scope.nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
-            var xhr = new XMLHttpRequest();
-            xhr.onload = function(){
-              $scope.loading = false;
-              var response = JSON.parse(xhr.responseText);
-              if(response.secure_url){
-                $scope.req.imagepath = response.secure_url;  
-                submitSnapshot();
-              }
-              else {
-                $scope.error = 'Error uploading image';
-                console.warn(response);
-                $scope.$digest();
-              }
-            };
-            xhr.open("post", "https://api.cloudinary.com/v1_1/duq2wnb9p/image/upload");
-            xhr.send(formData);
-          };
-
-          var submitSnapshot = function(){
+          var submit = function(imagePath){
+            $scope.req.imagepath = imagePath || '';
             http.post($scope, '/locations/' + $scope.locationId + '/snapshots', $scope.req).then(function(res){
               $scope.snapshots.unshift(parseSnapshot(res.data.snapshot));
             });
-          };          
+          };
         }
       };
     }

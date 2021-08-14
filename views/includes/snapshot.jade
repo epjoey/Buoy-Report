@@ -4,76 +4,89 @@
     .obs-date
       | {{ moment.unix(snapshot.obsdate).tz(snapshot.timezone).format('M/D/YY h:mma') }}
 
-  ul.quality.mb-10(
-    ng-if="snapshot.quality",
-    ng-class="'quality-' + snapshot.quality"
+  div(ng-if="isEditing[snapshot.id]",
+    ng-include="'update-snapshot'"
   )
-    li.level.level-1
-    li.level.level-2
-    li.level.level-3
-    li.level.level-4
-    li.level.level-5
-    li.text-meta &nbsp; {{ snapshot.qualityText }}
 
-  .mb-10(ng-if="snapshot.waveheight")
-    | {{ snapshot.waveheight }}
+  div(ng-if="!isEditing[snapshot.id]")
+    ul.quality.mb-10(
+      ng-if="snapshot.quality",
+      ng-class="'quality-' + snapshot.quality"
+    )
+      li.level.level-1
+      li.level.level-2
+      li.level.level-3
+      li.level.level-4
+      li.level.level-5
+      li.text-meta &nbsp; {{ snapshot.$qualityText }}
 
-  .mb-20(ng-if="snapshot.text")
-    | {{ snapshot.text }}
+    .mb-10(ng-if="snapshot.$waveHeight")
+      | {{ snapshot.$waveHeight }}
 
-  .image.mb-20(ng-if="snapshot.imagepath")
-    img(ng-src="{{ snapshot.imagepath|addImageParameters }}")
+    .mb-20(ng-if="snapshot.text")
+      | {{ snapshot.text }}
 
-  .buoy-snap.mb-20
-    table
-      thead
-        tr
-          th Buoy
-          th Time
-          th WVHT
-          th SwH
-          th SwP
-          th SwD
-          th MWD
-          th Wind Wave
+    .image.mb-20(ng-if="snapshot.$imagePath")
+      img(ng-src="{{ snapshot.$imagePath|addImageParameters }}")
 
-        tr.units
-          th
-          th {{ moment.tz(snapshot.timezone).format('z') }}
-          th ft
-          th ft
-          th sec
-          th
-          th
-          th ft / sec dir
+    .buoy-snap.mb-20
+      table
+        thead
+          tr
+            th Buoy
+            th Time
+            th WVHT
+            th SwH
+            th SwP
+            th SwD
+            th MWD
+            th Wind Wave
 
-      tbody
-        tr(ng-if="!snapshot.buoyData.length")
-          td
-            small no data
-        tr(ng-repeat="buoy in snapshot.buoyData")
-          td
-            a(
-              ng-href="{{ 'https://www.ndbc.noaa.gov/station_page.php?station=' + buoy.buoy }}",
-              target="_blank"
-            ) {{ buoy.buoy }}
-          td {{ moment.unix(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mma') }}
-          td {{ buoy.waveheight }}
-          td {{ buoy.swellheight }}
-          td {{ buoy.swellperiod }}
-          td {{ buoy.swelldir }}
-          td {{ buoy.meanwavedir }}
-          td
-            | {{ buoy.windWaveSummary }}
-            | &nbsp;
-            sub {{ buoy.windwavedir }}
+          tr.units
+            th
+            th {{ moment.tz(snapshot.timezone).format('z') }}
+            th ft
+            th ft
+            th sec
+            th
+            th
+            th ft / sec dir
+
+        tbody
+          tr(ng-if="!snapshot.$buoyData.length")
+            td
+              small no data
+          tr(ng-repeat="buoy in snapshot.$buoyData")
+            td
+              a(
+                ng-href="{{ 'https://www.ndbc.noaa.gov/station_page.php?station=' + buoy.buoy }}",
+                target="_blank"
+              ) {{ buoy.buoy }}
+            td {{ moment.unix(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mma') }}
+            td {{ buoy.waveheight }}
+            td {{ buoy.swellheight }}
+            td {{ buoy.swellperiod }}
+            td {{ buoy.swelldir }}
+            td {{ buoy.meanwavedir }}
+            td
+              | {{ buoy.windWaveSummary }}
+              | &nbsp;
+              sub {{ buoy.windwavedir }}
 
   div
     span.text-meta
       |report {{ snapshot.id }}
-      span(ng-if="snapshot.by")  by {{ snapshot.by }}
-    .btn.btn-small.btn-clear.delete(
-      ng-if="#{ isAdmin } || snapshot.email === '#{user && user.email}'",
+      span(ng-if="snapshot.$by")  by {{ snapshot.$by }}
+
+    .btn.btn-small.btn-clear(
+      ng-if="!isEditing[snapshot.id] && (#{ isAdmin } || snapshot.email === '#{user && user.email}')",
+      ng-click="isEditing[snapshot.id] = true",
+    ) Edit
+
+    .btn.btn-small.delete.right(
+      ng-if="isEditing[snapshot.id] && (#{ isAdmin } || snapshot.email === '#{user && user.email}')",
       ng-click="deleteSnapshot(snapshot)",
       ng-disabled="loading"
-    ) Delete
+    ) Delete snapshot
+
+    .clear

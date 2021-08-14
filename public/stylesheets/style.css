@@ -271,7 +271,7 @@ input[type="file"]{
 .favorite .star { opacity: .75; }
 .not-favorite .star { opacity: 0; }
 .location-page .not-favorite .star { opacity: .25; }
-.location-page .favorite .star { opacity: .8; }
+.location-page .favorite .star { opacity: .75; }
 
 /* On desktop you can hover and shit */
 @media only screen and (min-width: 680px){
@@ -522,7 +522,7 @@ input[type="file"]{
   padding: 2px 2px 0px 8px;
   white-space: nowrap
 }
-
+.snapshot .form {border-top: 0 none;}
 
 /*------=- INFO -=---------*/
 .info {
@@ -586,12 +586,8 @@ input[type="file"]{
 .form .form-title {
   font: 18px / 30px 'Museo500', 'Helvetica Neue', sans-serif;
 }
-.form .field {
-  margin-bottom: 8px;
-}
-.form .field > label {
-  display: block;
-}
+.form .field { margin-bottom: 8px; }
+.form .field > label { display: block; }
 .form .field > label > span {
   display: block;
   line-height: 35px;
@@ -624,7 +620,6 @@ input[type="file"]{
   padding: 6px;
   border: 1px solid darkred;  
 }
-
 
 /*---------------  Buttons ------------*/
 .btns { margin-top: 30px; }
