@@ -269,10 +269,12 @@ input[type="file"]{
   display: block;
 }
 .favorite .star { opacity: .75; }
-.not-favorite .star { opacity: .25; }
+.not-favorite .star { opacity: 0; }
+.location-page .not-favorite .star { opacity: .25; }
+.location-page .favorite .star { opacity: .8; }
+
 /* On desktop you can hover and shit */
 @media only screen and (min-width: 680px){
-  .not-favorite .star { opacity: 0; }
   .favorite .star { opacity: 0.5; }
   .favorite .star:hover { opacity: 1; color: darkred; }
   .not-favorite:hover .star { opacity: 0.5; }
