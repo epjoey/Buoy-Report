@@ -100,8 +100,7 @@ async function snapshotBuoyData(buoy, snapshotId, observationDate){
 
 
 async function getSingle(snapshotId){
-  let [rows,] = await db.query(SNAPSHOT_SELECT + ' WHERE s.id = ?', snapshotId);
-  let row = helper.first(rows);
+  let row = await helper.first(SNAPSHOT_SELECT + ' WHERE s.id = ?', snapshotId);
   let groupedBuoyData = await buoyDataByReport([snapshotId]);
   row.buoyData = groupedBuoyData[row.id];
   return row;

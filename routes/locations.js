@@ -9,8 +9,8 @@ const helper = require('../helper');
 
 
 router.get('/', async function(req, res){
-  let locations = await locationService.getMultiple(req.query.page, req.user);
-  res.json({ locations: locations.rows || [] });
+  let locations = await locationService.getMultiple(req.user);
+  res.json({ locations });
 });
 
 

@@ -5,17 +5,18 @@ block vars
 block headerLink
   a.header-link(
     ng-init="location = #{JSON.stringify(location)};"
-    ng-href="'/locations/' + location.id",
+    ng-href="{{ '/locations/' + location.id }}",
     class="{{ location.$isFavorite ? 'favorite' : 'not-favorite' }}"
   )
     {{ location.name }}
-    &nbsp;
-    span.star(ng-click="toggleFavorite(location, $event)") &starf;
+    if isAuthenticated
+      &nbsp;
+      span.star(ng-click="toggleFavorite(location, $event)") &starf;
 
 block headerMenuItems
   if isAuthenticated
     li
-      a(ng-href='#add-snapshot') Take snapshot
+      a(href='#add-snapshot') Take snapshot
 
 
 block container
@@ -33,9 +34,13 @@ block container
         include ./includes/buoy-data.jade
 
   .container.snapshots(ng-snapshots, ng-snapshots-location="#{location.id}")
-    if isAuthenticated
-      .mb-20#add-snapshot
+    .mb-20#add-snapshot
+      if isAuthenticated
         include ./includes/add-snapshot.jade
+      else
+        .form.text-center
+          a(ng-href='/login') Login
+          | to take snapshots
 
     div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade

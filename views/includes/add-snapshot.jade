@@ -13,45 +13,7 @@ form.form(
         ng-options="n as hourOffsetStr(n) for n in hourOffsetRange"
       )
 
-  .field.no-label
-    label
-      label.radio-label(ng-repeat="n in qualities")
-        input(
-          type="radio",
-          ng-model="req.quality",
-          ng-value="n"
-        )
-        {{ QUALITIES[n] }}
-
-  .field
-    label
-      span Waveheight (backs)
-      select(
-        ng-model="req.waveheight"
-        ng-options="n as WAVE_HEIGHTS[n] for n in waveHeights"
-      )
-
-  .field.no-label
-    label
-      textarea(
-        placeholder="Description"
-        ng-model="req.text"
-      )
-
-  .field
-    label
-      span Upload Image
-      input(
-        type="file",
-        accept="image/*",
-        ng-model="req.imagepath",
-        ng-file-upload
-      )
-
-  .field.no-label(ng-if="req.imagepath")
-    span.btn.delete.btn-small(ng-click="clearImage()") Clear image
-
-
+  include ./snapshot-fields.jade
 
   .field.errors(ng-if="error") {{ error }}
 

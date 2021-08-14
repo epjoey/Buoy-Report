@@ -1,17 +1,20 @@
 const https = require('https');
+const db = require('./db');
 
 function getOffset(currentPage = 1, listPerPage = 1000){
   return (currentPage - 1) * [listPerPage];
 }
 
-function rows(rows){
+async function rows(query, params){
+  let [rows,] = await db.query(query, params);
   if(!rows){
     return [];
   }
   return rows;
 }
 
-function first(rows){
+async function first(query, params){
+  let [rows,] = await db.query(query, params);
   if(!rows || !rows.length){
     return null;
   }

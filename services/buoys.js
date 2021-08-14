@@ -74,7 +74,7 @@ async function getData(id, type, offset=0, limit=24){ // get 24 hours of data
 
 
 async function forLocation(locationId){
-  let [rows, fields] = await db.query(
+  let rows = await helper.rows(
     'SELECT bl.buoyid, b.name \
     FROM `buoy_location` bl \
     LEFT JOIN `buoy` b ON bl.buoyid = b.buoyid \
@@ -82,18 +82,17 @@ async function forLocation(locationId){
     ORDER BY bl.created asc',
     locationId
   );
-  return helper.rows(rows);
+  return rows;
 }
 
 
 async function getMultiple(page = 1){
   const limit = 1000;
   const offset = helper.getOffset(page, limit);
-  let [rows, fields] = await db.query(
+  let rows = await helper.rows(
     'SELECT buoyid, name FROM `buoy` ORDER BY buoyid LIMIT ?,?',
     [offset, limit]
   );
-  rows = helper.rows(rows);
   const meta = {page};
 
   return {
@@ -103,11 +102,10 @@ async function getMultiple(page = 1){
 }
 
 async function getSingle(id){
-  let [rows, fields] = await db.query(
+  return await helper.first(
     'SELECT buoyid, name FROM `buoy` WHERE buoyid = ?',
     [id]
   );
-  return helper.first(rows);
 }
 
 

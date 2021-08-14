@@ -58,44 +58,34 @@ async function del(location){
   }
 }
 
+const LOCATION_SELECT = 'SELECT id, name, timezone, latitude, longitude, email FROM `location`';
+async function getMultiple(user){
+  let locations = await helper.rows(LOCATION_SELECT + 'ORDER BY name');
 
-async function getMultiple(page = 1, user){
-  const LIMIT = 1000;
-  const offset = helper.getOffset(page, LIMIT);
-  let [rows, fields] = await db.query(
-    'SELECT id, name, timezone, f.email AS favorite \
-    FROM `location` \
-    LEFT JOIN `favorites` f ON f.locationid = id AND f.email = ? \
-    ORDER BY name LIMIT ?,?',
-    [user._json.email, offset, LIMIT]
-  );
-  rows = helper.rows(rows);
-  rows.forEach(function(row){
-    row.$isFavorite = !!row.favorite;
-    delete row.favorite;
-  });
-  const meta = {page};
-  return {
-    rows,
-    meta
+  if(user){
+    let favorites = await helper.rows('SELECT locationid FROM `favorites` WHERE email = ?', user._json.email);
+    let favoritesMap = {};
+    favorites.forEach(function(fave){
+      favoritesMap[fave.locationid] = true;
+    });
+    locations.forEach(function(location){
+      location.$isFavorite = favoritesMap[location.id];
+    });
   }
+  return locations;
 }
 
 
 async function getSingle(id, user){
-  let [rows,] = await db.query(
-    'SELECT id, name, timezone, latitude, longitude, email \
-     FROM `location` WHERE id = ?',
-    [id]
-  );
-  let row = helper.first(rows);
-  let [favoriteRows,] = await db.query(
-    'SELECT email FROM `favorites` WHERE locationid = ? AND email = ?',
-    [id, user._json.email]
-  );
-  let favoriteRow = helper.first(favoriteRows);
-  row.$isFavorite = !!favoriteRow;
-  return row;
+  let location = await helper.first(LOCATION_SELECT + 'WHERE id = ?', [id]);
+  if(user){
+    let favorite = await helper.first(
+      'SELECT email FROM `favorites` WHERE locationid = ? AND email = ?',
+      [id, user._json.email]
+    );
+    location.$isFavorite = !!favorite;
+  }
+  return location;
 }
 
 
