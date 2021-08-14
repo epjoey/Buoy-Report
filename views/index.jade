@@ -39,6 +39,7 @@ block content
       li(
         ng-repeat="location in locations"
         ng-if='locationMatchesSearch(location.name)'
+        class="{{ location.$isFavorite ? 'favorite' : 'not-favorite' }}"
       )
         a(ng-href="{{ '/locations/' + location.id }}")
           {{ location.name }}

@@ -23,7 +23,7 @@ async function create(reqBody, user){
 }
 
 
-async function update(locationId, reqBody){
+async function update(locationId, reqBody, user){
   let params = _.pick(reqBody, ['name', 'timezone', 'stormsurfingurl']);
   if(reqBody.latitude){
     params.latitude = parseFloat(reqBody.latitude).toFixed(3);
@@ -38,7 +38,7 @@ async function update(locationId, reqBody){
     // Update buoys
     await db.query('DELETE FROM `buoy_location` WHERE locationid = ?', locationId);
     await addBuoysToLocation(reqBody.buoys, locationId);
-    return [null, getSingle(locationId)];
+    return [null, getSingle(locationId, user)];
   }
   catch(err){
     return [err.message, null];
@@ -82,13 +82,20 @@ async function getMultiple(page = 1, user){
 }
 
 
-async function getSingle(id){
-  let [rows, fields] = await db.query(
+async function getSingle(id, user){
+  let [rows,] = await db.query(
     'SELECT id, name, timezone, latitude, longitude, email \
      FROM `location` WHERE id = ?',
     [id]
   );
-  return helper.first(rows);
+  let row = helper.first(rows);
+  let [favoriteRows,] = await db.query(
+    'SELECT email FROM `favorites` WHERE locationid = ? AND email = ?',
+    [id, user._json.email]
+  );
+  let favoriteRow = helper.first(favoriteRows);
+  row.$isFavorite = !!favoriteRow;
+  return row;
 }
 
 

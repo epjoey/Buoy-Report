@@ -3,7 +3,14 @@ block vars
   - var bodyClass = 'location-page';
 
 block headerLink
-  a.header-link(href="/locations/#{location.id}")= location.name
+  a.header-link(
+    ng-init="location = #{JSON.stringify(location)};"
+    ng-href="'/locations/' + location.id",
+    class="{{ location.$isFavorite ? 'favorite' : 'not-favorite' }}"
+  )
+    {{ location.name }}
+    &nbsp;
+    span.star(ng-click="toggleFavorite(location, $event)") &starf;
 
 block headerMenuItems
   if isAuthenticated

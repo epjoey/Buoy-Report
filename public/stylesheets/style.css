@@ -260,17 +260,24 @@ input[type="file"]{
 @media only screen and (max-width: 480px){
   .block-list-add { font-size: 16px }
 }
+
+/* Stars */
 .block-list .star {
   position: absolute;
   top: 10px;
   right: 8px;
   display: block;
-  opacity: 0;
 }
-.block-list > li.favorite .star { opacity: 0.25; }
-.block-list > li.favorite .star:hover { opacity: 1; color: darkred; }
-.block-list > li:not(.favorite):hover .star { opacity: 0.25; }
-.block-list > li:not(.favorite):hover .star:hover { opacity: 1; }
+.favorite .star { opacity: .75; }
+.not-favorite .star { opacity: .25; }
+/* On desktop you can hover and shit */
+@media only screen and (min-width: 680px){
+  .not-favorite .star { opacity: 0; }
+  .favorite .star { opacity: 0.5; }
+  .favorite .star:hover { opacity: 1; color: darkred; }
+  .not-favorite:hover .star { opacity: 0.5; }
+  .not-favorite:hover .star:hover { opacity: 1; }
+}
 
 
 

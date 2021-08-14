@@ -22,7 +22,7 @@ router.post('/', helper.secured, async function(req, res, next){
 
 router.get('/:locationId', async function(req, res, next){
   let locationId = parseInt(req.params.locationId);
-  const location = await locationService.getSingle(locationId);
+  const location = await locationService.getSingle(locationId, req.user);
   if(!location){
     return next(createError(404));
   }
@@ -33,14 +33,14 @@ router.get('/:locationId', async function(req, res, next){
 
 router.put('/:locationId', helper.secured, async function(req, res, next){
   const locationId = parseInt(req.params.locationId);
-  const [error, location] = await locationService.update(locationId, req.body);
+  const [error, location] = await locationService.update(locationId, req.body, req.user);
   res.json({ location, error });
 });
 
 
 router.delete('/:locationId', helper.secured, async function(req, res, next){
   let locationId = parseInt(req.params.locationId);
-  let location = await locationService.getSingle(locationId);
+  let location = await locationService.getSingle(locationId, req.user);
   if(!req.user.isAdmin && req.user._json.email !== location.email){
     return res.sendStatus(404);
   }

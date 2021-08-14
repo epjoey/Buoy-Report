@@ -62,7 +62,8 @@
 
   .run([
     '$rootScope',
-    function($rootScope){
+    'http',
+    function($rootScope, http){
       window.$$scope = function(element){
         return angular.element(element).scope();
       };
@@ -70,6 +71,22 @@
       $rootScope.moment = moment;
       $rootScope.screen = screen;
       $rootScope.location = location;
+
+      $rootScope.toggleFavorite = function(location, $event){
+        $event.stopPropagation();
+        $event.preventDefault();
+        var url = '/favorites/' + location.id;
+        if(location.$isFavorite){
+          http.delete($rootScope, url).then(function(res){
+            location.$isFavorite = false;
+          });
+        }
+        else {
+          http.post($rootScope, url).then(function(res){
+            location.$isFavorite = true;
+          });
+        }
+      };      
     }
   ]);
 })();
