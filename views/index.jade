@@ -31,9 +31,7 @@ block content
           ng-repeat="location in locations|filter:{$isFavorite: true}"
           ng-if='locationMatchesSearch(location.name)'
         ).favorite
-          a(ng-href="{{ '/locations/' + location.id }}")
-            {{ location.name }}
-            span.star(ng-click="toggleFavorite(location, $event)") &starf;
+          include ./includes/location-link.jade
 
     ul.block-list.mt-10
       li(
@@ -41,6 +39,4 @@ block content
         ng-if='locationMatchesSearch(location.name)'
         class="{{ location.$isFavorite ? 'favorite' : 'not-favorite' }}"
       )
-        a(ng-href="{{ '/locations/' + location.id }}")
-          {{ location.name }}
-          span.star(ng-click="toggleFavorite(location, $event)") &starf;
+        include ./includes/location-link.jade

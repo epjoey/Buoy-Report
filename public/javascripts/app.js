@@ -86,7 +86,11 @@
             location.$isFavorite = true;
           });
         }
-      };      
+      };
+
+      $rootScope.scrollTo = function(target){
+        document.getElementById(target).scrollIntoView();
+      };
     }
   ]);
 })();

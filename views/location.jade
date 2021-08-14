@@ -16,7 +16,7 @@ block headerLink
 block headerMenuItems
   if isAuthenticated
     li
-      a(href='#add-snapshot') Take snapshot
+      a(ng-click="scrollTo('add-snapshot')") Take snapshot
 
 
 block container
@@ -38,15 +38,15 @@ block container
       if isAuthenticated
         include ./includes/add-snapshot.jade
       else
-        .form.text-center
+        .info
           a(ng-href='/login') Login
-          | to take snapshots
+          | to take snapshots.
 
     div(ng-repeat="snapshot in snapshots")
       include ./includes/snapshot.jade
 
-    .info.mb-20(ng-if="page && !snapshots.length") No snapshots exist &#128546;
-    .text-center
+    .info(ng-if="page && !snapshots.length") No snapshots exist &#128546;
+    .text-center.mt-20
       a.btn(
         ng-disabled="loading || isLastPage"
         ng-click="load()"
