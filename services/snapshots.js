@@ -32,6 +32,7 @@ async function create(locationId, reqBody, user){
     return [null, await getSingle(result.insertId)];
   }
   catch(err){
+    console.log('error creating snapshot for location', locationId, err);
     return [err.message, null];
   }
 }

@@ -68,7 +68,8 @@ async function getData(id, type, offset=0, limit=24){ // get 24 hours of data
     data = splitRows(data, offset, limit);
     return [null, data];
   } catch(err){
-    return [err.message, null];
+    console.log('error getting data from buoy', id, err);
+    return [err.message, []];
   }
 }
 
