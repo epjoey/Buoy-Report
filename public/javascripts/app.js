@@ -89,6 +89,7 @@
       };
 
       $rootScope.scrollTo = function(target){
+        window.location.hash = target;
         document.getElementById(target).scrollIntoView();
       };
     }

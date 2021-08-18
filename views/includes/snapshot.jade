@@ -1,4 +1,4 @@
-.snapshot
+.snapshot(id="snapshot-{{ snapshot.id }}")
   .mb-10
     a.location-name(ng-href="{{ '/locations/' + snapshot.locationId }}") {{ snapshot.locationName }}
     .obs-date
@@ -75,7 +75,7 @@
 
   div
     span.text-meta
-      |report {{ snapshot.id }}
+      a(ng-click="scrollTo('snapshot-' + snapshot.id)") report {{ snapshot.id }}
       span(ng-if="snapshot.$by")  by {{ snapshot.$by }}
 
     .btn.btn-small.btn-clear(

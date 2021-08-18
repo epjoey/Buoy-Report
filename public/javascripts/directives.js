@@ -93,6 +93,9 @@
   };
 
   var parseBuoyData = function(data, type){
+    if(!data || !data.length){
+      return [];
+    }
     // Both data sets have 2 rows of units.
     if(data[0][0] === "#YY" && data[1][0] === "#yr"){
       data = data.slice(2);
