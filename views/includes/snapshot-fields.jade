@@ -13,7 +13,7 @@
     span Waveheight (backs)
     select(
       ng-model="req.waveheight"
-      ng-options="n as WAVE_HEIGHTS[n] for n in waveHeights"
+      ng-options="n as (n ? WAVE_HEIGHTS[n] : '') for n in waveHeights"
     )
 
 .field.no-label

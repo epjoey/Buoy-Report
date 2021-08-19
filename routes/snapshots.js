@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const createError = require('http-errors');
 const router = express.Router();
@@ -11,8 +12,9 @@ router.put('/:snapshotId', helper.secured, async function(req, res, next){
   if(!snapshot || (req.user._json.email !== snapshot.email && !req.user.isAdmin)) {
     return res.sendStatus(404);
   }
-  const [result, fields] = await db.query(
-    'UPDATE `report` SET ? WHERE id = ?', [req.body, snapshot.id]
+  let params = _.pick(req.body, ['waveheight', 'quality', 'imagepath', 'text']);
+  await db.query(
+    'UPDATE `report` SET ? WHERE id = ?', [params, snapshot.id]
   );
   snapshot = await snapshotService.getSingle(snapshot.id);
   res.json({ snapshot });

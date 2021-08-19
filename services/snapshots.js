@@ -16,6 +16,7 @@ const SNAPSHOT_SELECT = '\
 
 async function create(locationId, reqBody, user){
   let params = _.pick(reqBody, ['waveheight', 'quality', 'imagepath', 'text']);
+  params.waveheight = params.waveheight || null;
   params.locationid = locationId;
   params.email = user._json.email;
   params.reportdate = Date.now() / 1000;
@@ -37,7 +38,7 @@ async function create(locationId, reqBody, user){
   }
 }
 
-
+const CLOSEST_ROW_CUTOFF_SECONDS = 60 * 60 * 8; // Any reading after 8 hours disregard.
 function closestRow(data, observationDate){
   // Returns the first row that is after observation date.
   // This is what a row looks like:
@@ -52,7 +53,12 @@ function closestRow(data, observationDate){
   // ]
   for(let row of data){
     row.date = Date.UTC(row[0], parseInt(row[1]) - 1, row[2], row[3], row[4]) / 1000;
+    // Find the first buoy reading before the observation.
     if(row.date < observationDate){
+      // If the latest buoy reading was more than 8 hours before the observation, bail.
+      if(observationDate - row.date > CLOSEST_ROW_CUTOFF_SECONDS){
+        return null;
+      }
       return row;
     }
   }
@@ -101,10 +107,10 @@ async function snapshotBuoyData(buoy, snapshotId, observationDate){
 
 
 async function getSingle(snapshotId){
-  let row = await helper.first(SNAPSHOT_SELECT + ' WHERE s.id = ?', snapshotId);
-  let groupedBuoyData = await buoyDataByReport([snapshotId]);
-  row.buoyData = groupedBuoyData[row.id];
-  return row;
+  let snapshot = await helper.first(SNAPSHOT_SELECT + ' WHERE s.id = ?', snapshotId);
+  let groupedBuoyData = await buoyDataForSnapshots([snapshotId]);
+  snapshot.buoyData = groupedBuoyData[snapshot.id];
+  return snapshot;
 };
 
 
@@ -115,7 +121,7 @@ async function forLocation(locationId, user, page = 1){
     [locationId, user ? user._json.email : null, offset, SNAPSHOT_LIMIT]
   );
 
-  const buoyData = await buoyDataByReport(_.map(rows, 'id'));
+  const buoyData = await buoyDataForSnapshots(_.map(rows, 'id'));
   _.forEach(rows, function(row){
     row.buoyData = buoyData[row.id] || [];
   });
@@ -137,7 +143,7 @@ async function forUser(user, page = 1){
   else {
     rows = await helper.rows(SNAPSHOT_SELECT + ' WHERE s.email = ? ' + sqlEnd, [user._json.email, offset, 100]);
   }
-  const buoyData = await buoyDataByReport(_.map(rows, 'id'));
+  const buoyData = await buoyDataForSnapshots(_.map(rows, 'id'));
   _.forEach(rows, function(row){
     row.buoyData = buoyData[row.id];
   });
@@ -149,22 +155,13 @@ async function forUser(user, page = 1){
 }
 
 
-async function insertBuoyData(reportId){
-  let [result,] = await db.query(
-    'INSERT INTO `buoydata` SET ?',
-    params
-  );
-  return _.groupBy(rows, 'reportid');
-}
-
-
-async function buoyDataByReport(reportIds){
-  if(!reportIds.length){
+async function buoyDataForSnapshots(snapshotIds){
+  if(!snapshotIds.length){
     return {};
   }
   let rows = await helper.rows(
     'SELECT * from `buoydata` WHERE reportid IN (?)',
-    [reportIds]
+    [snapshotIds]
   );
   return _.groupBy(rows, 'reportid');
 }

@@ -23,11 +23,11 @@
     .mb-10(ng-if="snapshot.$waveHeight")
       | {{ snapshot.$waveHeight }}
 
-    .mb-20(ng-if="snapshot.text")
-      | {{ snapshot.text }}
-
     .image.mb-20(ng-if="snapshot.$imagePath")
       img(ng-src="{{ snapshot.$imagePath|addImageParameters }}")
+
+    .mb-20(ng-if="snapshot.text")
+      | {{ snapshot.text }}
 
     .buoy-snap.mb-20
       table

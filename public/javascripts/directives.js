@@ -310,6 +310,7 @@
           $scope.QUALITIES = QUALITIES;
 
           $scope.waveHeights = _.sortBy(_.keys(WAVE_HEIGHTS), parseFloat);
+          $scope.waveHeights.unshift(null);
           $scope.WAVE_HEIGHTS = WAVE_HEIGHTS;
 
           $scope.isEditing = {};
@@ -349,7 +350,7 @@
       return {
         link: function($scope, el, attrs){
           $scope.req = _.pick($scope.snapshot, ['quality', 'waveheight', 'text', 'imagepath']);
-          $scope.req.waveheight = String($scope.req.waveheight);
+          $scope.req.waveheight = $scope.req.waveheight ? String($scope.req.waveheight) : null;
 
           $scope.clearImage = function(){
             $scope.req.imagepath = '';
