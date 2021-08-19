@@ -110,7 +110,7 @@ async function getSingle(snapshotId){
 
 async function forLocation(locationId, user, page = 1){
   const offset = helper.getOffset(page, SNAPSHOT_LIMIT);
-  let [rows, fields] = await db.query(
+  let rows = await helper.rows(
     SNAPSHOT_SELECT + ' WHERE s.locationid = ? AND (s.public = 1 OR s.email = ?) ORDER BY s.id desc LIMIT ?,?',
     [locationId, user ? user._json.email : null, offset, SNAPSHOT_LIMIT]
   );
@@ -132,10 +132,10 @@ async function forUser(user, page = 1){
   const sqlEnd = ' ORDER BY s.id desc LIMIT ?,?';
   let rows;
   if(user.isAdmin){
-    [rows,] = await db.query(SNAPSHOT_SELECT + sqlEnd, [offset, 100]);
+    rows = await helper.rows(SNAPSHOT_SELECT + sqlEnd, [offset, 100]);
   }
   else {
-    [rows,] = await db.query(SNAPSHOT_SELECT + ' WHERE s.email = ? ' + sqlEnd, [user._json.email, offset, 100]);
+    rows = await helper.rows(SNAPSHOT_SELECT + ' WHERE s.email = ? ' + sqlEnd, [user._json.email, offset, 100]);
   }
   const buoyData = await buoyDataByReport(_.map(rows, 'id'));
   _.forEach(rows, function(row){
@@ -162,9 +162,9 @@ async function buoyDataByReport(reportIds){
   if(!reportIds.length){
     return {};
   }
-  let [rows, fields] = await db.query(
+  let rows = await helper.rows(
     'SELECT * from `buoydata` WHERE reportid IN (?)',
-    reportIds
+    [reportIds]
   );
   return _.groupBy(rows, 'reportid');
 }
