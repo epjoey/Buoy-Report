@@ -87,19 +87,9 @@ async function forLocation(locationId){
 }
 
 
-async function getMultiple(page = 1){
-  const limit = 1000;
-  const offset = helper.getOffset(page, limit);
-  let rows = await helper.rows(
-    'SELECT buoyid, name FROM `buoy` ORDER BY buoyid LIMIT ?,?',
-    [offset, limit]
-  );
-  const meta = {page};
-
-  return {
-    rows,
-    meta
-  }
+async function getMultiple(){
+  let rows = await helper.rows('SELECT buoyid, name FROM `buoy` ORDER BY buoyid');
+  return rows
 }
 
 async function getSingle(id){

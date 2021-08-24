@@ -1,0 +1,18 @@
+div
+  .mb-20
+    if isAuthenticated
+      span.block-list-add(v-on:click="adding = !adding")
+        |+ Add Buoy
+    else
+      a.block-list-add(href="/login")
+        |+ Add Buoy
+    .clear
+
+  if isAuthenticated
+    .mb-20(v-if="adding")
+      add-buoy(v-on:add-buoy:close="adding = false")
+
+  ul.block-list
+    li(v-for="buoy in buoys")
+      a(:href="'/buoys/' + buoy.buoyid") {{ buoy.buoyid }}: {{ buoy.name }}
+

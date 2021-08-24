@@ -1,0 +1,36 @@
+.field.no-label
+  label
+    label.radio-label(v-for="n in QUALITIES_KEYS")
+      input(
+        type="radio",
+        v-model="req.quality",
+        :value="n"
+      )
+      {{ QUALITIES[n] }}
+
+.field
+  label
+    span Waveheight (backs)
+    select(
+      v-model="req.waveheight"
+    )
+      option(v-for="n in WAVE_HEIGHTS_KEYS", :value="n") {{  (n ? WAVE_HEIGHTS[n] : '') }}
+
+.field.no-label
+  label
+    textarea(
+      placeholder="Description"
+      v-model="req.text"
+    )
+
+.field
+  label
+    span Upload Image
+    input(
+      type="file",
+      accept="image/*",
+      v-on:change="imageSelected"
+    )
+
+.field.no-label(v-if="req.imagepath")
+  span.btn.delete.btn-small(@click="clearImage()") Clear image

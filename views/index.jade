@@ -5,38 +5,4 @@ block vars
 block content
   h1.banner Buoy Report
 
-  div(ng-controller="LocationsCtrl")
-    .mb-20
-      input.search-locations(
-        type="text",
-        ng-model="locationSearchText",
-        placeholder="Search Locations"
-      )
-
-      if isAuthenticated
-        span.block-list-add(ng-click="addLocation.isOpen = !addLocation.isOpen")
-          |+ Add Location
-      else
-        a.block-list-add(href="/login")
-          |+ Add Location
-      .clear
-
-    if isAuthenticated
-      .mb-20(ng-if="addLocation.isOpen")
-        include ./includes/add-location.jade
-
-    if isAuthenticated
-      ul.block-list
-        li(
-          ng-repeat="location in locations|filter:{$isFavorite: true}"
-          ng-if='locationMatchesSearch(location.name)'
-        ).favorite
-          include ./includes/location-link.jade
-
-    ul.block-list.mt-10
-      li(
-        ng-repeat="location in locations"
-        ng-if='locationMatchesSearch(location.name)'
-        class="{{ location.$isFavorite ? 'favorite' : 'not-favorite' }}"
-      )
-        include ./includes/location-link.jade
+  locations

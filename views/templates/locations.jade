@@ -1,0 +1,43 @@
+.locations
+  .mb-20
+    input.search-locations(
+      type="text",
+      v-model="locationSearchText",
+      placeholder="Search Locations"
+    )
+
+    if isAuthenticated
+      span.block-list-add(v-on:click="adding = !adding")
+        |+ Add Location
+    else
+      a.block-list-add(href="/login")
+        |+ Add Location
+    .clear
+
+  if isAuthenticated
+    .mb-20(v-if="adding")
+      add-location(v-on:add-location:close="adding = false")
+
+  if isAuthenticated
+    ul.block-list
+      li(
+        v-for="location in locations"
+        v-if="location.$isFavorite && matchesSearchText(location)"
+      ).favorite
+        a(:href="'/locations/' + location.id")
+          {{ location.name }}
+          if isAuthenticated
+            span.star(v-on:click.stop.prevent="toggleFavorite(location)") &starf;
+
+
+  ul.block-list.mt-10
+    li(
+      v-for="location in locations"
+      v-if="matchesSearchText(location)"
+      v-bind:class="{ 'favorite': location.$isFavorite, 'not-favorite': !location.$isFavorite }"
+    )
+      a(:href="'/locations/' + location.id")
+        {{ location.name }}
+        if isAuthenticated
+          span.star(v-on:click.stop.prevent="toggleFavorite(location)") &starf;
+

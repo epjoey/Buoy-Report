@@ -1,0 +1,22 @@
+form.form
+  .text-center.mb-20.form-title Take a snapshot
+
+  .field
+    label
+      span Session was...
+      select(
+        v-model="req.hourOffset",
+      )
+        option(v-for="n in hourOffsetRange", :value="n") {{  hourOffsetStr(n) }}
+
+  include ./snapshot-fields.jade
+
+  .field.errors(v-if="error") {{ error }}
+
+  .field.btns
+    input.btn.submit(
+      type="submit",
+      v-on:click="submit()",
+      :disabled="loading",
+      :value="loading ? 'Submitting...' : 'Submit'"
+    )

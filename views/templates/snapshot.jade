@@ -1,0 +1,90 @@
+.snapshot(:id="'snapshot-' + snapshot.id")
+  .mb-10
+    a.location-name(:href="'/locations/' + snapshot.locationId") {{ snapshot.locationName }}
+    .obs-date
+      | {{ $moment.unix(snapshot.obsdate).tz(snapshot.timezone).format('M/D/YY h:mma') }}
+
+  update-snapshot(v-if="isUpdating", :snapshot="snapshot", v-on:update-snapshot:close="isUpdating = false")
+
+  div(v-if="!isUpdating")
+    ul.quality.mb-10(
+      v-if="snapshot.quality",
+      :class="'quality-' + snapshot.quality"
+    )
+      li.level.level-1
+      li.level.level-2
+      li.level.level-3
+      li.level.level-4
+      li.level.level-5
+      li.text-meta &nbsp; {{ snapshot.$qualityText }}
+
+    .mb-10(v-if="snapshot.$waveHeight")
+      | {{ snapshot.$waveHeight }}
+
+    .image.mb-20(v-if="snapshot.$imagePath")
+      img(:src="snapshot.$imagePath")
+
+    .mb-20(v-if="snapshot.text")
+      | {{ snapshot.text }}
+
+    .buoy-snap.mb-20
+      table
+        thead
+          tr
+            th Buoy
+            th Time
+            th WVHT
+            th SwH
+            th SwP
+            th SwD
+            th MWD
+            th Wind Wave
+
+          tr.units
+            th
+            th {{ $moment.tz(snapshot.timezone).format('z') }}
+            th ft
+            th ft
+            th sec
+            th
+            th
+            th ft / sec dir
+
+        tbody
+          tr(v-if="!snapshot.$buoyData.length")
+            td
+              small no data
+          tr(v-for="buoy in snapshot.$buoyData")
+            td
+              a(
+                :href="'https://www.ndbc.noaa.gov/station_page.php?station=' + buoy.buoy",
+                target="_blank"
+              ) {{ buoy.buoy }}
+            td {{ $moment.unix(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mma') }}
+            td {{ buoy.waveheight }}
+            td {{ buoy.swellheight }}
+            td {{ buoy.swellperiod }}
+            td {{ buoy.swelldir }}
+            td {{ buoy.meanwavedir }}
+            td
+              | {{ buoy.windWaveSummary }}
+              | &nbsp;
+              sub {{ buoy.windwavedir }}
+
+  div
+    span.text-meta
+      a(v-on:click="scrollTo('snapshot-' + snapshot.id)") report {{ snapshot.id }}
+      span(v-if="snapshot.$by")  by {{ snapshot.$by }}
+
+    .btn.btn-small.btn-clear(
+      v-if="!isUpdating && ($user.isAdmin || snapshot.email === $user.email)",
+      v-on:click="isUpdating = true",
+    ) Edit
+
+    .btn.btn-small.delete.right(
+      v-if="isUpdating && ($user.isAdmin || snapshot.email === $user.email)",
+      v-on:click="deleteSnapshot(snapshot)",
+      :disabled="loading"
+    ) Delete snapshot
+
+    .clear

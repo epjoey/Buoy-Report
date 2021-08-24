@@ -18,10 +18,8 @@ const ADMIN_EMAIL = "jhodara@gmail.com";
  */
 const db = require('./db');
 const authRouter = require("./routes/auth");
-const indexRouter = require('./routes/index');
-const locationsRouter = require('./routes/locations');
-const buoysRouter = require('./routes/buoys');
-const snapshotsRouter = require('./routes/snapshots');
+const viewsRouter = require('./routes/views');
+const apiRouter = require('./routes/api');
 
 /**
  * App Variables
@@ -107,8 +105,8 @@ app.use((req, res, next) => {
     req.user.isAdmin = req.user._json.email === ADMIN_EMAIL;
   }
   res.locals.isAuthenticated = req.isAuthenticated();
-  res.locals.user = req.user ? req.user._json : null;
-  res.locals.isAdmin = req.user && req.user._json.email === ADMIN_EMAIL;
+  res.locals.user = req.user ? req.user._json : {};
+  res.locals.user.isAdmin = req.user && req.user._json.email === ADMIN_EMAIL;
   res.locals.NODE_ENV = process.env.NODE_ENV;
   next();
 });
@@ -118,12 +116,9 @@ app.use((req, res, next) => {
  * Routes Definitions
  */
 
-app.use('/', indexRouter);
 app.use('/', authRouter);
-app.use('/l', locationsRouter); // support short legacy urls. TODO: redirect.
-app.use('/locations', locationsRouter);
-app.use('/buoys', buoysRouter);
-app.use('/snapshots', snapshotsRouter);
+app.use('/', viewsRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

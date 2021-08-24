@@ -95,8 +95,10 @@ async function addBuoysToLocation(buoyIds, locationId){
     return;
   }
   buoyIds = _.map(_.split(buoyIds, /[ ,]+/), _.trim);
-  _.forEach(buoyIds, async function(buoyId){
-    let params = {buoyid: buoyId, locationid: locationId, created: Date.now()};
+  let i = 0; // increment `created` to maintain order.
+  buoyIds.forEach(async function(buoyId){
+    i += 1;
+    let params = {buoyid: buoyId, locationid: locationId, created: Date.now() + i};
     try {
       await db.query(
         'INSERT INTO `buoy_location` SET ?', params

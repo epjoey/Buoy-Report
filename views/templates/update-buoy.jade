@@ -1,0 +1,24 @@
+form.form
+  .field
+    label
+      span Name
+      input(type='text', v-model='name')
+
+  .field.errors(v-if="error") {{ error }}
+
+  .btns
+    input.btn.submit(
+      type="submit",
+      v-on:click="submit()",
+      :disabled="loading || invalid()"
+      value="Submit"
+    )
+
+    button.btn.delete.right.btn-small(
+      v-if="$user.isAdmin"
+      v-on:click="deleteBuoy()",
+      :disabled="loading"
+    ) Delete Buoy
+  .clear
+
+

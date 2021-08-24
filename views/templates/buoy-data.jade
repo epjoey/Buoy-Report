@@ -1,0 +1,79 @@
+.buoy-data
+  h3
+    a(:href="'https://www.ndbc.noaa.gov/station_page.php?station=' + buoy.buoyid" target="_blank")
+      | {{ buoy.buoyid }}: {{ buoy.name }} ({{ type }})
+
+  .table-wrap
+    template(v-for="table in tables")
+      table(v-if="type === 'wave'")
+        thead
+          tr
+            th Time
+            th WVHT
+            th SwH
+            th SwP
+            th SwD
+            th MWD
+            th Wind Wave
+
+          tr.units
+            th {{ location && location.timezone ? $moment.tz(location.timezone).format('z') : 'UTC' }}
+            th ft
+            th ft
+            th sec
+            th sec
+            th
+            th ft / sec dir
+
+        tbody
+          tr(v-for="row in table.rows")
+            td {{ formatDate(row.time) }}
+            td {{ row.waveHeight }}
+            td {{ row.swellHeight }}
+            td.swell-period {{ row.swellPeriod }}
+            td {{ row.swellDirection }}
+            td {{ row.meanWaveDirection }}
+            td
+              | {{ row.windWaveSummary }}
+              sub {{ row.windWaveDirection }}
+
+      table(v-if="type === 'standard'")
+        thead
+          tr
+            th Time
+            th WVHT
+            th DPD
+            th MWD
+            th WSPD
+            th GST
+            th WDIR
+
+          tr.units
+            th {{ location && location.timezone ? $moment.tz(location.timezone).format('z') : 'UTC' }}
+            th ft
+            th sec
+            th
+            th mph
+            th mph
+            th
+
+        tbody
+          tr(v-for="row in table.rows")
+            td {{ formatDate(row.time) }}
+            td {{ row.waveHeight }}
+            td {{ row.wavePeriod }}
+            td
+              | {{ row.waveDirection }}
+              sub {{ row.waveDirectionAbbr }}
+            td {{ row.windSpeed }}
+            td {{ row.gust }}
+            td
+              | {{ row.windDirection }}
+              sub {{ row.windDirectionAbbr }}
+
+    span.loading(v-if="loading") Loading...
+    span.no-data(v-if="!loading && !tables.length") Nothing to display.
+    a.paginate(
+      v-on:click="load()"
+    )
+      | &darr;

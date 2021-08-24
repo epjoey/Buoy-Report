@@ -1,41 +1,21 @@
 extends layout
-block vars
-  - var bodyClass = 'location-page';
+
+block scripts
+  script.
+    window.br.buoy = !{JSON.stringify(buoy)};
+
+  script(type="text/x-template", id="buoy")
+    .buoy-data-wrap
+      .buoy-data-inner-wrap
+        buoy-data(:buoy="buoy", type="wave")
+        buoy-data(:buoy="buoy", type="standard")
 
 block headerLink
   a.header-link(href="/buoys/#{buoy.buoyid}") #{buoy.buoyid}: #{buoy.name}
 
 block container
-  .buoy-data-wrap
-    .buoy-data-inner-wrap
-      include ./includes/buoy-data.jade
+  buoy
 
   if isAuthenticated
     .container
-      form.form(
-        ng-update-buoy="#{JSON.stringify(buoy)}",
-        name="updateBuoyForm"
-      )
-        .field
-          label
-            span Name
-            input(type='text', ng-model='req.name')
-
-        .field.errors(ng-if="error") {{ error }}
-
-        .btns
-          input.btn.submit(
-            type="submit",
-            ng-click="submit()",
-            ng-disabled="loading || updateBuoyForm.$invalid || updateBuoyForm.$pristine"
-            value="Submit"
-          )
-
-          if isAdmin
-            button.btn.delete.right.btn-small(
-              ng-click="deleteBuoy()",
-              ng-disabled="loading"
-            ) Delete Buoy
-        .clear
-
-
+      update-buoy

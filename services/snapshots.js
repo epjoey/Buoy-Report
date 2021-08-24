@@ -93,6 +93,7 @@ async function snapshotBuoyData(buoy, snapshotId, observationDate){
     console.log('error fetching buoy data for', buoy.buoyid, err);
     return;
   }
+  console.log('buoy', buoy)
   let row = closestRow(data, observationDate);
   if(!row){
     console.log('historical buoy data not found for buoy', buoy.buoyid, 'at date', observationDate);

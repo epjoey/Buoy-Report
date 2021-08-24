@@ -1,0 +1,23 @@
+.container.snapshots
+
+  .mb-20#add-snapshot(v-if="location")
+    if isAuthenticated
+      add-snapshot(:location="location", :snapshots="snapshots")
+    else
+      .info
+        a(href='/login') Login
+        |  to take snapshots.
+
+  snapshot(
+    v-for="snapshot in snapshots",
+    :key="snapshot.id",
+    :snapshot="snapshot",
+    :snapshots="snapshots"
+  )
+
+  .info(v-if="page && !snapshots.length") No snapshots exist &#128546;
+  .text-center.mt-20
+    a.btn(
+      :disabled="loading || isLastPage"
+      @click="load()"
+    ) Load {{ snapshots.length ? 'more' : 'snapshots' }}

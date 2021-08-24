@@ -1,22 +1,4 @@
 extends layout
 
 block content
-  div(ng-init="addBuoy = {isOpen: false}")
-  .mb-20
-    if isAuthenticated
-      span.block-list-add(ng-click="addBuoy.isOpen = !addBuoy.isOpen")
-        |+ Add Buoy
-    else
-      a.block-list-add(href="/login")
-        |+ Add Buoy
-    .clear
-
-  if isAuthenticated
-    .mb-20(ng-if="addBuoy.isOpen")
-      include ./includes/add-buoy.jade
-
-  ul.block-list
-    for buoy in buoys.rows
-      li
-        a(href="/buoys/#{buoy.buoyid}") #{buoy.buoyid}: #{buoy.name}
-
+  buoys

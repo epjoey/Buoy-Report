@@ -11,25 +11,28 @@ html
     link(rel="stylesheet", href="/stylesheets/style.css")
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 
-    script(src="https://code.jquery.com/jquery-2.1.4.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data-10-year-range.js")
 
-    script(src="/javascripts/directives.js")
-    script(src="/javascripts/controllers.js")
-    script(src="/javascripts/app.js")
+
+    if NODE_ENV == 'production'
+      script(src="https://cdn.jsdelivr.net/npm/vue@2.6.14")
+    else
+      script(src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js")
+
+    script.
+      window.br = window.br || {}
+      window.br.NODE_ENV = '!{ NODE_ENV }';
+      window.br.user = !{ JSON.stringify(user) };
+
+    block scripts
 
   - var bodyClass = '';
   block vars
 
-  body(
-    class='#{bodyClass}',
-    ng-app='app',
-    ng-init="nodeEnv = '#{ NODE_ENV }';"
-  )
-    .wrapper
+  body(class='#{bodyClass}')
+    .wrapper(id="app")
       .header
         .container
           .header-left
@@ -39,21 +42,21 @@ html
             block headerLink
               a.header-link(href='/') Buoy Report
           .header-right
-            .header-menu(ng-init="menuCtrl = { isOpen: false }")
-              a.header-menu-trigger(ng-click="menuCtrl.isOpen = !menuCtrl.isOpen")
+            .header-menu
+              a.header-menu-trigger(v-on:click="isMenuOpen = !isMenuOpen")
                 img(src="/images/down-arrow.png", width="15", height="9")
               ul.header-menu-inner(
-                ng-class="menuCtrl.isOpen ? 'open' : ''"
+                v-bind:class="{ open: isMenuOpen }"
               )
                 block headerMenuItems
                 if isAuthenticated
                   li
-                    a(ng-href='/me') My snapshots
+                    a(href='/me') My snapshots
                   li
                     a(href="/logout") Logout
                 else
                   li
-                    a(ng-href='/login') Login
+                    a(href='/login') Login
 
       block container
         .container
@@ -71,4 +74,7 @@ html
         p All buoy and tide data from
           a(href="http://noaa.gov", target="_blank")  NOAA
 
-    include ./includes/ng-includes.jade
+    include ./templates/index.jade
+
+    //- Include vue stuff.
+    script(src="/javascripts/v-app.js")

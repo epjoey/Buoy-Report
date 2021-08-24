@@ -1,0 +1,15 @@
+form.form.mb-20(
+  v-on:submit.prevent="submit"
+)
+  include ./snapshot-fields.jade
+
+  .field.errors(v-if="error") {{ error }}
+
+  .field.btns.text-center
+    span.btn.cancel(v-on:click="$emit('update-snapshot:close')") Cancel
+    | &nbsp; &nbsp;
+    input.btn.submit(
+      type="submit",
+      :disabled="loading",
+      :value="loading ? 'Submitting...' : 'Submit'"
+    )

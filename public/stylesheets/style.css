@@ -91,7 +91,7 @@ input[type="file"]{
   width: 100%;
   background: #06223c;
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   color: #adb9c4;
   height: 32px;
 }
@@ -271,7 +271,7 @@ input[type="file"]{
 .favorite .star { opacity: .75; }
 .not-favorite .star { opacity: 0; }
 .location-page .not-favorite .star { opacity: .25; }
-.location-page .favorite .star { opacity: .75; }
+.location-page .favorite .star { opacity: 1; }
 
 /* On desktop you can hover and shit */
 @media only screen and (min-width: 680px){
@@ -312,13 +312,6 @@ input[type="file"]{
     color: #ffffff;
   }
 }
-
-
-/*================================*/
-/* LOCATION PAGE */
-/*================================*/
-/*================================*/
-.location-page .header {margin-bottom: 30px;}
 
 /*================================*/
 /* Buoy View */
