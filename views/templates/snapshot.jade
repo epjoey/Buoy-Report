@@ -2,7 +2,7 @@
   .mb-10
     a.location-name(:href="'/locations/' + snapshot.locationId") {{ snapshot.locationName }}
     .obs-date
-      | {{ $moment.unix(snapshot.obsdate).tz(snapshot.timezone).format('M/D/YY h:mma') }}
+      | {{ $moment.unix(snapshot.obsdate).tz(snapshot.timezone || 'UTC').format('M/D/YY h:mma') }}
 
   update-snapshot(v-if="isUpdating", :snapshot="snapshot", v-on:update-snapshot:close="isUpdating = false")
 
@@ -42,7 +42,7 @@
 
           tr.units
             th
-            th {{ $moment.tz(snapshot.timezone).format('z') }}
+            th {{ $moment.tz(snapshot.timezone || 'UTC').format('z') }}
             th ft
             th ft
             th sec
@@ -60,7 +60,7 @@
                 :href="'https://www.ndbc.noaa.gov/station_page.php?station=' + buoy.buoy",
                 target="_blank"
               ) {{ buoy.buoy }}
-            td {{ $moment.unix(buoy.gmttime).tz(snapshot.timezone).format('M/D h:mma') }}
+            td {{ $moment.unix(buoy.gmttime).tz(snapshot.timezone || 'UTC').format('M/D h:mma') }}
             td {{ buoy.waveheight }}
             td {{ buoy.swellheight }}
             td {{ buoy.swellperiod }}

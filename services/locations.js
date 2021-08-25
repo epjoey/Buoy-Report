@@ -38,7 +38,7 @@ async function update(locationId, reqBody, user){
     // Update buoys
     await db.query('DELETE FROM `buoy_location` WHERE locationid = ?', locationId);
     await addBuoysToLocation(reqBody.buoys, locationId);
-    return [null, getSingle(locationId, user)];
+    return [null, await getSingle(locationId, user)];
   }
   catch(err){
     return [err.message, null];

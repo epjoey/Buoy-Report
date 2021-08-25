@@ -1,45 +1,6 @@
 form.form
-  .field
-    label
-      span Name
-      input(
-        placeholder="Molokini North Shore "
-        type='text', v-model='req.name', required
-      )
-
-  .field
-    label
-      span
-        a(href="http://www.ndbc.noaa.gov/rmd.shtml", target="_blank") Buoys
-      input(type='text', v-model='req.buoys', placeholder="#####, #####, #####, ...")
-
-  .field
-    label
-      span 
-        a(
-          href="https://github.com/moment/moment-timezone/blob/develop/data/packed/latest.json"
-          target="_blank"
-        ) Timezone
-      input(type='text', v-model='req.timezone', placeholder="Pacific/Honolulu")
-
-  .field
-    label
-      span 
-        a(
-          :href="'https://www.google.com/search?q=' + req.name + '+latitude'"
-          target="_blank"
-        ) Latitude
-      input(type='text', v-model='req.latitude', placeholder='20.6310')
-
-  .field
-    label
-      span 
-        a(
-          href="'https://www.google.com/search?q=' + req.name + '+longitude'"
-          target="_blank"
-        ) Longitude
-      input(type='text', v-model='req.longitude', placeholder='-156.495')
-
+  include ./location-fields.jade
+  
   .field.errors(v-if="error") {{ error }}
 
   .field.text-center.mt-20

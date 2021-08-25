@@ -20,6 +20,14 @@ router.post('/locations', helper.secured, async function(req, res, next){
   res.json({ locationId, error });
 });
 
+router.get('/locations/:locationId', async function(req, res, next){
+  const location = await locationService.getSingle(req.params.locationId, req.user);
+  if(!location){
+    return res.sendStatus(404);
+  }
+  res.json({ location });
+});
+
 router.put('/locations/:locationId', helper.secured, async function(req, res, next){
   const [error, location] = await locationService.update(parseInt(req.params.locationId), req.body, req.user);
   res.json({ location, error });
@@ -62,6 +70,14 @@ router.get('/buoys', async function(req, res, next){
 router.post('/buoys', helper.secured, async function(req, res, next){
   const [error, buoy] = await buoyService.create(req.body);
   res.json({ buoy, error });
+});
+
+router.get('/buoys/:buoyId', async function(req, res, next){
+  const buoy = await buoyService.getSingle(parseInt(req.params.buoyId));
+  if(!buoy){
+    return res.sendStatus(404);
+  }
+  res.json({ buoy });
 });
 
 router.put('/buoys/:buoyId', helper.secured, async function(req, res, next){

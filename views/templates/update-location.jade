@@ -1,42 +1,7 @@
 form.form
   .text-center.mb-20.form-title Configure location
-  .field
-    label
-      span Name
-      input(type='text', v-model='req.name', required)
 
-  .field
-    label
-      span
-        a(href="http://www.ndbc.noaa.gov/rmd.shtml", target="_blank") Buoys
-      input(type='text', v-model='req.buoys')
-
-  .field
-    label
-      span
-        a(
-          href="https://github.com/moment/moment-timezone/blob/develop/data/packed/latest.json"
-          target="_blank"
-        ) Timezone
-      input(type='text', v-model='req.timezone')
-
-  .field
-    label
-      span
-        a(
-          :href="'https://www.google.com/search?q=' + req.name + '+latitude'"
-          target="_blank"
-        ) Latitude
-      input(type='text', v-model='req.latitude')
-
-  .field
-    label
-      span
-        a(
-          :href="'https://www.google.com/search?q=' + req.name + '+longitude'"
-          target="_blank"
-        ) Longitude
-      input(type='text', v-model='req.longitude')
+  include ./location-fields.jade
 
   .field.errors(v-if="error") {{ error }}
 

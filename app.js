@@ -116,9 +116,9 @@ app.use((req, res, next) => {
  * Routes Definitions
  */
 
+app.use('/api', apiRouter);
 app.use('/', authRouter);
 app.use('/', viewsRouter);
-app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

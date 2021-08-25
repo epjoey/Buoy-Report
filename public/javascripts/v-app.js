@@ -1,7 +1,10 @@
 Vue.prototype.$moment = window.moment;
 Vue.prototype.$user = window.br.user;
+Vue.prototype.$goTo = function(path){
+  window.history.pushState({ path: path }, '', path);
+};
 
-const makeFetch = function(vm, url, method, data){
+const makeFetch = function(vm, method, url, data){
   vm.loading = true;
   let config = {
     method: method,
@@ -12,7 +15,7 @@ const makeFetch = function(vm, url, method, data){
   if(method === 'POST' || method === 'PUT'){
     config.body = JSON.stringify(data);
   }
-  return fetch('/api/' + url, config)
+  return fetch('/api' + url, config)
     .then(response => response.json())
     .then(function(data){
       vm.loading = false;
@@ -22,36 +25,27 @@ const makeFetch = function(vm, url, method, data){
       return data;
     })
     .catch(function(err){
+      vm.loading = false;
       vm.error = err;
       vm.$forceUpdate();
     });
 };
 
-let http = {};
 ['POST', 'PUT', 'GET', 'DELETE'].forEach(method => {
-  http[method] = (vm, url, data) => {
-    return makeFetch(vm, url, method, data);
+  Vue.prototype['$fetch' + _.capitalize(method)] = function(url, data){
+    return makeFetch(this, method, url, data);
   };
 });
 
 const toggleFavorite = function(vm, location){
-  var url = 'favorites/' + location.id;
+  var url = '/favorites/' + location.id;
   var isFavorite = location.$isFavorite;
-  http[isFavorite ? 'DELETE' : 'POST'](vm, url, {}).then(function(data){
+  vm[isFavorite ? '$fetchDelete' : '$fetchPost'](url, {}).then(function(data){
     location.$isFavorite = !isFavorite;
     vm.$forceUpdate();
   });
 };
 
-//************************************************
-Vue.component('header-menu', {
-  data: function(){
-    return {
-      isOpen: false
-    };
-  },
-  template: '#header-menu'
-});
 
 //************************************************
 Vue.component('locations', {
@@ -77,7 +71,7 @@ Vue.component('locations', {
   },
   created: function(){
     var self = this;
-    http.GET(self, "locations").then(function(data){
+    this.$fetchGet("/locations").then(function(data){
       self.locations = data.locations;
     });
   }
@@ -99,25 +93,8 @@ Vue.component('add-location', {
       return !this.req.name;
     },
     submit: function(){
-      http.POST(this, 'locations', this.req).then(function(data){
-        window.location.href = '/locations/' + data.locationId;
-      });
-    }
-  }
-});
-
-
-//************************************************
-Vue.component('location-header-link', {
-  template: '#location-header-link',
-  data: function(){
-    return {
-      location: window.br.location
-    }
-  },
-  methods: {
-    toggleFavorite: function(location){
-      toggleFavorite(this, location);
+      this.$fetchPost('/locations', this.req)
+        .then(data => this.$goTo('/locations/' + data.locationId));
     }
   }
 });
@@ -125,7 +102,7 @@ Vue.component('location-header-link', {
 
 //************************************************
 // Buoy Readings.
-var DIRECTIONS = {
+const DIRECTIONS = {
   'NNW': [337.5, 360],
   'NNE': [0, 22.5],
   'NE': [22.5, 67.5],
@@ -135,9 +112,9 @@ var DIRECTIONS = {
   'SW': [202.5, 247.5],
   'W': [247.5, 292.5],
   'NW': [292.5, 337.5]
-};  
+};
 
-var meters2Feet = function(meters){
+const meters2Feet = function(meters){
   // Missing data in the Realtime files are denoted by "MM" (https://www.ndbc.noaa.gov/measdes.shtml#stdmet).
   if(meters === 'MM'){
     return 'MM';
@@ -145,31 +122,31 @@ var meters2Feet = function(meters){
   return (parseFloat(meters) * 3.28084).toFixed(1);
 };
 
-var metersPerSec2mph = function(metersPerSec){
+const metersPerSec2mph = function(metersPerSec){
   if(metersPerSec === 'MM'){
     return 'MM';
   }
   return (parseFloat(metersPerSec) * 2.23694).toFixed(1); // meters/sec -> mph
 };
 
-var parseDateTime = function(year, month, day, hour, minute){
+const parseDateTime = function(year, month, day, hour, minute){
   return m = moment(year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":00Z");
 };
 
-var parseSeconds = function(seconds){
+const parseSeconds = function(seconds){
   if(seconds === 'MM'){
     return 'MM';
   }
   return parseFloat(seconds).toFixed(1);
 }
 
-var parseDirection = function(bearing){
+const parseDirection = function(bearing){
   if(bearing == 360 || bearing == 0){
     return 'N';
   }
   else {
     return _.find(_.keys(DIRECTIONS), function(key){
-      var angles = DIRECTIONS[key];
+      const angles = DIRECTIONS[key];
       return bearing >= angles[0] && bearing < angles[1];
     });
   }
@@ -181,7 +158,7 @@ var parseDirection = function(bearing){
 // 2021 07 14 21 40 230  3.0  5.0    MM    MM    MM  MM 1015.6  12.7    MM  11.1   MM   MM    MM
 // 2021 07 14 21 30 230  3.0  4.0    MM    MM    MM  MM 1015.6  12.7    MM  11.1   MM   MM    MM
 // 2021 07 14 21 20 220  3.0  4.0    MM    MM    MM  MM 1015.6  12.6    MM  11.0   MM   MM    MM
-var parseStandardData = function(dataRow){
+const parseStandardData = function(dataRow){
   var row = {};
   row.time = parseDateTime(dataRow[0], dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
   row.windDirection = dataRow[5];
@@ -201,7 +178,7 @@ var parseStandardData = function(dataRow){
 // 2021 07 14 21 40  2.2  2.1  9.1  0.4  3.3  NW   W    AVERAGE  7.4 316
 // 2021 07 14 20 40  2.1  2.1 10.0  0.4  3.3  NW WNW    AVERAGE  7.3 315
 // 2021 07 14 19 40  2.0  2.0 10.0  0.4  4.0  NW   W    AVERAGE  7.4 312
-var parseWaveData = function(dataRow){
+const parseWaveData = function(dataRow){
   var row = {};
   row.time = parseDateTime(dataRow[0], dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
   row.waveHeight = meters2Feet(dataRow[5]);
@@ -214,7 +191,7 @@ var parseWaveData = function(dataRow){
   return row;
 };
 
-var parseBuoyData = function(data, type){
+const parseBuoyData = function(data, type){
   if(!data || !data.length){
     return [];
   }
@@ -227,26 +204,25 @@ var parseBuoyData = function(data, type){
 
 Vue.component('buoy-data', {
   template: '#buoy-data',
-  props: ['buoy', 'type'],
+  props: ['buoy', 'type', 'location'],
   data: function(){
     return {
-      tables: [],
-      location: window.br.location // hack
+      tables: []
     }
   },
   methods: {
     load: function(){
       const BUOY_DATA_ROWS_PER_TABLE = 24;
       let offset = this.tables.length * BUOY_DATA_ROWS_PER_TABLE;
-      let url = 'buoys/' + this.buoy.buoyid + '/data?type=' + this.type + '&offset=' + offset;
+      let url = '/buoys/' + this.buoy.buoyid + '/data?type=' + this.type + '&offset=' + offset;
       let vm = this;
-      http.GET(vm, url).then(function(data){
+      this.$fetchGet(url).then(function(data){
         if(data.data){
           vm.tables.push({
             rows: parseBuoyData(data.data, vm.type)
           });
         }
-      }); 
+      });
     },
     formatDate: function(time){
       time = time.clone();
@@ -372,9 +348,9 @@ Vue.component('add-snapshot', {
     postSnapshot: function(imagepath){
       this.req.imagepath = imagepath || '';
       let vm = this;
-      http.POST(vm, '/locations/' + this.location.id + '/snapshots', this.req).then(function(data){
+      this.$fetchPost('/locations/' + this.location.id + '/snapshots', this.req).then(function(data){
         vm.snapshots.unshift(parseSnapshot(data.snapshot));
-      });    
+      });
     }
   }
 });
@@ -395,9 +371,9 @@ Vue.component('snapshots', {
   },
   methods: {
     load: function(){
-      let url = this.location ? 'locations/' + this.location.id + '/snapshots' : 'snapshots';
+      let url = this.location ? '/locations/' + this.location.id + '/snapshots' : '/snapshots';
       let vm = this;
-      http.GET(vm, url + '?page=' + (this.page + 1)).then(function(data){
+      this.$fetchGet(url + '?page=' + (this.page + 1)).then(function(data){
         let snapshots = data.snapshots.rows;
         snapshots.forEach(function(snapshot){
           vm.snapshots.push(parseSnapshot(snapshot));
@@ -424,7 +400,7 @@ Vue.component('snapshot', {
     deleteSnapshot: function(){
       if(window.confirm('Are you sure you want to delete this snapshot?')){
         var vm = this;
-        http.DELETE(this, 'snapshots/' + this.snapshot.id).then(function(){
+        this.$fetchDelete('/snapshots/' + this.snapshot.id).then(function(){
           vm.snapshots.splice(vm.snapshots.indexOf(vm.snapshot), 1);
         });
       }
@@ -445,7 +421,7 @@ Vue.component('update-snapshot', {
       QUALITIES_KEYS: QUALITIES_KEYS,
       QUALITIES: QUALITIES,
       WAVE_HEIGHTS_KEYS: WAVE_HEIGHTS_KEYS,
-      WAVE_HEIGHTS: WAVE_HEIGHTS      
+      WAVE_HEIGHTS: WAVE_HEIGHTS
     }
   },
   methods: {
@@ -468,7 +444,7 @@ Vue.component('update-snapshot', {
     updateSnapshot: function(imagepath){
       this.req.imagepath = imagepath || ''; // `undefined` will omit imagepath from the post, so it won't get cleared.
       var vm = this;
-      http.PUT(this, 'snapshots/' + this.snapshot.id, this.req).then(function(data){
+      this.$fetchPut('/snapshots/' + this.snapshot.id, this.req).then(function(data){
         _.extend(vm.snapshot, parseSnapshot(data.snapshot));
         vm.$emit('update-snapshot:close');
       });
@@ -488,9 +464,13 @@ Vue.component('my-snapshots', {
 Vue.component('location', {
   template: '#location',
   data: function(){
+    let idStr = window.location.pathname.match(/([\d]+)/g);
+    let id = idStr ? parseInt(idStr[0]) : null;
     return {
-      location: window.br.location,
-      buoys: []
+      locationId: id,
+      location: null,
+      buoys: [],
+      loading: false
     };
   },
   methods: {
@@ -500,10 +480,19 @@ Vue.component('location', {
   },
   created: function(){
     var vm = this;
-    http.GET(vm, 'locations/' + this.location.id + '/buoys').then(function(data){
-      vm.buoys = data.buoys;
+    if(!this.locationId){
+      return;
+    }
+    this.$fetchGet('/locations/' + this.locationId).then(function(data){
+      vm.location = data.location;
+      vm.$root.$emit('location', vm.location);
     });
-  }  
+    this.$fetchGet('/locations/' + this.locationId + '/buoys')
+      .then((data) => this.buoys = data.buoys);
+  },
+  destroyed: function(){
+    this.$root.$emit('location', null);
+  }
 });
 
 
@@ -529,15 +518,13 @@ Vue.component('update-location', {
       return !this.req.name;
     },
     submit: function(){
-      http.PUT(this, 'locations/' + this.location.id, this.req).then(function(data){
+      this.$fetchPut('/locations/' + this.location.id, this.req).then(function(data){
         return window.location.reload();
       });
     },
     deleteLocation: function(){
       if(window.confirm('Are you sure you want to delete this location?')){
-        http.DELETE(this, 'locations/' + this.location.id).then(function(){
-          window.location.href = '/';
-        });
+        this.$fetchDelete('/locations/' + this.location.id).then(() => this.$goTo('/'));
       }
     }
   }
@@ -554,10 +541,7 @@ Vue.component('buoys', {
     };
   },
   created: function(){
-    var vm = this;
-    http.GET(vm, "buoys").then(function(data){
-      vm.buoys = data.buoys;
-    });
+    this.$fetchGet("/buoys").then(data => this.buoys = data.buoys);
   }
 });
 
@@ -576,7 +560,7 @@ Vue.component('add-buoy', {
       return !this.req.buoyid;
     },
     submit: function(){
-      http.POST(this, 'buoys', this.req).then(function(data){
+      this.$fetchPost('/buoys', this.req).then(function(data){
         window.location.href = '/buoys/' + data.buoy.buoyid;
       });
     }
@@ -589,20 +573,33 @@ Vue.component('buoy', {
   template: '#buoy',
   data: function(){
     return {
-      buoy: window.br.buoy // hack
+      buoy: null
     }
+  },
+  created: function(){
+    var vm = this;
+    this.$fetchGet(window.location.pathname).then(function(data){
+      vm.buoy = data.buoy;
+      vm.$root.$emit('buoy', vm.buoy);
+      vm.$forceUpdate();
+    }, function(){
+      vm.$root.$emit('buoy', null);
+    });
+  },
+  destroyed: function(){
+    this.$root.$emit('buoy', null);
   }
 });
 
 //************************************************
 Vue.component('update-buoy', {
   template: '#update-buoy',
+  props: ['buoy'],
   data: function(){
     return {
-      name: window.br.buoy.name,
+      name: this.buoy.name,
       error: '',
-      loading: false,
-      buoy: window.br.buoy // hack
+      loading: false
     }
   },
   methods: {
@@ -610,15 +607,15 @@ Vue.component('update-buoy', {
       return !this.name;
     },
     submit: function(){
-      http.PUT(this, 'buoys/' + this.buoy.buoyid, {name: this.name}).then(function(data){
-        return window.location.reload();
+      let vm = this;
+      this.$fetchPut('/buoys/' + this.buoy.buoyid, {name: this.name}).then(function(data){
+        vm.buoy.name = vm.name;
+        vm.$forceUpdate();
       });
     },
     deleteBuoy: function(){
       if(window.confirm('Are you sure you want to delete buoy #' + this.buoy.buoyid + '?')){
-        http.DELETE(this, 'buoys/' + this.buoy.buoyid, {}).then(function(){
-          window.location.href = '/buoys';
-        });
+        this.$fetchDelete('/buoys/' + this.buoy.buoyid).then(() => this.$goTo('/buoys'))
       }
     }
   }
@@ -626,15 +623,88 @@ Vue.component('update-buoy', {
 
 
 //************************************************
+Vue.component('about', {
+  template: '#about'
+});
+
+
+//************************************************
 var app = new Vue({
   el: '#app',
   data: {
-    isMenuOpen: false
+    isMenuOpen: false,
+    path: window.location.pathname,
+    buoy: null, // custom header on buoy page
+    location: null // custom header on location page
   },
-  methods: { 
+  mounted: function(){
+    let vm = this;
+
+    // Modify `history.pushState` so we call a custom `window.onpushstate` fn
+    // which we define *inside* of react controller and accepts the same
+    // signature as window.onpopstate. So both can set the react `state`.
+    var pushState = window.history.pushState;
+    window.history.pushState = function(state) {
+      window.onpushstate({state: state}); // Call our custom function.
+      return pushState.apply(history, arguments);
+    };
+
+    window.onpopstate = window.onpushstate = function(event){
+      console.log('state change', event.state);
+      // Popstate event back to initial page has null state.
+      var path = event.state ? event.state.path : '/';
+      vm.path = path;
+      window.scrollTo(0, 0);
+      vm.$forceUpdate();
+    };
+
+    window.addEventListener('click', event => {
+      // ensure we use the link, in case the click has been received by a subelement
+      let { target } = event
+      while (target && target.tagName !== 'A') target = target.parentNode
+      // handle only links that do not reference external resources
+      if(target && target.matches("a:not([href*='://'])") && target.href){
+        // some sanity checks taken from vue-router:
+        // https://github.com/vuejs/vue-router/blob/dev/src/components/link.js#L106
+        const { altKey, ctrlKey, metaKey, shiftKey, button, defaultPrevented } = event;
+        if((metaKey || altKey || ctrlKey || shiftKey) || // don't handle with control keys
+          defaultPrevented || // don't handle when preventDefault called
+          (button !== undefined && button !== 0) // don't handle right clicks
+        ){
+          return;
+        }
+
+        // don't handle if `target="_blank"`
+        if(target && target.getAttribute){
+          const linkTarget = target.getAttribute('target')
+          if(/\b_blank\b/i.test(linkTarget)){
+            return;
+          }
+        }
+        // don't handle same page links/anchors
+        const url = new URL(target.href);
+        const to = url.pathname
+        if(window.location.pathname !== to && event.preventDefault){
+          event.preventDefault()
+          vm.$goTo(to);
+        }
+      }
+    });
+
+    vm.$on('buoy', function(buoy){
+      this.buoy = buoy; // change header.
+    });
+    vm.$on('location', function(location){
+      this.location = location; // change header.
+    });
+  },
+  methods: {
+    toggleFavorite: function(location){
+      toggleFavorite(this, location);
+    },
     scrollTo: function(target){
-      window.location.hash = target;
+      // window.location.hash = target;
       document.getElementById(target).scrollIntoView();
-    }    
+    }
   }
 });

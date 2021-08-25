@@ -1,0 +1,13 @@
+.container
+  div(v-if="buoy")
+    .buoy-data-wrap
+      .buoy-data-inner-wrap
+        buoy-data(:buoy="buoy", type="wave")
+        buoy-data(:buoy="buoy", type="standard")
+
+    if isAuthenticated
+      .container
+        update-buoy(:buoy="buoy")
+
+  pre(v-if="!buoy && !loading")
+    | Buoy not found

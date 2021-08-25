@@ -17,6 +17,8 @@ table {
 }
 ul { list-style: none outside; }
 
+pre { color: white; text-align: center; }
+
 /*================================*/
 /* BASIC */
 /*================================*/

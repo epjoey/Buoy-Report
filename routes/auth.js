@@ -73,11 +73,6 @@ router.get("/logout", (req, res) => {
 });
 
 
-router.get("/me", helper.secured, async function(req, res, next){
-  res.render("me");
-});
-
-
 /**
  * Module Exports
  */

@@ -1,8 +1,33 @@
 extends layout
-block vars
-  - var bodyClass = 'index-page';
+
+block headerLink
+  a.header-link(
+    v-if="buoy",
+    :href="'/buoys/' + buoy.buoyid",
+  ) {{ buoy.buoyid + ': ' + buoy.name}}
+
+  a.header-link(
+    v-else-if="location",
+    :href="'/locations/' + location.id",
+    :class="location.$isFavorite ? 'favorite' : 'not-favorite'"
+  )
+    {{ location.name }}
+    if isAuthenticated
+      &nbsp;
+      span.star(v-on:click.stop.prevent="toggleFavorite(location)") &starf;
+
+  a.header-link(v-else, href='/') Buoy Report
 
 block content
-  h1.banner Buoy Report
-
-  locations
+  template(v-if="path === '/'")
+    locations
+  template(v-if="path === '/about'")
+    about
+  template(v-if="path === '/me'")
+    snapshots
+  template(v-if="path === '/buoys'")
+    buoys
+  template(v-if="path.startsWith('/buoys/')")
+    buoy
+  template(v-if="path.startsWith('/locations/')")
+    location

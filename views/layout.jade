@@ -26,13 +26,8 @@ html
       window.br.NODE_ENV = '!{ NODE_ENV }';
       window.br.user = !{ JSON.stringify(user) };
 
-    block scripts
-
-  - var bodyClass = '';
-  block vars
-
-  body(class='#{bodyClass}')
-    .wrapper(id="app")
+  body
+    .wrapper(id="app", :class="path === '/' ? 'index-page' : path.startsWith('/locations/') ? 'location-page' : ''")
       .header
         .container
           .header-left
@@ -41,6 +36,7 @@ html
               img.logo-large(src="/images/logo-lrg.png", width="101", height="101")
             block headerLink
               a.header-link(href='/') Buoy Report
+
           .header-right
             .header-menu
               a.header-menu-trigger(v-on:click="isMenuOpen = !isMenuOpen")
@@ -48,7 +44,11 @@ html
               ul.header-menu-inner(
                 v-bind:class="{ open: isMenuOpen }"
               )
-                block headerMenuItems
+                if isAuthenticated
+                  li
+                    a(v-if="path.startsWith('/locations/')"
+                      @click="scrollTo('add-snapshot')") Take snapshot
+
                 if isAuthenticated
                   li
                     a(href='/me') My snapshots
@@ -58,9 +58,7 @@ html
                   li
                     a(href='/login') Login
 
-      block container
-        .container
-            block content
+      block content
 
     div.footer
       div.top

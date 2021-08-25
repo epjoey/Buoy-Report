@@ -3,31 +3,22 @@ const router = express.Router();
 const locationService = require('../services/locations');
 const buoyService = require('../services/buoys');
 
-router.get('/', async function(req, res, next) {
-  res.render('index');
-});
+const VIEW_ROUTES = [
+  '/',
+  '/about',
+  '/me',
 
-router.get('/about', function(req, res, next) {
-  res.render('about', {});
-});
+  '/buoys',
+  '/buoys/:buoyId',
 
-router.get('/locations/:locationId', async function(req, res, next){
-  const location = await locationService.getSingle(req.params.locationId, req.user);
-  if(!location){
-    return next(createError(404));
-  }
-  res.render('location', { location });
-});
+  '/locations/:locationId',
+];
 
-router.get('/buoys', async function(req, res, next){
-  const buoys = await buoyService.getMultiple(req.query.page);
-  res.render('buoys', { buoys });
+// Single page app: render index for all the view routes.
+VIEW_ROUTES.forEach(route => {
+  router.get(route, async function(req, res, next) {
+    res.render('index');
+  });
 });
-
-router.get('/buoys/:buoyId', async function(req, res, next){
-  const buoy = await buoyService.getSingle(parseInt(req.params.buoyId));
-  res.render('buoy', { buoy });
-});
-
 
 module.exports = router;
