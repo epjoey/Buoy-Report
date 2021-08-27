@@ -3,7 +3,8 @@ doctype html
 html
   head
     title Buoy Report
-    link(rel="shortcut icon", href="/images/favicon.ico")
+    link(rel="icon", href="/images/favicon.ico", type="image/x-icon")
+
     link(rel="apple-touch-icon", sizes="57x57", href="/images/apple-touch-icon.png")
     link(rel="apple-touch-icon", sizes="72x72", href="/images/apple-touch-icon-72x72.png")
     link(rel="apple-touch-icon", sizes="114x114", href="/images/apple-touch-icon-114x114.png")
@@ -11,15 +12,8 @@ html
     link(rel="stylesheet", href="/stylesheets/style.css")
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data-10-year-range.js")
-
-
-    if NODE_ENV == 'production'
-      script(src="https://cdn.jsdelivr.net/npm/vue@2.6.14")
-    else
-      script(src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js")
 
     script.
       window.br = window.br || {}
@@ -75,4 +69,4 @@ html
     include ./templates/index.jade
 
     //- Include vue stuff.
-    script(src="/javascripts/v-app.js")
+    script(src="/main.js")
