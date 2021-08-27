@@ -696,6 +696,7 @@ var app = new Vue({
         if(window.location.pathname !== to && event.preventDefault){
           event.preventDefault()
           vm.$goTo(to);
+          this.isMenuOpen = false; // close the header menu.
         }
       }
     });
