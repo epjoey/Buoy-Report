@@ -11,9 +11,9 @@ block headerLink
     :href="'/locations/' + location.id",
     :class="location.$isFavorite ? 'favorite' : 'not-favorite'"
   )
-    {{ location.name }}
+    | {{ location.name }}
     if isAuthenticated
-      &nbsp;
+      | &nbsp;
       span.star(v-on:click.stop.prevent="toggleFavorite(location)") &starf;
 
   a.header-link(v-else, href='/') Buoy Report

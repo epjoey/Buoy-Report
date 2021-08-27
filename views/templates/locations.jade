@@ -27,7 +27,7 @@
         v-if="location.$isFavorite && matchesSearchText(location)"
       ).favorite
         a(:href="'/locations/' + location.id")
-          {{ location.name }}
+          | {{ location.name }}
           if isAuthenticated
             span.star(v-on:click.stop.prevent="toggleFavorite(location)") &starf;
 
@@ -39,7 +39,7 @@
       v-bind:class="{ 'favorite': location.$isFavorite, 'not-favorite': !location.$isFavorite }"
     )
       a(:href="'/locations/' + location.id")
-        {{ location.name }}
+        | {{ location.name }}
         if isAuthenticated
           span.star(v-on:click.stop.prevent="toggleFavorite(location)") &starf;
 
