@@ -2,11 +2,13 @@ extends layout
 
 block headerLink
   a.header-link(
+    v-cloak
     v-if="buoy",
     :href="'/buoys/' + buoy.buoyid",
   ) {{ buoy.buoyid + ': ' + buoy.name}}
 
   a.header-link(
+    v-cloak
     v-else-if="location",
     :href="'/locations/' + location.id",
     :class="location.$isFavorite ? 'favorite' : 'not-favorite'"
