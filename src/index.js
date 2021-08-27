@@ -1,4 +1,3 @@
-import Vue from 'vue/dist/vue.js';
 import _ from 'lodash'
 
 Vue.prototype.$moment = window.moment;
