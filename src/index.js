@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 Vue.prototype.$moment = window.moment;
 Vue.prototype.$user = window.br.user;
 Vue.prototype.$goTo = function(path){
@@ -33,8 +31,12 @@ const makeFetch = function(vm, method, url, data){
     });
 };
 
+function capitalize(string){
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+};
+
 ['POST', 'PUT', 'GET', 'DELETE'].forEach(method => {
-  Vue.prototype['$fetch' + _.capitalize(method)] = function(url, data){
+  Vue.prototype['$fetch' + capitalize(method)] = function(url, data){
     return makeFetch(this, method, url, data);
   };
 });
@@ -61,7 +63,7 @@ Vue.component('locations', {
   },
   methods: {
     isFavorite: function(locations){
-      return _.filter(locations, '$isFavorite');
+      return locations.filter(loc => loc.$isFavorite);
     },
     matchesSearchText: function(location){
       return !this.locationSearchText.length ||
@@ -147,7 +149,7 @@ const parseDirection = function(bearing){
     return 'N';
   }
   else {
-    return _.find(_.keys(DIRECTIONS), function(key){
+    return Object.keys(DIRECTIONS).find(key => {
       const angles = DIRECTIONS[key];
       return bearing >= angles[0] && bearing < angles[1];
     });
@@ -201,7 +203,7 @@ const parseBuoyData = function(data, type){
   if(data[0][0] === "#YY" && data[1][0] === "#yr"){
     data = data.slice(2);
   }
-  return _.map(data, type === 'wave' ? parseWaveData : parseStandardData);
+  return data.map(type === 'wave' ? parseWaveData : parseStandardData);
 };
 
 Vue.component('buoy-data', {
@@ -259,7 +261,7 @@ var parseSnapshot = function(snapshot){
     snapshot.$imagePath = snapshot.$imagePath.replace("/image/upload/", "/image/upload/c_scale,w_680/");
   }
 
-  snapshot.$buoyData = _.map(snapshot.buoyData, parseSnapshotBuoyData);
+  snapshot.$buoyData = snapshot.buoyData.map(parseSnapshotBuoyData);
   snapshot.$by = snapshot.email ? snapshot.email.split('@')[0] : 0;
   return snapshot;
 };
@@ -276,7 +278,8 @@ const WAVE_HEIGHTS = {
   '17.5': "15-20'",
   '25': "20-30'"
 };
-let WAVE_HEIGHTS_KEYS = _.sortBy(_.keys(WAVE_HEIGHTS), parseFloat);
+let WAVE_HEIGHTS_KEYS = Object.keys(WAVE_HEIGHTS).sort((a, b) => parseFloat(a) - parseFloat(b));
+
 WAVE_HEIGHTS_KEYS.unshift(null);
 
 var QUALITIES = {
@@ -286,7 +289,6 @@ var QUALITIES = {
   4: 'Fun',
   5: 'Great'
 };
-let QUALITIES_KEYS = _.keys(QUALITIES);
 
 let submitImage = function(vm, imagePath, onSuccess){
   vm.loading = true;
@@ -317,11 +319,11 @@ Vue.component('add-snapshot', {
   props: ['location', 'snapshots'],
   data: function(){
     return {
-      req: { hourOffset: 0 },
+      req: {hourOffset: 0},
       error: '',
       loading: false,
-      hourOffsetRange: _.range(0, 240),
-      QUALITIES_KEYS: QUALITIES_KEYS,
+      hourOffsetRange: Array.from(Array(240).keys()),
+      QUALITIES_KEYS: Object.keys(QUALITIES),
       QUALITIES: QUALITIES,
       WAVE_HEIGHTS_KEYS: WAVE_HEIGHTS_KEYS,
       WAVE_HEIGHTS: WAVE_HEIGHTS
@@ -417,10 +419,10 @@ Vue.component('update-snapshot', {
   props: ['snapshot'],
   data: function(){
     return {
-      req: _.pick(this.snapshot, ['quality', 'waveheight', 'text', 'imagepath']),
+      req: (({ quality, waveheight, text, imagepath }) => ({ quality, waveheight, text, imagepath }))(this.snapshot),
       error: '',
       loading: false,
-      QUALITIES_KEYS: QUALITIES_KEYS,
+      QUALITIES_KEYS: Object.keys(QUALITIES),
       QUALITIES: QUALITIES,
       WAVE_HEIGHTS_KEYS: WAVE_HEIGHTS_KEYS,
       WAVE_HEIGHTS: WAVE_HEIGHTS
@@ -447,7 +449,7 @@ Vue.component('update-snapshot', {
       this.req.imagepath = imagepath || ''; // `undefined` will omit imagepath from the post, so it won't get cleared.
       var vm = this;
       this.$fetchPut('/snapshots/' + this.snapshot.id, this.req).then(function(data){
-        _.extend(vm.snapshot, parseSnapshot(data.snapshot));
+        Object.assign(vm.snapshot, parseSnapshot(data.snapshot));
         vm.$emit('update-snapshot:close');
       });
     }
@@ -504,14 +506,14 @@ Vue.component('update-location', {
   props: ['location', 'buoys', 'snapshots'],
   data: function(){
     return {
-      req: _.clone(this.location),
+      req: Object.assign({}, this.location),
       error: '',
       loading: false
     }
   },
   watch: {
     buoys: function(buoys){
-      this.req.buoys = _.join(_.map(this.buoys, 'buoyid'), ', ');
+      this.req.buoys = this.buoys.map(buoy => buoy.buoyid).join(', ');
       this.$forceUpdate();
     }
   },

@@ -94,7 +94,7 @@ async function addBuoysToLocation(buoyIds, locationId){
   if(!buoyIds){
     return;
   }
-  buoyIds = _.map(_.split(buoyIds, /[ ,]+/), _.trim);
+  buoyIds = _.compact(_.map(_.split(buoyIds, /[ ,]+/), _.trim));
   let i = 0; // increment `created` to maintain order.
   buoyIds.forEach(async function(buoyId){
     i += 1;

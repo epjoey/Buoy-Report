@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "watch": "nodemon app.js",
+    "dev": "nodemon app.js",
     "build": "webpack --mode production",
-    "dev": "webpack --mode development"
+    "watch": "watch 'webpack --mode development' ./src"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -22,10 +22,10 @@
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.7",
     "passport": "^0.4.1",
-    "passport-auth0": "^1.4.0",
-    "vue": "^2.6.14"
+    "passport-auth0": "^1.4.0"
   },
   "devDependencies": {
+    "watch": "^1.0.2",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0"
   }
