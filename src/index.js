@@ -677,8 +677,13 @@ var app = new Vue({
           return;
         }
 
+        // Auth0 urls.
+        if(target.href.match('/login|/logout')){
+          return;
+        }
+
         // don't handle if `target="_blank"`
-        if(target && target.getAttribute){
+        if(target.getAttribute){
           const linkTarget = target.getAttribute('target')
           if(/\b_blank\b/i.test(linkTarget)){
             return;

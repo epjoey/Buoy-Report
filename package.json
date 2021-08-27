@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "watch": "nodemon app.js",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
