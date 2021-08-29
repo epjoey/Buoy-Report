@@ -1,9 +1,3 @@
-Vue.prototype.$moment = window.moment;
-Vue.prototype.$user = window.br.user;
-Vue.prototype.$goTo = function(path){
-  window.history.pushState({ path: path }, '', path);
-};
-
 const makeFetch = function(vm, method, url, data){
   vm.loading = true;
   let config = {
@@ -134,7 +128,7 @@ const metersPerSec2mph = function(metersPerSec){
 };
 
 const parseDateTime = function(year, month, day, hour, minute){
-  return moment(year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":00Z");
+  return Vue.prototype.$moment(year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":00Z");
 };
 
 const parseSeconds = function(seconds){
@@ -294,8 +288,8 @@ let submitImage = function(vm, imagePath, onSuccess){
   vm.loading = true;
   var formData = new FormData();
   formData.append("file", imagePath);
-  formData.append("upload_preset", window.br.NODE_ENV === 'production' ? 'buoyreport' : 'buoyreport_dev');
-  formData.append("folder", window.br.NODE_ENV === 'production' ? 'buoyreport' : 'buoyreport_dev');
+  formData.append("upload_preset", Vue.$nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
+  formData.append("folder", Vue.$nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
   var xhr = new XMLHttpRequest();
   xhr.onload = function(){
     vm.loading = false;
@@ -489,13 +483,13 @@ Vue.component('location', {
     }
     this.$fetchGet('/locations/' + this.locationId).then(function(data){
       vm.location = data.location;
-      vm.$root.$emit('location', vm.location);
+      vm.$root.$emit('location:location', vm.location);
     });
     this.$fetchGet('/locations/' + this.locationId + '/buoys')
       .then((data) => this.buoys = data.buoys);
   },
   destroyed: function(){
-    this.$root.$emit('location', null);
+    this.$root.$emit('location:location', null);
   }
 });
 
@@ -576,22 +570,25 @@ Vue.component('add-buoy', {
 Vue.component('buoy', {
   template: '#buoy',
   data: function(){
+    let id = window.location.pathname.match(/buoys\/([\d]+)/g);
+    id = id ? id[0].split('/')[1] : null;
     return {
+      buoyId: id,
       buoy: null
     }
   },
   created: function(){
     var vm = this;
-    this.$fetchGet(window.location.pathname).then(function(data){
+    this.$fetchGet('/buoys/' + this.buoyId).then(function(data){
       vm.buoy = data.buoy;
-      vm.$root.$emit('buoy', vm.buoy);
+      vm.$root.$emit('buoy:buoy', vm.buoy);
       vm.$forceUpdate();
     }, function(){
-      vm.$root.$emit('buoy', null);
+      vm.$root.$emit('buoy:buoy', null);
     });
   },
   destroyed: function(){
-    this.$root.$emit('buoy', null);
+    this.$root.$emit('buoy:buoy', null);
   }
 });
 
@@ -636,8 +633,8 @@ Vue.component('about', {
 var app = new Vue({
   el: '#app',
   data: {
+    currentPath: window.location.pathname,
     isMenuOpen: false,
-    path: window.location.pathname,
     buoy: null, // custom header on buoy page
     location: null // custom header on location page
   },
@@ -645,27 +642,36 @@ var app = new Vue({
     let vm = this;
 
     // Modify `history.pushState` so we call a custom `window.onpushstate` fn
-    // which we define *inside* of react controller and accepts the same
-    // signature as window.onpopstate. So both can set the react `state`.
+    // which we define here and accepts the same signature as window.onpopstate.
+    // Both will set the currentPath variable.
     var pushState = window.history.pushState;
     window.history.pushState = function(state) {
       window.onpushstate({state: state}); // Call our custom function.
       return pushState.apply(history, arguments);
     };
 
+    // Listen to our new `onpushstate` and the existing `onpopstate` event.
     window.onpopstate = window.onpushstate = function(event){
       console.log('state change', event.state);
-      // Popstate event back to initial page has null state.
-      var path = event.state ? event.state.path : '/';
-      vm.path = path;
-      window.scrollTo(0, 0);
+      // Note: popstate event back to initial page has null state.
+      vm.currentPath = event.state ? event.state.path : '/';
+
+      window.scrollTo(0, 0); // scroll to top of the page as if you were loading page.
+      vm.isMenuOpen = false; // close the header menu.
+      
       vm.$forceUpdate();
     };
 
+    // Helper for components.
+    Vue.prototype.$goTo = function(path){
+      window.history.pushState({ path: path }, '', path);
+    };    
+
+    // Hi-jack all anchor tag clicks.
     window.addEventListener('click', event => {
       // ensure we use the link, in case the click has been received by a subelement
       let { target } = event
-      while (target && target.tagName !== 'A') target = target.parentNode
+      while (target && target.tagName !== 'A') target = target.parentNode;
       // handle only links that do not reference external resources
       if(target && target.matches("a:not([href*='://'])") && target.href){
         // some sanity checks taken from vue-router:
@@ -695,18 +701,14 @@ var app = new Vue({
         const to = url.pathname
         if(window.location.pathname !== to && event.preventDefault){
           event.preventDefault()
-          vm.$goTo(to);
-          this.isMenuOpen = false; // close the header menu.
+          window.history.pushState({ path: to }, '', to);
         }
       }
     });
 
-    vm.$on('buoy', function(buoy){
-      this.buoy = buoy; // change header.
-    });
-    vm.$on('location', function(location){
-      this.location = location; // change header.
-    });
+    // Hack? Child components sending data up here to customize the header.
+    vm.$on('buoy:buoy', buoy => this.buoy = buoy);
+    vm.$on('location:location', location => this.location = location);
   },
   methods: {
     toggleFavorite: function(location){

@@ -1,35 +1,15 @@
 extends layout
 
-block headerLink
-  a.header-link(
-    v-cloak,
-    v-if="buoy",
-    :href="'/buoys/' + buoy.buoyid",
-  ) {{ buoy.buoyid + ': ' + buoy.name}}
-
-  a.header-link(
-    v-cloak,
-    v-else-if="location",
-    :href="'/locations/' + location.id",
-    :class="location.$isFavorite ? 'favorite' : 'not-favorite'"
-  )
-    | {{ location.name }}
-    if isAuthenticated
-      | &nbsp;
-      span.star(v-on:click.stop.prevent="toggleFavorite(location)") &starf;
-
-  a.header-link(v-else, href='/') Buoy Report
-
 block content
-  template(v-if="path === '/'")
+  template(v-if="currentPath === '/'")
     locations
-  template(v-if="path === '/about'")
+  template(v-if="currentPath === '/about'")
     about
-  template(v-if="path === '/me'")
+  template(v-if="currentPath === '/me'")
     snapshots
-  template(v-if="path === '/buoys'")
+  template(v-if="currentPath === '/buoys'")
     buoys
-  template(v-if="path.startsWith('/buoys/')")
+  template(v-if="currentPath.startsWith('/buoys/')")
     buoy
-  template(v-if="path.startsWith('/locations/')")
+  template(v-if="currentPath.startsWith('/locations/')")
     location
