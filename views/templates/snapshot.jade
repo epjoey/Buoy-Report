@@ -24,7 +24,7 @@
     .image.mb-20(v-if="snapshot.$imagePath")
       img(:src="snapshot.$imagePath")
 
-    .mb-20(v-if="snapshot.text")
+    .mb-20.pre-wrap(v-if="snapshot.text")
       | {{ snapshot.text }}
 
     .buoy-snap.mb-20
