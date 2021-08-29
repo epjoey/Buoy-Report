@@ -255,7 +255,7 @@ var parseSnapshot = function(snapshot){
     snapshot.$imagePath = snapshot.$imagePath.replace("/image/upload/", "/image/upload/c_scale,w_680/");
   }
 
-  snapshot.$buoyData = snapshot.buoyData.map(parseSnapshotBuoyData);
+  snapshot.$buoyData = (snapshot.buoyData || []).map(parseSnapshotBuoyData);
   snapshot.$by = snapshot.email ? snapshot.email.split('@')[0] : 0;
   return snapshot;
 };
@@ -507,7 +507,7 @@ Vue.component('update-location', {
   },
   watch: {
     buoys: function(buoys){
-      this.req.buoys = this.buoys.map(buoy => buoy.buoyid).join(', ');
+      this.req.buoys = (this.buoys || []).map(buoy => buoy.buoyid).join(', ');
       this.$forceUpdate();
     }
   },
