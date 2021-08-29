@@ -58,7 +58,7 @@ input[type="file"]{
 }
 pre { color: white; text-align: center; }
 [v-cloak] { display: none !important; }
-.pre-wrap { .white-space: pre-wrap; }
+.pre-wrap { white-space: pre-wrap; }
 
 
 /*================================*/
