@@ -489,7 +489,10 @@ Vue.component('location', {
       vm.$root.$emit('location:location', vm.location);
     });
     this.$fetchGet('/locations/' + this.locationId + '/buoys')
-      .then((data) => this.buoys = data.buoys);
+      .then((data) => {
+        this.buoys = data.buoys;
+        this.forceUpdate();
+      });
   },
   destroyed: function(){
     this.$root.$emit('location:location', null);
