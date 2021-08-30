@@ -491,8 +491,8 @@ Vue.component('location', {
     this.$fetchGet('/locations/' + this.locationId + '/buoys')
       .then((data) => {
         this.buoys = data.buoys;
-        this.forceUpdate();
-      });
+        this.$forceUpdate();
+      }); 
   },
   destroyed: function(){
     this.$root.$emit('location:location', null);
