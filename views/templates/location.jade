@@ -1,24 +1,21 @@
-div
-  div(v-if="location")
-    .buoy-data-wrap
-      .buoy-data-inner-wrap
-        .buoy-data.windy-view.mb-20
-          iframe(
-            width="320",
-            :height="screenWidth() > 680 ? 568 : 320",
-            :src="'https://embed.windy.com/embed2.html?' + location.latitude + ',' + location.longitude + ',8'"
-            frameborder="0"
-          )
+div(v-if="location")
+  .buoy-data-wrap
+    .buoy-data-inner-wrap
+      .buoy-data.windy-view.mb-20
+        iframe(
+          width="320",
+          :height="screenWidth() > 680 ? 568 : 320",
+          :src="'https://embed.windy.com/embed2.html?' + location.latitude + ',' + location.longitude + ',8'"
+          frameborder="0"
+        )
 
-        template(v-for="buoy in buoys")
-          buoy-data(:buoy="buoy", :location="location", type="wave")
-          buoy-data(:buoy="buoy", :location="location", type="standard")
+      template(v-for="buoy in buoys")
+        buoy-data(:buoy="buoy", :location="location", type="wave")
+        buoy-data(:buoy="buoy", :location="location", type="standard")
 
-    snapshots(:location="location")        
-    
-    if isAuthenticated
-      .container.mt-20
-        update-location(:location="location", :buoys="buoys")
+  snapshots(:location="location")        
+  
+  if isAuthenticated
+    .container.mt-20
+      update-location(:location="location", :buoys="buoys")
 
-  pre(v-if="!loading && !location")
-    | Location not found

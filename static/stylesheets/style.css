@@ -32,6 +32,7 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
+  background: #0a3660;
 }
 
 input[type="text"],
@@ -667,3 +668,23 @@ pre { color: white; text-align: center; }
 /*======= COLORS =======*/
 .grey {color: #535458}
 .grey-dark {color: #323336}
+
+
+/*======= Rotation =======*/
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+.loading-spinner {
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 0 auto;
+  background-image: url('/images/logo-lrg.png');
+  background-size: 46px 46px;
+  animation: rotation 2s infinite linear;
+}

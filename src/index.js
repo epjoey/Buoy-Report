@@ -1,4 +1,4 @@
-const makeFetch = function(vm, method, url, data){
+function makeFetch(vm, method, url, data){
   vm.loading = true;
   let config = {
     method: method,
@@ -23,11 +23,11 @@ const makeFetch = function(vm, method, url, data){
       vm.error = err;
       vm.$forceUpdate();
     });
-};
+}
 
 function capitalize(string){
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-};
+}
 
 ['POST', 'PUT', 'GET', 'DELETE'].forEach(method => {
   Vue.prototype['$fetch' + capitalize(method)] = function(url, data){
@@ -35,15 +35,14 @@ function capitalize(string){
   };
 });
 
-const toggleFavorite = function(vm, location){
+function toggleFavorite(vm, location){
   var url = '/favorites/' + location.id;
   var isFavorite = location.$isFavorite;
   vm[isFavorite ? '$fetchDelete' : '$fetchPost'](url, {}).then(function(data){
     location.$isFavorite = !isFavorite;
     vm.$forceUpdate();
   });
-};
-
+}
 
 //************************************************
 Vue.component('locations', {
@@ -112,33 +111,33 @@ const DIRECTIONS = {
   'NW': [292.5, 337.5]
 };
 
-const meters2Feet = function(meters){
+function meters2Feet(meters){
   // Missing data in the Realtime files are denoted by "MM" (https://www.ndbc.noaa.gov/measdes.shtml#stdmet).
   if(meters === 'MM'){
     return 'MM';
   }
   return (parseFloat(meters) * 3.28084).toFixed(1);
-};
+}
 
-const metersPerSec2mph = function(metersPerSec){
+function metersPerSec2mph(metersPerSec){
   if(metersPerSec === 'MM'){
     return 'MM';
   }
   return (parseFloat(metersPerSec) * 2.23694).toFixed(1); // meters/sec -> mph
-};
+}
 
-const parseDateTime = function(year, month, day, hour, minute){
+function parseDateTime(year, month, day, hour, minute){
   return Vue.prototype.$moment(year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":00Z");
-};
+}
 
-const parseSeconds = function(seconds){
+function parseSeconds(seconds){
   if(seconds === 'MM'){
     return 'MM';
   }
   return parseFloat(seconds).toFixed(1);
 }
 
-const parseDirection = function(bearing){
+function parseDirection(bearing){
   if(bearing == 360 || bearing == 0){
     return 'N';
   }
@@ -148,7 +147,7 @@ const parseDirection = function(bearing){
       return bearing >= angles[0] && bearing < angles[1];
     });
   }
-};
+}
 
 // Standard Wave Data from NOAA looks like:
 // #YY  MM DD hh mm WDIR WSPD GST  WVHT   DPD   APD MWD   PRES  ATMP  WTMP  DEWP  VIS PTDY  TIDE
@@ -156,7 +155,7 @@ const parseDirection = function(bearing){
 // 2021 07 14 21 40 230  3.0  5.0    MM    MM    MM  MM 1015.6  12.7    MM  11.1   MM   MM    MM
 // 2021 07 14 21 30 230  3.0  4.0    MM    MM    MM  MM 1015.6  12.7    MM  11.1   MM   MM    MM
 // 2021 07 14 21 20 220  3.0  4.0    MM    MM    MM  MM 1015.6  12.6    MM  11.0   MM   MM    MM
-const parseStandardData = function(dataRow){
+function parseStandardData(dataRow){
   var row = {};
   row.time = parseDateTime(dataRow[0], dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
   row.windDirection = dataRow[5];
@@ -168,7 +167,7 @@ const parseStandardData = function(dataRow){
   row.waveDirection = dataRow[11];
   row.waveDirectionAbbr = parseDirection(row.waveDirection);
   return row;
-};
+}
 
 // Spectral Wave Data from NOAA looks like:
 // #YY  MM DD hh mm WVHT  SwH  SwP  WWH  WWP SwD WWD  STEEPNESS  APD MWD
@@ -176,7 +175,7 @@ const parseStandardData = function(dataRow){
 // 2021 07 14 21 40  2.2  2.1  9.1  0.4  3.3  NW   W    AVERAGE  7.4 316
 // 2021 07 14 20 40  2.1  2.1 10.0  0.4  3.3  NW WNW    AVERAGE  7.3 315
 // 2021 07 14 19 40  2.0  2.0 10.0  0.4  4.0  NW   W    AVERAGE  7.4 312
-const parseWaveData = function(dataRow){
+function parseWaveData(dataRow){
   var row = {};
   row.time = parseDateTime(dataRow[0], dataRow[1], dataRow[2], dataRow[3], dataRow[4]);
   row.waveHeight = meters2Feet(dataRow[5]);
@@ -187,9 +186,9 @@ const parseWaveData = function(dataRow){
   row.windWaveSummary = meters2Feet(dataRow[8]) + ' / ' + parseSeconds(dataRow[9]);
   row.windWaveDirection = dataRow[11];
   return row;
-};
+}
 
-const parseBuoyData = function(data, type){
+function parseBuoyData(data, type){
   if(!data || !data.length){
     return [];
   }
@@ -198,7 +197,7 @@ const parseBuoyData = function(data, type){
     data = data.slice(2);
   }
   return data.map(type === 'wave' ? parseWaveData : parseStandardData);
-};
+}
 
 Vue.component('buoy-data', {
   template: '#buoy-data',
@@ -235,15 +234,15 @@ Vue.component('buoy-data', {
 
 //************************************************
 /* Snapshots */
-var parseSnapshotBuoyData = function(buoy){
+function parseSnapshotBuoyData(buoy){
   buoy.waveheight = meters2Feet(buoy.waveheight);
   buoy.swellheight = meters2Feet(buoy.swellheight);
   buoy.swellperiod = parseSeconds(buoy.swellperiod);
   buoy.windWaveSummary = meters2Feet(buoy.windwaveheight) + ' / ' + parseSeconds(buoy.windwaveperiod);
   return buoy;
-};
+}
 
-var parseSnapshot = function(snapshot){
+function parseSnapshot(snapshot){
   snapshot.$waveHeight = snapshot.waveheight ? WAVE_HEIGHTS[snapshot.waveheight] : '';
   snapshot.$qualityText = snapshot.quality ? QUALITIES[snapshot.quality] : '';
 
@@ -258,7 +257,7 @@ var parseSnapshot = function(snapshot){
   snapshot.$buoyData = (snapshot.buoyData || []).map(parseSnapshotBuoyData);
   snapshot.$by = snapshot.email ? snapshot.email.split('@')[0] : 0;
   return snapshot;
-};
+}
 
 const WAVE_HEIGHTS = {
   '1.5': "1-2'",
@@ -284,12 +283,16 @@ var QUALITIES = {
   5: 'Great'
 };
 
-let submitImage = function(vm, imagePath, onSuccess){
+function submitImage(vm, imagePath, onSuccess){
   vm.loading = true;
+  let folder = Vue.$nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev';
+  if(vm.location.name.toLowerCase() === "the devil's loophole"){
+    folder = 'art';
+  }
   var formData = new FormData();
   formData.append("file", imagePath);
   formData.append("upload_preset", Vue.$nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
-  formData.append("folder", Vue.$nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
+  formData.append("folder", folder);
   var xhr = new XMLHttpRequest();
   xhr.onload = function(){
     vm.loading = false;
@@ -305,7 +308,7 @@ let submitImage = function(vm, imagePath, onSuccess){
   };
   xhr.open("post", "https://api.cloudinary.com/v1_1/duq2wnb9p/image/upload");
   xhr.send(formData);
-};
+}
 
 //************************************************
 Vue.component('add-snapshot', {
