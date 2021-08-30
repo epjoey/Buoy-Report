@@ -92,12 +92,12 @@ router.delete('/buoys/:buoyId', helper.secured, async function(req, res, next){
 });
 
 router.get('/buoys/:buoyId/data', async function(req, res, next) {
-  const [error, data] = await buoyService.getData(
+  const [error, rows] = await buoyService.getData(
     parseInt(req.params.buoyId),
     req.query.type,
     parseInt(req.query.offset) || 0
   );
-  res.json({ data, error });
+  res.json({ rows, error });
 });
 
 

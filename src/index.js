@@ -188,15 +188,15 @@ function parseWaveData(dataRow){
   return row;
 }
 
-function parseBuoyData(data, type){
-  if(!data || !data.length){
+function parseBuoyData(rows, type){
+  if(!rows || !rows.length){
     return [];
   }
   // Both data sets have 2 rows of units.
-  if(data[0][0] === "#YY" && data[1][0] === "#yr"){
-    data = data.slice(2);
+  if(rows[0][0] === "#YY" && rows[1][0] === "#yr"){
+    rows = rows.slice(2);
   }
-  return data.map(type === 'wave' ? parseWaveData : parseStandardData);
+  return rows.map(type === 'wave' ? parseWaveData : parseStandardData);
 }
 
 Vue.component('buoy-data', {
@@ -214,9 +214,9 @@ Vue.component('buoy-data', {
       let url = '/buoys/' + this.buoy.buoyid + '/data?type=' + this.type + '&offset=' + offset;
       let vm = this;
       this.$fetchGet(url).then(function(data){
-        if(data.data){
+        if(data.rows.length){
           vm.tables.push({
-            rows: parseBuoyData(data.data, vm.type)
+            rows: parseBuoyData(data.rows, vm.type)
           });
         }
       });

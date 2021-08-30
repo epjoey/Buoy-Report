@@ -65,10 +65,10 @@ async function getData(id, type, offset=0, limit=24){ // get 24 hours of data
   console.log('fetching buoy data from', url);
   try {
     let data = await helper.makeRequest(url);
-    data = splitRows(data, offset, limit);
-    return [null, data];
+    let rows = splitRows(data, offset, limit);
+    return [null, rows];
   } catch(err){
-    console.log('error getting data from buoy', id, err);
+    console.log('error getting rows from buoy', id, err);
     return [err.message, []];
   }
 }
