@@ -219,6 +219,9 @@ Vue.component('buoy-data', {
             rows: parseBuoyData(data.rows, vm.type)
           });
         }
+        else {
+          vm.$forceUpdate();
+        }
       });
     },
     formatDate: function(time){
