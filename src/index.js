@@ -491,7 +491,6 @@ Vue.component('location', {
     this.$fetchGet('/locations/' + this.locationId + '/buoys')
       .then((data) => {
         this.buoys = data.buoys;
-        this.$forceUpdate();
       }); 
   },
   destroyed: function(){
@@ -505,19 +504,23 @@ Vue.component('update-location', {
   template: '#update-location',
   props: ['location', 'buoys', 'snapshots'],
   data: function(){
+    let req = Object.assign({}, this.location);
+    req.buoys = this.joinBuoyIds();
     return {
-      req: Object.assign({}, this.location),
+      req: req,
       error: '',
       loading: false
     }
   },
   watch: {
-    buoys: function(buoys){
-      this.req.buoys = (this.buoys || []).map(buoy => buoy.buoyid).join(', ');
-      this.$forceUpdate();
+    buoys: function(){
+      this.req.buoys = this.joinBuoyIds();
     }
   },
   methods: {
+    joinBuoyIds: function(){
+      return this.buoys.map(buoy => buoy.buoyid).join(', ');
+    },
     invalid: function(){
       return !this.req.name;
     },
