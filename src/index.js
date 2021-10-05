@@ -439,7 +439,7 @@ Vue.component('update-snapshot', {
         submitImage(this, this.req.imagepath, this.updateSnapshot);
       }
       else {
-        this.updateSnapshot();
+        this.updateSnapshot(this.snapshot.imagepath);
       }
     },
     updateSnapshot: function(imagepath){
