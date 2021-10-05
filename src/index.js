@@ -289,9 +289,6 @@ var QUALITIES = {
 function submitImage(vm, imagePath, onSuccess){
   vm.loading = true;
   let folder = Vue.$nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev';
-  if(vm.location.name.toLowerCase() === "the devil's loophole"){
-    folder = 'art';
-  }
   var formData = new FormData();
   formData.append("file", imagePath);
   formData.append("upload_preset", Vue.$nodeEnv === 'production' ? 'buoyreport' : 'buoyreport_dev');
@@ -438,7 +435,7 @@ Vue.component('update-snapshot', {
       this.req.imagepath = file;
     },
     submit: function(){
-      if(this.req.imagepath){
+      if(this.req.imagepath && this.req.imagepath !== this.snapshot.imagepath){
         submitImage(this, this.req.imagepath, this.updateSnapshot);
       }
       else {

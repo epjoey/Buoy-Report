@@ -11,8 +11,8 @@ const Auth0Strategy = require("passport-auth0");
 const logger = require('morgan');
 const cookieSession = require('cookie-session')
 const cookieParser = require('cookie-parser');
-var debug = require('debug')('buoy-report:server');
-var http = require('http');
+const debug = require('debug')('buoy-report:server');
+const http = require('http');
 
 require("dotenv").config(); // loads the vars from the .env file into process.env
 const ADMIN_EMAIL = "jhodara@gmail.com";
