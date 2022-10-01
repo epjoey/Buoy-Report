@@ -54,22 +54,23 @@
           tr(v-if="!snapshot.$buoyData.length")
             td
               small no data
-          tr(v-for="buoy in snapshot.$buoyData")
+          tr(v-for="buoyData in snapshot.$buoyData")
             td
               a(
-                :href="'https://www.ndbc.noaa.gov/station_page.php?station=' + buoy.buoy",
-                target="_blank"
-              ) {{ buoy.buoy }}
-            td {{ $moment.unix(buoy.gmttime).tz(snapshot.timezone || 'UTC').format('M/D h:mma') }}
-            td {{ buoy.waveheight }}
-            td {{ buoy.swellheight }}
-            td {{ buoy.swellperiod }}
-            td {{ buoy.swelldir }}
-            td {{ buoy.meanwavedir }}
+                :href="'https://www.ndbc.noaa.gov/station_page.php?station=' + buoyData.buoy.buoyid",
+                target="_blank",
+                :title="buoyData.buoy.name"
+              ) {{ buoyData.buoy.buoyid }}
+            td {{ $moment.unix(buoyData.gmttime).tz(snapshot.timezone || 'UTC').format('M/D h:mma') }}
+            td {{ buoyData.waveheight }}
+            td {{ buoyData.swellheight }}
+            td {{ buoyData.swellperiod }}
+            td {{ buoyData.swelldir }}
+            td {{ buoyData.meanwavedir }}
             td
-              | {{ buoy.windWaveSummary }}
+              | {{ buoyData.windWaveSummary }}
               | &nbsp;
-              sub {{ buoy.windwavedir }}
+              sub {{ buoyData.windwavedir }}
 
   div
     span.text-meta

@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "nodemon": "nodemon app.js",
+    "start-dev": "nodemon app.js",
     "build": "webpack --mode production",
-    "watch": "watch 'webpack --mode development' ./src"
+    "build-dev": "watch 'webpack --mode development' ./src"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

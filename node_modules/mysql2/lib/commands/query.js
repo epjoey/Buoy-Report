@@ -1,6 +1,7 @@
 'use strict';
 
 const process = require('process');
+const Timers = require('timers');
 
 const Readable = require('stream').Readable;
 
@@ -8,7 +9,6 @@ const Command = require('./command.js');
 const Packets = require('../packets/index.js');
 const getTextParser = require('../parsers/text_parser.js');
 const ServerStatus = require('../constants/server_status.js');
-const CharsetToEncoding = require('../constants/charset_encodings.js');
 
 const EmptyPacket = new Packets.Packet(0, Buffer.allocUnsafe(4), 0, 4);
 
@@ -21,6 +21,8 @@ class Query extends Command {
     this._queryOptions = options;
     this.namedPlaceholders = options.namedPlaceholders || false;
     this.onResult = callback;
+    this.timeout = options.timeout;
+    this.queryTimeout = null;
     this._fieldCount = 0;
     this._rowParser = null;
     this._fields = [];
@@ -41,13 +43,16 @@ class Query extends Command {
     throw new Error(err);
   }
 
-  start(packet, connection) {
+  /* eslint no-unused-vars: ["error", { "argsIgnorePattern": "^_" }] */
+  start(_packet, connection) {
     if (connection.config.debug) {
       // eslint-disable-next-line
       console.log('        Sending query command: %s', this.sql);
     }
     this._connection = connection;
     this.options = Object.assign({}, connection.config, this._queryOptions);
+    this._setTimeout();
+
     const cmdPacket = new Packets.Query(
       this.sql,
       connection.config.charsetNumber
@@ -58,6 +63,15 @@ class Query extends Command {
 
   done() {
     this._unpipeStream();
+    // if all ready timeout, return null directly
+    if (this.timeout && !this.queryTimeout) {
+      return null;
+    }
+    // else clear timer
+    if (this.queryTimeout) {
+      Timers.clearTimeout(this.queryTimeout);
+      this.queryTimeout = null;
+    }
     if (this.onResult) {
       let rows, fields;
       if (this._resultIndex === 0) {
@@ -198,7 +212,7 @@ class Query extends Command {
     if (this._receivedFieldsCount === this._fieldCount) {
       const fields = this._fields[this._resultIndex];
       this.emit('fields', fields);
-      this._rowParser = getTextParser(fields, this.options, connection.config);
+      this._rowParser = new (getTextParser(fields, this.options, connection.config))(fields);
       return Query.prototype.fieldsEOF;
     }
     return Query.prototype.readField;
@@ -212,7 +226,8 @@ class Query extends Command {
     return this.row;
   }
 
-  row(packet) {
+  /* eslint no-unused-vars: ["error", { "argsIgnorePattern": "^_" }] */
+  row(packet, _connection) { 
     if (packet.isEOF()) {
       const status = packet.eofStatusFlags();
       const moreResults = status & ServerStatus.SERVER_MORE_RESULTS_EXISTS;
@@ -224,11 +239,10 @@ class Query extends Command {
     }
     let row;
     try {
-      row = new this._rowParser(
+      row = this._rowParser.next(
         packet,
         this._fields[this._resultIndex],
-        this.options,
-        CharsetToEncoding
+        this.options
       );
     } catch (err) {
       this._localStreamError = err;
@@ -271,6 +285,34 @@ class Query extends Command {
       stream.emit('fields', fields); // replicate old emitter
     });
     return stream;
+  }
+
+  _setTimeout() {
+    if (this.timeout) {
+      const timeoutHandler = this._handleTimeoutError.bind(this);
+      this.queryTimeout = Timers.setTimeout(
+        timeoutHandler,
+        this.timeout
+      );
+    }
+  }
+
+  _handleTimeoutError() {
+    if (this.queryTimeout) {
+      Timers.clearTimeout(this.queryTimeout);
+      this.queryTimeout = null;
+    }
+    
+    const err = new Error('Query inactivity timeout');
+    err.errorno = 'PROTOCOL_SEQUENCE_TIMEOUT';
+    err.code = 'PROTOCOL_SEQUENCE_TIMEOUT';
+    err.syscall = 'query';
+
+    if (this.onResult) {
+      this.onResult(err);
+    } else {
+      this.emit('error', err);
+    }
   }
 }
 

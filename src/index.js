@@ -1,4 +1,5 @@
-function makeFetch(vm, method, url, data){
+Vue.prototype.fetch = function(method, url, data){
+  var vm = this;
   vm.loading = true;
   let config = {
     method: method,
@@ -23,22 +24,12 @@ function makeFetch(vm, method, url, data){
       vm.error = err;
       vm.$forceUpdate();
     });
-}
-
-function capitalize(string){
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
-
-['POST', 'PUT', 'GET', 'DELETE'].forEach(method => {
-  Vue.prototype['$fetch' + capitalize(method)] = function(url, data){
-    return makeFetch(this, method, url, data);
-  };
-});
+};
 
 function toggleFavorite(vm, location){
   var url = '/favorites/' + location.id;
   var isFavorite = location.$isFavorite;
-  vm[isFavorite ? '$fetchDelete' : '$fetchPost'](url, {}).then(function(data){
+  vm.fetch(isFavorite ? 'DELETE' : 'POST', url, {}).then(function(data){
     location.$isFavorite = !isFavorite;
     vm.$forceUpdate();
   });
@@ -68,7 +59,7 @@ Vue.component('locations', {
   },
   created: function(){
     var self = this;
-    this.$fetchGet("/locations").then(function(data){
+    this.fetch('GET', "/locations").then(function(data){
       self.locations = data.locations;
     });
   }
@@ -90,7 +81,7 @@ Vue.component('add-location', {
       return !this.req.name;
     },
     submit: function(){
-      this.$fetchPost('/locations', this.req)
+      this.fetch('POST', '/locations', this.req)
         .then(data => this.$goTo('/locations/' + data.locationId));
     }
   }
@@ -213,7 +204,7 @@ Vue.component('buoy-data', {
       let offset = this.tables.length * BUOY_DATA_ROWS_PER_TABLE;
       let url = '/buoys/' + this.buoy.buoyid + '/data?type=' + this.type + '&offset=' + offset;
       let vm = this;
-      this.$fetchGet(url).then(function(data){
+      this.fetch('GET', url).then(function(data){
         if(data.rows.length){
           vm.tables.push({
             rows: parseBuoyData(data.rows, vm.type)
@@ -279,11 +270,11 @@ let WAVE_HEIGHTS_KEYS = Object.keys(WAVE_HEIGHTS).sort((a, b) => parseFloat(a) -
 WAVE_HEIGHTS_KEYS.unshift(null);
 
 var QUALITIES = {
-  1: 'Terrible',
-  2: 'Mediocre',
-  3: 'OK',
-  4: 'Fun',
-  5: 'Great'
+  1: 'Bad',
+  2: 'OK',
+  3: 'Fun',
+  4: 'Great',
+  5: 'Epic'
 };
 
 function submitImage(vm, imagePath, onSuccess){
@@ -349,7 +340,7 @@ Vue.component('add-snapshot', {
     postSnapshot: function(imagepath){
       this.req.imagepath = imagepath || '';
       let vm = this;
-      this.$fetchPost('/locations/' + this.location.id + '/snapshots', this.req).then(function(data){
+      this.fetch('POST', '/locations/' + this.location.id + '/snapshots', this.req).then(function(data){
         vm.snapshots.unshift(parseSnapshot(data.snapshot));
       });
     }
@@ -374,7 +365,7 @@ Vue.component('snapshots', {
     load: function(){
       let url = this.location ? '/locations/' + this.location.id + '/snapshots' : '/snapshots';
       let vm = this;
-      this.$fetchGet(url + '?page=' + (this.page + 1)).then(function(data){
+      this.fetch('GET', url + '?page=' + (this.page + 1)).then(function(data){
         let snapshots = data.snapshots.rows;
         snapshots.forEach(function(snapshot){
           vm.snapshots.push(parseSnapshot(snapshot));
@@ -401,7 +392,7 @@ Vue.component('snapshot', {
     deleteSnapshot: function(){
       if(window.confirm('Are you sure you want to delete this snapshot?')){
         var vm = this;
-        this.$fetchDelete('/snapshots/' + this.snapshot.id).then(function(){
+        this.fetch('DELETE', '/snapshots/' + this.snapshot.id).then(function(){
           vm.snapshots.splice(vm.snapshots.indexOf(vm.snapshot), 1);
         });
       }
@@ -445,7 +436,7 @@ Vue.component('update-snapshot', {
     updateSnapshot: function(imagepath){
       this.req.imagepath = imagepath || ''; // `undefined` will omit imagepath from the post, so it won't get cleared.
       var vm = this;
-      this.$fetchPut('/snapshots/' + this.snapshot.id, this.req).then(function(data){
+      this.fetch('PUT', '/snapshots/' + this.snapshot.id, this.req).then(function(data){
         Object.assign(vm.snapshot, parseSnapshot(data.snapshot));
         vm.$emit('update-snapshot:close');
       });
@@ -484,11 +475,11 @@ Vue.component('location', {
     if(!this.locationId){
       return;
     }
-    this.$fetchGet('/locations/' + this.locationId).then(function(data){
+    this.fetch('GET', '/locations/' + this.locationId).then(function(data){
       vm.location = data.location;
       vm.$root.$emit('location:location', vm.location);
     });
-    this.$fetchGet('/locations/' + this.locationId + '/buoys')
+    this.fetch('GET', '/locations/' + this.locationId + '/buoys')
       .then((data) => {
         this.buoys = data.buoys;
       }); 
@@ -525,13 +516,13 @@ Vue.component('update-location', {
       return !this.req.name;
     },
     submit: function(){
-      this.$fetchPut('/locations/' + this.location.id, this.req).then(function(data){
+      this.fetch('PUT', '/locations/' + this.location.id, this.req).then(function(data){
         return window.location.reload();
       });
     },
     deleteLocation: function(){
       if(window.confirm('Are you sure you want to delete this location?')){
-        this.$fetchDelete('/locations/' + this.location.id).then(() => this.$goTo('/'));
+        this.fetch('DELETE', '/locations/' + this.location.id).then(() => this.$goTo('/'));
       }
     }
   }
@@ -548,7 +539,7 @@ Vue.component('buoys', {
     };
   },
   created: function(){
-    this.$fetchGet("/buoys").then(data => this.buoys = data.buoys);
+    this.fetch('GET', '/buoys').then(data => this.buoys = data.buoys);
   }
 });
 
@@ -567,7 +558,7 @@ Vue.component('add-buoy', {
       return !this.req.buoyid;
     },
     submit: function(){
-      this.$fetchPost('/buoys', this.req).then(function(data){
+      this.fetch('POST', '/buoys', this.req).then(function(data){
         window.location.href = '/buoys/' + data.buoy.buoyid;
       });
     }
@@ -588,7 +579,7 @@ Vue.component('buoy', {
   },
   created: function(){
     var vm = this;
-    this.$fetchGet('/buoys/' + this.buoyId).then(function(data){
+    this.fetch('GET', '/buoys/' + this.buoyId).then(function(data){
       vm.buoy = data.buoy;
       vm.$root.$emit('buoy:buoy', vm.buoy);
       vm.$forceUpdate();
@@ -618,14 +609,14 @@ Vue.component('update-buoy', {
     },
     submit: function(){
       let vm = this;
-      this.$fetchPut('/buoys/' + this.buoy.buoyid, {name: this.name}).then(function(data){
+      this.fetch('PUT', '/buoys/' + this.buoy.buoyid, {name: this.name}).then(function(data){
         vm.buoy.name = vm.name;
         vm.$forceUpdate();
       });
     },
     deleteBuoy: function(){
       if(window.confirm('Are you sure you want to delete buoy #' + this.buoy.buoyid + '?')){
-        this.$fetchDelete('/buoys/' + this.buoy.buoyid).then(() => this.$goTo('/buoys'))
+        this.fetch('DELETE', '/buoys/' + this.buoy.buoyid).then(() => this.$goTo('/buoys'))
       }
     }
   }

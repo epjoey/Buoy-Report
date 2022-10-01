@@ -87,9 +87,14 @@ async function forLocation(locationId){
 }
 
 
-async function getMultiple(){
-  let rows = await helper.rows('SELECT buoyid, name FROM `buoy` ORDER BY buoyid');
-  return rows
+async function getMultiple(buoyIds){
+  sql = 'SELECT buoyid, name FROM `buoy`';
+  if(buoyIds){
+    sql += ' WHERE buoyid IN (?)';
+  }
+  sql += ' ORDER BY buoyid';
+  let rows = await helper.rows(sql, [buoyIds]);
+  return rows;
 }
 
 async function getSingle(id){

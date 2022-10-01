@@ -93,7 +93,6 @@ async function snapshotBuoyData(buoy, snapshotId, observationDate){
     console.log('error fetching buoy data for', buoy.buoyid, err);
     return;
   }
-  console.log('buoy', buoy)
   let row = closestRow(data, observationDate);
   if(!row){
     console.log('historical buoy data not found for buoy', buoy.buoyid, 'at date', observationDate);
@@ -164,7 +163,14 @@ async function buoyDataForSnapshots(snapshotIds){
     'SELECT * from `buoydata` WHERE reportid IN (?)',
     [snapshotIds]
   );
-  return _.groupBy(rows, 'reportid');
+  let buoyIds = rows.map(row => parseInt(row.buoy));
+  let buoys = await buoyService.getMultiple(buoyIds);
+  let buoysById = _.keyBy(buoys, 'buoyid')
+  rows.forEach(row => {
+    row.buoy = buoysById[row.buoy];
+  });
+  let grouped = _.groupBy(rows, 'reportid');
+  return grouped;
 }
 
 
