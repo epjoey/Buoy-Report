@@ -21,7 +21,7 @@
     "morgan": "~1.9.1",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.7",
-    "passport": "^0.4.1",
+    "passport": "^0.6.0",
     "passport-auth0": "^1.4.0"
   },
   "devDependencies": {
