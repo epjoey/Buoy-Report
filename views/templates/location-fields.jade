@@ -9,12 +9,12 @@
 .field
   label
     span
-      a(href="http://www.ndbc.noaa.gov/rmd.shtml", target="_blank") Buoys
+      a(href="https://www.ndbc.noaa.gov/", target="_blank") Buoys
     input(type='text', v-model='req.buoys', placeholder="#####, #####, #####, ...")
 
 .field
   label
-    span 
+    span
       a(
         href="https://github.com/moment/moment-timezone/blob/develop/data/packed/latest.json"
         target="_blank"
@@ -23,7 +23,7 @@
 
 .field
   label
-    span 
+    span
       a(
         :href="'https://www.google.com/search?q=' + req.name + '+latitude'"
         target="_blank"
@@ -32,7 +32,7 @@
 
 .field
   label
-    span 
+    span
       a(
         href="'https://www.google.com/search?q=' + req.name + '+longitude'"
         target="_blank"
