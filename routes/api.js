@@ -148,5 +148,16 @@ router.delete("/favorites/:locationId", helper.secured, async function(req, res,
   res.json({});
 });
 
+router.get('/activestations', async (req, res) => {
+  try {
+    const response = await fetch('https://www.ndbc.noaa.gov/activestations.xml');
+    const text = await response.text();
+    res.setHeader('Content-Type', 'application/xml');
+    res.send(text);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching buoy data');
+  }
+});
 
 module.exports = router;

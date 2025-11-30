@@ -1,3 +1,8 @@
+// New components are imported.
+import BuoyMap from './BuoyMap.js';
+Vue.component('BuoyMap', BuoyMap);
+
+// Legacy code is all stuffed into this file:
 Vue.prototype.fetch = function(method, url, data){
   var vm = this;
   vm.loading = true;

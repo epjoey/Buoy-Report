@@ -7,6 +7,7 @@ const VIEW_ROUTES = [
   '/',
   '/about',
   '/me',
+  '/map',
 
   '/buoys',
   '/buoys/:buoyId',

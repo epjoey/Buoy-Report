@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "start-dev": "nodemon app.js",
-    "build": "webpack --mode production",
-    "build-dev": "watch 'webpack --mode development' ./src"
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --mode production",
+    "build-dev": "watch 'NODE_OPTIONS=--openssl-legacy-provider webpack --mode development' ./src"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -17,6 +17,7 @@
     "express-session": "^1.17.2",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "morgan": "~1.9.1",
     "mysql2": "^2.2.5",
