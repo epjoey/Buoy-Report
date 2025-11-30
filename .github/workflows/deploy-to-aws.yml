@@ -1,0 +1,30 @@
+name: Deploy Buoy Report
+
+on:
+  push:
+    branches:
+      - master  # deploy when master is pushed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.7.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no user@YOUR_SERVER_IP << 'EOF'
+            set -e
+            cd /var/www/buoyreport.com
+            git reset --hard
+            git pull origin master
+            npm install
+            pm2 restart buoyreport --update-env || pm2 start app.js --name buoyreport
+          EOF
