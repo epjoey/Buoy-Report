@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     renderStations() {
-      console.log('renderStations')
       // remove old markers
       this.markers.forEach(m => this.buoyMap.removeLayer(m));
       this.markers = [];
@@ -31,7 +30,8 @@ export default {
       const inRadiusStations = this.stations.filter(s => {
         const lat = parseFloat(s.getAttribute('lat'));
         const lon = parseFloat(s.getAttribute('lon'));
-        return inRadius(lat, lon);
+        const type = s.getAttribute('type');   // get type
+        return (type === 'buoy' || type === "other") && inRadius(lat, lon); // only buoys
       });
 
       inRadiusStations.forEach(s => {
