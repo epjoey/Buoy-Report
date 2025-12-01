@@ -1,5 +1,5 @@
 const https = require('https');
-const db = require('./db');
+const db = require('../services/db');
 
 function getOffset(currentPage = 1, listPerPage = 1000){
   return (currentPage - 1) * [listPerPage];

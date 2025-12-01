@@ -1,8 +1,8 @@
 var assert = require('assert');
 const https = require('https');
 const _ = require('lodash');
-const db = require('../db');
-const helper = require('../helper');
+const db = require('../services/db');
+const helper = require('../services/helper');
 
 
 async function create(reqBody){
@@ -89,7 +89,7 @@ async function forLocation(locationId){
 
 async function getMultiple(buoyIds){
   sql = 'SELECT buoyid, name FROM `buoy`';
-  if(buoyIds){
+  if(buoyIds && buoyIds.length){
     sql += ' WHERE buoyid IN (?)';
   }
   sql += ' ORDER BY buoyid';

@@ -1,6 +1,6 @@
 const _ = require('lodash');
-const db = require('../db');
-const helper = require('../helper');
+const db = require('../services/db');
+const helper = require('../services/helper');
 
 
 async function create(reqBody, user){

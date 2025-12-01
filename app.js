@@ -20,7 +20,7 @@ const ADMIN_EMAIL = "jhodara@gmail.com";
 /**
  * Required Internal Modules
  */
-const db = require('./db');
+const db = require('./services/db');
 const authRouter = require("./routes/auth");
 const viewsRouter = require('./routes/views');
 const apiRouter = require('./routes/api');

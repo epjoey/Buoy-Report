@@ -6,10 +6,10 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const db = require('../db');
+const db = require('../services/db');
 const querystring = require("querystring");
 const snapshotService = require('../services/snapshots');
-const helper = require('../helper');
+const helper = require('../services/helper');
 
 require("dotenv").config();
 

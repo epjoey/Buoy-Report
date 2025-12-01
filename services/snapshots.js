@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const db = require('../db');
-const helper = require('../helper');
-const buoyService = require('./buoys')
+const db = require('../services/db');
+const helper = require('../services/helper');
+const buoyService = require('../services/buoys')
 
 const SNAPSHOT_LIMIT = 10;
 const SNAPSHOT_SELECT = '\

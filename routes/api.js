@@ -5,8 +5,8 @@ const router = express.Router();
 const locationService = require('../services/locations');
 const buoyService = require('../services/buoys');
 const snapshotService = require('../services/snapshots');
-const helper = require('../helper');
-const db = require('../db');
+const helper = require('../services/helper');
+const db = require('../services/db');
 
 
 /* Locations */
