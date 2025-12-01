@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up Node.js (matches local dev)
+      # 2️⃣ Setup Node.js (match local dev version)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -35,22 +35,28 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 6️⃣ Deploy to EC2
-      - name: Upload files and restart server
+      # 6️⃣ Add EC2 host to known_hosts
+      - name: Add EC2 host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      # 7️⃣ Deploy files and restart server
+      - name: Deploy to EC2
         run: |
           # Copy server code + built assets to EC2
           scp -r \
             package.json package-lock.json app.js server/ dist/ \
             ubuntu@54.183.21.154:/home/ubuntu/buoyreport/
 
-          # SSH into server to install deps & reload PM2
-          ssh -o StrictHostKeyChecking=no ubuntu@54.183.21.154 << 'EOF'
+          # SSH into EC2 to install deps & reload PM2
+          ssh ubuntu@54.183.21.154 << 'EOF'
             set -e
             cd /home/ubuntu/buoyreport
 
-            # Install Node dependencies (production only)
+            # Install production dependencies
             npm ci --omit=dev
 
-            # Reload app in PM2
+            # Reload Node API in PM2
             pm2 reload buoyreport --update-env || pm2 start app.js --name buoyreport
           EOF
