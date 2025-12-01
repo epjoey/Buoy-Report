@@ -19,13 +19,31 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Check if package.json changed
+        id: pkg
+        run: |
+          git fetch origin main
+          if git diff --name-only HEAD^ HEAD | grep -q "package.json"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no user@YOUR_SERVER_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@54.183.21.154 << 'EOF'
             set -e
-            cd /var/www/buoyreport.com
-            git reset --hard
-            git pull origin main
-            npm install
-            pm2 restart buoyreport --update-env || pm2 start app.js --name buoyreport
+            cd /buoyreport
+            
+            git fetch --all
+            git reset --hard origin/main
+
+            if [ "${{ steps.pkg.outputs.changed }}" = "true" ]; then
+              echo "Installing updated dependencies..."
+              npm install
+            else
+              echo "Skipping npm install (no dependency changes)."
+            fi            
+
+            pm2 reload buoyreport --update-env || pm2 start app.js --name buoyreport
           EOF
