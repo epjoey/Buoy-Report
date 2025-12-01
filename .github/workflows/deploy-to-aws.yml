@@ -11,39 +11,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install SSH key
+      # 2️⃣ Set up Node.js (matches local dev)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4️⃣ Build SPA
+      - name: Build SPA
+        run: npm run build
+
+      # 5️⃣ Add SSH key for server
+      - name: Add SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Check if package.json changed
-        id: pkg
+      # 6️⃣ Deploy to EC2
+      - name: Upload files and restart server
         run: |
-          git fetch origin main
-          if git diff --name-only HEAD^ HEAD | grep -q "package.json"; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
+          # Copy server code + built assets to EC2
+          scp -r \
+            package.json package-lock.json app.js server/ dist/ \
+            ubuntu@54.183.21.154:/home/ubuntu/buoyreport/
 
-      - name: Deploy to server
-        run: |
+          # SSH into server to install deps & reload PM2
           ssh -o StrictHostKeyChecking=no ubuntu@54.183.21.154 << 'EOF'
             set -e
-            cd /buoyreport
+            cd /home/ubuntu/buoyreport
 
-            git fetch --all
-            git reset --hard origin/main
+            # Install Node dependencies (production only)
+            npm ci --omit=dev
 
-            if [ "${{ steps.pkg.outputs.changed }}" = "true" ]; then
-              echo "Installing updated dependencies..."
-              npm install
-            else
-              echo "Skipping npm install (no dependency changes)."
-            fi
-
+            # Reload app in PM2
             pm2 reload buoyreport --update-env || pm2 start app.js --name buoyreport
           EOF
