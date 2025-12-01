@@ -2,8 +2,9 @@ name: Deploy Buoy Report
 
 on:
   push:
-    branches:
-      - master  # deploy when master is pushed
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -24,7 +25,7 @@ jobs:
             set -e
             cd /var/www/buoyreport.com
             git reset --hard
-            git pull origin master
+            git pull origin main
             npm install
             pm2 restart buoyreport --update-env || pm2 start app.js --name buoyreport
           EOF
