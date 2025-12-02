@@ -1,4 +1,4 @@
-name: Deploy Buoy Report
+name: Deploy Buoy Report (to DigitalOcean)
 
 on:
   push:
@@ -11,47 +11,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout code
+      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js (match local dev version)
+      # Setup Node.js (match local dev version)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # 3️⃣ Install dependencies
+      # Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --omit=dev
 
-      # 4️⃣ Build SPA
+      # Build SPA
       - name: Build SPA
         run: npm run build
 
-      # 5️⃣ Add SSH key for server
+      # Add SSH key for server
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 6️⃣ Add EC2 host to known_hosts
-      - name: Add EC2 host to known_hosts
+      # 6 Deploy files and restart server
+      - name: Deploy to DigitalOcean
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-
-      # 7️⃣ Deploy files and restart server
-      - name: Deploy to EC2
-        run: |
-          # Copy server code + built assets to EC2
+          # Copy server code + built assets to droplet
           # TODO: move all server stuff into a server directory and everything else into a static dir.
           scp -r \
             package.json package-lock.json app.js dist/ migrations/ routes/ services/ static/ views/   \
-            ubuntu@54.183.21.154:/home/ubuntu/buoyreport/
+            root@137.184.127.160:/home/ubuntu/buoyreport/
 
-          # SSH into EC2 to install deps & reload PM2
-          ssh ubuntu@54.183.21.154 << 'EOF'
+          # SSH into droplet to install deps & reload PM2
+          ssh root@137.184.127.160 << 'EOF'
             set -e
             cd /home/ubuntu/buoyreport
 
