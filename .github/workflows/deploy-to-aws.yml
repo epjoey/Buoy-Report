@@ -1,4 +1,4 @@
-name: Deploy Buoy Report (to DigitalOcean)
+name: Deploy Buoy Report (DigitalOcean)
 
 on:
   push:
@@ -11,41 +11,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup Node.js (match local dev version)
+      # 2️⃣ Setup Node.js for build
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # Install dependencies
+      # 3️⃣ Install dependencies for build
       - name: Install dependencies
         run: npm ci --omit=dev
 
-      # Build SPA
+      # 4️⃣ Build SPA
       - name: Build SPA
         run: npm run build
 
-      # Add SSH key for server
+      # 5️⃣ Add SSH key for server
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 6 Deploy files and restart server
+      # 6️⃣ Deploy files and reload server
       - name: Deploy to DigitalOcean
         run: |
-          # Copy server code + built assets to droplet
-          # TODO: move all server stuff into a server directory and everything else into a static dir.
-          scp -r \
-            package.json package-lock.json app.js dist/ migrations/ routes/ services/ static/ views/   \
-            root@137.184.127.160:/home/ubuntu/buoyreport/
+          # Sync only changed files to droplet
+          rsync -avz --delete \
+            package.json package-lock.json app.js dist/ migrations/ routes/ services/ static/ views/ \
+            ubuntu@137.184.127.160:/home/ubuntu/buoyreport/
 
           # SSH into droplet to install deps & reload PM2
-          ssh root@137.184.127.160 << 'EOF'
+          ssh ubuntu@137.184.127.160 << 'EOF'
             set -e
             cd /home/ubuntu/buoyreport
 
