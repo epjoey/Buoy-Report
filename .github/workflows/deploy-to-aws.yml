@@ -36,21 +36,22 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # 6️⃣ Deploy files and reload server
+      # Sync only changed files to droplet and restart PM2
       - name: Deploy to DigitalOcean
         run: |
-          # Sync only changed files to droplet
-          rsync -avz --delete \
+          # Sync code and assets to the droplet
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" \
             package.json package-lock.json app.js dist/ migrations/ routes/ services/ static/ views/ \
             ubuntu@137.184.127.160:/home/ubuntu/buoyreport/
 
           # SSH into droplet to install deps & reload PM2
-          ssh ubuntu@137.184.127.160 << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@137.184.127.160 << 'EOF'
             set -e
             cd /home/ubuntu/buoyreport
 
             # Install production dependencies
             npm ci --omit=dev
 
-            # Reload Node API in PM2
+            # Reload Node API in PM2, or start if not running
             pm2 reload buoyreport --update-env || pm2 start app.js --name buoyreport
-          EOF
+      EOF
