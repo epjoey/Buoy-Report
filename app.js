@@ -31,19 +31,26 @@ const apiRouter = require('./routes/api');
 const app = express();
 
 /**
- * Session Configuration (New!)
+ *  App Configuration
  */
-const session = {
-  secret: process.env.SESSION_SECRET,
-  cookie: {},
-  resave: false,
-  saveUninitialized: false
-};
+// https://stackoverflow.com/questions/39930070/nodejs-express-why-should-i-use-app-enabletrust-proxy
+app.enable('trust proxy');
 
-// if(process.env.NODE_ENV === "production"){
-//   // Serve secure cookies, requires HTTPS
-//   session.cookie.secure = true;
-// }
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2'],
+
+  // Cookie Options
+  maxAge: 14 * 24 * 3600000 //2 week
+}))
+
 
 /**
  * Passport Configuration (New!)
@@ -68,33 +75,9 @@ const strategy = new Auth0Strategy(
   }
 );
 
-/**
- *  App Configuration
- */
-// https://stackoverflow.com/questions/39930070/nodejs-express-why-should-i-use-app-enabletrust-proxy
-app.enable('trust proxy');
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'dist')));
-app.use(express.static(path.join(__dirname, 'static')));
-app.use(cookieParser());
-app.use(cookieSession({
-  name: 'session',
-  keys: ['key1', 'key2'],
-
-  // Cookie Options
-  maxAge: 14 * 24 * 3600000 //2 week
-}))
-
 passport.use(strategy);
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -104,6 +87,7 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+// Set up some auth helpers.
 app.use((req, res, next) => {
   if(req.user){
     req.user.isAdmin = req.user._json.email === ADMIN_EMAIL;
@@ -115,6 +99,12 @@ app.use((req, res, next) => {
   next();
 });
 
+
+// Nginx serves static/dist on production.
+if (process.env.NODE_ENV !== 'production') {
+  app.use(express.static(path.join(__dirname, 'dist')));
+  app.use(express.static(path.join(__dirname, 'static')));
+}
 
 /**
  * Routes Definitions

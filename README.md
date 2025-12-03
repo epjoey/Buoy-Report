@@ -38,7 +38,7 @@ pm2 show buoyreport
 --update-env reloads environment variables from .env.
 
 To start from scratch:
-pm2 start /buoyreport/app.js --name buoyreport
+pm2 start /home/ubuntu/buoyreport/app.js --name buoyreport
 
 
 
