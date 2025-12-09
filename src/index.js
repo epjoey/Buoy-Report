@@ -1,5 +1,8 @@
+import { toggleFavorite } from './favorites.js';
+
 // New components are imported.
 import BuoyMap from './BuoyMap.js';
+
 Vue.component('BuoyMap', BuoyMap);
 
 // Legacy code is all stuffed into this file:
@@ -31,14 +34,6 @@ Vue.prototype.fetch = function(method, url, data){
     });
 };
 
-function toggleFavorite(vm, location){
-  var url = '/favorites/' + location.id;
-  var isFavorite = location.$isFavorite;
-  vm.fetch(isFavorite ? 'DELETE' : 'POST', url, {}).then(function(data){
-    location.$isFavorite = !isFavorite;
-    vm.$forceUpdate();
-  });
-}
 
 //************************************************
 Vue.component('locations', {
