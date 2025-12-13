@@ -1,17 +1,4 @@
 extends layout
 
 block content
-  template(v-if="currentPath === '/'")
-    locations
-  template(v-if="currentPath === '/map'")
-    buoy-map
-  template(v-if="currentPath === '/about'")
-    about
-  template(v-if="currentPath === '/me'")
-    snapshots
-  template(v-if="currentPath === '/buoys'")
-    buoys
-  template(v-if="currentPath.startsWith('/buoys/')")
-    buoy
-  template(v-if="currentPath.startsWith('/locations/')")
-    location
+  router-view

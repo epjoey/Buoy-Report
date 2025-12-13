@@ -431,8 +431,15 @@ pre { color: white; text-align: center; }
   width: 100%;
   text-align: center;
 }
+
 /* Windy - margin so you can scroll on the sides */
 .windy-view iframe { max-width: 90vw; }
+
+#map-canvas {
+  margin:20px auto;
+  height: 568px;
+  width:100%;
+}
 
 /*================================*/
 /* Snapshots */
@@ -687,4 +694,38 @@ pre { color: white; text-align: center; }
   background-image: url('/images/logo-lrg.png');
   background-size: 46px 46px;
   animation: rotation 2s infinite linear;
+}
+
+
+/* Toggle */
+.view-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.view-toggle {
+  display: inline-flex;
+  background: #06223c;
+  border-radius: 6px;
+}
+
+.view-toggle__btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 8px 20px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 160ms ease;
+  color: #fff;
+  opacity: .5;
+}
+
+.view-toggle__btn.is-active {
+  background: white;
+  color: #222;
+  opacity: 1;
+  font-weight: 800
 }

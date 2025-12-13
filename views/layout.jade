@@ -14,34 +14,38 @@ html
 
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data-10-year-range.js")
+    script(src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.43/builds/moment-timezone-with-data.min.js")      
 
     script(src="https://cdn.jsdelivr.net/npm/vue@2.6.14")
+    script(src="https://cdn.jsdelivr.net/npm/vue-router@3.6.5/dist/vue-router.min.js")
 
     script.
       Vue.prototype.$moment = window.moment;
       Vue.prototype.$user = !{ JSON.stringify(user) };
       Vue.prototype.$nodeEnv = '!{ NODE_ENV }';
+
   body
-    .wrapper(id="app", :class="currentPath === '/' ? 'index-page' : currentPath.startsWith('/locations/') ? 'location-page' : ''")
+
+    .wrapper(id="app", :class="$route.path === '/' ? 'index-page' : $route.path.startsWith('/locations/') ? 'location-page' : ''")
+
       .header
         .container
           .header-left
-            a(href='/')
+            router-link(to="/")
               img.logo(src="/images/logo-lrg.png", width="46", height="46")
               img.logo-large(src="/images/logo-lrg.png", width="101", height="101")
 
-            a.header-link(
+            router-link.header-link(
               v-cloak,
               v-if="buoy",
-              :href="'/buoys/' + buoy.buoyid",
+              :to="'/buoys/' + buoy.buoyid"
             ) {{ buoy.buoyid + ': ' + buoy.name}}
 
-            a.header-link(
+            router-link.header-link(
               v-cloak,
               v-else-if="location",
-              :href="'/locations/' + location.id",
+              :to="'/locations/' + location.id",
               :class="location.$isFavorite ? 'favorite' : 'not-favorite'"
             )
               | {{ location.name }}
@@ -49,7 +53,7 @@ html
                 | &nbsp;
                 span.star(v-on:click.stop.prevent="toggleFavorite(location)") &starf;
 
-            a.header-link(v-else, href='/') Buoy Report
+            router-link.header-link(v-else, to='/') Buoy Report
 
           .header-right
             .header-menu
@@ -60,12 +64,12 @@ html
               )
                 if isAuthenticated
                   li
-                    a(v-if="currentPath.startsWith('/locations/')"
+                    a(v-if="$route.path.startsWith('/locations/')"
                       @click="scrollTo('add-snapshot')") Take snapshot
 
                 if isAuthenticated
                   li
-                    a(href='/me') My snapshots
+                    router-link(to='/me') My snapshots
                   li
                     a(href="/logout") Logout
                 else

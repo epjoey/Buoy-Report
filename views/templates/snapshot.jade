@@ -1,6 +1,6 @@
 .snapshot(:id="'snapshot-' + snapshot.id")
   .mb-10
-    a.location-name(:href="'/locations/' + snapshot.locationId") {{ snapshot.locationName }}
+    router-link.location-name(:to="'/locations/' + snapshot.locationId") {{ snapshot.locationName }}
     .obs-date
       | {{ $moment.unix(snapshot.obsdate).tz(snapshot.timezone || 'UTC').format('M/D/YY h:mma') }}
 
@@ -57,6 +57,7 @@
           tr(v-for="buoyData in snapshot.$buoyData")
             td
               a(
+                v-if="buoyData.buoy",
                 :href="'https://www.ndbc.noaa.gov/station_page.php?station=' + buoyData.buoy.buoyid",
                 target="_blank",
                 :title="buoyData.buoy.name"
