@@ -63,9 +63,8 @@ html
                 v-bind:class="{ open: isMenuOpen }"
               )
                 if isAuthenticated
-                  li
-                    a(v-if="$route.path.startsWith('/locations/')"
-                      @click="scrollTo('add-snapshot')") Take snapshot
+                  li(v-if="location")
+                    a(@click="scrollTo('add-snapshot')") Take snapshot
 
                 if isAuthenticated
                   li
