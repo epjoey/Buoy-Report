@@ -21,11 +21,6 @@ div(v-if="location")
       )
 
       template(v-else)
-
-        template(v-for="buoy in buoys")
-          buoy-data(:buoy="buoy", :location="location", type="wave")
-          buoy-data(:buoy="buoy", :location="location", type="standard")
-
         .buoy-data.windy-view.mb-20
           iframe(
             width="320",
@@ -33,6 +28,11 @@ div(v-if="location")
             :src="'https://embed.windy.com/embed2.html?lat=' + location.latitude + '&lon=' + location.longitude + '&zoom=8'"
             frameborder="0"
           )
+
+        template(v-for="buoy in buoys")
+          buoy-data(:buoy="buoy", :location="location", type="wave")
+          buoy-data(:buoy="buoy", :location="location", type="standard")
+
 
   snapshots(:location="location")        
   
