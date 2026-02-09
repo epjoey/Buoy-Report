@@ -53,8 +53,5 @@ jobs:
             npm ci --omit=dev
 
             # Restart using ecosystem file
-            which pm2
-            pm2 -v
-            echo "RUNNING PM2 RESTART"
             pm2 startOrReload ecosystem.config.js
           EOF
