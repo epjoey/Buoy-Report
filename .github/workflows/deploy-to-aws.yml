@@ -53,5 +53,5 @@ jobs:
             npm ci --omit=dev
 
             # Restart using ecosystem file
-            pm2 startOrReload ecosystem.config.js
+            pm2 restart buoyreport --update-env
           EOF
