@@ -33,24 +33,33 @@ function makeRequest(url){
   return new Promise((resolve, reject) => {
     const req = https.get(url, res => {
       console.log("Got response: " + res.statusCode);
-      
-      if(res.statusCode === 404){
-        return reject(res.statusCode)
+
+      if (res.statusCode === 404) {
+        res.resume();
+        return reject(new Error("HTTP 404"));
       }
+
       let data = '';
 
-      res.on('data', (chunk) => {
+      res.on('data', chunk => {
         data += chunk;
       });
 
       res.on('end', () => {
         resolve(data);
       });
+
+      res.on('error', reject);
     });
+
+    req.setTimeout(10000, () => {
+      req.destroy(new Error('Request timed out after 10 seconds'));
+    });
+
     req.on('error', e => {
       console.log("Got error: " + e.message);
       reject(e);
-    }); 
+    });
   });
 }
 
